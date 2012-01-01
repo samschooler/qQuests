@@ -1,0 +1,9 @@
+# qQuests by Quas3l
+version: 0.02
+# (DO NOT CHANGE THIS!)
+
+# If this plugin should enable
+enabled: true
+
+# The "X" Is Replaced with the money values in the quests
+economyScale: 000X.00

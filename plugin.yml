@@ -1,0 +1,14 @@
+name: qQuests
+main: me.quaz3l.qQuests.qQuests
+version: 0.02
+description: >
+             A robust quests plugin.
+commands:
+  Q:
+    description: Alias Command To Use qQuests
+  QUEST:
+    description: Main Command To Use qQuests
+  QUESTS:
+    description: Alias Command To Use qQuests
+  QQUESTS:
+    description: Alternate Command To Use qQuests (Just In-Case)
