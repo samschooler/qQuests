@@ -7,9 +7,7 @@ import net.milkbowl.vault.economy.Economy;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -82,7 +80,7 @@ public class qQuests extends JavaPlugin
 		}
 		if(this.getQuestConfig().getString("0.info.name") == null) {
 			this.getQuestConfig().options().copyDefaults(true);
-			
+			/*
 			// Quest 0: Diamonds
 			if(this.getQuestConfig().getString("0.info.name") == null) {
 				this.getQuestConfig().set("0.info.name", "Diamonds!");
@@ -346,6 +344,7 @@ public class qQuests extends JavaPlugin
 			//if(this.getQuestConfig().getString("3.market.reward.items") == null) {
 			//	this.getQuestConfig().set("3.market.reward.items", exRewardItemIds);
 			//}
+			 */
 		}
 		
 		// Saves Configuration Files
