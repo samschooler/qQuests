@@ -33,7 +33,7 @@
       hunger: 0
       items:
       - '25:2'
-      - 3:64
+      - '3:64'
       - '266:4'
 '1':
   info:
@@ -61,6 +61,10 @@
       money: 10
       health: 0
       hunger: 0
+      items:
+      - '25:2'
+      - '3:64'
+      - '266:4'
 '2':
   info:
     name: KILL ZOMBIEZZZ!
@@ -86,6 +90,10 @@
       money: 10
       health: 0
       hunger: 0
+      items:
+      - '25:2'
+      - '3:64'
+      - '266:4'
 '3':
   info:
     name: Damage Dirt!
@@ -112,3 +120,7 @@
       money: 10
       health: 0
       hunger: 0
+      items:
+      - '25:2'
+      - '3:64'
+      - '266:4'

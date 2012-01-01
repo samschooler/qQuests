@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -242,6 +244,11 @@ public class qQuests extends JavaPlugin
 			//***TODO*** Add Items
 			//***FIX*** List<String> Throws a null error
 			// Reward: Items
+			List<String> items = plugin.getQuestConfig().getStringList("0.market.reward.items");
+			Iterator<String> iter = items.iterator();
+			while (iter.hasNext()) {
+				player.sendMessage(iter.next());
+			}
 			/*
 			List<String> items = plugin.getQuestConfig().getStringList((String) plugin.currentQuests.get("0.market.reward.items"));
 
