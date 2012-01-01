@@ -3,10 +3,7 @@ package me.quaz3l.qQuests;
 import me.quaz3l.qQuests.Util.cmd_qQuests;
 import me.quaz3l.qQuests.listeners.bListener;
 import me.quaz3l.qQuests.listeners.eListener;
-import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,7 +40,6 @@ import org.bukkit.entity.Squid;
 import org.bukkit.entity.Wolf;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.Event;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -372,18 +368,8 @@ public class qQuests extends JavaPlugin
 			getCommand("QUESTS").setExecutor(cmdExe);
 			getCommand("qQUESTS").setExecutor(cmdExe);
 		
-		// Setup Economy
-			Plugin vlt = this.getServer().getPluginManager().getPlugin("Vault");
-			if(vlt != null & vlt instanceof Vault) 
-			{
-				this.logger.info(String.format("[%s] Hooked %s %s", getDescription().getName(), vault.getDescription().getName(), vault.getDescription().getVersion()));
-			}
-			else
-			{
-				this.logger.warning(String.format("[%s] Vault was _NOT_ found! Disabling ", getDescription().getName()));
-	            getPluginLoader().disablePlugin(this);
-	            return;
-			}
+		// ***TODO*** Setup Economy
+		//Setup Economy
 		
 		// Notify The Console
 		this.logger.info( "[" + pdfFile.getName() + "] Version " + pdfFile.getVersion() + " by Quaz3l: Enabled");
@@ -431,7 +417,10 @@ public class qQuests extends JavaPlugin
 		
 		if(type == "join")
 		{
-			//***WORK*** Add Items
+			//***TODO*** Add Items
+			//Fee: Items
+			
+			//***TODO*** Reward money
 			// Fee: Money
 
 			
@@ -468,7 +457,10 @@ public class qQuests extends JavaPlugin
 			}
 		}
 		else if(type == "drop") {
-			//***WORK*** Add Items
+			//***TODO*** Add Items
+			//Fee: Items
+			
+			//***TODO*** Reward money
 			// Fee: Money
 
 			
@@ -513,7 +505,7 @@ public class qQuests extends JavaPlugin
 		}
 		else if(type == "done")
 		{
-			//***WORK*** Add Items
+			//***TODO*** Add Items
 			//***FIX*** List<String> Throws a null error
 			// Reward: Items
 			/*
@@ -532,9 +524,8 @@ public class qQuests extends JavaPlugin
 			    }
 			}
 			*/
+			//***TODO*** Reward money
 			// Reward: Money
-			sender.sendMessage(String.format("You have %s", vault.getEconomy().format(vault.getEconomy().getBalance(player.getName()).amount)));
-			EconomyResponse r = vault.getEconomy().depositPlayer(player.getName(), 1.05);
 			
 			// Reward: Health
 			cHealth = player.getHealth();
@@ -572,6 +563,7 @@ public class qQuests extends JavaPlugin
 			// Reset Players Quest Data
 			this.doneItems.put(player, null);
 			this.currentQuests.put(player, null);
+			
 			// Notify Player
 			player.sendMessage(ChatColor.GREEN + "Quest Done!");
 		}
