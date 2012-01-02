@@ -89,7 +89,9 @@ public class qQuests extends JavaPlugin
 	    	econEnabled = false;
 	    }
 		
-		// Checks for a quests.yml with contents if none exists creates one with default quests		
+		// Checks for a quests.yml with contents if none exists creates one with default quests
+	    this.logger.info( "[" + pdfFile.getName() + "] '" + this.getQuestConfig().getString("installed") + "'");
+		
 	    if(configFile.exists() == false) this.getConfig().options().copyDefaults(true);
 		if(qConfigFile.exists() == false) this.getQuestConfig().options().copyDefaults(true);
 		
@@ -102,7 +104,6 @@ public class qQuests extends JavaPlugin
 			// Block Events
 			pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Event.Priority.Normal, this);
 			pm.registerEvent(Event.Type.BLOCK_DAMAGE, blockListener, Event.Priority.Normal, this);
-			pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Event.Priority.Normal, this);
 		
 			// Entity Events
 			pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Event.Priority.Normal, this);

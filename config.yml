@@ -1,2 +1,5 @@
 # qQuests by Quas3l
+installed: true
 
+# The "X" Is Replaced with the money values in the quests
+economyScale: 000X.00
