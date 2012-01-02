@@ -56,6 +56,7 @@ public class qQuests extends JavaPlugin
 	
 	private FileConfiguration qConfig = null;
 	private File qConfigFile = null;
+	File configFile = new File(this.getDataFolder(), "config.yml");
 	
 	public boolean econEnabled = false;
 	
@@ -89,12 +90,10 @@ public class qQuests extends JavaPlugin
 	    }
 		
 		// Checks for a quests.yml with contents if none exists creates one with default quests
-		if(this.getQuestConfig().getString("version") == null) {
-			this.getConfig().options().copyDefaults(true);
-		}
-		if(this.getQuestConfig().getString("0.info.name") == null) {
-			this.getQuestConfig().options().copyDefaults(true);
-		}
+	    this.logger.info( "[" + pdfFile.getName() + "] '" + this.getQuestConfig().getString("installed") + "'");
+		
+	    if(configFile.exists() == false) this.getConfig().options().copyDefaults(true);
+		if(qConfigFile.exists() == false) this.getQuestConfig().options().copyDefaults(true);
 		
 		// Saves Configuration Files
 		this.saveConfig();
