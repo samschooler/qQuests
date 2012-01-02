@@ -1,8 +1,8 @@
 name: qQuests
 main: me.quaz3l.qQuests.qQuests
 version: 0.02
-description: >
-             A robust quests plugin.
+description: A robust quests plugin.
+depend: [Vault]
 commands:
   Q:
     description: Alias Command To Use qQuests

@@ -1,5 +1,6 @@
 package me.quaz3l.qQuests;
 
+import me.quaz3l.qQuests.Util.Econ;
 import me.quaz3l.qQuests.Util.cmd_qQuests;
 import me.quaz3l.qQuests.listeners.bListener;
 import me.quaz3l.qQuests.listeners.eListener;
@@ -8,8 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,8 +54,6 @@ public class qQuests extends JavaPlugin
 		
 	public final Logger logger = Logger.getLogger(("Minecraft"));
 	
-	public static Economy economy = null;
-	
 	private FileConfiguration qConfig = null;
 	private File qConfigFile = null;
 	
@@ -74,7 +71,19 @@ public class qQuests extends JavaPlugin
 	public void onEnable() 
 	{
 		PluginDescriptionFile pdfFile = this.getDescription();
-		this.logger.info( "[" + pdfFile.getName() + "] Version " + pdfFile.getVersion() + " by Quaz3l: Enabling");
+		
+		// Find Economy
+		RegisteredServiceProvider<Economy> economyProvider =
+	    getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+	    if (economyProvider != null) {
+	    	Econ.economy = economyProvider.getProvider();
+	    	this.logger.info( "[" + pdfFile.getName() + "] Version " + pdfFile.getVersion() + " by Quaz3l: Economy Found! Enabling");
+	    }
+	    else
+	    {
+	    	this.logger.severe( "[" + pdfFile.getName() + "] Version " + pdfFile.getVersion() + " by Quaz3l: Economy NOT Found! Disabling");
+	    	this.getPluginLoader().disablePlugin(this);
+	    }
 		
 		// Checks for a quests.yml with contents if none exists creates one with default quests
 		if(this.getQuestConfig().getString("version") == null) {
@@ -103,9 +112,6 @@ public class qQuests extends JavaPlugin
 			getCommand("QUEST").setExecutor(cmdExe);
 			getCommand("QUESTS").setExecutor(cmdExe);
 			getCommand("qQUESTS").setExecutor(cmdExe);
-		
-		// ***TODO*** Setup Economy
-		//Setup Economy
 		
 		// Notify The Console
 		this.logger.info( "[" + pdfFile.getName() + "] Version " + pdfFile.getVersion() + " by Quaz3l: Enabled");
@@ -156,9 +162,8 @@ public class qQuests extends JavaPlugin
 			//***TODO*** Add Items
 			//Fee: Items
 			
-			//***TODO*** Reward money
 			// Fee: Money
-
+			Econ.econChangeBalancePlayer(player, this.getQuestConfig().getDouble(this.currentQuests.get(player) + ".market.fee.toJoin.money"));
 			
 			// Reward: Health
 			cHealth = player.getHealth();
@@ -196,8 +201,8 @@ public class qQuests extends JavaPlugin
 			//***TODO*** Add Items
 			//Fee: Items
 			
-			//***TODO*** Reward money
 			// Fee: Money
+			Econ.econChangeBalancePlayer(player, this.getQuestConfig().getDouble(this.currentQuests.get(player) + ".market.fee.toDrop.money"));
 
 			
 			// Fee: Health
@@ -244,11 +249,11 @@ public class qQuests extends JavaPlugin
 			//***TODO*** Add Items
 			//***FIX*** List<String> Throws a null error
 			// Reward: Items
-			List<String> items = plugin.getQuestConfig().getStringList("0.market.reward.items");
-			Iterator<String> iter = items.iterator();
-			while (iter.hasNext()) {
-				player.sendMessage(iter.next());
-			}
+			//List<String> items = plugin.getQuestConfig().getStringList("0.market.reward.items");
+			//Iterator<String> iter = items.iterator();
+			//while (iter.hasNext()) {
+			//	player.sendMessage(iter.next());
+			//}
 			/*
 			List<String> items = plugin.getQuestConfig().getStringList((String) plugin.currentQuests.get("0.market.reward.items"));
 
@@ -265,9 +270,8 @@ public class qQuests extends JavaPlugin
 			    }
 			}
 			*/
-			//***TODO*** Reward money
 			// Reward: Money
-			
+			Econ.econChangeBalancePlayer(player, this.getQuestConfig().getDouble(this.currentQuests.get(player) + ".market.reward.money"));
 			// Reward: Health
 			cHealth = player.getHealth();
 			aHealth = this.getQuestConfig().getInt(this.currentQuests.get(player) + ".market.reward.health");
@@ -335,15 +339,4 @@ public class qQuests extends JavaPlugin
         if(entity instanceof Wolf) return "Wolf";
         return null;
     }
-	
-	private Boolean setupEconomy()
-    {
-        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-        if (economyProvider != null) {
-            economy = economyProvider.getProvider();
-        }
-
-        return (economy != null);
-    }
-	
 }
