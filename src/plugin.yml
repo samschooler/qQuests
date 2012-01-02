@@ -12,3 +12,57 @@ commands:
     description: Alias Command To Use qQuests
   QQUESTS:
     description: Alternate Command To Use qQuests (Just In-Case)
+permissions:
+    qquests.*:
+        description: Gives all qQuest permissions
+        default: op
+        children:
+            qquests.give: true
+            qquests.give.specific: true
+            qquests.info: true
+            qquests.info: true
+            qquests.drop: true
+            qquests.done: true
+    qquests.give:
+        description: Gives all give permissions
+        default: true
+        children:
+            qquests.give.collect: true
+            qquests.give.destroy: true
+            qquests.give.damage: true
+            qquests.give.place: true
+            qquests.give.kill.player: true
+            qquests.give.kill.mob: true
+    qquests.give.specific:
+        description: Gives all specific give permissions
+        default: true
+        children:
+            qquests.give.specific.collect: true
+            qquests.give.specific.destroy: true
+            qquests.give.specific.damage: true
+            qquests.give.specific.place: true
+            qquests.give.specific.kill.player: true
+            qquests.give.specific.kill.mob: true
+    qquests.info:
+        description: Gives all info permissions
+        default: true
+        children:
+            qquests.info.collect: true
+            qquests.info.destroy: true
+            qquests.info.damage: true
+            qquests.info.place: true
+            qquests.info.kill.player: true
+            qquests.info.kill.mob: true
+    qquests.drop:
+        description: Gives all drop permissions
+        default: true
+        children:
+            qquests.drop.collect: true
+            qquests.drop.destroy: true
+            qquests.drop.damage: true
+            qquests.drop.place: true
+            qquests.drop.kill.player: true
+            qquests.drop.kill.mob: true
+    qquests.done:
+        description: Lets players finish a quest
+        default: true
