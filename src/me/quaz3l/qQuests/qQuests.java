@@ -49,16 +49,20 @@ public class qQuests extends JavaPlugin
 	public static qQuests plugin;
 	private cmd_qQuests cmdExe;
 	
+	// Hashmaps to store temporary data on player quests
 	public Map<Player, Object> currentQuests = new HashMap<Player, Object>();
 	public Map<Player, Integer> doneItems = new HashMap<Player, Integer>();
-		
+	
+	// Get The Logger
 	public final Logger logger = Logger.getLogger(("Minecraft"));
 	
+	// Configuration Files Variables
 	private FileConfiguration qConfig = null;
 	private File qConfigFile = null;
 	private FileConfiguration cConfig = null;
 	private File cConfigFile = null;
 	
+	// If the economy is enabled
 	public boolean econEnabled = false;
 	
 	private final bListener blockListener = new bListener(this);
@@ -90,9 +94,7 @@ public class qQuests extends JavaPlugin
 	    	econEnabled = false;
 	    }
 		
-		// Checks for a quests.yml with contents if none exists creates one with default quests
-	    this.logger.info( "[" + pdfFile.getName() + "] '" + this.getQuestConfig().getString("installed") + "'");
-		
+		// Get The Configuration Files
 	    this.getConfig();
 		this.getQuestConfig();
 		
@@ -120,6 +122,7 @@ public class qQuests extends JavaPlugin
 		this.logger.info( "[" + pdfFile.getName() + "] Version " + pdfFile.getVersion() + " by Quaz3l: Enabled");
 	}
 	 
+	// Configuration Functions
 	public FileConfiguration getQuestConfig() {
 	    if (qConfig == null) {
 	        reloadQuestConfig();
@@ -186,6 +189,7 @@ public class qQuests extends JavaPlugin
 	    }
 	}
 	
+	// End Of Quest Function
 	public void endQuest(Player player, String type) {
 		int healAmount;
 		int aHealth;
@@ -360,6 +364,7 @@ public class qQuests extends JavaPlugin
 		}
 	}
 	
+	// This guesses the entity based on trial and error; and returns the right guess
 	public String isEntityType(Entity entity)
     {
         if (entity instanceof Player) return "Player";
