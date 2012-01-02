@@ -56,7 +56,8 @@ public class qQuests extends JavaPlugin
 	
 	private FileConfiguration qConfig = null;
 	private File qConfigFile = null;
-	File configFile = new File(this.getDataFolder(), "config.yml");
+	private FileConfiguration cConfig = null;
+	private File cConfigFile = null;
 	
 	public boolean econEnabled = false;
 	
@@ -92,8 +93,8 @@ public class qQuests extends JavaPlugin
 		// Checks for a quests.yml with contents if none exists creates one with default quests
 	    this.logger.info( "[" + pdfFile.getName() + "] '" + this.getQuestConfig().getString("installed") + "'");
 		
-	    if(configFile.exists() == false) this.getConfig().options().copyDefaults(true);
-		if(qConfigFile.exists() == false) this.getQuestConfig().options().copyDefaults(true);
+	    this.getConfig();
+		this.getQuestConfig();
 		
 		// Saves Configuration Files
 		this.saveConfig();
@@ -137,6 +138,7 @@ public class qQuests extends JavaPlugin
 	    if (defConfigStream != null) {
 	        YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
 	        qConfig.setDefaults(defConfig);
+	        qConfig.options().copyDefaults(true);
 	    }
 	}
 	 
@@ -148,6 +150,39 @@ public class qQuests extends JavaPlugin
 	        qConfig.save(qConfigFile);
 	    } catch (IOException ex) {
 	        Logger.getLogger(JavaPlugin.class.getName()).log(Level.SEVERE, "Could not save config to " + qConfigFile, ex);
+	    }
+	}
+	
+	public FileConfiguration getConfig() {
+	    if (cConfig == null) {
+	        reloadConfig();
+	    }
+	    return cConfig;
+	}
+	 
+	public void reloadConfig() {
+		if (cConfigFile == null) 
+		{
+		    cConfigFile = new File(getDataFolder(), "config.yml");
+		}
+	    cConfig = YamlConfiguration.loadConfiguration(cConfigFile);
+	    
+	    InputStream defConfigStream = getResource("config.yml");
+	    if (defConfigStream != null) {
+	        YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+	        cConfig.setDefaults(defConfig);
+	        cConfig.options().copyDefaults(true);
+	    }
+	}
+	 
+	public void saveConfig() {
+		if (cConfig == null || cConfigFile == null) {
+	    return;
+	    }
+		try {
+	        cConfig.save(cConfigFile);
+	    } catch (IOException ex) {
+	        Logger.getLogger(JavaPlugin.class.getName()).log(Level.SEVERE, "Could not save config to " + cConfigFile, ex);
 	    }
 	}
 	

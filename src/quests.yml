@@ -3,9 +3,7 @@
 # <URL_PLACEHOLDER>
 # or just copy a current quest and use the vars and common sense to
 # decrypt the YAML.
-# Quests 0-1000 by Quaz3l
-installed: true
-
+# Quests 0-10 by Quaz3l
 '0':
   info:
     name: Diamonds!
