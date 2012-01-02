@@ -57,6 +57,8 @@ public class qQuests extends JavaPlugin
 	private FileConfiguration qConfig = null;
 	private File qConfigFile = null;
 	
+	public boolean econEnabled = false;
+	
 	private final bListener blockListener = new bListener(this);
 	private final eListener entityListener = new eListener(this);
 
@@ -77,12 +79,13 @@ public class qQuests extends JavaPlugin
 	    getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
 	    if (economyProvider != null) {
 	    	Econ.economy = economyProvider.getProvider();
-	    	this.logger.info( "[" + pdfFile.getName() + "] Version " + pdfFile.getVersion() + " by Quaz3l: Economy Found! Enabling");
+	    	this.logger.info( "[" + pdfFile.getName() + "] Version " + pdfFile.getVersion() + " by Quaz3l: Economy Found!");
+	    	econEnabled = true;
 	    }
 	    else
 	    {
-	    	this.logger.severe( "[" + pdfFile.getName() + "] Version " + pdfFile.getVersion() + " by Quaz3l: Economy NOT Found! Disabling");
-	    	this.getPluginLoader().disablePlugin(this);
+	    	this.logger.warning( "[" + pdfFile.getName() + "] Version " + pdfFile.getVersion() + " by Quaz3l: Economy Not Found! All Economic Interactions Have Been Disabled!");
+	    	econEnabled = false;
 	    }
 		
 		// Checks for a quests.yml with contents if none exists creates one with default quests
@@ -163,7 +166,10 @@ public class qQuests extends JavaPlugin
 			//Fee: Items
 			
 			// Fee: Money
-			Econ.econChangeBalancePlayer(player, this.getQuestConfig().getDouble(this.currentQuests.get(player) + ".market.fee.toJoin.money"));
+			if(econEnabled) 
+			{
+				Econ.econChangeBalancePlayer(player, this.getQuestConfig().getDouble(this.currentQuests.get(player) + ".market.fee.toJoin.money"));
+			}
 			
 			// Reward: Health
 			cHealth = player.getHealth();
@@ -202,7 +208,10 @@ public class qQuests extends JavaPlugin
 			//Fee: Items
 			
 			// Fee: Money
-			Econ.econChangeBalancePlayer(player, this.getQuestConfig().getDouble(this.currentQuests.get(player) + ".market.fee.toDrop.money"));
+			if(econEnabled) 
+			{
+				Econ.econChangeBalancePlayer(player, this.getQuestConfig().getDouble(this.currentQuests.get(player) + ".market.fee.toDrop.money"));
+			}
 
 			
 			// Fee: Health
@@ -271,7 +280,10 @@ public class qQuests extends JavaPlugin
 			}
 			*/
 			// Reward: Money
-			Econ.econChangeBalancePlayer(player, this.getQuestConfig().getDouble(this.currentQuests.get(player) + ".market.reward.money"));
+			if(econEnabled) 
+			{
+				Econ.econChangeBalancePlayer(player, this.getQuestConfig().getDouble(this.currentQuests.get(player) + ".market.reward.money"));
+			}
 			// Reward: Health
 			cHealth = player.getHealth();
 			aHealth = this.getQuestConfig().getInt(this.currentQuests.get(player) + ".market.reward.health");
