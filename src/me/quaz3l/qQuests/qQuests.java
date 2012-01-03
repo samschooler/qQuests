@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -390,4 +392,51 @@ public class qQuests extends JavaPlugin
         if(entity instanceof Wolf) return "Wolf";
         return null;
     }
+
+	public void giveQuest(Player player) {
+		if(this.currentQuests.get(player) == null) 
+		{
+			Set<String> questNo = this.getQuestConfig().getKeys(false);
+			Random rand = new Random(); 
+			Object SelectedQuest = rand.nextInt(questNo.size()); 
+			
+			this.currentQuests.put(player, SelectedQuest);
+			
+			this.endQuest(player, "join");
+			
+			player.sendMessage(ChatColor.AQUA + "Your Quest: " + ChatColor.LIGHT_PURPLE + this.getQuestConfig().getString(SelectedQuest + ".info.messageStart"));
+		}
+		else
+		{
+			player.sendMessage(ChatColor.RED + "You already have a active quest!");
+			player.sendMessage(ChatColor.AQUA + "Your Quest: " + ChatColor.LIGHT_PURPLE + this.getQuestConfig().getString(this.currentQuests.get(player) + ".info.messageStart"));
+		}
+		
+	}
+	
+	public void giveQuest(Player player, String s) {
+		if(this.currentQuests.get(player) == null) 
+		{
+			try
+		    {
+				int SelectedQuest = Integer.parseInt(s.trim()) - 1;
+				
+				this.currentQuests.put(player, SelectedQuest);
+				
+				this.endQuest(player, "join");
+				
+				player.sendMessage(ChatColor.AQUA + "Your Quest: " + ChatColor.LIGHT_PURPLE + this.getQuestConfig().getString(SelectedQuest + ".info.messageStart"));
+		    }
+			catch (NumberFormatException nfe) 
+			{
+				player.sendMessage("This Is Not A Valid Quest!");
+				return;
+			}
+		}
+		else
+		{
+			player.sendMessage(ChatColor.RED + "You already have a active quest!");
+			player.sendMessage(ChatColor.AQUA + "Your Quest: " + ChatColor.LIGHT_PURPLE + this.getQuestConfig().getString(this.currentQuests.get(player) + ".info.messageStart"));
+		}
+	}
 }

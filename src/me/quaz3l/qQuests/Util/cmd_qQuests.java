@@ -1,8 +1,5 @@
 package me.quaz3l.qQuests.Util;
 
-import java.util.Random;
-import java.util.Set;
-
 import me.quaz3l.qQuests.qQuests;
 
 import org.bukkit.ChatColor;
@@ -35,26 +32,18 @@ public class cmd_qQuests implements CommandExecutor
 			}
 			else
 			{
-				if( (args[0].equalsIgnoreCase("give")) )
+				if((args[0].equalsIgnoreCase("give")))
 				{
-					if(plugin.currentQuests.get(((Player) s)) == null) 
+					if (args.length < 2)
 					{
-						Set<String> questNo = plugin.getQuestConfig().getKeys(false);
-						Random rand = new Random(); 
-						Object SelectedQuest = rand.nextInt(questNo.size()); 
-						
-						plugin.currentQuests.put(((Player) s), SelectedQuest);
-						
-						plugin.endQuest(((Player) s), "join");
-						
-						((Player) s).sendMessage(ChatColor.AQUA + "Your Quest: " + ChatColor.LIGHT_PURPLE + plugin.getQuestConfig().getString(SelectedQuest + ".info.messageStart"));
+						plugin.giveQuest(((Player) s));
+						return true;
 					}
 					else
 					{
-						((Player) s).sendMessage(ChatColor.RED + "You already have a active quest!");
-						((Player) s).sendMessage(ChatColor.AQUA + "Your Quest: " + ChatColor.LIGHT_PURPLE + plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".info.messageStart"));
+						plugin.giveQuest(((Player) s), args[1]);
+						return true;
 					}
-					return true;
 				}
 				else if(args[0].equalsIgnoreCase("info")) 
 				{
@@ -91,7 +80,8 @@ public class cmd_qQuests implements CommandExecutor
 					else
 					{
 						((Player) s).sendMessage(ChatColor.RED + "You Don't Have A Active Quest!");
-						((Player) s).sendMessage(ChatColor.LIGHT_PURPLE + "To Get A Quest Type: " + ChatColor.YELLOW + "/Quest GIVE");
+						((Player) s).sendMessage(ChatColor.LIGHT_PURPLE + "To Get A Quest Type: " + ChatColor.GREEN + "/Quest GIVE");
+					
 					}
 					return true;
 				}
