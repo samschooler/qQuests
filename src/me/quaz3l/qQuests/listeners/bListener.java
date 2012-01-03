@@ -40,12 +40,12 @@ public class bListener extends BlockListener
 					}
 					if(plugin.getQuestConfig().getInt(plugin.currentQuests.get(player) + ".task.amount") > plugin.doneItems.get(player)) 
 					{
-						player.sendMessage( plugin.chatPrefix + ChatColor.LIGHT_PURPLE + "You have broken " + ChatColor.GREEN + plugin.doneItems.get(player) + "/" + plugin.getQuestConfig().getInt(plugin.currentQuests.get(player) + ".task.amount") + " " + plugin.getQuestConfig().getString(plugin.currentQuests.get(player) + ".task.object.name"));
+						player.sendMessage(ChatColor.LIGHT_PURPLE + "You have broken " + ChatColor.GREEN + plugin.doneItems.get(player) + "/" + plugin.getQuestConfig().getInt(plugin.currentQuests.get(player) + ".task.amount") + " " + plugin.getQuestConfig().getString(plugin.currentQuests.get(player) + ".task.object.name"));
 					}
 					else
 					{
-						player.sendMessage( plugin.chatPrefix + ChatColor.LIGHT_PURPLE + "You have completed the quest with " + ChatColor.GREEN + plugin.doneItems.get(player) + "/" + plugin.getQuestConfig().getInt(plugin.currentQuests.get(player) + ".task.amount") + " broken " + plugin.getQuestConfig().getString(plugin.currentQuests.get(player) + ".task.object.name"));
-						player.sendMessage( plugin.chatPrefix + ChatColor.GREEN + "To Turn In The Quest Type: " + ChatColor.YELLOW + "/Quest DONE");
+						player.sendMessage(ChatColor.LIGHT_PURPLE + "You have completed the quest with " + ChatColor.GREEN + plugin.doneItems.get(player) + "/" + plugin.getQuestConfig().getInt(plugin.currentQuests.get(player) + ".task.amount") + " broken " + plugin.getQuestConfig().getString(plugin.currentQuests.get(player) + ".task.object.name"));
+						player.sendMessage(ChatColor.GREEN + "To Turn In The Quest Type: " + ChatColor.YELLOW + "/Quest DONE");
 					}
 				}
 			}
@@ -74,12 +74,12 @@ public class bListener extends BlockListener
 					}
 					if(plugin.getQuestConfig().getInt(plugin.currentQuests.get(player) + ".task.amount") > plugin.doneItems.get(player)) 
 					{
-						player.sendMessage( plugin.chatPrefix + ChatColor.LIGHT_PURPLE + "You have damaged " + ChatColor.GREEN + plugin.doneItems.get(player) + "/" + plugin.getQuestConfig().getInt(plugin.currentQuests.get(player) + ".task.amount") + " " + plugin.getQuestConfig().getString(plugin.currentQuests.get(player) + ".task.object.name"));
+						player.sendMessage(ChatColor.LIGHT_PURPLE + "You have damaged " + ChatColor.GREEN + plugin.doneItems.get(player) + "/" + plugin.getQuestConfig().getInt(plugin.currentQuests.get(player) + ".task.amount") + " " + plugin.getQuestConfig().getString(plugin.currentQuests.get(player) + ".task.object.name"));
 					}
 					else
 					{
-						player.sendMessage( plugin.chatPrefix + ChatColor.LIGHT_PURPLE + "You have completed the quest with " + ChatColor.GREEN + plugin.doneItems.get(player) + "/" + plugin.getQuestConfig().getInt(plugin.currentQuests.get(player) + ".task.amount") + " damaged " + plugin.getQuestConfig().getString(plugin.currentQuests.get(player) + ".task.object.name"));
-						player.sendMessage( plugin.chatPrefix + ChatColor.GREEN + "To Turn In The Quest Type: " + ChatColor.YELLOW + "/Quest DONE");
+						player.sendMessage(ChatColor.LIGHT_PURPLE + "You have completed the quest with " + ChatColor.GREEN + plugin.doneItems.get(player) + "/" + plugin.getQuestConfig().getInt(plugin.currentQuests.get(player) + ".task.amount") + " damaged " + plugin.getQuestConfig().getString(plugin.currentQuests.get(player) + ".task.object.name"));
+						player.sendMessage(ChatColor.GREEN + "To Turn In The Quest Type: " + ChatColor.YELLOW + "/Quest DONE");
 					}
 				}
 			}
