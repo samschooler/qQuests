@@ -5,6 +5,8 @@ import me.quaz3l.qQuests.Util.cmd_qQuests;
 import me.quaz3l.qQuests.listeners.bListener;
 import me.quaz3l.qQuests.listeners.eListener;
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,6 +59,8 @@ public class qQuests extends JavaPlugin
 	
 	// Get The Logger
 	public final Logger logger = Logger.getLogger(("Minecraft"));
+	public String pluginPrefix = "[qQuests] ";
+	public String chatPrefix = ChatColor.LIGHT_PURPLE + "[qQuests] ";
 	
 	// Configuration Files Variables
 	private FileConfiguration qConfig = null;
@@ -67,6 +71,11 @@ public class qQuests extends JavaPlugin
 	// If the economy is enabled
 	public boolean econEnabled = false;
 	
+	// If permissions are enabled
+	public boolean permissionsEnabled = false;
+	
+	public static Permission permission = null;
+	
 	private final bListener blockListener = new bListener(this);
 	private final eListener entityListener = new eListener(this);
 
@@ -74,7 +83,7 @@ public class qQuests extends JavaPlugin
 	public void onDisable() 
 	{
 		PluginDescriptionFile pdfFile = this.getDescription();
-		this.logger.info( "[" + getDescription().getName() + "] Version " + pdfFile.getVersion() + " by Quaz3l: Disabled");
+		this.logger.info(this.pluginPrefix +  "Version " + pdfFile.getVersion() + " by Quaz3l: Disabled");
 	}
 
 	@Override
@@ -87,15 +96,27 @@ public class qQuests extends JavaPlugin
 	    getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
 	    if (economyProvider != null) {
 	    	Econ.economy = economyProvider.getProvider();
-	    	this.logger.info( "[" + pdfFile.getName() + "] Version " + pdfFile.getVersion() + " by Quaz3l: Economy Found!");
+	    	this.logger.info( this.pluginPrefix + "Economy Found!");
 	    	econEnabled = true;
 	    }
 	    else
 	    {
-	    	this.logger.warning( "[" + pdfFile.getName() + "] Version " + pdfFile.getVersion() + " by Quaz3l: Economy Not Found! All Economic Interactions Have Been Disabled!");
+	    	this.logger.warning(this.pluginPrefix + "Economy Not Found! All Economic Interactions Have Been Disabled!");
 	    	econEnabled = false;
 	    }
-		
+	    
+	    // Find Permissions
+	    RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+	    if (permissionProvider != null) {
+	    	qQuests.permission = permissionProvider.getProvider();
+	    	permissionsEnabled = true;
+	    }
+	    else
+	    {
+	    	this.logger.warning(this.pluginPrefix + "Permissions Plugin Not Found! Defaulting to OP/Not OP!");
+	    	permissionsEnabled = false;
+	    }
+	    
 		// Get The Configuration Files
 	    this.getConfig();
 		this.getQuestConfig();
@@ -121,7 +142,7 @@ public class qQuests extends JavaPlugin
 			getCommand("qQUESTS").setExecutor(cmdExe);
 		
 		// Notify The Console
-		this.logger.info( "[" + pdfFile.getName() + "] Version " + pdfFile.getVersion() + " by Quaz3l: Enabled");
+		this.logger.info(this.pluginPrefix + " Version " + pdfFile.getVersion() + " by Quaz3l: Enabled");
 	}
 	 
 	// Configuration Functions
@@ -154,7 +175,7 @@ public class qQuests extends JavaPlugin
 		try {
 	        qConfig.save(qConfigFile);
 	    } catch (IOException ex) {
-	        Logger.getLogger(JavaPlugin.class.getName()).log(Level.SEVERE, "Could not save config to " + qConfigFile, ex);
+	        this.logger.severe(this.pluginPrefix + "Could not save config to " + qConfigFile);
 	    }
 	}
 	
@@ -291,7 +312,7 @@ public class qQuests extends JavaPlugin
 			this.doneItems.put(player, null);
 			this.currentQuests.put(player, null);
 			// Notify Player
-			player.sendMessage(ChatColor.LIGHT_PURPLE + "Quest Dropped!");
+			player.sendMessage(chatPrefix + ChatColor.LIGHT_PURPLE + "Quest Dropped!");
 		}
 		else if(type == "done")
 		{
@@ -301,7 +322,7 @@ public class qQuests extends JavaPlugin
 			//List<String> items = plugin.getQuestConfig().getStringList("0.market.reward.items");
 			//Iterator<String> iter = items.iterator();
 			//while (iter.hasNext()) {
-			//	player.sendMessage(iter.next());
+			//	player.sendMessage(chatPrefix + iter.next());
 			//}
 			/*
 			List<String> items = plugin.getQuestConfig().getStringList((String) plugin.currentQuests.get("0.market.reward.items"));
@@ -362,7 +383,7 @@ public class qQuests extends JavaPlugin
 			this.currentQuests.put(player, null);
 			
 			// Notify Player
-			player.sendMessage(ChatColor.GREEN + "Quest Done!");
+			player.sendMessage(chatPrefix + ChatColor.GREEN + "Quest Done!");
 		}
 	}
 	
@@ -394,22 +415,28 @@ public class qQuests extends JavaPlugin
     }
 
 	public void giveQuest(Player player) {
-		if(this.currentQuests.get(player) == null) 
+		if (permission.has(player, "qquests.give"))
 		{
-			Set<String> questNo = this.getQuestConfig().getKeys(false);
-			Random rand = new Random(); 
-			Object SelectedQuest = rand.nextInt(questNo.size()); 
-			
-			this.currentQuests.put(player, SelectedQuest);
-			
-			this.endQuest(player, "join");
-			
-			player.sendMessage(ChatColor.AQUA + "Your Quest: " + ChatColor.LIGHT_PURPLE + this.getQuestConfig().getString(SelectedQuest + ".info.messageStart"));
+			if(this.currentQuests.get(player) == null) 
+			{
+				Set<String> questNo = this.getQuestConfig().getKeys(false);
+				Random rand = new Random(); 
+				Object SelectedQuest = rand.nextInt(questNo.size()); 
+				this.currentQuests.put(player, SelectedQuest);
+				
+				this.endQuest(player, "join");
+				
+				player.sendMessage(chatPrefix + ChatColor.AQUA + "Your Quest: " + ChatColor.LIGHT_PURPLE + this.getQuestConfig().getString(SelectedQuest + ".info.messageStart"));
+			}
+			else
+			{
+				player.sendMessage(chatPrefix + ChatColor.RED + "You already have a active quest!");
+				player.sendMessage(chatPrefix + ChatColor.AQUA + "Your Quest: " + ChatColor.LIGHT_PURPLE + this.getQuestConfig().getString(this.currentQuests.get(player) + ".info.messageStart"));
+			}
 		}
 		else
 		{
-			player.sendMessage(ChatColor.RED + "You already have a active quest!");
-			player.sendMessage(ChatColor.AQUA + "Your Quest: " + ChatColor.LIGHT_PURPLE + this.getQuestConfig().getString(this.currentQuests.get(player) + ".info.messageStart"));
+			player.sendMessage(chatPrefix + ChatColor.RED + "You can't get quests!");
 		}
 		
 	}
@@ -417,26 +444,34 @@ public class qQuests extends JavaPlugin
 	public void giveQuest(Player player, String s) {
 		if(this.currentQuests.get(player) == null) 
 		{
-			try
-		    {
-				int SelectedQuest = Integer.parseInt(s.trim()) - 1;
-				
-				this.currentQuests.put(player, SelectedQuest);
-				
-				this.endQuest(player, "join");
-				
-				player.sendMessage(ChatColor.AQUA + "Your Quest: " + ChatColor.LIGHT_PURPLE + this.getQuestConfig().getString(SelectedQuest + ".info.messageStart"));
-		    }
-			catch (NumberFormatException nfe) 
+			if (permission.has(player, "qquests.give.specific"))
 			{
-				player.sendMessage("This Is Not A Valid Quest!");
-				return;
+				try
+				{
+					int SelectedQuest = Integer.parseInt(s.trim()) - 1;
+					
+					this.currentQuests.put(player, SelectedQuest);
+					
+					this.endQuest(player, "join");
+					
+					player.sendMessage(chatPrefix + ChatColor.AQUA + "Your Quest: " + ChatColor.LIGHT_PURPLE + this.getQuestConfig().getString(SelectedQuest + ".info.messageStart"));
+				}
+				catch (NumberFormatException nfe) 
+				{
+					player.sendMessage(chatPrefix + "This Is Not A Valid Quest!");
+					return;
+				}
+			}
+			else
+			{
+				player.sendMessage(chatPrefix + ChatColor.RED + "You can't get specific quests!");
 			}
 		}
 		else
 		{
-			player.sendMessage(ChatColor.RED + "You already have a active quest!");
-			player.sendMessage(ChatColor.AQUA + "Your Quest: " + ChatColor.LIGHT_PURPLE + this.getQuestConfig().getString(this.currentQuests.get(player) + ".info.messageStart"));
+			player.sendMessage(chatPrefix + ChatColor.RED + "You already have a active quest!");
+			player.sendMessage(chatPrefix + ChatColor.AQUA + "Your Quest: " + ChatColor.LIGHT_PURPLE + this.getQuestConfig().getString(this.currentQuests.get(player) + ".info.messageStart"));
 		}
 	}
+	
 }

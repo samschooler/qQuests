@@ -45,12 +45,12 @@ public class eListener extends EntityListener
     						}
     						if(plugin.getQuestConfig().getInt(plugin.currentQuests.get(player) + ".task.amount") > plugin.doneItems.get(player)) 
     						{
-    							player.sendMessage(ChatColor.LIGHT_PURPLE + "You have killed " + ChatColor.GREEN + plugin.doneItems.get(player) + "/" + plugin.getQuestConfig().getInt(plugin.currentQuests.get(player) + ".task.amount") + " " + plugin.getQuestConfig().getString(plugin.currentQuests.get(player) + ".task.object.name") + "s");
+    							player.sendMessage( plugin.chatPrefix + ChatColor.LIGHT_PURPLE + "You have killed " + ChatColor.GREEN + plugin.doneItems.get(player) + "/" + plugin.getQuestConfig().getInt(plugin.currentQuests.get(player) + ".task.amount") + " " + plugin.getQuestConfig().getString(plugin.currentQuests.get(player) + ".task.object.name") + "s");
     						}
     						else
     						{
-    							player.sendMessage(ChatColor.LIGHT_PURPLE + "You have completed the quest with " + ChatColor.GREEN + plugin.doneItems.get(player) + "/" + plugin.getQuestConfig().getInt(plugin.currentQuests.get(player) + ".task.amount") + " killed " + plugin.getQuestConfig().getString(plugin.currentQuests.get(player) + ".task.object.name") + "s");
-    							player.sendMessage(ChatColor.GREEN + "To Turn In The Quest Type: " + ChatColor.YELLOW + "/Quest DONE");
+    							player.sendMessage( plugin.chatPrefix + ChatColor.LIGHT_PURPLE + "You have completed the quest with " + ChatColor.GREEN + plugin.doneItems.get(player) + "/" + plugin.getQuestConfig().getInt(plugin.currentQuests.get(player) + ".task.amount") + " killed " + plugin.getQuestConfig().getString(plugin.currentQuests.get(player) + ".task.object.name") + "s");
+    							player.sendMessage( plugin.chatPrefix + ChatColor.GREEN + "To Turn In The Quest Type: " + ChatColor.YELLOW + "/Quest DONE");
     						}
     					}
         			}
