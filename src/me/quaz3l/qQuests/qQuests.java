@@ -8,12 +8,15 @@ import net.milkbowl.vault.economy.Economy;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -45,6 +48,10 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class qQuests extends JavaPlugin 
 {
@@ -69,6 +76,9 @@ public class qQuests extends JavaPlugin
 	
 	private final bListener blockListener = new bListener(this);
 	private final eListener entityListener = new eListener(this);
+	
+	//private String newVersion;
+    //private String currentVersion;
 
 	@Override
 	public void onDisable() 
@@ -81,6 +91,38 @@ public class qQuests extends JavaPlugin
 	public void onEnable() 
 	{
 		PluginDescriptionFile pdfFile = this.getDescription();
+		
+		// Check For Updates
+		// ***TODO*** Will enable on first release
+		/*
+		this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    newVersion = updateCheck(currentVersion);
+                    String oldVersion = getDescription().getVersion().substring(0, 5);
+                    if (!newVersion.contains(oldVersion)) {
+                        plugin.logger.warning(newVersion + " is out! You are running " + oldVersion);
+                        plugin.logger.warning("Update Vault at: http://dev.bukkit.org/server-mods/quests");
+                    }
+                } catch (Exception e) {
+                    // ignore exceptions
+                }
+            }
+            
+        }, 0, 432000);
+		try {
+            newVersion = updateCheck(currentVersion);
+            String oldVersion = getDescription().getVersion().substring(0, 5);
+            if (!newVersion.contains(oldVersion)) {
+                plugin.logger.warning(newVersion + " is out! You are running " + oldVersion);
+                plugin.logger.warning("Update Vault at: http://dev.bukkit.org/server-mods/quests");
+            }
+        } catch (Exception e) {
+            // ignore exceptions
+        }
+		*/
 		
 		// Find Economy
 		RegisteredServiceProvider<Economy> economyProvider =
@@ -420,16 +462,21 @@ public class qQuests extends JavaPlugin
 			try
 		    {
 				int SelectedQuest = Integer.parseInt(s.trim()) - 1;
-				
+				if(this.getQuestConfig().contains(SelectedQuest + ".info.name")) {
 				this.currentQuests.put(player, SelectedQuest);
 				
 				this.endQuest(player, "join");
 				
 				player.sendMessage(ChatColor.AQUA + "Your Quest: " + ChatColor.LIGHT_PURPLE + this.getQuestConfig().getString(SelectedQuest + ".info.messageStart"));
+				}
+				else
+				{
+					player.sendMessage(ChatColor.RED + "This Is Not A Valid Quest!");
+				}
 		    }
 			catch (NumberFormatException nfe) 
 			{
-				player.sendMessage("This Is Not A Valid Quest!");
+				player.sendMessage(ChatColor.RED + "This Is Not A Valid Quest!");
 				return;
 			}
 		}
@@ -439,4 +486,25 @@ public class qQuests extends JavaPlugin
 			player.sendMessage(ChatColor.AQUA + "Your Quest: " + ChatColor.LIGHT_PURPLE + this.getQuestConfig().getString(this.currentQuests.get(player) + ".info.messageStart"));
 		}
 	}
+	
+	public String updateCheck(String currentVersion) throws Exception {
+        String pluginUrlString = "http://dev.bukkit.org/server-mods/quests/files.rss";
+        try {
+            URL url = new URL(pluginUrlString);
+            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(url.openConnection().getInputStream());
+            doc.getDocumentElement().normalize();
+            NodeList nodes = doc.getElementsByTagName("item");
+            Node firstNode = nodes.item(0);
+            if (firstNode.getNodeType() == 1) {
+                Element firstElement = (Element)firstNode;
+                NodeList firstElementTagName = firstElement.getElementsByTagName("title");
+                Element firstNameElement = (Element) firstElementTagName.item(0);
+                NodeList firstNodes = firstNameElement.getChildNodes();
+                return firstNodes.item(0).getNodeValue();
+            }
+        }
+        catch (Exception localException) {
+        }
+        return currentVersion;
+    }
 }
