@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -61,6 +62,19 @@ public class qQuests extends JavaPlugin
 	// Hashmaps to store temporary data on player quests
 	public Map<Player, Object> currentQuests = new HashMap<Player, Object>();
 	public Map<Player, Integer> doneItems = new HashMap<Player, Integer>();
+	
+	// Player Quest Data
+	public Map<Player, List<Integer>> destroyed = new HashMap<Player, List<Integer>>();
+	public Map<Player, List<Integer>> damaged = new HashMap<Player, List<Integer>>();
+	public Map<Player, List<Integer>> placed = new HashMap<Player, List<Integer>>();
+	public Map<Player, List<Integer>> killed = new HashMap<Player, List<Integer>>();
+	
+	// Quest Hashes
+	public Map<Player, List<Integer>> hasCollect = new HashMap<Player, List<Integer>>();
+	public Map<Player, List<Integer>> hasDestroy = new HashMap<Player, List<Integer>>();
+	public Map<Player, List<Integer>> hasDamage = new HashMap<Player, List<Integer>>();
+	public Map<Player, List<Integer>> hasPlace = new HashMap<Player, List<Integer>>();
+	public Map<Player, List<Integer>> hasKill = new HashMap<Player, List<Integer>>();
 	
 	// Get The Logger
 	public final Logger logger = Logger.getLogger(("Minecraft"));
