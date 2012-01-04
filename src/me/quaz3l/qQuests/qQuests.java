@@ -346,6 +346,16 @@ public class qQuests extends JavaPlugin
 			// Reset Players Quest Data
 			this.doneItems.put(player, null);
 			this.currentQuests.put(player, null);
+			
+			this.destroyed.put(player, null);
+			this.damaged.put(player, null);
+			this.placed.put(player, null);
+			this.killed.put(player, null);
+			
+			this.hasCollect.put(player, null);
+			this.hasDestroy.put(player, null);
+			this.hasPlace.put(player, null);
+			this.hasKill.put(player, null);
 			// Notify Player
 			player.sendMessage(ChatColor.LIGHT_PURPLE + "Quest Dropped!");
 		}
@@ -416,6 +426,16 @@ public class qQuests extends JavaPlugin
 			// Reset Players Quest Data
 			this.doneItems.put(player, null);
 			this.currentQuests.put(player, null);
+			
+			this.destroyed.put(player, null);
+			this.damaged.put(player, null);
+			this.placed.put(player, null);
+			this.killed.put(player, null);
+			
+			this.hasCollect.put(player, null);
+			this.hasDestroy.put(player, null);
+			this.hasPlace.put(player, null);
+			this.hasKill.put(player, null);
 			
 			// Notify Player
 			player.sendMessage(ChatColor.GREEN + "Quest Done!");
