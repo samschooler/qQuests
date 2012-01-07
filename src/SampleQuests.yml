@@ -30,13 +30,6 @@
       money: 500
       health: 0
       hunger: 0
-  task:
-    0:
-      type: collect
-      object:
-        id: 264
-        name: Diamonds
-      amount: 5
 1:
   info:
     name: Dirt? Where?
@@ -88,12 +81,6 @@
       money: 10
       health: 0
       hunger: 0
-  task:
-    0:
-      type: kill
-      object:
-        name: Zombie
-      amount: 5
 3:
   info:
     name: Damage Dirt!
@@ -120,10 +107,3 @@
       money: 10
       health: 0
       hunger: 0
-  task:
-    0:
-      type: damage
-      object:
-        id: 3
-        name: Dirt
-      amount: 128

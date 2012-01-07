@@ -432,7 +432,7 @@ public class qQuests extends JavaPlugin
 			this.hasKill.put(player, null);
 			
 			// Notify Player
-			player.sendMessage(ChatColor.GREEN + "Quest Done!");
+			player.sendMessage(ChatColor.GREEN + this.getQuestConfig().getString(this.currentQuests.get(player) + ".info.messageEnd"));
 		}
 	}
 	
@@ -579,7 +579,7 @@ public class qQuests extends JavaPlugin
 	}
 	
 	public String updateCheck(String currentVersion) throws Exception {
-        String pluginUrlString = "http://dev.bukkit.org/server-mods/quests/files.rss";
+        String pluginUrlString = "http://dev.bukkit.org/server-mods/project-34294/files.rss";
         try {
             URL url = new URL(pluginUrlString);
             Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(url.openConnection().getInputStream());

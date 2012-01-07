@@ -30,10 +30,3 @@
       money: 500
       health: 0
       hunger: 0
-  task:
-    0:
-      type: collect
-      object:
-        id: 264
-        name: Diamonds
-      amount: 5
