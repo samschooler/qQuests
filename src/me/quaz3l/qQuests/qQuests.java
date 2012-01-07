@@ -98,13 +98,14 @@ public class qQuests extends JavaPlugin
 	public void onDisable() 
 	{
 		PluginDescriptionFile pdfFile = this.getDescription();
-		this.logger.info( "[" + getDescription().getName() + "] Version " + pdfFile.getVersion() + " by Quaz3l: Disabled");
+		this.logger.info("[" + pdfFile.getName() + "] " + " Version " + pdfFile.getVersion() + " by Quaz3l: Disabled");
 	}
 
 	@Override
 	public void onEnable() 
 	{
 		PluginDescriptionFile pdfFile = this.getDescription();
+		PluginManager pm = getServer().getPluginManager();
 		
 		// Check For Updates
 		this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
@@ -114,8 +115,8 @@ public class qQuests extends JavaPlugin
                     newVersion = updateCheck(currentVersion);
                     String oldVersion = getDescription().getVersion().substring(0, 5);
                     if (!newVersion.contains(oldVersion)) {
-                        plugin.logger.warning(newVersion + " is out! You are running " + oldVersion);
-                        plugin.logger.warning("Update qQuests at: http://dev.bukkit.org/server-mods/quests");
+                        plugin.logger.warning("[qQuests] " + newVersion + " is out! You are running " + oldVersion);
+                        plugin.logger.warning("[qQuests] " + "Update qQuests at: http://dev.bukkit.org/server-mods/quests");
                     }
                 } catch (Exception e) {
                     // ignore exceptions
@@ -127,24 +128,31 @@ public class qQuests extends JavaPlugin
             newVersion = updateCheck(currentVersion);
             String oldVersion = getDescription().getVersion().substring(0, 5);
             if (!newVersion.contains(oldVersion)) {
-                plugin.logger.warning(newVersion + " is out! You are running " + oldVersion);
-                plugin.logger.warning("Update qQuests at: http://dev.bukkit.org/server-mods/quests");
+                plugin.logger.warning("[" + pdfFile.getName() + "] " + newVersion + " is out! You are running " + oldVersion);
+                plugin.logger.warning("[" + pdfFile.getName() + "] " + "Update qQuests at: http://dev.bukkit.org/server-mods/quests");
             }
         } catch (Exception e) {}
 		
 		// Find Economy
+		if(pm.isPluginEnabled("Vault")) {
 		RegisteredServiceProvider<Economy> economyProvider =
 	    getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
 	    if (economyProvider != null) {
 	    	Econ.economy = economyProvider.getProvider();
-	    	this.logger.info( "[" + pdfFile.getName() + "] Version " + pdfFile.getVersion() + " by Quaz3l: Economy Found!");
+	    	this.logger.info( "[" + pdfFile.getName() + "] " + "Economy Found!");
 	    	econEnabled = true;
 	    }
 	    else
 	    {
-	    	this.logger.warning( "[" + pdfFile.getName() + "] Version " + pdfFile.getVersion() + " by Quaz3l: Economy Not Found! All Economic Interactions Have Been Disabled!");
+	    	this.logger.warning("[" + pdfFile.getName() + "] " + "Economy Not Found! All Economic Interactions Have Been Disabled!");
 	    	econEnabled = false;
 	    }
+		}
+		else
+		{
+			this.logger.warning("[" + pdfFile.getName() + "] " + "Vault Not Found! All Economic Interactions Have Been Disabled!");
+	    	econEnabled = false;
+		}
 		
 		// Get The Configuration Files
 	    this.getConfig();
@@ -155,13 +163,12 @@ public class qQuests extends JavaPlugin
 		this.saveQuestConfig();
 		
 		// Register Events
-		PluginManager pm = getServer().getPluginManager();
-			// Block Events
-			pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Event.Priority.Normal, this);
-			pm.registerEvent(Event.Type.BLOCK_DAMAGE, blockListener, Event.Priority.Normal, this);
+		// Block Events
+		pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Event.Priority.Normal, this);
+		pm.registerEvent(Event.Type.BLOCK_DAMAGE, blockListener, Event.Priority.Normal, this);
 		
-			// Entity Events
-			pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Event.Priority.Normal, this);
+		// Entity Events
+		pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Event.Priority.Normal, this);
 		
 		// Setup Command Executors
 		cmdExe = new cmd_qQuests(this);
@@ -204,7 +211,7 @@ public class qQuests extends JavaPlugin
 		try {
 	        qConfig.save(qConfigFile);
 	    } catch (IOException ex) {
-	        Logger.getLogger(JavaPlugin.class.getName()).log(Level.SEVERE, "Could not save config to " + qConfigFile, ex);
+	        Logger.getLogger(JavaPlugin.class.getName()).log(Level.SEVERE, "[qQuests] " + "Could not save config to " + qConfigFile, ex);
 	    }
 	}
 	
@@ -237,7 +244,7 @@ public class qQuests extends JavaPlugin
 		try {
 	        cConfig.save(cConfigFile);
 	    } catch (IOException ex) {
-	        Logger.getLogger(JavaPlugin.class.getName()).log(Level.SEVERE, "Could not save config to " + cConfigFile, ex);
+	        Logger.getLogger(JavaPlugin.class.getName()).log(Level.SEVERE, "[qQuests] " + "Could not save config to " + cConfigFile, ex);
 	    }
 	}
 	
@@ -416,6 +423,8 @@ public class qQuests extends JavaPlugin
 				player.setFoodLevel(feedAmount);
 			}
 			
+			// Notify Player
+			player.sendMessage(ChatColor.LIGHT_PURPLE + this.getQuestConfig().getString(this.currentQuests.get(player) + ".info.messageEnd"));
 			
 			// Reset Players Quest Data
 			this.doneItems.put(player, null);
@@ -430,9 +439,6 @@ public class qQuests extends JavaPlugin
 			this.hasDestroy.put(player, null);
 			this.hasPlace.put(player, null);
 			this.hasKill.put(player, null);
-			
-			// Notify Player
-			player.sendMessage(ChatColor.GREEN + this.getQuestConfig().getString(this.currentQuests.get(player) + ".info.messageEnd"));
 		}
 	}
 	
