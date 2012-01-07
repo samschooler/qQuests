@@ -91,8 +91,8 @@ public class qQuests extends JavaPlugin
 	private final bListener blockListener = new bListener(this);
 	private final eListener entityListener = new eListener(this);
 	
-	//private String newVersion;
-    //private String currentVersion;
+	private String newVersion;
+    private String currentVersion;
 
 	@Override
 	public void onDisable() 
@@ -107,10 +107,7 @@ public class qQuests extends JavaPlugin
 		PluginDescriptionFile pdfFile = this.getDescription();
 		
 		// Check For Updates
-		// ***TODO*** Will enable on first release
-		/*
 		this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
-
             @Override
             public void run() {
                 try {
@@ -118,7 +115,7 @@ public class qQuests extends JavaPlugin
                     String oldVersion = getDescription().getVersion().substring(0, 5);
                     if (!newVersion.contains(oldVersion)) {
                         plugin.logger.warning(newVersion + " is out! You are running " + oldVersion);
-                        plugin.logger.warning("Update Vault at: http://dev.bukkit.org/server-mods/quests");
+                        plugin.logger.warning("Update qQuests at: http://dev.bukkit.org/server-mods/quests");
                     }
                 } catch (Exception e) {
                     // ignore exceptions
@@ -131,12 +128,9 @@ public class qQuests extends JavaPlugin
             String oldVersion = getDescription().getVersion().substring(0, 5);
             if (!newVersion.contains(oldVersion)) {
                 plugin.logger.warning(newVersion + " is out! You are running " + oldVersion);
-                plugin.logger.warning("Update Vault at: http://dev.bukkit.org/server-mods/quests");
+                plugin.logger.warning("Update qQuests at: http://dev.bukkit.org/server-mods/quests");
             }
-        } catch (Exception e) {
-            // ignore exceptions
-        }
-		*/
+        } catch (Exception e) {}
 		
 		// Find Economy
 		RegisteredServiceProvider<Economy> economyProvider =
@@ -478,6 +472,69 @@ public class qQuests extends JavaPlugin
 			
 			this.currentQuests.put(player, SelectedQuest);
 			
+			// This is for multi-objective support which will be added later but for now its throwing to many errors to handle
+			/* 
+			ConfigurationSection sec = this.getQuestConfig().getConfigurationSection(this.currentQuests.get(player) + ".tasks");
+			if (sec != null) {
+			    for (String key : sec.getKeys(false)) {
+			    	Map<String, Object> taskValues = this.getQuestConfig().getConfigurationSection(this.currentQuests.get(player) + ".tasks." + key).getValues(true);
+			    	player.sendMessage(taskValues.get("type").toString());
+			    	player.sendMessage(taskValues.get("amount").toString());
+			    	player.sendMessage("-" + key + "-");
+			    	if(taskValues.get("type").toString().equalsIgnoreCase("collect")) 
+			    	{
+			    		try
+			    	    {
+			    			int i = Integer.parseInt(key.trim());
+			    			List<Integer> taskCollect = this.hasCollect.get(player);
+			    			taskCollect.add(i);
+			    	    }
+			    	    catch (NumberFormatException nfe) {
+			    	    }
+			    	}
+			    	else if(taskValues.get("type").toString().equalsIgnoreCase("destroy")) 
+			    	{
+			    		try
+			    	    {
+			    			int i = Integer.parseInt(key.trim());
+			    			List<Integer> taskCollect = this.hasDestroy.get(player);
+			    			taskCollect.add(i);
+			    	    }
+			    	    catch (NumberFormatException nfe) {}
+			    	}
+			    	else if(taskValues.get("type").toString().equalsIgnoreCase("damage")) 
+			    	{
+			    		try
+			    	    {
+			    			int i = Integer.parseInt(key.trim());
+			    			List<Integer> taskCollect = this.hasDamage.get(player);
+			    			taskCollect.add(i);
+			    	    }
+			    	    catch (NumberFormatException nfe) {}
+			    	}
+			    	else if(taskValues.get("type").toString().equalsIgnoreCase("place")) 
+			    	{
+			    		try
+			    	    {
+			    			int i = Integer.parseInt(key.trim());
+			    			List<Integer> taskCollect = this.hasPlace.get(player);
+			    			taskCollect.add(i);
+			    	    }
+			    	    catch (NumberFormatException nfe) {}
+			    	}
+			    	else if(taskValues.get("type").toString().equalsIgnoreCase("kill")) 
+			    	{
+			    		try
+			    	    {
+			    			int i = Integer.parseInt(key.trim());
+			    			List<Integer> taskCollect = this.hasKill.get(player);
+			    			taskCollect.add(i);
+			    	    }
+			    	    catch (NumberFormatException nfe) {}
+			    	}
+			    }
+			}*/
+						
 			this.endQuest(player, "join");
 			
 			player.sendMessage(ChatColor.AQUA + "Your Quest: " + ChatColor.LIGHT_PURPLE + this.getQuestConfig().getString(SelectedQuest + ".info.messageStart"));

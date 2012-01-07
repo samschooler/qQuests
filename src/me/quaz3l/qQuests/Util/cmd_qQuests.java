@@ -49,33 +49,34 @@ public class cmd_qQuests implements CommandExecutor
 				{
 					if(plugin.currentQuests.get(((Player) s)) != null) 
 					{
-						if(plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".task.type").equalsIgnoreCase("collect") || plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".task.type").equalsIgnoreCase("destroy")) 
+						if(plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type") != null && plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type").equalsIgnoreCase("collect") || plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type").equalsIgnoreCase("destroy") || plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type").equalsIgnoreCase("damage") || plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type").equalsIgnoreCase("place")) 
 						{
 							((Player) s).sendMessage(ChatColor.AQUA + "Quest Info: ");
 							((Player) s).sendMessage(ChatColor.YELLOW + "Name: " + ChatColor.GREEN + plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".info.name"));
-							((Player) s).sendMessage(ChatColor.YELLOW + "Task: " + ChatColor.GREEN + "You need to " + plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".task.type") + " " + 
-																													  plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".task.amount") + " " +
-																													  plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".task.object.name") + "(ID:" +
-																													  plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".task.object.id") + ")");
+							((Player) s).sendMessage(ChatColor.YELLOW + "Task: " + ChatColor.GREEN + "You need to " + plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type") + " " + 
+																													  plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".tasks.0.amount") + " " +
+																													  plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.object.name") + "(ID:" +
+																													  plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".tasks.0.object.id") + ")");
 							//List<String> rewardItems = plugin.getQuestConfig().getStringList(plugin.currentQuests.get(((Player) s)) + ".market.reward.items");
 							((Player) s).sendMessage(ChatColor.YELLOW + "Rewards:");
 							((Player) s).sendMessage(ChatColor.YELLOW + "	Money: " + ChatColor.GREEN + plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".market.reward.money"));
 							((Player) s).sendMessage(ChatColor.YELLOW + "	Health: " + ChatColor.GREEN + plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".market.reward.health"));
 							((Player) s).sendMessage(ChatColor.YELLOW + "	Food: " + ChatColor.GREEN + plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".market.reward.hunger"));
 						}
-						else if(plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".task.type").equalsIgnoreCase("kill")) 
+						else if(plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type").equalsIgnoreCase("kill")) 
 						{
 							((Player) s).sendMessage(ChatColor.AQUA + "Quest Info: ");
 							((Player) s).sendMessage(ChatColor.YELLOW + "Name: " + ChatColor.GREEN + plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".info.name"));
-							((Player) s).sendMessage(ChatColor.YELLOW + "Task: " + ChatColor.GREEN + "You need to " + plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".task.type") + " " + 
-																													  plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".task.amount") + " " +
-																													  plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".task.object.name") + "s");
+							((Player) s).sendMessage(ChatColor.YELLOW + "Task: " + ChatColor.GREEN + "You need to " + plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type") + " " + 
+																													  plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".tasks.0.amount") + " " +
+																													  plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.object.name") + "s");
 							//List<String> rewardItems = plugin.getQuestConfig().getStringList(plugin.currentQuests.get(((Player) s)) + ".market.reward.items");
 							((Player) s).sendMessage(ChatColor.YELLOW + "Rewards:");
 							((Player) s).sendMessage(ChatColor.YELLOW + "	Money: " + ChatColor.GREEN + plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".market.reward.money"));
 							((Player) s).sendMessage(ChatColor.YELLOW + "	Health: " + ChatColor.GREEN + plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".market.reward.health"));
 							((Player) s).sendMessage(ChatColor.YELLOW + "	Food: " + ChatColor.GREEN + plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".market.reward.hunger"));
 						}
+						else ((Player) s).sendMessage(ChatColor.RED + "The objective types are undefined for this quest!");
 					}
 					else
 					{
@@ -100,10 +101,10 @@ public class cmd_qQuests implements CommandExecutor
 				else if(args[0].equalsIgnoreCase("done")) 
 				{
 					if(plugin.currentQuests.get(((Player) s)) != null) {
-						if(plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".task.type").equalsIgnoreCase("collect")) {
+						if(plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type").equalsIgnoreCase("collect")) {
 							PlayerInventory inventory = ((Player) s).getInventory();
-							ItemStack istack = new ItemStack(plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".task.object.id"), plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".task.amount"));
-							if (inventory.contains(plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".task.object.id"), plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".task.amount"))) {
+							ItemStack istack = new ItemStack(plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".tasks.0.object.id"), plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".tasks.0.amount"));
+							if (inventory.contains(plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".tasks.0.object.id"), plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".tasks.0.amount"))) {
 								//Remove items from Inventory...
 								inventory.removeItem(istack);
 								plugin.endQuest(((Player) s), "done");
@@ -113,11 +114,11 @@ public class cmd_qQuests implements CommandExecutor
 								((Player) s).sendMessage(ChatColor.RED + "You Have Not Met The Requirements Of This Quest!");
 							}
 						}
-						else if(plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".task.type").equalsIgnoreCase("destroy"))
+						else if(plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type").equalsIgnoreCase("destroy"))
 						{
 							if(plugin.doneItems.get(((Player) s)) != null)
 							{
-								if(plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".task.amount") <= plugin.doneItems.get(((Player) s)))
+								if(plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".tasks.0.amount") <= plugin.doneItems.get(((Player) s)))
 								{
 									plugin.endQuest(((Player) s), "done");
 								}
@@ -131,11 +132,11 @@ public class cmd_qQuests implements CommandExecutor
 								((Player) s).sendMessage(ChatColor.RED + "You Have Broke Enough Blocks!");
 							}
 						}
-						else if(plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".task.type").equalsIgnoreCase("damage"))
+						else if(plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type").equalsIgnoreCase("damage"))
 						{
 							if(plugin.doneItems.get(((Player) s)) != null)
 							{
-								if(plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".task.amount") <= plugin.doneItems.get(((Player) s)))
+								if(plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".tasks.0.amount") <= plugin.doneItems.get(((Player) s)))
 								{
 									plugin.endQuest(((Player) s), "done");
 								}
@@ -149,22 +150,22 @@ public class cmd_qQuests implements CommandExecutor
 								((Player) s).sendMessage(ChatColor.RED + "You Have Broke Enough Blocks!");
 							}
 						}
-						else if(plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".task.type").equalsIgnoreCase("kill"))
+						else if(plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type").equalsIgnoreCase("kill"))
 						{
 							if(plugin.doneItems.get(((Player) s)) != null)
 							{
-								if(plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".task.amount") <= plugin.doneItems.get(((Player) s)))
+								if(plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".tasks.0.amount") <= plugin.doneItems.get(((Player) s)))
 								{
 									plugin.endQuest(((Player) s), "done");
 								}
 								else
 								{
-									((Player) s).sendMessage(ChatColor.RED + "You Have Killed Enough " + plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".task.object.name") + "s!");
+									((Player) s).sendMessage(ChatColor.RED + "You Have Killed Enough " + plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.object.name") + "s!");
 								}
 							}
 							else
 							{
-								((Player) s).sendMessage(ChatColor.RED + "You Have Killed Enough " + plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".task.object.name") + "s!");
+								((Player) s).sendMessage(ChatColor.RED + "You Have Killed Enough " + plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.object.name") + "s!");
 							}
 						}
 					}

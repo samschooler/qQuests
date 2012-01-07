@@ -4,17 +4,18 @@
 # or just copy a current quest and use the vars and common sense to
 # decrypt the YAML.
 # Quests 0-10 by Quaz3l
-'0':
+0:
   info:
     name: Diamonds!
     messageStart: Hey! Can you go get my 5 diamonds! I'll pay you $500
     messageEnd: Thanks! Now I can feed my lava dragon! ;)
-  task:
-    type: collect
-    object:
-      id: 264
-      name: Diamonds
-    amount: 5
+  tasks:
+    0:
+      type: collect
+      object:
+        id: 264
+        name: Diamonds
+      amount: 5
   market:
     fee:
       toJoin:
@@ -29,77 +30,10 @@
       money: 500
       health: 0
       hunger: 0
-'1':
-  info:
-    name: Dirt? Where?
-    messageStart: I don't want any dirt to be in this world, go destroy 10 dirt blocks!
-    messageEnd: Thanks I like not having dirt anywhere!
   task:
-    type: destroy
-    object:
-      id: 3
-      name: Dirt
-    amount: 10
-  market:
-    fee:
-      toJoin:
-        money: 0
-        health: 0
-        hunger: 0
-      toDrop:
-        money: -50
-        health: 0
-        hunger: 0
-    reward:
-      money: 10
-      health: 0
-      hunger: 0
-'2':
-  info:
-    name: KILL ZOMBIEZZZ!
-    messageStart: KILL 5 ZOMBIEZZZ!
-    messageEnd: Thanks I waz paranoid.
-  task:
-    type: kill
-    object:
-      name: Zombie
-    amount: 5
-  market:
-    fee:
-      toJoin:
-        money: 0
-        health: 0
-        hunger: 0
-      toDrop:
-        money: -50
-        health: 0
-        hunger: 0
-    reward:
-      money: 10
-      health: 0
-      hunger: 0
-'3':
-  info:
-    name: Damage Dirt!
-    messageStart: Damage the dirt, I like my dirt weak!
-    messageEnd: Thanks I like not having dirt strong!
-  task:
-    type: damage
-    object:
-      id: 3
-      name: Dirt
-    amount: 128
-  market:
-    fee:
-      toJoin:
-        money: 0
-        health: 0
-        hunger: 0
-      toDrop:
-        money: -50
-        health: 0
-        hunger: 0
-    reward:
-      money: 10
-      health: 0
-      hunger: 0
+    0:
+      type: collect
+      object:
+        id: 264
+        name: Diamonds
+      amount: 5
