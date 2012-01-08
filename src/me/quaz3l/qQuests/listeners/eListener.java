@@ -18,7 +18,6 @@ public class eListener extends EntityListener
 	{
 		plugin = instance;
 	}
-//***FIX** ***RAGE!!!!**** Doesn't F***N' WORK!
 	public void onEntityDeath(EntityDeathEvent event)
 	{        
         if(event.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent)
@@ -31,7 +30,7 @@ public class eListener extends EntityListener
         		String entityType = plugin.isEntityType(entity);
         		if(plugin.currentQuests.get(player) != null) 
         		{
-        			if(plugin.getQuestConfig().getString(plugin.currentQuests.get(player) + ".tasks.0.type").equalsIgnoreCase("kill")) 
+        			if(plugin.getQuestConfig().getString(plugin.currentQuests.get(player) + ".tasks.0.type") != null && plugin.getQuestConfig().getString(plugin.currentQuests.get(player) + ".tasks.0.type").equalsIgnoreCase("kill"))  
         			{
         				if(plugin.getQuestConfig().getString(plugin.currentQuests.get(player) + ".tasks.0.object.name").trim().equalsIgnoreCase(entityType.trim())) 
     					{

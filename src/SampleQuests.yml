@@ -1,9 +1,9 @@
-# Default Quests Auto Generated
+# Sample Quests Auto Generated
 # To create your own quests either follow the steps on:
-# <URL_PLACEHOLDER>
+# http://dev.bukkit.org/server-mods/quests/pages/quests-yml/
 # or just copy a current quest and use the vars and common sense to
 # decrypt the YAML.
-# Quests 0-3 by Quaz3l
+# Quests 0-4 by Quaz3l
 0:
   info:
     name: Diamonds!
@@ -35,7 +35,7 @@
     name: Dirt? Where?
     messageStart: I don't want any dirt to be in this world, go destroy 10 dirt blocks!
     messageEnd: Thanks I like not having dirt anywhere!
-  task:
+  tasks:
     0:
       type: destroy
       object:
@@ -93,6 +93,32 @@
         id: 3
         name: Dirt
       amount: 128
+  market:
+    fee:
+      toJoin:
+        money: 0
+        health: 0
+        hunger: 0
+      toDrop:
+        money: -50
+        health: 0
+        hunger: 0
+    reward:
+      money: 10
+      health: 0
+      hunger: 0
+4:
+  info:
+    name: Place Dirt!
+    messageStart: Place 2 dirt, I like my dirt!
+    messageEnd: Thanks I like having dirt!
+  tasks:
+    0:
+      type: damage
+      object:
+        id: 3
+        name: Dirt
+      amount: 2
   market:
     fee:
       toJoin:

@@ -129,7 +129,7 @@ public class cmd_qQuests implements CommandExecutor
 							}
 							else
 							{
-								((Player) s).sendMessage(ChatColor.RED + "You Have Broke Enough Blocks!");
+								((Player) s).sendMessage(ChatColor.RED + "You Have Not Broke Enough Blocks!");
 							}
 						}
 						else if(plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type").equalsIgnoreCase("damage"))
@@ -147,7 +147,25 @@ public class cmd_qQuests implements CommandExecutor
 							}
 							else
 							{
-								((Player) s).sendMessage(ChatColor.RED + "You Have Broke Enough Blocks!");
+								((Player) s).sendMessage(ChatColor.RED + "You Have Not Damaged Enough Blocks!");
+							}
+						}
+						else if(plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type").equalsIgnoreCase("place"))
+						{
+							if(plugin.doneItems.get(((Player) s)) != null)
+							{
+								if(plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".tasks.0.amount") <= plugin.doneItems.get(((Player) s)))
+								{
+									plugin.endQuest(((Player) s), "done");
+								}
+								else
+								{
+									((Player) s).sendMessage(ChatColor.RED + "You Have Not Placed Enough Blocks!");
+								}
+							}
+							else
+							{
+								((Player) s).sendMessage(ChatColor.RED + "You Have Not Placed Enough Blocks!");
 							}
 						}
 						else if(plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type").equalsIgnoreCase("kill"))
