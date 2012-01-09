@@ -8,7 +8,6 @@ import net.milkbowl.vault.economy.Economy;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,8 +15,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -49,10 +46,6 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 public class qQuests extends JavaPlugin 
 {
@@ -90,9 +83,6 @@ public class qQuests extends JavaPlugin
 	
 	private final bListener blockListener = new bListener(this);
 	private final eListener entityListener = new eListener(this);
-	
-	private String newVersion;
-    private String currentVersion;
 
 	@Override
 	public void onDisable() 
@@ -106,32 +96,6 @@ public class qQuests extends JavaPlugin
 	{
 		PluginDescriptionFile pdfFile = this.getDescription();
 		PluginManager pm = getServer().getPluginManager();
-		
-		// Check For Updates
-		this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    newVersion = updateCheck(currentVersion);
-                    String oldVersion = getDescription().getVersion().substring(0, 5);
-                    if (!newVersion.contains(oldVersion)) {
-                        plugin.logger.warning("[qQuests] " + newVersion + " is out! You are running " + oldVersion);
-                        plugin.logger.warning("[qQuests] " + "Update qQuests at: http://dev.bukkit.org/server-mods/quests");
-                    }
-                } catch (Exception e) {
-                    // ignore exceptions
-                }
-            }
-            
-        }, 0, 432000);
-		try {
-            newVersion = updateCheck(currentVersion);
-            String oldVersion = getDescription().getVersion().substring(0, 5);
-            if (!newVersion.contains(oldVersion)) {
-                plugin.logger.warning("[" + pdfFile.getName() + "] " + newVersion + " is out! You are running " + oldVersion);
-                plugin.logger.warning("[" + pdfFile.getName() + "] " + "Update qQuests at: http://dev.bukkit.org/server-mods/quests");
-            }
-        } catch (Exception e) {}
 		
 		// Find Economy
 		if(pm.isPluginEnabled("Vault")) {
@@ -249,227 +213,8 @@ public class qQuests extends JavaPlugin
 	    }
 	}
 	
-	// End Of Quest Function
-	public void endQuest(Player player, String type) {
-		int healAmount;
-		int aHealth;
-		int cHealth;
-		int feedAmount;
-		int aHunger;
-		int cHunger;
-		
-		if(type == "join")
-		{
-			//***TODO*** Add Items
-			//Fee: Items
-			
-			// Fee: Money
-			if(econEnabled) 
-			{
-				Econ.econChangeBalancePlayer(player, this.getQuestConfig().getDouble(this.currentQuests.get(player) + ".market.fee.toJoin.money"));
-			}
-			
-			// Reward: Health
-			cHealth = player.getHealth();
-			aHealth = this.getQuestConfig().getInt(this.currentQuests.get(player) + ".market.fee.toJoin.health");
-			healAmount = (cHealth + aHealth);
-			if(healAmount > 20) {
-				player.setHealth(20);
-			}
-			else if(healAmount < 0)
-			{
-				player.setHealth(0);
-			}
-			else
-			{
-				player.setHealth(healAmount);
-			}
-			
-			// Fee: Hunger
-			cHunger = player.getFoodLevel();
-			aHunger = this.getQuestConfig().getInt(this.currentQuests.get(player) + ".market.fee.toJoin.hunger");
-			feedAmount = (cHunger + aHunger);
-			if(feedAmount > 20) {
-				player.setFoodLevel(20);
-			}
-			else if(feedAmount < 0)
-			{
-				player.setFoodLevel(0);
-			}
-			else
-			{
-				player.setFoodLevel(feedAmount);
-			}
-		}
-		else if(type == "drop") {
-			//***TODO*** Add Items
-			//Fee: Items
-			
-			// Fee: Money
-			if(econEnabled) 
-			{
-				Econ.econChangeBalancePlayer(player, this.getQuestConfig().getDouble(this.currentQuests.get(player) + ".market.fee.toDrop.money"));
-			}
-
-			
-			// Fee: Health
-			cHealth = player.getHealth();
-			aHealth = this.getQuestConfig().getInt(this.currentQuests.get(player) + ".market.fee.toDrop.health");
-			healAmount = (cHealth + aHealth);
-			if(healAmount > 20) {
-				player.setHealth(20);
-			}
-			else if(healAmount < 0)
-			{
-				player.setHealth(0);
-			}
-			else
-			{
-				player.setHealth(healAmount);
-			}
-			
-			// Fee: Hunger
-			cHunger = player.getFoodLevel();
-			aHunger = this.getQuestConfig().getInt(this.currentQuests.get(player) + ".market.fee.toDrop.hunger");
-			feedAmount = (cHunger + aHunger);
-			if(feedAmount > 20) {
-				player.setFoodLevel(20);
-			}
-			else if(feedAmount < 0)
-			{
-				player.setFoodLevel(0);
-			}
-			else
-			{
-				player.setFoodLevel(feedAmount);
-			}
-						
-			
-			// Reset Players Quest Data
-			this.doneItems.put(player, null);
-			this.currentQuests.put(player, null);
-			
-			this.destroyed.put(player, null);
-			this.damaged.put(player, null);
-			this.placed.put(player, null);
-			this.killed.put(player, null);
-			
-			this.hasCollect.put(player, null);
-			this.hasDestroy.put(player, null);
-			this.hasPlace.put(player, null);
-			this.hasKill.put(player, null);
-			// Notify Player
-			player.sendMessage(ChatColor.LIGHT_PURPLE + "Quest Dropped!");
-		}
-		else if(type == "done")
-		{
-			//***TODO*** Add Items
-			//***FIX*** List<String> Throws a null error
-			// Reward: Items
-			//List<String> items = plugin.getQuestConfig().getStringList("0.market.reward.items");
-			//Iterator<String> iter = items.iterator();
-			//while (iter.hasNext()) {
-			//	player.sendMessage(iter.next());
-			//}
-			/*
-			List<String> items = plugin.getQuestConfig().getStringList((String) plugin.currentQuests.get("0.market.reward.items"));
-
-			if(items != null && items.size() > 0) // always check against null if it's even the slightest possibility of beeing null
-			{
-			    for(String itemStr : items) // iterate, don't use indexes and .get() for loops !
-			    {
-			    	PlayerInventory inventory = player.getInventory();
-					String[] cItem = itemStr.split(":");
-					Integer howMuch = Integer.parseInt(cItem[1].trim());
-					Integer whatToGive = Integer.parseInt(cItem[0].trim());
-					ItemStack istack = new ItemStack(whatToGive, howMuch);
-					inventory.addItem(istack);
-			    }
-			}
-			*/
-			// Reward: Money
-			if(econEnabled) 
-			{
-				Econ.econChangeBalancePlayer(player, this.getQuestConfig().getDouble(this.currentQuests.get(player) + ".market.reward.money"));
-			}
-			// Reward: Health
-			cHealth = player.getHealth();
-			aHealth = this.getQuestConfig().getInt(this.currentQuests.get(player) + ".market.reward.health");
-			healAmount = (cHealth + aHealth);
-			if(healAmount > 20) {
-				player.setHealth(20);
-			}
-			else if(healAmount < 0)
-			{
-				player.setHealth(0);
-			}
-			else
-			{
-				player.setHealth(healAmount);
-			}
-			
-			// Reward: Hunger
-			cHunger = player.getFoodLevel();
-			aHunger = this.getQuestConfig().getInt(this.currentQuests.get(player) + ".market.reward.hunger");
-			feedAmount = (cHunger + aHunger);
-			if(feedAmount > 20) {
-				player.setFoodLevel(20);
-			}
-			else if(feedAmount < 0)
-			{
-				player.setFoodLevel(0);
-			}
-			else
-			{
-				player.setFoodLevel(feedAmount);
-			}
-			
-			// Notify Player
-			player.sendMessage(ChatColor.LIGHT_PURPLE + this.getQuestConfig().getString(this.currentQuests.get(player) + ".info.messageEnd"));
-			
-			// Reset Players Quest Data
-			this.doneItems.put(player, null);
-			this.currentQuests.put(player, null);
-			
-			this.destroyed.put(player, null);
-			this.damaged.put(player, null);
-			this.placed.put(player, null);
-			this.killed.put(player, null);
-			
-			this.hasCollect.put(player, null);
-			this.hasDestroy.put(player, null);
-			this.hasPlace.put(player, null);
-			this.hasKill.put(player, null);
-		}
-	}
-	
-	// This guesses the entity based on trial and error; and returns the right guess
-	public String isEntityType(Entity entity)
-    {
-        if (entity instanceof Player) return "Player";
-        if(entity instanceof Sheep) return "Sheep";
-        if(entity instanceof Cow) return "Cow";
-        if(entity instanceof Pig) return "Pig";
-        if(entity instanceof Creeper) return "Creeper";
-        if(entity instanceof PigZombie) return "PigZombie";
-        if(entity instanceof Skeleton)return "Skeleton";
-        if(entity instanceof Spider) return "Spider";
-        if(entity instanceof Squid) return "Squid";
-        if(entity instanceof Zombie) return "Zombie";
-        if(entity instanceof Ghast) return "Ghast";
-        if(entity instanceof Slime) return "Slime";
-        if(entity instanceof Giant) return "Giant";
-        if(entity instanceof Blaze) return "Blaze";
-        if(entity instanceof CaveSpider) return "CaveSpider";
-        if(entity instanceof Chicken) return "Chicken";
-        if(entity instanceof Enderman) return "Enderman";
-        if(entity instanceof MagmaCube) return "MagmaCube";
-        if(entity instanceof MushroomCow) return "MushroomCow";
-        if(entity instanceof Snowman) return "Snowman";
-        if(entity instanceof Wolf) return "Wolf";
-        return null;
-    }
-
+	// API Functions
+	// Give Random Quest
 	public void giveQuest(Player player) {
 		if(this.currentQuests.get(player) == null) 
 		{
@@ -554,6 +299,7 @@ public class qQuests extends JavaPlugin
 		
 	}
 	
+	// Give Specific Quest
 	public void giveQuest(Player player, String s) {
 		if(this.currentQuests.get(player) == null) 
 		{
@@ -585,24 +331,266 @@ public class qQuests extends JavaPlugin
 		}
 	}
 	
-	public String updateCheck(String currentVersion) throws Exception {
-        String pluginUrlString = "http://dev.bukkit.org/server-mods/project-34294/files.rss";
-        try {
-            URL url = new URL(pluginUrlString);
-            Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(url.openConnection().getInputStream());
-            doc.getDocumentElement().normalize();
-            NodeList nodes = doc.getElementsByTagName("item");
-            Node firstNode = nodes.item(0);
-            if (firstNode.getNodeType() == 1) {
-                Element firstElement = (Element)firstNode;
-                NodeList firstElementTagName = firstElement.getElementsByTagName("title");
-                Element firstNameElement = (Element) firstElementTagName.item(0);
-                NodeList firstNodes = firstNameElement.getChildNodes();
-                return firstNodes.item(0).getNodeValue();
-            }
-        }
-        catch (Exception localException) {
-        }
-        return currentVersion;
+	// Returns Info on their current quest to the player
+	public void questInfo(Player p) {
+		if(this.currentQuests.get(p) != null) 
+		{
+			if(this.getQuestConfig().getString(this.currentQuests.get(p) + ".tasks.0.type") != null && this.getQuestConfig().getString(this.currentQuests.get(p) + ".tasks.0.type").equalsIgnoreCase("collect") || this.getQuestConfig().getString(this.currentQuests.get(p) + ".tasks.0.type").equalsIgnoreCase("destroy") || this.getQuestConfig().getString(this.currentQuests.get(p) + ".tasks.0.type").equalsIgnoreCase("damage") || this.getQuestConfig().getString(this.currentQuests.get(p) + ".tasks.0.type").equalsIgnoreCase("place")) 
+			{
+				p.sendMessage(ChatColor.AQUA + "Quest Info: ");
+				p.sendMessage(ChatColor.YELLOW + "Name: " + ChatColor.GREEN + this.getQuestConfig().getString(this.currentQuests.get(p) + ".info.name"));
+				p.sendMessage(ChatColor.YELLOW + "Task: " + ChatColor.GREEN + "You need to " + this.getQuestConfig().getString(this.currentQuests.get(p) + ".tasks.0.type") + " " + 
+																										  this.getQuestConfig().getInt(this.currentQuests.get(p) + ".tasks.0.amount") + " " +
+																										  this.getQuestConfig().getString(this.currentQuests.get(p) + ".tasks.0.object.name") + "(ID:" +
+																										  this.getQuestConfig().getInt(this.currentQuests.get(p) + ".tasks.0.object.id") + ")");
+				//List<String> rewardItems = this.getQuestConfig().getStringList(this.currentQuests.get(p) + ".market.reward.items");
+				p.sendMessage(ChatColor.YELLOW + "Rewards:");
+				p.sendMessage(ChatColor.YELLOW + "	Money: " + ChatColor.GREEN + this.getQuestConfig().getInt(this.currentQuests.get(p) + ".market.reward.money"));
+				p.sendMessage(ChatColor.YELLOW + "	Health: " + ChatColor.GREEN + this.getQuestConfig().getInt(this.currentQuests.get(p) + ".market.reward.health"));
+				p.sendMessage(ChatColor.YELLOW + "	Food: " + ChatColor.GREEN + this.getQuestConfig().getInt(this.currentQuests.get(p) + ".market.reward.hunger"));
+			}
+			else if(this.getQuestConfig().getString(this.currentQuests.get(p) + ".tasks.0.type").equalsIgnoreCase("kill")) 
+			{
+				p.sendMessage(ChatColor.AQUA + "Quest Info: ");
+				p.sendMessage(ChatColor.YELLOW + "Name: " + ChatColor.GREEN + this.getQuestConfig().getString(this.currentQuests.get(p) + ".info.name"));
+				p.sendMessage(ChatColor.YELLOW + "Task: " + ChatColor.GREEN + "You need to " + this.getQuestConfig().getString(this.currentQuests.get(p) + ".tasks.0.type") + " " + 
+																										  this.getQuestConfig().getInt(this.currentQuests.get(p) + ".tasks.0.amount") + " " +
+																										  this.getQuestConfig().getString(this.currentQuests.get(p) + ".tasks.0.object.name") + "s");
+				//List<String> rewardItems = this.getQuestConfig().getStringList(this.currentQuests.get(p) + ".market.reward.items");
+				p.sendMessage(ChatColor.YELLOW + "Rewards:");
+				p.sendMessage(ChatColor.YELLOW + "	Money: " + ChatColor.GREEN + this.getQuestConfig().getInt(this.currentQuests.get(p) + ".market.reward.money"));
+				p.sendMessage(ChatColor.YELLOW + "	Health: " + ChatColor.GREEN + this.getQuestConfig().getInt(this.currentQuests.get(p) + ".market.reward.health"));
+				p.sendMessage(ChatColor.YELLOW + "	Food: " + ChatColor.GREEN + this.getQuestConfig().getInt(this.currentQuests.get(p) + ".market.reward.hunger"));
+			}
+			else p.sendMessage(ChatColor.RED + "The objective types are undefined for this quest!");
+		}
+		else
+		{
+			p.sendMessage(ChatColor.RED + "You Don't Have A Active Quest!");
+			p.sendMessage(ChatColor.LIGHT_PURPLE + "To Get A Quest Type: " + ChatColor.GREEN + "/Quest GIVE");
+		
+		}
+	}
+	
+	// End Of Quest Function
+	public void endQuest(Player player, String type) {
+			int healAmount;
+			int aHealth;
+			int cHealth;
+			int feedAmount;
+			int aHunger;
+			int cHunger;
+			
+			if(type == "join")
+			{
+				//***TODO*** Add Items
+				//Fee: Items
+				
+				// Fee: Money
+				if(econEnabled) 
+				{
+					Econ.econChangeBalancePlayer(player, this.getQuestConfig().getDouble(this.currentQuests.get(player) + ".market.fee.toJoin.money"));
+				}
+				
+				// Reward: Health
+				cHealth = player.getHealth();
+				aHealth = this.getQuestConfig().getInt(this.currentQuests.get(player) + ".market.fee.toJoin.health");
+				healAmount = (cHealth + aHealth);
+				if(healAmount > 20) {
+					player.setHealth(20);
+				}
+				else if(healAmount < 0)
+				{
+					player.setHealth(0);
+				}
+				else
+				{
+					player.setHealth(healAmount);
+				}
+				
+				// Fee: Hunger
+				cHunger = player.getFoodLevel();
+				aHunger = this.getQuestConfig().getInt(this.currentQuests.get(player) + ".market.fee.toJoin.hunger");
+				feedAmount = (cHunger + aHunger);
+				if(feedAmount > 20) {
+					player.setFoodLevel(20);
+				}
+				else if(feedAmount < 0)
+				{
+					player.setFoodLevel(0);
+				}
+				else
+				{
+					player.setFoodLevel(feedAmount);
+				}
+			}
+			else if(type == "drop") {
+				//***TODO*** Add Items
+				//Fee: Items
+				
+				// Fee: Money
+				if(econEnabled) 
+				{
+					Econ.econChangeBalancePlayer(player, this.getQuestConfig().getDouble(this.currentQuests.get(player) + ".market.fee.toDrop.money"));
+				}
+
+				
+				// Fee: Health
+				cHealth = player.getHealth();
+				aHealth = this.getQuestConfig().getInt(this.currentQuests.get(player) + ".market.fee.toDrop.health");
+				healAmount = (cHealth + aHealth);
+				if(healAmount > 20) {
+					player.setHealth(20);
+				}
+				else if(healAmount < 0)
+				{
+					player.setHealth(0);
+				}
+				else
+				{
+					player.setHealth(healAmount);
+				}
+				
+				// Fee: Hunger
+				cHunger = player.getFoodLevel();
+				aHunger = this.getQuestConfig().getInt(this.currentQuests.get(player) + ".market.fee.toDrop.hunger");
+				feedAmount = (cHunger + aHunger);
+				if(feedAmount > 20) {
+					player.setFoodLevel(20);
+				}
+				else if(feedAmount < 0)
+				{
+					player.setFoodLevel(0);
+				}
+				else
+				{
+					player.setFoodLevel(feedAmount);
+				}
+							
+				
+				// Reset Players Quest Data
+				this.doneItems.put(player, null);
+				this.currentQuests.put(player, null);
+				
+				this.destroyed.put(player, null);
+				this.damaged.put(player, null);
+				this.placed.put(player, null);
+				this.killed.put(player, null);
+				
+				this.hasCollect.put(player, null);
+				this.hasDestroy.put(player, null);
+				this.hasPlace.put(player, null);
+				this.hasKill.put(player, null);
+				// Notify Player
+				player.sendMessage(ChatColor.LIGHT_PURPLE + "Quest Dropped!");
+			}
+			else if(type == "done")
+			{
+				//***TODO*** Add Items
+				//***FIX*** List<String> Throws a null error
+				// Reward: Items
+				//List<String> items = plugin.getQuestConfig().getStringList("0.market.reward.items");
+				//Iterator<String> iter = items.iterator();
+				//while (iter.hasNext()) {
+				//	player.sendMessage(iter.next());
+				//}
+				/*
+				List<String> items = plugin.getQuestConfig().getStringList((String) plugin.currentQuests.get("0.market.reward.items"));
+
+				if(items != null && items.size() > 0) // always check against null if it's even the slightest possibility of beeing null
+				{
+				    for(String itemStr : items) // iterate, don't use indexes and .get() for loops !
+				    {
+				    	PlayerInventory inventory = player.getInventory();
+						String[] cItem = itemStr.split(":");
+						Integer howMuch = Integer.parseInt(cItem[1].trim());
+						Integer whatToGive = Integer.parseInt(cItem[0].trim());
+						ItemStack istack = new ItemStack(whatToGive, howMuch);
+						inventory.addItem(istack);
+				    }
+				}
+				*/
+				// Reward: Money
+				if(econEnabled) 
+				{
+					Econ.econChangeBalancePlayer(player, this.getQuestConfig().getDouble(this.currentQuests.get(player) + ".market.reward.money"));
+				}
+				// Reward: Health
+				cHealth = player.getHealth();
+				aHealth = this.getQuestConfig().getInt(this.currentQuests.get(player) + ".market.reward.health");
+				healAmount = (cHealth + aHealth);
+				if(healAmount > 20) {
+					player.setHealth(20);
+				}
+				else if(healAmount < 0)
+				{
+					player.setHealth(0);
+				}
+				else
+				{
+					player.setHealth(healAmount);
+				}
+				
+				// Reward: Hunger
+				cHunger = player.getFoodLevel();
+				aHunger = this.getQuestConfig().getInt(this.currentQuests.get(player) + ".market.reward.hunger");
+				feedAmount = (cHunger + aHunger);
+				if(feedAmount > 20) {
+					player.setFoodLevel(20);
+				}
+				else if(feedAmount < 0)
+				{
+					player.setFoodLevel(0);
+				}
+				else
+				{
+					player.setFoodLevel(feedAmount);
+				}
+				
+				// Notify Player
+				player.sendMessage(ChatColor.LIGHT_PURPLE + this.getQuestConfig().getString(this.currentQuests.get(player) + ".info.messageEnd"));
+				
+				// Reset Players Quest Data
+				this.doneItems.put(player, null);
+				this.currentQuests.put(player, null);
+				
+				this.destroyed.put(player, null);
+				this.damaged.put(player, null);
+				this.placed.put(player, null);
+				this.killed.put(player, null);
+				
+				this.hasCollect.put(player, null);
+				this.hasDestroy.put(player, null);
+				this.hasPlace.put(player, null);
+				this.hasKill.put(player, null);
+			}
+		}
+	
+	// Utility Functions
+	// This guesses the entity based on trial and error; and returns the right guess
+	public String isEntityType(Entity entity)
+    {
+        if (entity instanceof Player) return "Player";
+        if(entity instanceof Sheep) return "Sheep";
+        if(entity instanceof Cow) return "Cow";
+        if(entity instanceof Pig) return "Pig";
+        if(entity instanceof Creeper) return "Creeper";
+        if(entity instanceof PigZombie) return "PigZombie";
+        if(entity instanceof Skeleton)return "Skeleton";
+        if(entity instanceof Spider) return "Spider";
+        if(entity instanceof Squid) return "Squid";
+        if(entity instanceof Zombie) return "Zombie";
+        if(entity instanceof Ghast) return "Ghast";
+        if(entity instanceof Slime) return "Slime";
+        if(entity instanceof Giant) return "Giant";
+        if(entity instanceof Blaze) return "Blaze";
+        if(entity instanceof CaveSpider) return "CaveSpider";
+        if(entity instanceof Chicken) return "Chicken";
+        if(entity instanceof Enderman) return "Enderman";
+        if(entity instanceof MagmaCube) return "MagmaCube";
+        if(entity instanceof MushroomCow) return "MushroomCow";
+        if(entity instanceof Snowman) return "Snowman";
+        if(entity instanceof Wolf) return "Wolf";
+        return null;
     }
 }

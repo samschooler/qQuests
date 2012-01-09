@@ -47,43 +47,7 @@ public class cmd_qQuests implements CommandExecutor
 				}
 				else if(args[0].equalsIgnoreCase("info")) 
 				{
-					if(plugin.currentQuests.get(((Player) s)) != null) 
-					{
-						if(plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type") != null && plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type").equalsIgnoreCase("collect") || plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type").equalsIgnoreCase("destroy") || plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type").equalsIgnoreCase("damage") || plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type").equalsIgnoreCase("place")) 
-						{
-							((Player) s).sendMessage(ChatColor.AQUA + "Quest Info: ");
-							((Player) s).sendMessage(ChatColor.YELLOW + "Name: " + ChatColor.GREEN + plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".info.name"));
-							((Player) s).sendMessage(ChatColor.YELLOW + "Task: " + ChatColor.GREEN + "You need to " + plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type") + " " + 
-																													  plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".tasks.0.amount") + " " +
-																													  plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.object.name") + "(ID:" +
-																													  plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".tasks.0.object.id") + ")");
-							//List<String> rewardItems = plugin.getQuestConfig().getStringList(plugin.currentQuests.get(((Player) s)) + ".market.reward.items");
-							((Player) s).sendMessage(ChatColor.YELLOW + "Rewards:");
-							((Player) s).sendMessage(ChatColor.YELLOW + "	Money: " + ChatColor.GREEN + plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".market.reward.money"));
-							((Player) s).sendMessage(ChatColor.YELLOW + "	Health: " + ChatColor.GREEN + plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".market.reward.health"));
-							((Player) s).sendMessage(ChatColor.YELLOW + "	Food: " + ChatColor.GREEN + plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".market.reward.hunger"));
-						}
-						else if(plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type").equalsIgnoreCase("kill")) 
-						{
-							((Player) s).sendMessage(ChatColor.AQUA + "Quest Info: ");
-							((Player) s).sendMessage(ChatColor.YELLOW + "Name: " + ChatColor.GREEN + plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".info.name"));
-							((Player) s).sendMessage(ChatColor.YELLOW + "Task: " + ChatColor.GREEN + "You need to " + plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.type") + " " + 
-																													  plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".tasks.0.amount") + " " +
-																													  plugin.getQuestConfig().getString(plugin.currentQuests.get(((Player) s)) + ".tasks.0.object.name") + "s");
-							//List<String> rewardItems = plugin.getQuestConfig().getStringList(plugin.currentQuests.get(((Player) s)) + ".market.reward.items");
-							((Player) s).sendMessage(ChatColor.YELLOW + "Rewards:");
-							((Player) s).sendMessage(ChatColor.YELLOW + "	Money: " + ChatColor.GREEN + plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".market.reward.money"));
-							((Player) s).sendMessage(ChatColor.YELLOW + "	Health: " + ChatColor.GREEN + plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".market.reward.health"));
-							((Player) s).sendMessage(ChatColor.YELLOW + "	Food: " + ChatColor.GREEN + plugin.getQuestConfig().getInt(plugin.currentQuests.get(((Player) s)) + ".market.reward.hunger"));
-						}
-						else ((Player) s).sendMessage(ChatColor.RED + "The objective types are undefined for this quest!");
-					}
-					else
-					{
-						((Player) s).sendMessage(ChatColor.RED + "You Don't Have A Active Quest!");
-						((Player) s).sendMessage(ChatColor.LIGHT_PURPLE + "To Get A Quest Type: " + ChatColor.GREEN + "/Quest GIVE");
-					
-					}
+					plugin.questInfo(((Player) s));
 					return true;
 				}
 				else if(args[0].equalsIgnoreCase("drop")) 
