@@ -1,4 +1,4 @@
-package l;
+package me.quaz3l.qQuests.Listeners;
 
 import me.quaz3l.qQuests.qQuests;
 
