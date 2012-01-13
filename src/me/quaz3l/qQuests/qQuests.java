@@ -1,9 +1,9 @@
 package me.quaz3l.qQuests;
 
+import me.quaz3l.qQuests.Commands.cmd_qQuests;
+import me.quaz3l.qQuests.Listeners.bListener;
+import me.quaz3l.qQuests.Listeners.eListener;
 import me.quaz3l.qQuests.Util.Econ;
-import me.quaz3l.qQuests.Util.cmd_qQuests;
-import me.quaz3l.qQuests.listeners.bListener;
-import me.quaz3l.qQuests.listeners.eListener;
 import net.milkbowl.vault.economy.Economy;
 import java.io.File;
 import java.io.IOException;
@@ -47,6 +47,9 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+
+
+
 public class qQuests extends JavaPlugin 
 {
 	public static qQuests plugin;
@@ -68,6 +71,8 @@ public class qQuests extends JavaPlugin
 	public Map<Player, List<Integer>> hasDamage = new HashMap<Player, List<Integer>>();
 	public Map<Player, List<Integer>> hasPlace = new HashMap<Player, List<Integer>>();
 	public Map<Player, List<Integer>> hasKill = new HashMap<Player, List<Integer>>();
+	
+	//QuestWorker QuestWorker = new QuestWorker();
 	
 	// Get The Logger
 	public final Logger logger = Logger.getLogger(("Minecraft"));
@@ -96,6 +101,9 @@ public class qQuests extends JavaPlugin
 	{
 		PluginDescriptionFile pdfFile = this.getDescription();
 		PluginManager pm = getServer().getPluginManager();
+		
+		// Startup Building Quests
+		//QuestWorker.buildQuests(this.getQuestConfig());
 		
 		// Find Economy
 		if(pm.isPluginEnabled("Vault")) {
