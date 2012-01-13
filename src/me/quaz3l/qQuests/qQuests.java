@@ -1,8 +1,8 @@
 package me.quaz3l.qQuests;
 
+import l.bListener;
+import l.eListener;
 import me.quaz3l.qQuests.Commands.cmd_qQuests;
-import me.quaz3l.qQuests.Listeners.bListener;
-import me.quaz3l.qQuests.Listeners.eListener;
 import me.quaz3l.qQuests.Util.Econ;
 import net.milkbowl.vault.economy.Economy;
 import java.io.File;
