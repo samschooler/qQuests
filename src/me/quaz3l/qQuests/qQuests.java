@@ -1,4 +1,4 @@
-package me.quaz3l.qQuests;
+	package me.quaz3l.qQuests;
 
 import me.quaz3l.qQuests.Commands.cmd_qQuests;
 import me.quaz3l.qQuests.Listeners.bListener;
@@ -88,7 +88,7 @@ public class qQuests extends JavaPlugin
 	
 	private final bListener blockListener = new bListener(this);
 	private final eListener entityListener = new eListener(this);
-
+	
 	@Override
 	public void onDisable() 
 	{
@@ -138,8 +138,7 @@ public class qQuests extends JavaPlugin
 		// Block Events
 		pm.registerEvent(Event.Type.BLOCK_BREAK, blockListener, Event.Priority.Normal, this);
 		pm.registerEvent(Event.Type.BLOCK_DAMAGE, blockListener, Event.Priority.Normal, this);
-		pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Event.Priority.Normal, this);
-		
+		pm.registerEvent(Event.Type.BLOCK_PLACE, blockListener, Event.Priority.Normal, this);		
 		// Entity Events
 		pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener, Event.Priority.Normal, this);
 		
