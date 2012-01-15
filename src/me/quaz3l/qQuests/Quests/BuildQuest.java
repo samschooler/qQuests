@@ -8,6 +8,8 @@ public class BuildQuest {
 	public String messageStart;
 	public String messageEnd;
 	public Boolean tasksOrdered;
+	public Integer repeated;
+	public String nextQuest;
 	public Map<Integer, Task> tasks = new HashMap<Integer, Task>();
 	public Map<String, Integer> toJoin = new HashMap<String, Integer>();
 	public Map<String, Integer> toDrop = new HashMap<String, Integer>();

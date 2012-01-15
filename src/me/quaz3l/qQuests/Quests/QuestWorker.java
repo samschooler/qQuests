@@ -21,6 +21,8 @@ public class QuestWorker
 			quest.messageStart = questConfig.getString(questName + ".info.messageStart");
 			quest.messageEnd = questConfig.getString(questName + ".info.messageEnd");
 			quest.tasksOrdered = questConfig.getBoolean(questName + ".info.tasksOrdered");
+			quest.repeated = questConfig.getInt(questName + ".info.repeated");
+			quest.nextQuest = questConfig.getString(questName + ".info.nextQuest");
 			for (Object taskNo : questConfig.createSection(questName + ".tasks").getKeys(false)) 
 			{
 				Integer tRoot = (Integer) taskNo;
