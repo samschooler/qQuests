@@ -3,6 +3,7 @@
 import me.quaz3l.qQuests.Commands.cmd_qQuests;
 import me.quaz3l.qQuests.Listeners.bListener;
 import me.quaz3l.qQuests.Listeners.eListener;
+import me.quaz3l.qQuests.Quests.QuestWorker;
 import me.quaz3l.qQuests.Util.Econ;
 import net.milkbowl.vault.economy.Economy;
 import java.io.File;
@@ -47,9 +48,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-
-
-
 public class qQuests extends JavaPlugin 
 {
 	public static qQuests plugin;
@@ -72,8 +70,6 @@ public class qQuests extends JavaPlugin
 	public Map<Player, List<Integer>> hasPlace = new HashMap<Player, List<Integer>>();
 	public Map<Player, List<Integer>> hasKill = new HashMap<Player, List<Integer>>();
 	
-	//QuestWorker QuestWorker = new QuestWorker();
-	
 	// Get The Logger
 	public final Logger logger = Logger.getLogger(("Minecraft"));
 	
@@ -82,6 +78,9 @@ public class qQuests extends JavaPlugin
 	private File qConfigFile = null;
 	private FileConfiguration cConfig = null;
 	private File cConfigFile = null;
+	
+	// Get QuestWorker
+	private QuestWorker qw = new QuestWorker();
 	
 	// If the economy is enabled
 	public boolean econEnabled = false;
@@ -103,7 +102,7 @@ public class qQuests extends JavaPlugin
 		PluginManager pm = getServer().getPluginManager();
 		
 		// Startup Building Quests
-		//QuestWorker.buildQuests(this.getQuestConfig());
+		qw.buildQuests(this.getQuestConfig());
 		
 		// Find Economy
 		if(pm.isPluginEnabled("Vault")) {
@@ -154,14 +153,14 @@ public class qQuests extends JavaPlugin
 	}
 	 
 	// Configuration Functions
-	public FileConfiguration getQuestConfig() {
+	private FileConfiguration getQuestConfig() {
 	    if (qConfig == null) {
 	        reloadQuestConfig();
 	    }
 	    return qConfig;
 	}
 	 
-	public void reloadQuestConfig() {
+	private void reloadQuestConfig() {
 		if (qConfigFile == null) 
 		{
 		    qConfigFile = new File(getDataFolder(), "quests.yml");
@@ -176,7 +175,7 @@ public class qQuests extends JavaPlugin
 	    }
 	}
 	 
-	public void saveQuestConfig() {
+	private void saveQuestConfig() {
 		if (qConfig == null || qConfigFile == null) {
 	    return;
 	    }
@@ -600,4 +599,10 @@ public class qQuests extends JavaPlugin
         if(entity instanceof Wolf) return "Wolf";
         return null;
     }
+	
+	// Returns The QuestWorker
+	public QuestWorker getQuestWorker()
+	{
+		return this.qw;
+	}
 }

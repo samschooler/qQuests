@@ -8,8 +8,7 @@ import org.bukkit.entity.Player;
 
 public class QuestWorker
 {
-	
-	public static final Map<String, Quest> quests = new HashMap<String, Quest>();
+	public final Map<String, Quest> quests = new HashMap<String, Quest>();
 	public Map<Player, Quest> currentQuests = new HashMap<Player, Quest>();
 	
 	public void buildQuests(FileConfiguration questConfig)
@@ -53,15 +52,15 @@ public class QuestWorker
 			this.rememberQuest(quest.create());
 		}
 	}
-	public void rememberTask(Integer taskNo, Task task, BuildQuest quest) 
+	private void rememberTask(Integer taskNo, Task task, BuildQuest quest) 
 	{
 		quest.tasks.put(taskNo, task);
 	}
-	public void rememberReward(Integer rewardNo, Reward reward, BuildQuest quest) 
+	private void rememberReward(Integer rewardNo, Reward reward, BuildQuest quest) 
 	{
 		quest.toComplete.put(rewardNo, reward);
 	}
-	public void rememberQuest(Quest quest) 
+	private void rememberQuest(Quest quest) 
 	{
 		quests.put(quest.name.toLowerCase(), quest);
 	}
