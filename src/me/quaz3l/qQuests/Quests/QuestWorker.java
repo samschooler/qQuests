@@ -31,12 +31,33 @@ public class QuestWorker
 				task.amount = questConfig.getInt(questName + ".tasks." + taskNo + ".amount");
 				this.rememberTask(tRoot, task.create(), quest);
 			}
+			quest.toJoin.put("money", questConfig.getInt(questName + ".market.toJoin.money"));
+			quest.toJoin.put("health", questConfig.getInt(questName + ".market.toJoin.health"));
+			quest.toJoin.put("hunger", questConfig.getInt(questName + ".market.toJoin.hunger"));
+			
+			quest.toDrop.put("money", questConfig.getInt(questName + ".market.toJoin.money"));
+			quest.toDrop.put("health", questConfig.getInt(questName + ".market.toJoin.health"));
+			quest.toDrop.put("hunger", questConfig.getInt(questName + ".market.toJoin.hunger"));
+			
+			for (Object rewardNo : questConfig.createSection(questName + ".market.toComplete").getKeys(false)) 
+			{
+				Integer rRoot = (Integer) rewardNo;
+				BuildReward reward = new BuildReward(rRoot);
+				reward.money = questConfig.getString(questName + ".market.toComplete." + rewardNo + ".money");
+				reward.health = questConfig.getInt(questName + ".market.toComplete." + rewardNo + ".health");
+				reward.hunger = questConfig.getString(questName + ".market.toComplete." + rewardNo + ".hunger");
+				this.rememberReward(rRoot, reward.create(), quest);
+			}
 			this.rememberQuest(quest.create());
 		}
 	}
 	public void rememberTask(Integer taskNo, Task task, BuildQuest quest) 
 	{
 		quest.tasks.put(taskNo, task);
+	}
+	public void rememberReward(Integer rewardNo, Reward reward, BuildQuest quest) 
+	{
+		quest.toComplete.put(rewardNo, reward);
 	}
 	public void rememberQuest(Quest quest) 
 	{

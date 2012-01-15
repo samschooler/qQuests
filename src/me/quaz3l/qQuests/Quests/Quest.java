@@ -9,7 +9,10 @@ public class Quest {
 	public String messageEnd;
 	public Boolean tasksOrdered;
 	public Map<Integer, Task> tasks = new HashMap<Integer, Task>();
-
+	public Map<String, Integer> toJoin = new HashMap<String, Integer>();
+	public Map<String, Integer> toDrop = new HashMap<String, Integer>();
+	public Map<Integer, Reward> toComplete = new HashMap<Integer, Reward>();
+	
 	public Quest(BuildQuest build) 
 	{
 		name = build.name;
@@ -17,5 +20,8 @@ public class Quest {
 		messageEnd = build.messageEnd;
 		tasksOrdered = build.tasksOrdered;
 		tasks = build.tasks;
+		toJoin = build.toJoin;
+		toDrop = build.toDrop;
+		toComplete = build.toComplete;
 	}
 }
