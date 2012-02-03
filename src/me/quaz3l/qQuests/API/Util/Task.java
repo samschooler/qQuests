@@ -1,4 +1,6 @@
-package me.quaz3l.qQuests.Quests;
+package me.quaz3l.qQuests.API.Util;
+
+import me.quaz3l.qQuests.API.Build.BuildTask;
 
 public class Task {	
 	public Integer no;

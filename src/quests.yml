@@ -2,29 +2,32 @@
 # http://dev.bukkit.org/server-mods/quests/pages/quests-yml/
 # or just copy a current quest and use the vars and common sense to
 # decrypt the YAML.
-0:
-  info:
-    name: Diamonds!
+Diamonds!:
+  setup:
     messageStart: Hey! Can you go get my 5 diamonds! I'll pay you $500
     messageEnd: Thanks! Now I can feed my lava dragon! ;)
+    tasksOrdered: true
+    repeated: 0
+    invisible: false
+    nextQuest: ''
   tasks:
-    0:
+    '0':
       type: collect
-      object:
-        id: 264
-        name: Diamonds
+      id: 264
+      name: Diamonds
       amount: 5
+      nextTask: ''
   market:
-    fee:
-      toJoin:
-        money: 0
-        health: 0
-        hunger: 0
-      toDrop:
-        money: -50
-        health: 0
-        hunger: 0
-    reward:
-      money: 500
+    toJoin:
+      money: 0
       health: 0
       hunger: 0
+    toDrop:
+      money: -50
+      health: 0
+      hunger: 0
+    toComplete:
+      '0':
+        money: 500
+        health: 0
+        hunger: 0

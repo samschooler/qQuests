@@ -35,7 +35,7 @@ permissions:
             qquests.give.kill.mob: true
     qquests.give.specific:
         description: Gives all specific give permissions
-        default: true
+        default: op
         children:
             qquests.give.specific.collect: true
             qquests.give.specific.destroy: true

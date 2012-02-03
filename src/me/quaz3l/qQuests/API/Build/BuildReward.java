@@ -1,4 +1,6 @@
-package me.quaz3l.qQuests.Quests;
+package me.quaz3l.qQuests.API.Build;
+
+import me.quaz3l.qQuests.API.Util.Reward;
 
 public class BuildReward {
 	public Integer no;

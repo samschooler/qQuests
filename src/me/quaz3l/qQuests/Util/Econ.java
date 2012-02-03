@@ -6,9 +6,9 @@ import org.bukkit.entity.Player;
 
 public class Econ 
 {
-	public static Economy economy;
+	public Economy economy;
 	
-	public static boolean econChangeBalancePlayer(Player player, double amount) 
+	public boolean econChangeBalancePlayer(Player player, double amount) 
 	{
         String name = player.getName();
         //String economyScale = qQuests.plugin.getConfig().getString("economyScale");
@@ -36,7 +36,7 @@ public class Econ
         return false;
     }
 	
-    public static String format(double amount) 
+    public String format(double amount) 
     {
         return economy.format(amount).replace(".00", "");
     }
