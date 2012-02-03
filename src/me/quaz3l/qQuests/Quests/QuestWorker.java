@@ -3,10 +3,12 @@ package me.quaz3l.qQuests.Quests;
 import java.util.HashMap;
 import java.util.Map;
 
+import me.quaz3l.qQuests.qQuests;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-public class QuestWorker
+public class QuestWorker extends QuestActions
 {
 	public final Map<String, Quest> quests = new HashMap<String, Quest>();
 	public Map<Player, Quest> currentQuests = new HashMap<Player, Quest>();
@@ -24,13 +26,20 @@ public class QuestWorker
 			quest.nextQuest = questConfig.getString(questName + ".info.nextQuest");
 			for (Object taskNo : questConfig.createSection(questName + ".tasks").getKeys(false)) 
 			{
-				Integer tRoot = (Integer) taskNo;
-				BuildTask task = new BuildTask(tRoot);
-				task.type = questConfig.getString(questName + ".tasks." + taskNo + ".type");
-				task.id = questConfig.getInt(questName + ".tasks." + taskNo + ".id");
-				task.name = questConfig.getString(questName + ".tasks." + taskNo + ".name");
-				task.amount = questConfig.getInt(questName + ".tasks." + taskNo + ".amount");
-				this.rememberTask(tRoot, task.create(), quest);
+				try
+			    {
+					Integer tRoot = Integer.parseInt(taskNo.toString().trim());
+					BuildTask task = new BuildTask(tRoot);
+					task.type = questConfig.getString(questName + ".tasks." + taskNo + ".type");
+					task.id = questConfig.getInt(questName + ".tasks." + taskNo + ".id");
+					task.name = questConfig.getString(questName + ".tasks." + taskNo + ".name");
+					task.amount = questConfig.getInt(questName + ".tasks." + taskNo + ".amount");
+					this.rememberTask(tRoot, task.create(), quest);
+			    }
+				catch (NumberFormatException nfe)
+				{
+					qQuests.plugin.logger.severe(qQuests.plugin.prefix + "The tasks of quest '" + root + "' are not correctly formatted!");
+				}
 			}
 			quest.toJoin.put("money", questConfig.getInt(questName + ".market.toJoin.money"));
 			quest.toJoin.put("health", questConfig.getInt(questName + ".market.toJoin.health"));
@@ -42,12 +51,19 @@ public class QuestWorker
 			
 			for (Object rewardNo : questConfig.createSection(questName + ".market.toComplete").getKeys(false)) 
 			{
-				Integer rRoot = (Integer) rewardNo;
-				BuildReward reward = new BuildReward(rRoot);
-				reward.money = questConfig.getString(questName + ".market.toComplete." + rewardNo + ".money");
-				reward.health = questConfig.getInt(questName + ".market.toComplete." + rewardNo + ".health");
-				reward.hunger = questConfig.getString(questName + ".market.toComplete." + rewardNo + ".hunger");
-				this.rememberReward(rRoot, reward.create(), quest);
+				try
+			    {
+					Integer rRoot = Integer.parseInt(rewardNo.toString().trim());
+					BuildReward reward = new BuildReward(rRoot);
+					reward.money = questConfig.getString(questName + ".market.toComplete." + rewardNo + ".money");
+					reward.health = questConfig.getInt(questName + ".market.toComplete." + rewardNo + ".health");
+					reward.hunger = questConfig.getString(questName + ".market.toComplete." + rewardNo + ".hunger");
+					this.rememberReward(rRoot, reward.create(), quest);
+			    }
+				catch (NumberFormatException nfe)
+				{
+					qQuests.plugin.logger.severe(qQuests.plugin.prefix + "The rewards in onComplete of quest '" + root + "' are not correctly formatted!");
+				}
 			}
 			this.rememberQuest(quest.create());
 		}

@@ -8,6 +8,7 @@ Diamonds!:
     messageEnd: Thanks! Now I can feed my lava dragon! ;)
     tasksOrdered: true
     repeated: 0
+    invisible: false
     nextQuest: ''
   tasks:
     '0':
@@ -15,6 +16,7 @@ Diamonds!:
       id: 264
       name: Diamonds
       amount: 5
+      nextTask: ''
   market:
     toJoin:
       money: 0

@@ -51,7 +51,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class qQuests extends JavaPlugin 
 {
 	public static qQuests plugin;
+	public static qQuests instance;
 	private cmd_qQuests cmdExe;
+	public String prefix = "[qQuests] ";
 	
 	// Hashmaps to store temporary data on player quests
 	public Map<Player, Object> currentQuests = new HashMap<Player, Object>();
@@ -88,11 +90,16 @@ public class qQuests extends JavaPlugin
 	private final bListener blockListener = new bListener(this);
 	private final eListener entityListener = new eListener(this);
 	
+	public qQuests() {
+        instance = this;
+    }
+	
+	
 	@Override
 	public void onDisable() 
 	{
 		PluginDescriptionFile pdfFile = this.getDescription();
-		this.logger.info("[" + pdfFile.getName() + "] " + " Version " + pdfFile.getVersion() + " by Quaz3l: Disabled");
+		this.logger.info(this.prefix + " Version " + pdfFile.getVersion() + " by Quaz3l: Disabled");
 	}
 
 	@Override
@@ -102,7 +109,7 @@ public class qQuests extends JavaPlugin
 		PluginManager pm = getServer().getPluginManager();
 		
 		// Startup Building Quests
-		qw.buildQuests(this.getQuestConfig());
+		//qw.buildQuests(this.getQuestConfig());
 		
 		// Find Economy
 		if(pm.isPluginEnabled("Vault")) {
@@ -110,27 +117,27 @@ public class qQuests extends JavaPlugin
 	    getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
 	    if (economyProvider != null) {
 	    	Econ.economy = economyProvider.getProvider();
-	    	this.logger.info( "[" + pdfFile.getName() + "] " + "Economy Found!");
+	    	this.logger.info(this.prefix + "Economy Found!");
 	    	econEnabled = true;
 	    }
 	    else
 	    {
-	    	this.logger.warning("[" + pdfFile.getName() + "] " + "Economy Not Found! All Economic Interactions Have Been Disabled!");
+	    	this.logger.warning(this.prefix + "Economy Not Found! All Economic Interactions Have Been Disabled!");
 	    	econEnabled = false;
 	    }
 		}
 		else
 		{
-			this.logger.warning("[" + pdfFile.getName() + "] " + "Vault Not Found! All Economic Interactions Have Been Disabled!");
+			this.logger.warning(this.prefix + "Vault Not Found! All Economic Interactions Have Been Disabled!");
 	    	econEnabled = false;
 		}
 		
 		// Get The Configuration Files
-	    this.getConfig();
+	    //this.getConfig();
 		this.getQuestConfig();
 		
 		// Saves Configuration Files
-		this.saveConfig();
+		//this.saveConfig();
 		this.saveQuestConfig();
 		
 		// Register Events
@@ -149,18 +156,18 @@ public class qQuests extends JavaPlugin
 			getCommand("qQUESTS").setExecutor(cmdExe);
 		
 		// Notify The Console
-		this.logger.info( "[" + pdfFile.getName() + "] Version " + pdfFile.getVersion() + " by Quaz3l: Enabled");
+		this.logger.info(this.prefix + "Version " + pdfFile.getVersion() + " by Quaz3l: Enabled");
 	}
 	 
 	// Configuration Functions
-	private FileConfiguration getQuestConfig() {
+	public FileConfiguration getQuestConfig() {
 	    if (qConfig == null) {
 	        reloadQuestConfig();
 	    }
 	    return qConfig;
 	}
 	 
-	private void reloadQuestConfig() {
+	public void reloadQuestConfig() {
 		if (qConfigFile == null) 
 		{
 		    qConfigFile = new File(getDataFolder(), "quests.yml");
@@ -175,14 +182,14 @@ public class qQuests extends JavaPlugin
 	    }
 	}
 	 
-	private void saveQuestConfig() {
+	public void saveQuestConfig() {
 		if (qConfig == null || qConfigFile == null) {
 	    return;
 	    }
 		try {
 	        qConfig.save(qConfigFile);
 	    } catch (IOException ex) {
-	        Logger.getLogger(JavaPlugin.class.getName()).log(Level.SEVERE, "[qQuests] " + "Could not save config to " + qConfigFile, ex);
+	        Logger.getLogger(JavaPlugin.class.getName()).log(Level.SEVERE, this.prefix + "Could not save config to " + qConfigFile, ex);
 	    }
 	}
 	
@@ -215,7 +222,7 @@ public class qQuests extends JavaPlugin
 		try {
 	        cConfig.save(cConfigFile);
 	    } catch (IOException ex) {
-	        Logger.getLogger(JavaPlugin.class.getName()).log(Level.SEVERE, "[qQuests] " + "Could not save config to " + cConfigFile, ex);
+	        Logger.getLogger(JavaPlugin.class.getName()).log(Level.SEVERE, this.prefix + "Could not save config to " + cConfigFile, ex);
 	    }
 	}
 	
@@ -335,6 +342,7 @@ public class qQuests extends JavaPlugin
 			player.sendMessage(ChatColor.RED + "You already have a active quest!");
 			player.sendMessage(ChatColor.AQUA + "Your Quest: " + ChatColor.LIGHT_PURPLE + this.getQuestConfig().getString(this.currentQuests.get(player) + ".info.messageStart"));
 		}
+		//getQuestWorker().give(player, s);
 	}
 	
 	// Returns Info on their current quest to the player
@@ -603,6 +611,6 @@ public class qQuests extends JavaPlugin
 	// Returns The QuestWorker
 	public QuestWorker getQuestWorker()
 	{
-		return this.qw;
+		return qw;
 	}
 }
