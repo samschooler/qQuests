@@ -27,7 +27,7 @@ public class qQuests extends JavaPlugin
 	public final Logger logger = Logger.getLogger(("Minecraft"));
 	public final String chatPrefix = ChatColor.AQUA + "[" + ChatColor.LIGHT_PURPLE + "qQuests" + ChatColor.AQUA + "] " + ChatColor.LIGHT_PURPLE + " ";
 	public final String prefix = "[qQuests] ";
-	private QuestWorker QuestWorker = new QuestWorker();
+	private QuestWorker QuestWorker = new QuestWorker(this);
 	private Econ Econ = new Econ();
 	
 	// If the economy is enabled
@@ -49,52 +49,105 @@ public class qQuests extends JavaPlugin
 	@Override
 	public void onEnable() 
 	{
-		// Get The Configuration Files
-	    this.getConfig();
-		this.getQuestConfig();
+		// API
+			// Get The Configuration File
+			if(this.getQuestConfig().getKeys(false).size() < 1) {
+				this.getQuestConfig().options().copyDefaults(true);
 				
-		// Saves Configuration Files
-		this.saveConfig();
-		this.saveQuestConfig();
-		
-		// Build Quests
-		getQuestWorker().buildQuests();
-		this.logger.info(this.prefix + getQuestWorker().getQuests().get("d").name());
-		
-		// Find Economy
-		if(getServer().getPluginManager().isPluginEnabled("Vault")) {
-			RegisteredServiceProvider<Economy> economyProvider =
-					getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-			if (economyProvider != null) {
-				Econ.economy = economyProvider.getProvider();
-				this.logger.info(this.prefix + "Vault And Economy Plugin Found, All Economic Interactions Have Been Enabled!");
-				econEnabled = true;
+				// Set Setup Nodes
+				if(this.getQuestConfig().getString("Diamonds!.setup.messageStart") == null) 
+					this.getQuestConfig().set("Diamonds!.setup.messageStart", "Hey! Can you go get my 5 diamonds! I'll pay you $500");
+				if(this.getQuestConfig().getString("Diamonds!.setup.messageEnd") == null) 
+					this.getQuestConfig().set("Diamonds!.setup.messageEnd", "Thanks! Now I can feed my lava dragon! ;)");
+				if(this.getQuestConfig().getBoolean("Diamonds!.setup.tasksOrdered") == false) 
+					this.getQuestConfig().set("Diamonds!.setup.tasksOrdered", false);
+				if(this.getQuestConfig().getInt("Diamonds!.setup.repeated") == 0) 
+					this.getQuestConfig().set("Diamonds!.setup.repeated", 0);
+				if(this.getQuestConfig().getBoolean("Diamonds!.setup.invisible") == false) 
+					this.getQuestConfig().set("Diamonds!.setup.invisible", false);
+				if(this.getQuestConfig().getString("Diamonds!.setup.nextQuest") == null) 
+					this.getQuestConfig().set("Diamonds!.setup.nextQuest", "");
+				
+				// Set Task Nodes
+				if(this.getQuestConfig().getString("Diamonds!.tasks.0.type") == null) 
+					this.getQuestConfig().set("Diamonds!.tasks.0.type", "collect");
+				if(this.getQuestConfig().getInt("Diamonds!.tasks.0.id") == 0) 
+					this.getQuestConfig().set("Diamonds!.tasks.0.id", 264);
+				if(this.getQuestConfig().getString("Diamonds!.tasks.0.name") == null) 
+					this.getQuestConfig().set("Diamonds!.tasks.0.name", "Diamonds");
+				if(this.getQuestConfig().getInt("Diamonds!.tasks.0.amount") == 0) 
+					this.getQuestConfig().set("Diamonds!.tasks.0.amount", 5);
+				if(this.getQuestConfig().getString("Diamonds!.tasks.0.nextTask") == null) 
+					this.getQuestConfig().set("Diamonds!.tasks.0.nextTask", "");
+				
+				// Set toJoin Nodes
+				if(this.getQuestConfig().getInt("Diamonds!.market.toJoin.money") == 0) 
+					this.getQuestConfig().set("Diamonds!.market.toJoin.money", 0);
+				if(this.getQuestConfig().getInt("Diamonds!.market.toJoin.health") == 0) 
+					this.getQuestConfig().set("Diamonds!.market.toJoin.health", 0);
+				if(this.getQuestConfig().getInt("Diamonds!.market.toJoin.hunger") == 0) 
+					this.getQuestConfig().set("Diamonds!.market.toJoin.hunger", 0);
+				
+				// Set toDrop Nodes
+				if(this.getQuestConfig().getInt("Diamonds!.market.toDrop.money") == 0) 
+					this.getQuestConfig().set("Diamonds!.market.toDrop.money", -50);
+				if(this.getQuestConfig().getInt("Diamonds!.market.toDrop.health") == 0) 
+					this.getQuestConfig().set("Diamonds!.market.toDrop.health", 0);
+				if(this.getQuestConfig().getInt("Diamonds!.market.toDrop.hunger") == 0) 
+					this.getQuestConfig().set("Diamonds!.market.toDrop.hunger", 0);
+				
+				// Set toComplete Nodes
+				if(this.getQuestConfig().getInt("Diamonds!.market.toComplete.0.money") == 0) 
+					this.getQuestConfig().set("Diamonds!.market.toComplete.0.money", 500);
+				if(this.getQuestConfig().getInt("Diamonds!.market.toComplete.0.health") == 0) 
+					this.getQuestConfig().set("Diamonds!.market.toComplete.0.health", 0);
+				if(this.getQuestConfig().getInt("Diamonds!.market.toComplete.0.hunger") == 0) 
+					this.getQuestConfig().set("Diamonds!.market.toComplete.0.hunger", 0);
+				
+	        	this.saveQuestConfig();
+			}
+			
+			// Build Quests
+			getQuestWorker().buildQuests();
+			//this.logger.info(this.prefix + this.getQuestConfig().getConfigurationSection("d.market.toJoin"));
+			
+			// Find Economy
+			if(getServer().getPluginManager().isPluginEnabled("Vault")) {
+				RegisteredServiceProvider<Economy> economyProvider =
+						getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+				if (economyProvider != null) {
+					Econ.economy = economyProvider.getProvider();
+					this.logger.info(this.prefix + "Vault And Economy Plugin Found, All Economic Interactions Have Been Enabled!");
+					econEnabled = true;
+				}
+				else
+				{
+					this.logger.warning(this.prefix + "****************************************************************");
+					this.logger.warning(this.prefix + "Economy Not Found! All Economic Interactions Have Been Disabled!");
+					this.logger.warning(this.prefix + "****************************************************************");
+					econEnabled = false;
+				}
 			}
 			else
 			{
 				this.logger.warning(this.prefix + "****************************************************************");
-				this.logger.warning(this.prefix + "Economy Not Found! All Economic Interactions Have Been Disabled!");
+				this.logger.warning(this.prefix + "Vault Not Found! All Economic Interactions Have Been Disabled!");
 				this.logger.warning(this.prefix + "****************************************************************");
-				econEnabled = false;
+		    	econEnabled = false;
 			}
-		}
-		else
-		{
-			this.logger.warning(this.prefix + "****************************************************************");
-			this.logger.warning(this.prefix + "Vault Not Found! All Economic Interactions Have Been Disabled!");
-			this.logger.warning(this.prefix + "****************************************************************");
-	    	econEnabled = false;
-		}
-		
-		// Events
-		getServer().getPluginManager().registerEvents(new qListener(this), this);
-				
-		// Setup Command Executors
-		CommandExecutor cmd = new cmd(this);
-			getCommand("Q").setExecutor(cmd);
-			getCommand("QUEST").setExecutor(cmd);
-			getCommand("QUESTS").setExecutor(cmd);
-			getCommand("qQUESTS").setExecutor(cmd);
+			
+			// Events
+			getServer().getPluginManager().registerEvents(new qListener(this), this);
+		// End API
+			
+			
+		// Plugin: Commands 
+			// Setup Command Executors
+			CommandExecutor cmd = new cmd(this);
+				getCommand("Q").setExecutor(cmd);
+				getCommand("QUEST").setExecutor(cmd);
+				getCommand("QUESTS").setExecutor(cmd);
+				getCommand("qQUESTS").setExecutor(cmd);
 		
 		PluginDescriptionFile pdfFile = this.getDescription();
 		this.logger.info(this.prefix + " Version " + pdfFile.getVersion() + " by Quaz3l: Enabled");
@@ -105,6 +158,11 @@ public class qQuests extends JavaPlugin
 	{
 		return QuestWorker;
 	}
+	public static qQuests getPlugin()
+	{
+		return plugin;
+	}
+	
 	
 	// Configuration Functions
 	public FileConfiguration getQuestConfig() {
@@ -122,11 +180,8 @@ public class qQuests extends JavaPlugin
 	 
 	    InputStream defConfigStream = getResource("quests.yml");
 	    if (defConfigStream != null) {
-	        YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-	        if(qConfigFile.exists()) {
-	        	qConfig.setDefaults(defConfig);
-	        	qConfig.options().copyDefaults(true);
-	        }
+	    	YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+	    	qConfig.setDefaults(defConfig);
 	    }
 	}
 	public void saveQuestConfig() {
@@ -154,9 +209,9 @@ public class qQuests extends JavaPlugin
 	    
 	    InputStream defConfigStream = getResource("config.yml");
 	    if (defConfigStream != null) {
-	        YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-	        cConfig.setDefaults(defConfig);
-	        cConfig.options().copyDefaults(true);
+	    		YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+	        	cConfig.setDefaults(defConfig);
+	        	cConfig.options().copyDefaults(true);
 	    }
 	}
 	public void saveConfig() {

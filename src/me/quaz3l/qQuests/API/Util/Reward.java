@@ -4,9 +4,9 @@ import me.quaz3l.qQuests.API.Build.BuildReward;
 
 public class Reward {
 	public Integer no;
-	public String money;
+	public Integer money;
 	public Integer health;
-	public String hunger;
+	public Integer hunger;
 
 	public Reward(BuildReward build) 
 	{
