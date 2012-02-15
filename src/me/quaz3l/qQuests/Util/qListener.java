@@ -11,7 +11,8 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import me.quaz3l.qQuests.qQuests;
 
 public class qListener implements Listener {
-	public qQuests plugin;
+	@SuppressWarnings("unused")
+	private qQuests plugin;
  
 	public qListener(qQuests plugin) {
 		this.plugin = plugin;

@@ -29,57 +29,39 @@ public class QuestWorker
 		currentQuests.clear();
 		
 		for (Object questName :
-			plugin.getQuestConfig()
+			plugin.Config.getQuestConfig()
 			.getKeys(false)) 
 		{
 			String root = questName.toString();
-			plugin.logger.info(plugin.getQuestConfig().getString("d.setup.messageStart"));
-			// TODO
-				if(plugin.getQuestConfig().getString(questName + ".setup.messageStart") == null) 
-					plugin.getQuestConfig().set(questName + ".setup.messageStart", "Hey! Can you go get my 5 diamonds! I'll pay you $500");
-				
-				if(plugin.getQuestConfig().getString(questName + ".setup.messageEnd") == null)
-					plugin.getQuestConfig().set(questName + ".setup.messageEnd", "End Message");
-				
-				if(plugin.getQuestConfig().getBoolean(questName + ".setup.tasksOrdered") == false)
-					plugin.getQuestConfig().set(questName + ".setup.tasksOrdered", false);
-				
-				if(plugin.getQuestConfig().getInt(questName + ".setup.repeated") == 0)
-					plugin.getQuestConfig().set(questName + ".setup.repeated", 0);
-				
-				if(plugin.getQuestConfig().getBoolean(questName + ".setup.invisible") == false)
-					plugin.getQuestConfig().set(questName + ".setup.invisible", false);
-				
-				if(plugin.getQuestConfig().getString(questName + ".setup.nextQuest") == null)
-					plugin.getQuestConfig().set(questName + ".setup.nextQuest", "");
-				
-				plugin.saveQuestConfig();
+			
+			// Validate The Quest
+			plugin.Config.validate(root);
 				
 			BuildQuest quest = new BuildQuest(root);
-			quest.messageStart(plugin.getQuestConfig().getString(questName + ".setup.messageStart"));
-			quest.messageEnd(plugin.getQuestConfig().getString(questName + ".setup.messageEnd"));
-			quest.tasksOrdered(plugin.getQuestConfig().getBoolean(questName + ".setup.tasksOrdered"));
-			quest.repeated(plugin.getQuestConfig().getInt(questName + ".setup.repeated"));
-			quest.nextQuest(plugin.getQuestConfig().getString(questName + ".setup.nextQuest"));
-			for (Object taskNo : plugin.getQuestConfig().createSection(questName + ".tasks").getKeys(false)) 
+			quest.messageStart(plugin.Config.getQuestConfig().getString(questName + ".setup.messageStart"));
+			quest.messageEnd(plugin.Config.getQuestConfig().getString(questName + ".setup.messageEnd"));
+			quest.tasksOrdered(plugin.Config.getQuestConfig().getBoolean(questName + ".setup.tasksOrdered"));
+			quest.repeated(plugin.Config.getQuestConfig().getInt(questName + ".setup.repeated"));
+			quest.nextQuest(plugin.Config.getQuestConfig().getString(questName + ".setup.nextQuest"));
+			for (Object taskNo : plugin.Config.getQuestConfig().createSection(questName + ".tasks").getKeys(false)) 
 			{
 				try
 			    {
 					Integer tRoot = Integer.parseInt(taskNo.toString().trim());
 					BuildTask task = new BuildTask(tRoot);
-					task.type(plugin.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type"));
+					task.type(plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type"));
 					// TODO
-					if(plugin.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type").equalsIgnoreCase("kill"))
+					if(plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type").equalsIgnoreCase("kill"))
 					{
-						//task.id(plugin.getQuestConfig().getString(questName + ".tasks." + tRoot + ".id"));
-						task.name(plugin.getQuestConfig().getString(questName + ".tasks." + tRoot + ".name"));
+						//task.id(plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".id"));
+						task.name(plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".name"));
 					}
 					else
 					{
-						task.id(plugin.getQuestConfig().getInt(questName + ".tasks." + tRoot + ".id"));
-						task.name(plugin.getQuestConfig().getString(questName + ".tasks." + tRoot + ".name"));
+						task.id(plugin.Config.getQuestConfig().getInt(questName + ".tasks." + tRoot + ".id"));
+						task.name(plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".name"));
 					}
-					task.amount(plugin.getQuestConfig().getInt(questName + ".tasks." + tRoot + ".amount"));
+					task.amount(plugin.Config.getQuestConfig().getInt(questName + ".tasks." + tRoot + ".amount"));
 					this.rememberTask(tRoot, task.create(), quest);
 			    }
 				catch (NumberFormatException nfe)
@@ -87,23 +69,23 @@ public class QuestWorker
 					qQuests.plugin.logger.severe(qQuests.plugin.prefix + "The tasks of quest '" + root + "' are not correctly formatted!");
 				}
 			}
-			quest.toJoin().put("money", plugin.getQuestConfig().getInt(questName + ".market.toJoin.money"));
-			quest.toJoin().put("health", plugin.getQuestConfig().getInt(questName + ".market.toJoin.health"));
-			quest.toJoin().put("hunger", plugin.getQuestConfig().getInt(questName + ".market.toJoin.hunger"));
+			quest.toJoin().put("money", plugin.Config.getQuestConfig().getInt(questName + ".market.toJoin.money"));
+			quest.toJoin().put("health", plugin.Config.getQuestConfig().getInt(questName + ".market.toJoin.health"));
+			quest.toJoin().put("hunger", plugin.Config.getQuestConfig().getInt(questName + ".market.toJoin.hunger"));
 			
-			quest.toDrop().put("money", plugin.getQuestConfig().getInt(questName + ".market.toJoin.money"));
-			quest.toDrop().put("health", plugin.getQuestConfig().getInt(questName + ".market.toJoin.health"));
-			quest.toDrop().put("hunger", plugin.getQuestConfig().getInt(questName + ".market.toJoin.hunger"));
+			quest.toDrop().put("money", plugin.Config.getQuestConfig().getInt(questName + ".market.toJoin.money"));
+			quest.toDrop().put("health", plugin.Config.getQuestConfig().getInt(questName + ".market.toJoin.health"));
+			quest.toDrop().put("hunger", plugin.Config.getQuestConfig().getInt(questName + ".market.toJoin.hunger"));
 			
-			for (Object rewardNo : plugin.getQuestConfig().createSection(questName + ".market.toComplete").getKeys(false)) 
+			for (Object rewardNo : plugin.Config.getQuestConfig().createSection(questName + ".market.toComplete").getKeys(false)) 
 			{
 				try
 			    {
 					Integer rRoot = Integer.parseInt(rewardNo.toString().trim());
 					BuildReward reward = new BuildReward(rRoot);
-					reward.money = plugin.getQuestConfig().getInt(questName + ".market.toComplete." + rewardNo + ".money");
-					reward.health = plugin.getQuestConfig().getInt(questName + ".market.toComplete." + rewardNo + ".health");
-					reward.hunger = plugin.getQuestConfig().getInt(questName + ".market.toComplete." + rewardNo + ".hunger");
+					reward.money = plugin.Config.getQuestConfig().getInt(questName + ".market.toComplete." + rewardNo + ".money");
+					reward.health = plugin.Config.getQuestConfig().getInt(questName + ".market.toComplete." + rewardNo + ".health");
+					reward.hunger = plugin.Config.getQuestConfig().getInt(questName + ".market.toComplete." + rewardNo + ".hunger");
 					this.rememberReward(rRoot, reward.create(), quest);
 			    }
 				catch (NumberFormatException nfe)
