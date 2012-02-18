@@ -16,6 +16,7 @@ public class QuestWorker
 	private Map<String, Quest> quests = new HashMap<String, Quest>();
 	private Map<Player, Quest> currentQuests = new HashMap<Player, Quest>();
 	private qQuests plugin;
+	public boolean valid = true;
     public QuestWorker(qQuests plugin) 
     {
     	this.plugin = plugin;
@@ -31,9 +32,10 @@ public class QuestWorker
 			.getKeys(false)) 
 		{
 			String root = questName.toString();
+			this.valid = true;
 			
 			// Validate The Quest
-			plugin.Config.validate(root);
+			plugin.Config.validate(root, this);
 				
 			BuildQuest quest = new BuildQuest(root);
 			quest.multiTaskMode(plugin.Config.getQuestConfig().getBoolean(questName + ".setup.multiTaskMode"));
@@ -44,7 +46,58 @@ public class QuestWorker
 			{
 				try
 			    {
+					// TODO
 					Integer tRoot = Integer.parseInt(taskNo.toString().trim());
+					if(plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type").equalsIgnoreCase("collect")) 
+					{
+						plugin.logger.warning(plugin.prefix + "Sorry! A " + plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type") + " quest is not yet supported!");
+						this.valid = false;
+					}
+					else if(plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type").equalsIgnoreCase("destroy")) 
+					{
+						plugin.logger.warning(plugin.prefix + "Sorry! A " + plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type") + " quest is not yet supported!");
+						this.valid = false;
+					}
+					else if(plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type").equalsIgnoreCase("damage")) 
+					{
+						plugin.logger.warning(plugin.prefix + "Sorry! A " + plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type") + " quest is not yet supported!");
+						this.valid = false;
+					}
+					else if(plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type").equalsIgnoreCase("place")) 
+					{
+						plugin.logger.warning(plugin.prefix + "Sorry! A " + plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type") + " quest is not yet supported!");
+						this.valid = false;
+					}
+					else if(plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type").equalsIgnoreCase("kill")) 
+					{
+						plugin.logger.warning(plugin.prefix + "Sorry! A " + plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type") + " quest is not yet supported!");
+						this.valid = false;
+					}
+					else if(plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type").equalsIgnoreCase("kill_player")) 
+					{
+						plugin.logger.warning(plugin.prefix + "Sorry! A " + plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type") + " quest is not yet supported!");
+						this.valid = false;
+					}
+					else if(plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type").equalsIgnoreCase("kill")) 
+					{
+						plugin.logger.warning(plugin.prefix + "Sorry! A " + plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type") + " quest is not yet supported!");
+						this.valid = false;
+					}
+					else if(plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type").equalsIgnoreCase("goto")) 
+					{
+						plugin.logger.warning(plugin.prefix + "Sorry! A " + plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type") + " quest is not yet supported!");
+						this.valid = false;
+					}
+					else if(plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type").equalsIgnoreCase("distance")) 
+					{
+						plugin.logger.warning(plugin.prefix + "Sorry! A " + plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type") + " quest is not yet supported!");
+						this.valid = false;
+					}
+					else
+					{
+						plugin.logger.warning(plugin.prefix + "Sorry! A " + plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type") + " quest is not yet supported!");
+						this.valid = false;
+					}
 					BuildTask task = new BuildTask(tRoot);
 					task.type(plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type"));
 					// TODO
@@ -61,9 +114,10 @@ public class QuestWorker
 					task.amount(plugin.Config.getQuestConfig().getInt(questName + ".tasks." + tRoot + ".amount"));
 					this.rememberTask(tRoot, task.create(), quest);
 			    }
-				catch (NumberFormatException nfe)
+				catch (Exception e)
 				{
-					qQuests.plugin.logger.severe(qQuests.plugin.prefix + "The tasks of quest '" + root + "' are not correctly formatted!");
+					qQuests.plugin.logger.severe(qQuests.plugin.prefix + "The tasks of quest '" + root + "' are not correctly formatted! Disabling this quest");
+					this.valid = false;
 				}
 			}
 			quest.BuildonJoin().message(plugin.Config.getQuestConfig().getString(questName + ".onJoin.message"));
@@ -81,7 +135,10 @@ public class QuestWorker
 			quest.BuildonComplete().health(plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.health"));
 			quest.BuildonComplete().hunger(plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.hunger"));
 			
-			this.rememberQuest(quest.create());
+			if(valid)
+				this.rememberQuest(quest.create());
+			else
+				plugin.logger.warning(plugin.prefix + "Sorry! Quest '" + root + "' is not correctly formatted it has been disabled!");
 		}
 	}
 	

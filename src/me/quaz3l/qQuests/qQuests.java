@@ -41,10 +41,10 @@ public class qQuests extends JavaPlugin
 	{
 		// API
 			// Initialize The Configuration File
-			//Config.initialize();
+			Config.initialize();
 			
 			// Build Quests
-			//getQuestWorker().buildQuests();
+			getQuestWorker().buildQuests();
 			//this.logger.info(this.prefix + Config.getQuestConfig().getConfigurationSection("d.market.toJoin"));
 			
 			// Find Economy
@@ -89,7 +89,7 @@ public class qQuests extends JavaPlugin
 		this.logger.info(this.prefix + " Version " + pdfFile.getVersion() + " by Quaz3l: Enabled");
 		this
 		.logger
-		.info(this.Config.getQuestConfig().getString("d.tasks.0.itemDisplay"));
+		.info(this.Config.getQuestConfig().getString("d.tasks.0.type"));
 	}
 	
 	// Returns The QuestWorker

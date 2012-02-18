@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import me.quaz3l.qQuests.qQuests;
+import me.quaz3l.qQuests.API.Quest.QuestWorker;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -141,7 +142,7 @@ public class Config {
         	this.saveQuestConfig();
 		}
 	}
-	public void validate(String questName) {
+	public void validate(String questName, QuestWorker q) {
 		// Check The Setup Nodes
 		if(this.getQuestConfig().getBoolean("Diamonds!.setup.multiTaskMode") == false) 
 			this.getQuestConfig().set("Diamonds!.setup.multiTaskMode", false);
@@ -154,7 +155,10 @@ public class Config {
 		
 		// Check onJoin Nodes
 		if(this.getQuestConfig().getString("Diamonds!.onJoin.message") == null) 
-			this.getQuestConfig().set("Diamonds!.onJoin.message", "");
+		{
+			plugin.logger.warning(plugin.prefix + "Quest " + questName + " disabled because node 'onJoin.message' is not set!");
+			q.valid = false;
+		}
 		if(this.getQuestConfig().getInt("Diamonds!.onJoin.market.money") == 0) 
 			this.getQuestConfig().set("Diamonds!.onJoin.market.money", 0);
 		if(this.getQuestConfig().getInt("Diamonds!.onJoin.market.health") == 0) 
@@ -164,7 +168,10 @@ public class Config {
 		
 		// Check onDrop Nodes
 		if(this.getQuestConfig().getString("Diamonds!.onDrop.message") == null) 
-			this.getQuestConfig().set("Diamonds!.onDrop.message", "");
+		{
+			plugin.logger.warning(plugin.prefix + "Quest " + questName + " disabled because node 'onDrop.message' is not set!");
+			q.valid = false;
+		}
 		if(this.getQuestConfig().getInt("Diamonds!.onDrop.market.money") == 0) 
 			this.getQuestConfig().set("Diamonds!.onDrop.market.money", 0);
 		if(this.getQuestConfig().getInt("Diamonds!.onDrop.market.health") == 0) 
@@ -174,7 +181,10 @@ public class Config {
 		
 		// Check onComplete Nodes
 		if(this.getQuestConfig().getString("Diamonds!.onComplete.message") == null) 
-			this.getQuestConfig().set("Diamonds!.onComplete.message", "");
+		{
+			plugin.logger.warning(plugin.prefix + "Quest " + questName + " disabled because node 'onComplete.message' is not set!");
+			q.valid = false;
+		}
 		if(this.getQuestConfig().getInt("Diamonds!.onComplete.market.money") == 0) 
 			this.getQuestConfig().set("Diamonds!.onComplete.market.money", 0);
 		if(this.getQuestConfig().getInt("Diamonds!.onComplete.market.health") == 0) 
