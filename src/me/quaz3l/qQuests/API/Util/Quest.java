@@ -4,44 +4,43 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.quaz3l.qQuests.API.Build.BuildQuest;
+import me.quaz3l.qQuests.API.Util.Events.onComplete;
+import me.quaz3l.qQuests.API.Util.Events.onDrop;
+import me.quaz3l.qQuests.API.Util.Events.onJoin;
 
 public class Quest {	
 	private String name = "Quest";
-	private String messageStart = "You Have Recived A Quest!";
-	private String messageEnd = "You Have Finished A Quest!";
-	private Boolean tasksOrdered = false;
+	private Boolean multiTaskMode = false;
 	private Integer repeated  = -1;
+	private Boolean invisible = false;
 	private String nextQuest  = "";
 	private Map<Integer, Task> tasks = new HashMap<Integer, Task>();
-	private Map<String, Integer> toJoin = new HashMap<String, Integer>();
-	private Map<String, Integer> toDrop = new HashMap<String, Integer>();
-	private Map<Integer, Reward> toComplete = new HashMap<Integer, Reward>();
+	private onJoin onJoin;
+	private onDrop onDrop;
+	private onComplete onComplete;
 	
 	public Quest(BuildQuest build) 
 	{
 		name = build.name();
-		messageStart = build.messageStart();
-		messageEnd = build.messageEnd();
-		tasksOrdered = build.tasksOrdered();
+		multiTaskMode = build.multiTaskMode();
+		repeated = build.repeated();
+		invisible = build.invisible();
 		tasks = build.tasks();
-		toJoin = build.toJoin();
-		toDrop = build.toDrop();
-		toComplete = build.toComplete();
+		onJoin = build.onJoin();
+		onDrop = build.onDrop();
+		onComplete = build.onComplete();
 	}
 	public String name() {
 		return this.name;
 	}
-	public String messageStart() {
-		return this.messageStart;
-	}
-	public String messageEnd() {
-		return this.messageEnd;
-	}
-	public Boolean tasksOrdered() {
-		return this.tasksOrdered;
+	public Boolean multiTaskMode() {
+		return this.multiTaskMode;
 	}
 	public Integer repeated() {
 		return this.repeated;
+	}
+	public Boolean invisible() {
+		return this.invisible;
 	}
 	public String nextQuest() {
 		return this.nextQuest;
@@ -49,13 +48,13 @@ public class Quest {
 	public Map<Integer, Task> tasks() {
 		return this.tasks;
 	}
-	public Map<String, Integer> toJoin() {
-		return this.toJoin;
+	public onJoin onJoin() {
+		return this.onJoin;
 	}
-	public Map<String, Integer> toDrop() {
-		return this.toDrop;
+	public onDrop onDrop() {
+		return this.onDrop;
 	}
-	public Map<Integer, Reward> toComplete() {
-		return this.toComplete;
+	public onComplete onComplete() {
+		return this.onComplete;
 	}
 }

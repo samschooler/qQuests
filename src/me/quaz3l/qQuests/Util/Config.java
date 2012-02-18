@@ -87,14 +87,10 @@ public class Config {
 			this.getQuestConfig().options().copyDefaults(true);
 			
 			// Set Setup Nodes
-			if(this.getQuestConfig().getString("Diamonds!.setup.messageStart") == null) 
-				this.getQuestConfig().set("Diamonds!.setup.messageStart", "Hey! Can you go get my 5 diamonds! I'll pay you $500");
-			if(this.getQuestConfig().getString("Diamonds!.setup.messageEnd") == null) 
-				this.getQuestConfig().set("Diamonds!.setup.messageEnd", "Thanks! Now I can feed my lava dragon! ;)");
-			if(this.getQuestConfig().getBoolean("Diamonds!.setup.tasksOrdered") == false) 
-				this.getQuestConfig().set("Diamonds!.setup.tasksOrdered", false);
+			if(this.getQuestConfig().getBoolean("Diamonds!.setup.multiTaskMode") == false) 
+				this.getQuestConfig().set("Diamonds!.setup.multiTaskMode", false);
 			if(this.getQuestConfig().getInt("Diamonds!.setup.repeated") == 0) 
-				this.getQuestConfig().set("Diamonds!.setup.repeated", 0);
+				this.getQuestConfig().set("Diamonds!.setup.repeated", -1);
 			if(this.getQuestConfig().getBoolean("Diamonds!.setup.invisible") == false) 
 				this.getQuestConfig().set("Diamonds!.setup.invisible", false);
 			if(this.getQuestConfig().getString("Diamonds!.setup.nextQuest") == null) 
@@ -103,60 +99,88 @@ public class Config {
 			// Set Task Nodes
 			if(this.getQuestConfig().getString("Diamonds!.tasks.0.type") == null) 
 				this.getQuestConfig().set("Diamonds!.tasks.0.type", "collect");
-			if(this.getQuestConfig().getInt("Diamonds!.tasks.0.id") == 0) 
-				this.getQuestConfig().set("Diamonds!.tasks.0.id", 264);
-			if(this.getQuestConfig().getString("Diamonds!.tasks.0.name") == null) 
-				this.getQuestConfig().set("Diamonds!.tasks.0.name", "Diamonds");
+			if(this.getQuestConfig().getInt("Diamonds!.tasks.0.itemId") == 0) 
+				this.getQuestConfig().set("Diamonds!.tasks.0.itemId", 264);
+			if(this.getQuestConfig().getString("Diamonds!.tasks.0.itemDisplay") == null) 
+				this.getQuestConfig().set("Diamonds!.tasks.0.itemDisplay", "Diamond");
 			if(this.getQuestConfig().getInt("Diamonds!.tasks.0.amount") == 0) 
 				this.getQuestConfig().set("Diamonds!.tasks.0.amount", 5);
 			if(this.getQuestConfig().getString("Diamonds!.tasks.0.nextTask") == null) 
 				this.getQuestConfig().set("Diamonds!.tasks.0.nextTask", "");
 			
-			// Set toJoin Nodes
-			if(this.getQuestConfig().getInt("Diamonds!.market.toJoin.money") == 0) 
-				this.getQuestConfig().set("Diamonds!.market.toJoin.money", 0);
-			if(this.getQuestConfig().getInt("Diamonds!.market.toJoin.health") == 0) 
-				this.getQuestConfig().set("Diamonds!.market.toJoin.health", 0);
-			if(this.getQuestConfig().getInt("Diamonds!.market.toJoin.hunger") == 0) 
-				this.getQuestConfig().set("Diamonds!.market.toJoin.hunger", 0);
+			// Set onJoin Nodes
+			if(this.getQuestConfig().getString("Diamonds!.onJoin.message") == null) 
+				this.getQuestConfig().set("Diamonds!.onJoin.message", "Hey! Can you go get my 5 diamonds! I'll pay you $500");
+			if(this.getQuestConfig().getInt("Diamonds!.onJoin.market.money") == 0) 
+				this.getQuestConfig().set("Diamonds!.onJoin.market.money", 0);
+			if(this.getQuestConfig().getInt("Diamonds!.onJoin.market.health") == 0) 
+				this.getQuestConfig().set("Diamonds!.onJoin.market.health", 0);
+			if(this.getQuestConfig().getInt("Diamonds!.onJoin.market.hunger") == 0) 
+				this.getQuestConfig().set("Diamonds!.onJoin.market.hunger", 0);
 			
-			// Set toDrop Nodes
-			if(this.getQuestConfig().getInt("Diamonds!.market.toDrop.money") == 0) 
-				this.getQuestConfig().set("Diamonds!.market.toDrop.money", -50);
-			if(this.getQuestConfig().getInt("Diamonds!.market.toDrop.health") == 0) 
-				this.getQuestConfig().set("Diamonds!.market.toDrop.health", 0);
-			if(this.getQuestConfig().getInt("Diamonds!.market.toDrop.hunger") == 0) 
-				this.getQuestConfig().set("Diamonds!.market.toDrop.hunger", 0);
+			// Set onDrop Nodes
+			if(this.getQuestConfig().getString("Diamonds!.onDrop.message") == null) 
+				this.getQuestConfig().set("Diamonds!.onDrop.message", "Aww… fine… I'll go find someone else :(");
+			if(this.getQuestConfig().getInt("Diamonds!.onDrop.market.money") == 0) 
+				this.getQuestConfig().set("Diamonds!.onDrop.market.money", -50);
+			if(this.getQuestConfig().getInt("Diamonds!.onDrop.market.health") == 0) 
+				this.getQuestConfig().set("Diamonds!.onDrop.market.health", 0);
+			if(this.getQuestConfig().getInt("Diamonds!.onDrop.market.hunger") == 0) 
+				this.getQuestConfig().set("Diamonds!.onDrop.market.hunger", 0);
 			
-			// Set toComplete Nodes
-			if(this.getQuestConfig().getInt("Diamonds!.market.toComplete.0.money") == 0) 
-				this.getQuestConfig().set("Diamonds!.market.toComplete.0.money", 500);
-			if(this.getQuestConfig().getInt("Diamonds!.market.toComplete.0.health") == 0) 
-				this.getQuestConfig().set("Diamonds!.market.toComplete.0.health", 0);
-			if(this.getQuestConfig().getInt("Diamonds!.market.toComplete.0.hunger") == 0) 
-				this.getQuestConfig().set("Diamonds!.market.toComplete.0.hunger", 0);
+			// Set onComplete Nodes
+			if(this.getQuestConfig().getString("Diamonds!.onComplete.message") == null) 
+				this.getQuestConfig().set("Diamonds!.onComplete.message", "Thanks! Now I can feed my lava dragon! ;)");
+			if(this.getQuestConfig().getInt("Diamonds!.onComplete.market.money") == 0) 
+				this.getQuestConfig().set("Diamonds!.onComplete.market.money", 500);
+			if(this.getQuestConfig().getInt("Diamonds!.onComplete.market.health") == 0) 
+				this.getQuestConfig().set("Diamonds!.onComplete.market.health", 0);
+			if(this.getQuestConfig().getInt("Diamonds!.onComplete.market.hunger") == 0) 
+				this.getQuestConfig().set("Diamonds!.onComplete.market.hunger", 0);
 			
         	this.saveQuestConfig();
 		}
 	}
 	public void validate(String questName) {
-		if(this.getQuestConfig().getString(questName + ".setup.messageStart") == null) 
-			this.getQuestConfig().set(questName + ".setup.messageStart", "Hey! Can you go get my 5 diamonds! I'll pay you $500");
+		// Check The Setup Nodes
+		if(this.getQuestConfig().getBoolean("Diamonds!.setup.multiTaskMode") == false) 
+			this.getQuestConfig().set("Diamonds!.setup.multiTaskMode", false);
+		if(this.getQuestConfig().getInt("Diamonds!.setup.repeated") == 0) 
+			this.getQuestConfig().set("Diamonds!.setup.repeated", -1);
+		if(this.getQuestConfig().getBoolean("Diamonds!.setup.invisible") == false) 
+			this.getQuestConfig().set("Diamonds!.setup.invisible", false);
+		if(this.getQuestConfig().getString("Diamonds!.setup.nextQuest") == null) 
+			this.getQuestConfig().set("Diamonds!.setup.nextQuest", "");
 		
-		if(this.getQuestConfig().getString(questName + ".setup.messageEnd") == null)
-			this.getQuestConfig().set(questName + ".setup.messageEnd", "End Message");
+		// Check onJoin Nodes
+		if(this.getQuestConfig().getString("Diamonds!.onJoin.message") == null) 
+			this.getQuestConfig().set("Diamonds!.onJoin.message", "");
+		if(this.getQuestConfig().getInt("Diamonds!.onJoin.market.money") == 0) 
+			this.getQuestConfig().set("Diamonds!.onJoin.market.money", 0);
+		if(this.getQuestConfig().getInt("Diamonds!.onJoin.market.health") == 0) 
+			this.getQuestConfig().set("Diamonds!.onJoin.market.health", 0);
+		if(this.getQuestConfig().getInt("Diamonds!.onJoin.market.hunger") == 0) 
+			this.getQuestConfig().set("Diamonds!.onJoin.market.hunger", 0);
 		
-		if(this.getQuestConfig().getBoolean(questName + ".setup.tasksOrdered") == false)
-			this.getQuestConfig().set(questName + ".setup.tasksOrdered", false);
+		// Check onDrop Nodes
+		if(this.getQuestConfig().getString("Diamonds!.onDrop.message") == null) 
+			this.getQuestConfig().set("Diamonds!.onDrop.message", "");
+		if(this.getQuestConfig().getInt("Diamonds!.onDrop.market.money") == 0) 
+			this.getQuestConfig().set("Diamonds!.onDrop.market.money", 0);
+		if(this.getQuestConfig().getInt("Diamonds!.onDrop.market.health") == 0) 
+			this.getQuestConfig().set("Diamonds!.onDrop.market.health", 0);
+		if(this.getQuestConfig().getInt("Diamonds!.onDrop.market.hunger") == 0) 
+			this.getQuestConfig().set("Diamonds!.onDrop.market.hunger", 0);
 		
-		if(this.getQuestConfig().getInt(questName + ".setup.repeated") == 0)
-			this.getQuestConfig().set(questName + ".setup.repeated", 0);
-		
-		if(this.getQuestConfig().getBoolean(questName + ".setup.invisible") == false)
-			this.getQuestConfig().set(questName + ".setup.invisible", false);
-		
-		if(this.getQuestConfig().getString(questName + ".setup.nextQuest") == null)
-			this.getQuestConfig().set(questName + ".setup.nextQuest", "");
+		// Check onComplete Nodes
+		if(this.getQuestConfig().getString("Diamonds!.onComplete.message") == null) 
+			this.getQuestConfig().set("Diamonds!.onComplete.message", "");
+		if(this.getQuestConfig().getInt("Diamonds!.onComplete.market.money") == 0) 
+			this.getQuestConfig().set("Diamonds!.onComplete.market.money", 0);
+		if(this.getQuestConfig().getInt("Diamonds!.onComplete.market.health") == 0) 
+			this.getQuestConfig().set("Diamonds!.onComplete.market.health", 0);
+		if(this.getQuestConfig().getInt("Diamonds!.onComplete.market.hunger") == 0) 
+			this.getQuestConfig().set("Diamonds!.onComplete.market.hunger", 0);
 		
 		this.saveQuestConfig();
 	}

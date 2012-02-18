@@ -5,10 +5,8 @@ import java.util.Map;
 
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.Build.BuildQuest;
-import me.quaz3l.qQuests.API.Build.BuildReward;
 import me.quaz3l.qQuests.API.Build.BuildTask;
 import me.quaz3l.qQuests.API.Util.Quest;
-import me.quaz3l.qQuests.API.Util.Reward;
 import me.quaz3l.qQuests.API.Util.Task;
 
 import org.bukkit.entity.Player;
@@ -20,14 +18,14 @@ public class QuestWorker
 	private qQuests plugin;
     public QuestWorker(qQuests plugin) 
     {
-	this.plugin = plugin;
+    	this.plugin = plugin;
     }
-	
-	public void buildQuests()
+    
+    public void buildQuests()
 	{
-		quests.clear();
-		currentQuests.clear();
-		
+    	quests.clear();
+    	currentQuests.clear();
+    	
 		for (Object questName :
 			plugin.Config.getQuestConfig()
 			.getKeys(false)) 
@@ -38,10 +36,9 @@ public class QuestWorker
 			plugin.Config.validate(root);
 				
 			BuildQuest quest = new BuildQuest(root);
-			quest.messageStart(plugin.Config.getQuestConfig().getString(questName + ".setup.messageStart"));
-			quest.messageEnd(plugin.Config.getQuestConfig().getString(questName + ".setup.messageEnd"));
-			quest.tasksOrdered(plugin.Config.getQuestConfig().getBoolean(questName + ".setup.tasksOrdered"));
+			quest.multiTaskMode(plugin.Config.getQuestConfig().getBoolean(questName + ".setup.multiTaskMode"));
 			quest.repeated(plugin.Config.getQuestConfig().getInt(questName + ".setup.repeated"));
+			quest.invisible(plugin.Config.getQuestConfig().getBoolean(questName + ".setup.invisible"));
 			quest.nextQuest(plugin.Config.getQuestConfig().getString(questName + ".setup.nextQuest"));
 			for (Object taskNo : plugin.Config.getQuestConfig().createSection(questName + ".tasks").getKeys(false)) 
 			{
@@ -69,30 +66,21 @@ public class QuestWorker
 					qQuests.plugin.logger.severe(qQuests.plugin.prefix + "The tasks of quest '" + root + "' are not correctly formatted!");
 				}
 			}
-			quest.toJoin().put("money", plugin.Config.getQuestConfig().getInt(questName + ".market.toJoin.money"));
-			quest.toJoin().put("health", plugin.Config.getQuestConfig().getInt(questName + ".market.toJoin.health"));
-			quest.toJoin().put("hunger", plugin.Config.getQuestConfig().getInt(questName + ".market.toJoin.hunger"));
+			quest.BuildonJoin().message(plugin.Config.getQuestConfig().getString(questName + ".onJoin.message"));
+			quest.BuildonJoin().money(plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.money"));
+			quest.BuildonJoin().health(plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.health"));
+			quest.BuildonJoin().hunger(plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.hunger"));
 			
-			quest.toDrop().put("money", plugin.Config.getQuestConfig().getInt(questName + ".market.toJoin.money"));
-			quest.toDrop().put("health", plugin.Config.getQuestConfig().getInt(questName + ".market.toJoin.health"));
-			quest.toDrop().put("hunger", plugin.Config.getQuestConfig().getInt(questName + ".market.toJoin.hunger"));
+			quest.BuildonDrop().message(plugin.Config.getQuestConfig().getString(questName + ".onDrop.message"));
+			quest.BuildonDrop().money(plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.money"));
+			quest.BuildonDrop().health(plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.health"));
+			quest.BuildonDrop().hunger(plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.hunger"));
 			
-			for (Object rewardNo : plugin.Config.getQuestConfig().createSection(questName + ".market.toComplete").getKeys(false)) 
-			{
-				try
-			    {
-					Integer rRoot = Integer.parseInt(rewardNo.toString().trim());
-					BuildReward reward = new BuildReward(rRoot);
-					reward.money = plugin.Config.getQuestConfig().getInt(questName + ".market.toComplete." + rewardNo + ".money");
-					reward.health = plugin.Config.getQuestConfig().getInt(questName + ".market.toComplete." + rewardNo + ".health");
-					reward.hunger = plugin.Config.getQuestConfig().getInt(questName + ".market.toComplete." + rewardNo + ".hunger");
-					this.rememberReward(rRoot, reward.create(), quest);
-			    }
-				catch (NumberFormatException nfe)
-				{
-					qQuests.plugin.logger.severe(qQuests.plugin.prefix + "The rewards in onComplete of quest '" + root + "' are not correctly formatted!");
-				}
-			}
+			quest.BuildonComplete().message(plugin.Config.getQuestConfig().getString(questName + ".onComplete.message"));
+			quest.BuildonComplete().money(plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.money"));
+			quest.BuildonComplete().health(plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.health"));
+			quest.BuildonComplete().hunger(plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.hunger"));
+			
 			this.rememberQuest(quest.create());
 		}
 	}
@@ -100,10 +88,6 @@ public class QuestWorker
 	private void rememberTask(Integer taskNo, Task task, BuildQuest quest) 
 	{
 		quest.tasks().put(taskNo, task);
-	}
-	private void rememberReward(Integer rewardNo, Reward reward, BuildQuest quest) 
-	{
-		quest.toComplete().put(rewardNo, reward);
 	}
 	private void rememberQuest(Quest quest) 
 	{
