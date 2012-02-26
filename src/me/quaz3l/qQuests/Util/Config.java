@@ -84,6 +84,7 @@ public class Config {
 	    }
 	}
 	public void initialize() {
+		this.getQuestConfig();
 		if(this.getQuestConfig().getKeys(false).size() < 1) {
 			this.getQuestConfig().options().copyDefaults(true);
 			
@@ -138,59 +139,69 @@ public class Config {
 				this.getQuestConfig().set("Diamonds!.onComplete.market.health", 0);
 			if(this.getQuestConfig().getInt("Diamonds!.onComplete.market.hunger") == 0) 
 				this.getQuestConfig().set("Diamonds!.onComplete.market.hunger", 0);
-			
-        	this.saveQuestConfig();
 		}
+		this.saveQuestConfig();
 	}
 	public void validate(String questName, QuestWorker q) {
 		// Check The Setup Nodes
-		if(this.getQuestConfig().getBoolean("Diamonds!.setup.multiTaskMode") == false) 
-			this.getQuestConfig().set("Diamonds!.setup.multiTaskMode", false);
-		if(this.getQuestConfig().getInt("Diamonds!.setup.repeated") == 0) 
-			this.getQuestConfig().set("Diamonds!.setup.repeated", -1);
-		if(this.getQuestConfig().getBoolean("Diamonds!.setup.invisible") == false) 
-			this.getQuestConfig().set("Diamonds!.setup.invisible", false);
-		if(this.getQuestConfig().getString("Diamonds!.setup.nextQuest") == null) 
-			this.getQuestConfig().set("Diamonds!.setup.nextQuest", "");
+		if(this.getQuestConfig().getBoolean(questName + ".setup.multiTaskMode") == false) 
+			this.getQuestConfig().set(questName + ".setup.multiTaskMode", false);
+		if(this.getQuestConfig().getInt(questName + ".setup.repeated") == 0) 
+			this.getQuestConfig().set(questName + ".setup.repeated", -1);
+		if(this.getQuestConfig().getBoolean(questName + ".setup.invisible") == false) 
+			this.getQuestConfig().set(questName + ".setup.invisible", false);
+		if(this.getQuestConfig().getString(questName + ".setup.nextQuest") == null) 
+			this.getQuestConfig().set(questName + ".setup.nextQuest", "");
+		
+		if(this.getQuestConfig().getString(questName + ".tasks.0.type") == null) 
+			this.getQuestConfig().set(questName + ".tasks.0.type", "collect");
+		if(this.getQuestConfig().getInt(questName + ".tasks.0.itemId") == 0) 
+			this.getQuestConfig().set(questName + ".tasks.0.itemId", 264);
+		if(this.getQuestConfig().getString(questName + ".tasks.0.itemDisplay") == null) 
+			this.getQuestConfig().set(questName + ".tasks.0.itemDisplay", "Diamond");
+		if(this.getQuestConfig().getInt(questName + ".tasks.0.amount") == 0) 
+			this.getQuestConfig().set(questName + ".tasks.0.amount", 5);
+		if(this.getQuestConfig().getString(questName + ".tasks.0.nextTask") == null) 
+			this.getQuestConfig().set(questName + ".tasks.0.nextTask", "");
 		
 		// Check onJoin Nodes
-		if(this.getQuestConfig().getString("Diamonds!.onJoin.message") == null) 
+		if(this.getQuestConfig().getString(questName + ".onJoin.message") == null) 
 		{
 			plugin.logger.warning(plugin.prefix + "Quest " + questName + " disabled because node 'onJoin.message' is not set!");
 			q.valid = false;
 		}
-		if(this.getQuestConfig().getInt("Diamonds!.onJoin.market.money") == 0) 
-			this.getQuestConfig().set("Diamonds!.onJoin.market.money", 0);
-		if(this.getQuestConfig().getInt("Diamonds!.onJoin.market.health") == 0) 
-			this.getQuestConfig().set("Diamonds!.onJoin.market.health", 0);
-		if(this.getQuestConfig().getInt("Diamonds!.onJoin.market.hunger") == 0) 
-			this.getQuestConfig().set("Diamonds!.onJoin.market.hunger", 0);
+		if(this.getQuestConfig().getInt(questName + ".onJoin.market.money") == 0) 
+			this.getQuestConfig().set(questName + ".onJoin.market.money", 0);
+		if(this.getQuestConfig().getInt(questName + ".onJoin.market.health") == 0) 
+			this.getQuestConfig().set(questName + ".onJoin.market.health", 0);
+		if(this.getQuestConfig().getInt(questName + ".onJoin.market.hunger") == 0) 
+			this.getQuestConfig().set(questName + ".onJoin.market.hunger", 0);
 		
 		// Check onDrop Nodes
-		if(this.getQuestConfig().getString("Diamonds!.onDrop.message") == null) 
+		if(this.getQuestConfig().getString(questName + ".onDrop.message") == null) 
 		{
 			plugin.logger.warning(plugin.prefix + "Quest " + questName + " disabled because node 'onDrop.message' is not set!");
 			q.valid = false;
 		}
-		if(this.getQuestConfig().getInt("Diamonds!.onDrop.market.money") == 0) 
-			this.getQuestConfig().set("Diamonds!.onDrop.market.money", 0);
-		if(this.getQuestConfig().getInt("Diamonds!.onDrop.market.health") == 0) 
-			this.getQuestConfig().set("Diamonds!.onDrop.market.health", 0);
-		if(this.getQuestConfig().getInt("Diamonds!.onDrop.market.hunger") == 0) 
-			this.getQuestConfig().set("Diamonds!.onDrop.market.hunger", 0);
+		if(this.getQuestConfig().getInt(questName + ".onDrop.market.money") == 0) 
+			this.getQuestConfig().set(questName + ".onDrop.market.money", 0);
+		if(this.getQuestConfig().getInt(questName + ".onDrop.market.health") == 0) 
+			this.getQuestConfig().set(questName + ".onDrop.market.health", 0);
+		if(this.getQuestConfig().getInt(questName + ".onDrop.market.hunger") == 0) 
+			this.getQuestConfig().set(questName + ".onDrop.market.hunger", 0);
 		
 		// Check onComplete Nodes
-		if(this.getQuestConfig().getString("Diamonds!.onComplete.message") == null) 
+		if(this.getQuestConfig().getString(questName + ".onComplete.message") == null) 
 		{
 			plugin.logger.warning(plugin.prefix + "Quest " + questName + " disabled because node 'onComplete.message' is not set!");
 			q.valid = false;
 		}
-		if(this.getQuestConfig().getInt("Diamonds!.onComplete.market.money") == 0) 
-			this.getQuestConfig().set("Diamonds!.onComplete.market.money", 0);
-		if(this.getQuestConfig().getInt("Diamonds!.onComplete.market.health") == 0) 
-			this.getQuestConfig().set("Diamonds!.onComplete.market.health", 0);
-		if(this.getQuestConfig().getInt("Diamonds!.onComplete.market.hunger") == 0) 
-			this.getQuestConfig().set("Diamonds!.onComplete.market.hunger", 0);
+		if(this.getQuestConfig().getInt(questName + ".onComplete.market.money") == 0) 
+			this.getQuestConfig().set(questName + ".onComplete.market.money", 0);
+		if(this.getQuestConfig().getInt(questName + ".onComplete.market.health") == 0) 
+			this.getQuestConfig().set(questName + ".onComplete.market.health", 0);
+		if(this.getQuestConfig().getInt(questName + ".onComplete.market.hunger") == 0) 
+			this.getQuestConfig().set(questName + ".onComplete.market.hunger", 0);
 		
 		this.saveQuestConfig();
 	}

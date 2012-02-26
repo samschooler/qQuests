@@ -4,7 +4,6 @@ import java.util.logging.Logger;
 
 import me.quaz3l.qQuests.API.Quest.QuestWorker;
 import me.quaz3l.qQuests.Plugins.cmd;
-import me.quaz3l.qQuests.Util.Econ;
 import me.quaz3l.qQuests.Util.Config;
 import me.quaz3l.qQuests.Util.qListener;
 import net.milkbowl.vault.economy.Economy;
@@ -24,7 +23,7 @@ public class qQuests extends JavaPlugin
 	public final String prefix = "[qQuests] ";
 	private QuestWorker QuestWorker = new QuestWorker(this);
 	public Config Config = new Config(this);
-	private Econ Econ = new Econ();
+	private Economy economy;
 	
 	// If the economy is enabled
 	public boolean econEnabled = false;
@@ -52,7 +51,7 @@ public class qQuests extends JavaPlugin
 				RegisteredServiceProvider<Economy> economyProvider =
 						getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
 				if (economyProvider != null) {
-					Econ.economy = economyProvider.getProvider();
+					this.economy = economyProvider.getProvider();
 					this.logger.info(this.prefix + "Vault And Economy Plugin Found, All Economic Interactions Have Been Enabled!");
 					econEnabled = true;
 				}
@@ -87,9 +86,9 @@ public class qQuests extends JavaPlugin
 		
 		PluginDescriptionFile pdfFile = this.getDescription();
 		this.logger.info(this.prefix + " Version " + pdfFile.getVersion() + " by Quaz3l: Enabled");
-		this
-		.logger
-		.info(this.Config.getQuestConfig().getString("d.tasks.0.type"));
+		//this
+		//.logger
+		//.info(this.Config.getQuestConfig().getString("d.onComplete.message"));
 	}
 	
 	// Returns The QuestWorker
