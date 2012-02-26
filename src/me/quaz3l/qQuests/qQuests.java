@@ -19,14 +19,15 @@ public class qQuests extends JavaPlugin
 	// General Setup
 	public static qQuests plugin;
 	public final Logger logger = Logger.getLogger(("Minecraft"));
+	public Config Config = new Config(this);
+	private QuestWorker QuestWorker = new QuestWorker(this);
+	
+	// Economy
+	public Economy economy = null;
+	
+	// Prefixes
 	public final String chatPrefix = ChatColor.AQUA + "[" + ChatColor.LIGHT_PURPLE + "qQuests" + ChatColor.AQUA + "] " + ChatColor.LIGHT_PURPLE + " ";
 	public final String prefix = "[qQuests] ";
-	private QuestWorker QuestWorker = new QuestWorker(this);
-	public Config Config = new Config(this);
-	private Economy economy;
-	
-	// If the economy is enabled
-	public boolean econEnabled = false;
 	
 	@Override
 	public void onDisable() 
@@ -53,14 +54,12 @@ public class qQuests extends JavaPlugin
 				if (economyProvider != null) {
 					this.economy = economyProvider.getProvider();
 					this.logger.info(this.prefix + "Vault And Economy Plugin Found, All Economic Interactions Have Been Enabled!");
-					econEnabled = true;
 				}
 				else
 				{
 					this.logger.warning(this.prefix + "****************************************************************");
 					this.logger.warning(this.prefix + "Economy Not Found! All Economic Interactions Have Been Disabled!");
 					this.logger.warning(this.prefix + "****************************************************************");
-					econEnabled = false;
 				}
 			}
 			else
@@ -68,7 +67,6 @@ public class qQuests extends JavaPlugin
 				this.logger.warning(this.prefix + "****************************************************************");
 				this.logger.warning(this.prefix + "Vault Not Found! All Economic Interactions Have Been Disabled!");
 				this.logger.warning(this.prefix + "****************************************************************");
-		    	econEnabled = false;
 			}
 			
 			// Events
@@ -76,28 +74,35 @@ public class qQuests extends JavaPlugin
 		// End API
 			
 			
-		// Plugin: Commands 
-			// Setup Command Executors
-			CommandExecutor cmd = new cmd(this);
-				getCommand("Q").setExecutor(cmd);
-				getCommand("QUEST").setExecutor(cmd);
-				getCommand("QUESTS").setExecutor(cmd);
-				getCommand("qQUESTS").setExecutor(cmd);
+		// Stock Plugins TODO
+			pluginCommands();
+			//pluginSigns();
+			//pluginNPCs();
 		
+		// Notify Logger
 		PluginDescriptionFile pdfFile = this.getDescription();
 		this.logger.info(this.prefix + " Version " + pdfFile.getVersion() + " by Quaz3l: Enabled");
-		//this
-		//.logger
-		//.info(this.Config.getQuestConfig().getString("d.onComplete.message"));
 	}
-	
-	// Returns The QuestWorker
+	// The Plugin
+	public static qQuests getPlugin()
+	{
+		return plugin;
+	}
+	// QuestWorker
 	public QuestWorker getQuestWorker() 
 	{
 		return QuestWorker;
 	}
-	public static qQuests getPlugin()
+	
+	
+	// Stock Plugins
+	private void pluginCommands()
 	{
-		return plugin;
+		// Setup Command Executors
+		CommandExecutor cmd = new cmd(this);
+			getCommand("Q").setExecutor(cmd);
+			getCommand("QUEST").setExecutor(cmd);
+			getCommand("QUESTS").setExecutor(cmd);
+			getCommand("qQUESTS").setExecutor(cmd);
 	}
 }
