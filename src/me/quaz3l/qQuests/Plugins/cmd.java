@@ -1,6 +1,7 @@
 package me.quaz3l.qQuests.Plugins;
 
 import me.quaz3l.qQuests.qQuests;
+import me.quaz3l.qQuests.API.Util.Quest;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -9,13 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class cmd implements CommandExecutor 
-{
-	private qQuests plugin;
-    public cmd(qQuests plugin) 
-    {
-	this.plugin = plugin;
-    }
-    
+{    
 	@Override
 	public boolean onCommand(CommandSender s, Command c, String l, String[] args) 
 	{
@@ -23,7 +18,7 @@ public class cmd implements CommandExecutor
 		{
 			if(args.length < 1)
 			{
-				((Player) s).sendMessage(plugin.chatPrefix + "/Quest " + ChatColor.RED + "[" + ChatColor.YELLOW + "give, info, drop, done" + ChatColor.RED + "]");
+				((Player) s).sendMessage(qQuests.plugin.chatPrefix + "/Quest " + ChatColor.RED + "[" + ChatColor.YELLOW + "give, info, drop, done" + ChatColor.RED + "]");
 				return false;
 			}
 			else
@@ -32,12 +27,31 @@ public class cmd implements CommandExecutor
 				{
 					if (args.length < 2)
 					{
-						
+						if(!qQuests.plugin.qAPI.hasActiveQuest((Player) s)) {
+							Quest q = qQuests.plugin.qAPI.giveQuest(((Player) s));
+							((Player) s).sendMessage(qQuests.plugin.chatPrefix + q.onJoin().message);
+						}
+						else
+						{
+							((Player) s).sendMessage(qQuests.plugin.chatPrefix + ChatColor.RED + "You Already Have An Active Quest! Type " + ChatColor.YELLOW + "/q info" + ChatColor.RED + " To Get More Info On Your Quest.");
+						}
 						return true;
 					}
 					else
 					{
-						// TODO Give Specified
+						if(!qQuests.plugin.qAPI.hasActiveQuest((Player) s)) {
+							if(qQuests.plugin.qAPI.getQuests().containsKey(args[1]))
+							{
+								Quest q = qQuests.plugin.qAPI.giveQuest(((Player) s), args[1]);
+								((Player) s).sendMessage(qQuests.plugin.chatPrefix + q.onJoin().message);
+							}
+							else
+								((Player) s).sendMessage(qQuests.plugin.chatPrefix + ChatColor.RED + "This Isn't A Valid Quest!");
+						}
+						else
+						{
+							((Player) s).sendMessage(qQuests.plugin.chatPrefix + ChatColor.RED + "You Already Have An Active Quest! Type " + ChatColor.YELLOW + "/q info" + ChatColor.RED + " To Get More Info On Your Quest.");
+						}
 						return true;
 					}
 				}
@@ -58,14 +72,14 @@ public class cmd implements CommandExecutor
 				}
 				else
 				{
-					((Player) s).sendMessage(plugin.chatPrefix + "/Quest " + ChatColor.RED + "[" + ChatColor.YELLOW + "give, info, drop" + ChatColor.RED + "]");
+					((Player) s).sendMessage(qQuests.plugin.chatPrefix + "/Quest " + ChatColor.RED + "[" + ChatColor.YELLOW + "give, info, drop" + ChatColor.RED + "]");
 					return false;
 				}
 			}
 		}
 		else
 		{
-			s.sendMessage(plugin.prefix + ChatColor.RED + "Sorry A Quest Can Only Be Used By Players!");
+			s.sendMessage(qQuests.plugin.prefix + ChatColor.RED + "Sorry A Quest Can Only Be Used By Players!");
 			return false;
 		}
 	}

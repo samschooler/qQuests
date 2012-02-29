@@ -142,7 +142,7 @@ public class Config {
 		}
 		this.saveQuestConfig();
 	}
-	public void validate(String questName, QuestWorker q) {
+	public boolean validate(String questName, QuestWorker q) {
 		// Check The Setup Nodes
 		if(this.getQuestConfig().getBoolean(questName + ".setup.multiTaskMode") == false) 
 			this.getQuestConfig().set(questName + ".setup.multiTaskMode", false);
@@ -168,7 +168,7 @@ public class Config {
 		if(this.getQuestConfig().getString(questName + ".onJoin.message") == null) 
 		{
 			plugin.logger.warning(plugin.prefix + "Quest " + questName + " disabled because node 'onJoin.message' is not set!");
-			q.valid = false;
+			return false;
 		}
 		if(this.getQuestConfig().getInt(questName + ".onJoin.market.money") == 0) 
 			this.getQuestConfig().set(questName + ".onJoin.market.money", 0);
@@ -181,7 +181,7 @@ public class Config {
 		if(this.getQuestConfig().getString(questName + ".onDrop.message") == null) 
 		{
 			plugin.logger.warning(plugin.prefix + "Quest " + questName + " disabled because node 'onDrop.message' is not set!");
-			q.valid = false;
+			return false;
 		}
 		if(this.getQuestConfig().getInt(questName + ".onDrop.market.money") == 0) 
 			this.getQuestConfig().set(questName + ".onDrop.market.money", 0);
@@ -194,7 +194,7 @@ public class Config {
 		if(this.getQuestConfig().getString(questName + ".onComplete.message") == null) 
 		{
 			plugin.logger.warning(plugin.prefix + "Quest " + questName + " disabled because node 'onComplete.message' is not set!");
-			q.valid = false;
+			return false;
 		}
 		if(this.getQuestConfig().getInt(questName + ".onComplete.market.money") == 0) 
 			this.getQuestConfig().set(questName + ".onComplete.market.money", 0);
@@ -204,5 +204,20 @@ public class Config {
 			this.getQuestConfig().set(questName + ".onComplete.market.hunger", 0);
 		
 		this.saveQuestConfig();
+		return true;
+	}
+	public void dumpQuestConfig()
+	{
+		plugin.logger.warning(plugin.prefix + "****************************************************************");
+		plugin.logger.warning(plugin.prefix + "**********************Starting Config Dump**********************");
+		plugin.logger.warning(plugin.prefix + "****************************************************************");
+		plugin.logger.info(plugin.prefix + plugin.Config.getQuestConfig().getKeys(true));
+		
+		for (Object o : plugin.Config.getQuestConfig().getKeys(true))
+			plugin.logger.info(plugin.prefix + plugin.Config.getQuestConfig().get("d." + o));
+		
+		plugin.logger.warning(plugin.prefix + "****************************************************************");
+		plugin.logger.warning(plugin.prefix + "***********************Ending Config Dump***********************");
+		plugin.logger.warning(plugin.prefix + "****************************************************************");
 	}
 }
