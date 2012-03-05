@@ -3,14 +3,10 @@ package me.quaz3l.qQuests.API.Build;
 import java.util.HashMap;
 import java.util.Map;
 
-import me.quaz3l.qQuests.API.Build.Events.BuildonComplete;
-import me.quaz3l.qQuests.API.Build.Events.BuildonDrop;
-import me.quaz3l.qQuests.API.Build.Events.BuildonJoin;
 import me.quaz3l.qQuests.API.Util.Quest;
 import me.quaz3l.qQuests.API.Util.Task;
-import me.quaz3l.qQuests.API.Util.Events.onJoin;
-import me.quaz3l.qQuests.API.Util.Events.onDrop;
-import me.quaz3l.qQuests.API.Util.Events.onComplete;
+import me.quaz3l.qQuests.API.Util.onSomething;
+import me.quaz3l.qQuests.Util.Chat;
 
 public class BuildQuest {
 	private String name = "Quest";
@@ -19,20 +15,21 @@ public class BuildQuest {
 	private Boolean invisible = false;
 	private String nextQuest  = "";
 	private Map<Integer, Task> tasks = new HashMap<Integer, Task>();
-	private BuildonJoin BuildonJoin = new BuildonJoin();
-	private BuildonDrop BuildonDrop = new BuildonDrop();
-	private BuildonComplete BuildonComplete = new BuildonComplete();
-	private onJoin onJoin;
-	private onDrop onDrop;
-	private onComplete onComplete;
+	private BuildonSomething BuildonJoin = new BuildonSomething();
+	private BuildonSomething BuildonDrop = new BuildonSomething();
+	private BuildonSomething BuildonComplete = new BuildonSomething();
+	private onSomething onJoin;
+	private onSomething onDrop;
+	private onSomething onComplete;
 	
 	public BuildQuest(String quest) {
 		this.name = quest.toLowerCase();
 	}
 	public Quest create() {
-		this.onJoin = new onJoin(BuildonJoin);
-		this.onDrop = new onDrop(BuildonDrop);
-		this.onComplete = new onComplete(BuildonComplete);
+		this.onJoin = new onSomething(BuildonJoin);
+		Chat.logger("info", this.onJoin().message());
+		this.onDrop = new onSomething(BuildonDrop);
+		this.onComplete = new onSomething(BuildonComplete);
 		return new Quest(this);
 	}
 	
@@ -77,22 +74,22 @@ public class BuildQuest {
 	public Map<Integer, Task> tasks() {
 		return this.tasks;
 	}
-	public onJoin onJoin() {
+	public onSomething onJoin() {
 		return this.onJoin;
 	}
-	public onDrop onDrop() {
+	public onSomething onDrop() {
 		return this.onDrop;
 	}
-	public onComplete onComplete() {
+	public onSomething onComplete() {
 		return this.onComplete;
 	}
-	public BuildonJoin BuildonJoin() {
+	public BuildonSomething BuildonJoin() {
 		return this.BuildonJoin;
 	}
-	public BuildonDrop BuildonDrop() {
+	public BuildonSomething BuildonDrop() {
 		return this.BuildonDrop;
 	}
-	public BuildonComplete BuildonComplete() {
+	public BuildonSomething BuildonComplete() {
 		return this.BuildonComplete;
 	}
 }

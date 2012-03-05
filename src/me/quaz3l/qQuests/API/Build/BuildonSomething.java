@@ -1,30 +1,30 @@
-package me.quaz3l.qQuests.API.Build.Events;
+package me.quaz3l.qQuests.API.Build;
 
-import me.quaz3l.qQuests.API.Util.Events.onJoin;
+import me.quaz3l.qQuests.API.Util.onSomething;
 
-public class BuildonJoin {
+public class BuildonSomething {
 	private String message;
 	private Integer money;
 	private Integer health;
 	private Integer hunger;
 	
-	public onJoin create() {
-		return new onJoin(this);
+	public onSomething create() {
+		return new onSomething(this);
 	}
 	
-	public BuildonJoin message(String s) {
+	public BuildonSomething message(String s) {
 		this.message = s;
 		return this;
 	}
-	public BuildonJoin money(Integer i) {
+	public BuildonSomething money(Integer i) {
 		this.money = i;
 		return this;
 	}
-	public BuildonJoin health(Integer i) {
+	public BuildonSomething health(Integer i) {
 		this.health = i;
 		return this;
 	}
-	public BuildonJoin hunger(Integer i) {
+	public BuildonSomething hunger(Integer i) {
 		this.hunger = i;
 		return this;
 	}

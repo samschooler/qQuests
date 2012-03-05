@@ -3,14 +3,20 @@ package me.quaz3l.qQuests;
 import java.util.logging.Logger;
 
 import me.quaz3l.qQuests.API.QuestAPI;
+import me.quaz3l.qQuests.API.Listeners.Damage;
+import me.quaz3l.qQuests.API.Listeners.Destroy;
+import me.quaz3l.qQuests.API.Listeners.Distance;
+import me.quaz3l.qQuests.API.Listeners.GoTo;
+import me.quaz3l.qQuests.API.Listeners.Kill;
+import me.quaz3l.qQuests.API.Listeners.Kill_Player;
+import me.quaz3l.qQuests.API.Listeners.Place;
 import me.quaz3l.qQuests.Plugins.cmd;
+import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Config;
-import me.quaz3l.qQuests.Util.qListener;
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -38,31 +44,39 @@ public class qQuests extends JavaPlugin
 	@Override
 	public void onDisable() 
 	{
-		this.logger.info(this.prefix + "v" + this.getDescription().getVersion() + " by Quaz3l: Disabled");
+		Chat.logger("info", "v" + this.getDescription().getVersion() + " by Quaz3l: Disabled");
 	}
 
 	@Override
 	public void onEnable() 
 	{
+		
+		
 		this.qAPI = new QuestAPI();
 		// Initialize The Configuration File
 		Config.initialize();
+		Config.dumpQuestConfig();
 		
 		// Find Economy
 		this.startEconomy();
 		
 		// Register Events
-		getServer().getPluginManager().registerEvents(new qListener(this), this);
+		this.registerEvents();
 		
 		// Build Quests
 		qAPI.getQuestWorker().buildQuests();
+		Chat.logger("info", qAPI
+				.getQuests()
+				.get("d")
+				.onJoin()
+				.message());
 		
 		//Start Stock qPlugins
 		stockPlugins();
 		
 		// Notify Logger
-		this.logger.info(qQuests.plugin.prefix + this.qPlugins + " qPlugins Linked.");
-		this.logger.info(this.prefix + "v" + this.getDescription().getVersion() + " by Quaz3l: Enabled");
+		Chat.logger("info", qQuests.plugin.prefix + this.qPlugins + " qPlugins Linked.");
+		Chat.logger("info", "v" + this.getDescription().getVersion() + " by Quaz3l: Enabled");
 	}
 	// Hooks Into The Economy
 	private void startEconomy()
@@ -72,22 +86,37 @@ public class qQuests extends JavaPlugin
 					getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
 			if (economyProvider != null) {
 				this.economy = economyProvider.getProvider();
-				this.logger.info(this.prefix + "[Economy] Enabled - Vault And Economy Plugin Found.");
+				Chat.logger("info", "[Economy] Enabled - Vault And Economy Plugin Found.");
 			}
 			else
 			{
-				this.logger.warning(this.prefix + "****************************************************************");
-				this.logger.warning(this.prefix + "[Economy] Disabled - Economy Plugin Not Found! Go Dowmnload An Economy Plugin From: http://dev.bukkit.org/server-mods/iconomy");
-				this.logger.warning(this.prefix + "****************************************************************");
+				Chat.logger("warning", "****************************************************************");
+				Chat.logger("warning", "[Economy] Disabled - Economy Plugin Not Found! Go Dowmnload An Economy Plugin From: http://dev.bukkit.org/server-mods/iconomy");
+				Chat.logger("warning", "****************************************************************");
 			}
 		}
 		else
 		{
-			this.logger.warning(this.prefix + "****************************************************************");
-			this.logger.warning(this.prefix + "[Economy] Disabled - Vault Not Found! Go Download Vault From: http://dev.bukkit.org/server-mods/vault");
-			this.logger.warning(this.prefix + "****************************************************************");
+			Chat.logger("warning", "****************************************************************");
+			Chat.logger("warning", "[Economy] Disabled - Vault Not Found! Go Download Vault From: http://dev.bukkit.org/server-mods/vault");
+			Chat.logger("warning", "****************************************************************");
 		}
 	}
+	// Register Events
+	private void registerEvents()
+	{
+		// Collect Is Handled By The Command
+		getServer().getPluginManager().registerEvents(new Damage(), this);
+		getServer().getPluginManager().registerEvents(new Destroy(), this);
+		getServer().getPluginManager().registerEvents(new Place(), this);
+		
+		getServer().getPluginManager().registerEvents(new Distance(), this);
+		getServer().getPluginManager().registerEvents(new GoTo(), this);
+		
+		getServer().getPluginManager().registerEvents(new Kill_Player(), this);
+		getServer().getPluginManager().registerEvents(new Kill(), this);
+	}
+	
 	// Starts The Stock Plugins
 	private void stockPlugins()
 	{
@@ -104,18 +133,5 @@ public class qQuests extends JavaPlugin
 			getCommand("QUEST").setExecutor(cmd);
 			getCommand("QUESTS").setExecutor(cmd);
 			getCommand("qQUESTS").setExecutor(cmd);
-	}
-	
-	// Streamline The Permissions
-	public boolean checkPerms(Player p, String perm)
-	{
-		if(p.hasPermission("qquests." + perm))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
 	}
 }

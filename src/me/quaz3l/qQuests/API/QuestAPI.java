@@ -6,48 +6,17 @@ import java.util.Random;
 import org.bukkit.entity.Player;
 
 import me.quaz3l.qQuests.qQuests;
-import me.quaz3l.qQuests.API.Quest.QuestWorker;
 import me.quaz3l.qQuests.API.Util.Quest;
+import me.quaz3l.qQuests.Util.Chat;
 
-/**
- * This is the main class that is vital to link to make a qPlugin, here is how to access it:<br><br>
- * <code>
- * public QuestAPI qAPI = new QuestAPI();
- * </code>
- */
 public class QuestAPI {
 	private QuestWorker QuestWorker;
 	
-	/**
-	 * This is the main class that is vital to link to make a qPlugin, here is how to access it:<br><br>
-	 * <code>
-	 * public QuestAPI qAPI = new QuestAPI();
-	 * </code>
-	 */
 	public QuestAPI() {
 		this.QuestWorker = new QuestWorker();
 		qQuests.plugin.qPlugins++;
 	}
 	
-	
-	
-	/**
-	 * This is an advanced Worker that allows you to<br>
-	 * <ul>
-	 * <li>Refresh The quests.yml: <i><b>buildQuests();</b></i></li>
-	 * <li>Add Quests To The quests.yml: <i><b>TODO</b></i></li>
-	 * <li>Remove Quests From The quests.yml: <i><b>TODO</b></i></li>
-	 * <li>Change Quests In The quests.yml: <i><b>TODO</b></i></li>
-	 * </ul>
-	 * <br>
-	 * <br>
-	 * To access this you will need:
-	 * <code>
-	 * TODO
-	 * public QuestWorker qWorker = qAPI.getQuestWorker();
-	 * </code>
-	 *
-	 */
 	public QuestWorker getQuestWorker() 
 	{
 		return QuestWorker;
@@ -78,62 +47,57 @@ public class QuestAPI {
     
     public boolean hasActiveQuest(Player p)
     {
-    	return QuestWorker.getActiveQuests().containsKey(p);
+    	if(QuestWorker.getActiveQuests().get(p) == null) 
+    		return false;
+    	else 
+    		return true;
     }
     
 	// Quest Functions
 	public Quest giveQuest(Player player)
     {
-		if(QuestWorker.getActiveQuests().get(player) == null)
+		Random generator = new Random();
+		Object[] values = QuestWorker.getQuests().values().toArray();
+		Quest q = (Quest) values[generator.nextInt(values.length)];
+		
+		// Rewards/Fees
+		if(feeReward(player, q,  "onJoin"))
 		{
-			Random generator = new Random();
-			Object[] values = QuestWorker.getQuests().values().toArray();
-			Quest q = (Quest) values[generator.nextInt(values.length)];
-			
-			// Rewards/Fees
-			if(feeReward(player, q,  "onJoin"))
-			{
 			// Give The Quest
 			QuestWorker.getActiveQuests().put(player, q);
+			Chat.logger("info", q.onJoin().message());
 			return q;
-			}
-			else return null;
 		}
-		else return QuestWorker.getActiveQuests().get(player);
+		else return null;
     }
 	
 	public Quest giveQuest(Player player, String quest)
     {
-		if(hasActiveQuest(player))
-		{
-			Quest q = QuestWorker.getQuests().get(quest);
-			if(q != null)
-				if(feeReward(player, q, "onJoin"))
-				{
-					// Give The Quest
-					QuestWorker.getActiveQuests().put(player, q);
-					return q;
-				}
-				else return null;
-			else 
+		Quest q = QuestWorker.getQuests().get(quest);
+		if(q != null)
+			if(feeReward(player, q, "onJoin"))
 			{
-				throw new IllegalArgumentException("The Quest '" +quest + "' Does Not Exist!");
+				// Give The Quest
+				QuestWorker.getActiveQuests().put(player, q);
+				return q;
 			}
-		}
-		else return QuestWorker.getActiveQuests().get(player);
+			else return null;
+		else 
+			throw new IllegalArgumentException("The Quest '" +quest + "' Does Not Exist!");
     }
 	
-	public boolean dropQuest(Player player){
+	public Quest dropQuest(Player player){
+		Quest q = QuestWorker.getActiveQuests().get(player);
 		if(hasActiveQuest(player))
 		{
-			if(feeReward(player, QuestWorker.getActiveQuests().get(player), "onDrop"))
+			if(feeReward(player, q, "onDrop"))
 			{
 				QuestWorker.getActiveQuests().put(player, null);
-				return true;
+				return q;
 			}
-			else return false;
+			else return null;
 		}
-		else return true;
+		else return q;
 	}
 	
 	public boolean cancelQuest(Player player)
@@ -151,18 +115,20 @@ public class QuestAPI {
 			
 			// Money
 			if(qQuests.plugin.economy != null) 
+			{
 				if (qQuests.plugin.economy.bankBalance(player.getDisplayName()) != null) 
 					qQuests.plugin.economy.createPlayerAccount(player.getDisplayName());
-			if(q.onJoin().money < 0) 
-				if(qQuests.plugin.economy.getBalance(player.getDisplayName()) < q.onJoin().money) 
-					return false;
+				if(q.onJoin().money() < 0) 
+					if(qQuests.plugin.economy.getBalance(player.getDisplayName()) < q.onJoin().money()) 
+						return false;
+					else
+						qQuests.plugin.economy.withdrawPlayer(player.getDisplayName(), q.onJoin().money() * -1);
 				else
-					qQuests.plugin.economy.withdrawPlayer(player.getDisplayName(), q.onJoin().money * -1);
-			else
-				qQuests.plugin.economy.depositPlayer(player.getDisplayName(), q.onJoin().money);
+					qQuests.plugin.economy.depositPlayer(player.getDisplayName(), q.onJoin().money());
+			}
 			
 			// Health
-			Integer healAmount = (player.getHealth() + q.onJoin().health);
+			Integer healAmount = (player.getHealth() + q.onJoin().health());
 			if(healAmount > 20)
 				player.setHealth(20);
 			else if(healAmount < 0)
@@ -171,7 +137,7 @@ public class QuestAPI {
 				player.setHealth(healAmount);
 			
 			// Hunger
-			Integer feedAmount = (player.getFoodLevel() + q.onJoin().hunger);
+			Integer feedAmount = (player.getFoodLevel() + q.onJoin().hunger());
 			if(feedAmount > 20)
 				player.setFoodLevel(20);
 			else if(feedAmount < 0)
@@ -189,18 +155,20 @@ public class QuestAPI {
 			
 			// Money
 			if(qQuests.plugin.economy != null) 
+			{
 				if (qQuests.plugin.economy.bankBalance(player.getDisplayName()) != null) 
 					qQuests.plugin.economy.createPlayerAccount(player.getDisplayName());
-			if(q.onDrop().money < 0) 
-				if(qQuests.plugin.economy.getBalance(player.getDisplayName()) < q.onDrop().money) 
-					return false;
+				if(q.onDrop().money() < 0) 
+					if(qQuests.plugin.economy.getBalance(player.getDisplayName()) < q.onDrop().money()) 
+						return false;
+					else
+						qQuests.plugin.economy.withdrawPlayer(player.getDisplayName(), q.onDrop().money() * -1);
 				else
-					qQuests.plugin.economy.withdrawPlayer(player.getDisplayName(), q.onDrop().money * -1);
-			else
-				qQuests.plugin.economy.depositPlayer(player.getDisplayName(), q.onDrop().money);
+					qQuests.plugin.economy.depositPlayer(player.getDisplayName(), q.onDrop().money());
+			}
 			
 			// Health
-			Integer healAmount = (player.getHealth() + q.onDrop().health);
+			Integer healAmount = (player.getHealth() + q.onDrop().health());
 			if(healAmount > 20)
 				player.setHealth(20);
 			else if(healAmount < 0)
@@ -209,7 +177,7 @@ public class QuestAPI {
 				player.setHealth(healAmount);
 			
 			// Hunger
-			Integer feedAmount = (player.getFoodLevel() + q.onDrop().hunger);
+			Integer feedAmount = (player.getFoodLevel() + q.onDrop().hunger());
 			if(feedAmount > 20)
 				player.setFoodLevel(20);
 			else if(feedAmount < 0)
@@ -227,18 +195,20 @@ public class QuestAPI {
 			
 			// Money
 			if(qQuests.plugin.economy != null) 
+			{
 				if (qQuests.plugin.economy.bankBalance(player.getDisplayName()) != null) 
 					qQuests.plugin.economy.createPlayerAccount(player.getDisplayName());
-			if(q.onComplete().money < 0) 
-				if(qQuests.plugin.economy.getBalance(player.getDisplayName()) < q.onComplete().money) 
-					return false;
+				if(q.onComplete().money() < 0) 
+					if(qQuests.plugin.economy.getBalance(player.getDisplayName()) < q.onComplete().money()) 
+						return false;
+					else
+						qQuests.plugin.economy.withdrawPlayer(player.getDisplayName(), q.onComplete().money() * -1);
 				else
-					qQuests.plugin.economy.withdrawPlayer(player.getDisplayName(), q.onComplete().money * -1);
-			else
-				qQuests.plugin.economy.depositPlayer(player.getDisplayName(), q.onComplete().money);
+					qQuests.plugin.economy.depositPlayer(player.getDisplayName(), q.onComplete().money());
+			}
 			
 			// Health
-			Integer healAmount = (player.getHealth() + q.onComplete().health);
+			Integer healAmount = (player.getHealth() + q.onComplete().health());
 			if(healAmount > 20)
 				player.setHealth(20);
 			else if(healAmount < 0)
@@ -247,7 +217,7 @@ public class QuestAPI {
 				player.setHealth(healAmount);
 			
 			// Hunger
-			Integer feedAmount = (player.getFoodLevel() + q.onComplete().hunger);
+			Integer feedAmount = (player.getFoodLevel() + q.onComplete().hunger());
 			if(feedAmount > 20)
 				player.setFoodLevel(20);
 			else if(feedAmount < 0)
@@ -259,5 +229,18 @@ public class QuestAPI {
 			return true;
 		}
 		else throw new IllegalArgumentException("This Type Of Fee/Reward Does Not Exist!");
+	}
+	
+	// Streamline The Permissions
+	public boolean checkPerms(Player p, String perm)
+	{
+		if(p.hasPermission("qquests." + perm) || p.isOp())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }

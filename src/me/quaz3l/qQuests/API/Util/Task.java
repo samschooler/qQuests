@@ -3,35 +3,40 @@ package me.quaz3l.qQuests.API.Util;
 import me.quaz3l.qQuests.API.Build.BuildTask;
 
 public class Task {	
-	public Integer no;
-	public String type;
-	public Integer id;
-	public String name;
-	public Integer amount;
+	private Integer no;
+	private String type;
+	private Integer id;
+	private String ids;
+	private String display;
+	private Integer amount;
 
 	public Task(BuildTask build) 
 	{
 		no = build.no();
 		type = build.type();
 		id = build.id();
-		name = build.name();
+		ids = build.ids();
+		display = build.display();
 		amount = build.amount();
 	}
 	
 	// Getting Variables
-	public Integer no() {
+	public final Integer no() {
 		return this.no;
 	}
-	public String type() {
+	public final String type() {
 		return this.type;
 	}
-	public Integer id() {
+	public final Integer idInt() {
 		return this.id;
 	}
-	public String name() {
-		return this.name;
+	public final String idString() {
+		return this.ids;
 	}
-	public Integer amount() {
+	public final String display() {
+		return this.display;
+	}
+	public final Integer amount() {
 		return this.amount;
 	}
 }

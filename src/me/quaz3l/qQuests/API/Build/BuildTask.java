@@ -3,11 +3,12 @@ package me.quaz3l.qQuests.API.Build;
 import me.quaz3l.qQuests.API.Util.Task;
 
 public class BuildTask {
-	public Integer no;
-	public String type;
-	public Integer id;
-	public String name;
-	public Integer amount;
+	private Integer no;
+	private String type;
+	private Integer id;
+	private String ids;
+	private String display;
+	private Integer amount;
 	
 	public BuildTask(Integer task) {
 		this.no = task;
@@ -25,8 +26,12 @@ public class BuildTask {
 		this.id = i;
 		return this;
 	}
-	public BuildTask name(String s) {
-		this.name = s;
+	public BuildTask id(String s) {
+		this.ids = s;
+		return this;
+	}
+	public BuildTask display(String s) {
+		this.display = s;
 		return this;
 	}
 	public BuildTask amount(Integer i) {
@@ -44,8 +49,11 @@ public class BuildTask {
 	public Integer id() {
 		return this.id;
 	}
-	public String name() {
-		return this.name;
+	public String ids() {
+		return this.ids;
+	}
+	public String display() {
+		return this.display;
 	}
 	public Integer amount() {
 		return this.amount;

@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import me.quaz3l.qQuests.qQuests;
-import me.quaz3l.qQuests.API.Quest.QuestWorker;
+import me.quaz3l.qQuests.API.QuestWorker;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -80,7 +80,7 @@ public class Config {
 		try {
 	        cConfig.save(cConfigFile);
 	    } catch (IOException ex) {
-	    	plugin.logger.severe(plugin.prefix + "Could not save config to " + cConfigFile);
+	    	Chat.logger("severe", "Could not save config to " + cConfigFile);
 	    }
 	}
 	public void initialize() {
@@ -103,8 +103,8 @@ public class Config {
 				this.getQuestConfig().set("Diamonds!.tasks.0.type", "collect");
 			if(this.getQuestConfig().getInt("Diamonds!.tasks.0.itemId") == 0) 
 				this.getQuestConfig().set("Diamonds!.tasks.0.itemId", 264);
-			if(this.getQuestConfig().getString("Diamonds!.tasks.0.itemDisplay") == null) 
-				this.getQuestConfig().set("Diamonds!.tasks.0.itemDisplay", "Diamond");
+			if(this.getQuestConfig().getString("Diamonds!.tasks.0.display") == null) 
+				this.getQuestConfig().set("Diamonds!.tasks.0.display", "Diamond");
 			if(this.getQuestConfig().getInt("Diamonds!.tasks.0.amount") == 0) 
 				this.getQuestConfig().set("Diamonds!.tasks.0.amount", 5);
 			if(this.getQuestConfig().getString("Diamonds!.tasks.0.nextTask") == null) 
@@ -157,8 +157,8 @@ public class Config {
 			this.getQuestConfig().set(questName + ".tasks.0.type", "collect");
 		if(this.getQuestConfig().getInt(questName + ".tasks.0.itemId") == 0) 
 			this.getQuestConfig().set(questName + ".tasks.0.itemId", 264);
-		if(this.getQuestConfig().getString(questName + ".tasks.0.itemDisplay") == null) 
-			this.getQuestConfig().set(questName + ".tasks.0.itemDisplay", "Diamond");
+		if(this.getQuestConfig().getString(questName + ".tasks.0.display") == null) 
+			this.getQuestConfig().set(questName + ".tasks.0.display", "Diamond");
 		if(this.getQuestConfig().getInt(questName + ".tasks.0.amount") == 0) 
 			this.getQuestConfig().set(questName + ".tasks.0.amount", 5);
 		if(this.getQuestConfig().getString(questName + ".tasks.0.nextTask") == null) 
@@ -167,7 +167,7 @@ public class Config {
 		// Check onJoin Nodes
 		if(this.getQuestConfig().getString(questName + ".onJoin.message") == null) 
 		{
-			plugin.logger.warning(plugin.prefix + "Quest " + questName + " disabled because node 'onJoin.message' is not set!");
+			Chat.logger("warning", "Quest " + questName + " disabled because node 'onJoin.message' is not set!");
 			return false;
 		}
 		if(this.getQuestConfig().getInt(questName + ".onJoin.market.money") == 0) 
@@ -180,7 +180,7 @@ public class Config {
 		// Check onDrop Nodes
 		if(this.getQuestConfig().getString(questName + ".onDrop.message") == null) 
 		{
-			plugin.logger.warning(plugin.prefix + "Quest " + questName + " disabled because node 'onDrop.message' is not set!");
+			Chat.logger("warning", "Quest " + questName + " disabled because node 'onDrop.message' is not set!");
 			return false;
 		}
 		if(this.getQuestConfig().getInt(questName + ".onDrop.market.money") == 0) 
@@ -193,7 +193,7 @@ public class Config {
 		// Check onComplete Nodes
 		if(this.getQuestConfig().getString(questName + ".onComplete.message") == null) 
 		{
-			plugin.logger.warning(plugin.prefix + "Quest " + questName + " disabled because node 'onComplete.message' is not set!");
+			Chat.logger("warning", "Quest " + questName + " disabled because node 'onComplete.message' is not set!");
 			return false;
 		}
 		if(this.getQuestConfig().getInt(questName + ".onComplete.market.money") == 0) 
@@ -208,16 +208,15 @@ public class Config {
 	}
 	public void dumpQuestConfig()
 	{
-		plugin.logger.warning(plugin.prefix + "****************************************************************");
-		plugin.logger.warning(plugin.prefix + "**********************Starting Config Dump**********************");
-		plugin.logger.warning(plugin.prefix + "****************************************************************");
-		plugin.logger.info(plugin.prefix + plugin.Config.getQuestConfig().getKeys(true));
+		Chat.logger("warning", "################################################################");
+		Chat.logger("warning", "##################### Starting Config Dump #####################");
+		Chat.logger("warning", "################################################################");
 		
-		for (Object o : plugin.Config.getQuestConfig().getKeys(true))
-			plugin.logger.info(plugin.prefix + plugin.Config.getQuestConfig().get("d." + o));
+		for (String o : plugin.Config.getQuestConfig().getKeys(true))
+			Chat.logger("info", o + ": " + plugin.Config.getQuestConfig().get(o));
 		
-		plugin.logger.warning(plugin.prefix + "****************************************************************");
-		plugin.logger.warning(plugin.prefix + "***********************Ending Config Dump***********************");
-		plugin.logger.warning(plugin.prefix + "****************************************************************");
+		Chat.logger("warning", "################################################################");
+		Chat.logger("warning", "###################### Ending Config Dump ######################");
+		Chat.logger("warning", "################################################################");
 	}
 }

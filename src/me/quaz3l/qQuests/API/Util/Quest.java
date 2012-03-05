@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import me.quaz3l.qQuests.API.Build.BuildQuest;
-import me.quaz3l.qQuests.API.Util.Events.onComplete;
-import me.quaz3l.qQuests.API.Util.Events.onDrop;
-import me.quaz3l.qQuests.API.Util.Events.onJoin;
 
 public class Quest {	
 	private String name = "Quest";
@@ -15,9 +12,9 @@ public class Quest {
 	private Boolean invisible = false;
 	private String nextQuest  = "";
 	private Map<Integer, Task> tasks = new HashMap<Integer, Task>();
-	private onJoin onJoin;
-	private onDrop onDrop;
-	private onComplete onComplete;
+	private onSomething onJoin;
+	private onSomething onDrop;
+	private onSomething onComplete;
 	
 	public Quest(BuildQuest build) 
 	{
@@ -30,31 +27,31 @@ public class Quest {
 		onDrop = build.onDrop();
 		onComplete = build.onComplete();
 	}
-	public String name() {
+	public final String name() {
 		return this.name;
 	}
-	public Boolean multiTaskMode() {
+	public final Boolean multiTaskMode() {
 		return this.multiTaskMode;
 	}
-	public Integer repeated() {
+	public final Integer repeated() {
 		return this.repeated;
 	}
-	public Boolean invisible() {
+	public final Boolean invisible() {
 		return this.invisible;
 	}
-	public String nextQuest() {
+	public final String nextQuest() {
 		return this.nextQuest;
 	}
-	public Map<Integer, Task> tasks() {
+	public final Map<Integer, Task> tasks() {
 		return this.tasks;
 	}
-	public onJoin onJoin() {
+	public final onSomething onJoin() {
 		return this.onJoin;
 	}
-	public onDrop onDrop() {
+	public final onSomething onDrop() {
 		return this.onDrop;
 	}
-	public onComplete onComplete() {
+	public final onSomething onComplete() {
 		return this.onComplete;
 	}
 }
