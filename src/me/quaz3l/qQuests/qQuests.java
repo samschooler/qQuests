@@ -65,12 +65,6 @@ public class qQuests extends JavaPlugin
 		
 		// Build Quests
 		qAPI.getQuestWorker().buildQuests();
-		Chat.logger("info", qAPI
-				.getQuestWorker()
-				.getQuests()
-				.get("d")
-				.onJoin()
-				.message());
 		
 		//Start Stock qPlugins
 		stockPlugins();

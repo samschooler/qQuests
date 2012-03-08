@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.bukkit.entity.Player;
 
+import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.Util.Quest;
 import me.quaz3l.qQuests.Util.Storage;
 
@@ -113,10 +114,37 @@ public class QuestAPI {
 		else return true;
 	}
 	
+	public boolean completeQuest(Player player){
+		if(hasActiveQuest(player))
+		{
+			int i=0;
+			while(qQuests.plugin.qAPI.getActiveQuest(player).tasks().size() > i) 
+			{
+				if(getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("damage") || 
+					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("destroy") || 
+					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("place"))
+				{	
+					Integer a = Storage.currentTaskProgress.get(player).get(i);
+					if(a < getActiveQuest(player).tasks().get(i).amount())
+						return false;
+				}
+				i++;
+			}
+			if(getActiveQuest(player).onComplete().feeReward(player))
+			{
+				this.resetPlayer(player);
+				return true;
+			}
+			else return false;
+		}
+		else return false;
+	}
+	
 	public void cancelQuest(Player player)
 	{
 		this.resetPlayer(player);
 	}
+	
 	private void resetPlayer(Player player)
 	{
 		QuestWorker.getActiveQuests().remove(player);

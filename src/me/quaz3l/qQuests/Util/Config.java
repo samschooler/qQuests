@@ -106,8 +106,6 @@ public class Config {
 				this.getQuestConfig().set("Diamonds!.tasks.0.display", "Diamond");
 			if(this.getQuestConfig().getInt("Diamonds!.tasks.0.amount") == 0) 
 				this.getQuestConfig().set("Diamonds!.tasks.0.amount", 5);
-			if(this.getQuestConfig().getString("Diamonds!.tasks.0.nextTask") == null) 
-				this.getQuestConfig().set("Diamonds!.tasks.0.nextTask", "");
 			
 			// Set onJoin Nodes
 			if(this.getQuestConfig().getString("Diamonds!.onJoin.message") == null) 
@@ -160,8 +158,6 @@ public class Config {
 			this.getQuestConfig().set(questName + ".tasks.0.display", "Diamond");
 		if(this.getQuestConfig().getInt(questName + ".tasks.0.amount") == 0) 
 			this.getQuestConfig().set(questName + ".tasks.0.amount", 5);
-		if(this.getQuestConfig().getString(questName + ".tasks.0.nextTask") == null) 
-			this.getQuestConfig().set(questName + ".tasks.0.nextTask", "");
 		
 		// Check onJoin Nodes
 		if(this.getQuestConfig().getString(questName + ".onJoin.message") == null) 

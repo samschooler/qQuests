@@ -19,7 +19,7 @@ public class cmd implements CommandExecutor
 		{
 			if(args.length < 1)
 			{
-				Chat.message((Player) s, "/quest " + ChatColor.RED + "[" + ChatColor.YELLOW + "give, info, drop, done" + ChatColor.RED + "]");
+				Chat.noPrefixMessage((Player) s, "/q " + ChatColor.RED + "[" + ChatColor.YELLOW + "give, info, drop, done" + ChatColor.RED + "]");
 			}
 			else
 			{
@@ -30,15 +30,14 @@ public class cmd implements CommandExecutor
 						if(qQuests.plugin.qAPI.checkPerms((Player) s, "give"))
 						{
 							if(qQuests.plugin.qAPI.hasActiveQuest((Player) s))
-								Chat.error((Player) s, "You Already Have An Active Quest! Type " + ChatColor.YELLOW + "/quest info" + ChatColor.RED + " To Get More Info On Your Quest.");
+								Chat.error((Player) s, "You Already Have An Active Quest! Type " + ChatColor.YELLOW + "/q info" + ChatColor.RED + " To Get More Info On Your Quest.");
 							else
 							{
 								qQuests.plugin.qAPI.getActiveQuests().put(((Player) s), qQuests.plugin.qAPI.giveQuest((Player) s));
 								Chat.message(((Player) s), qQuests.plugin.qAPI.getActiveQuest((Player) s).onJoin().message());
 							}
 						}
-						else
-							Chat.noPerms((Player) s);
+						else Chat.noPerms((Player) s);
 					}
 					else if(args.length == 2)
 					{
@@ -55,12 +54,13 @@ public class cmd implements CommandExecutor
 							}
 							else
 							{
-								Chat.error((Player) s, "You Already Have An Active Quest! Type " + ChatColor.YELLOW + "/quest info" + ChatColor.RED + " To Get More Info On Your Quest.");
+								Chat.error((Player) s, "You Already Have An Active Quest! Type " + ChatColor.YELLOW + "/q info" + ChatColor.RED + " To Get More Info On Your Quest.");
 							}
 						}
+						else Chat.noPerms((Player) s);
 					}
 					else
-						Chat.message((Player) s, "/quest " + ChatColor.RED + "[" + ChatColor.YELLOW + "give, info, drop, done" + ChatColor.RED + "]");
+						Chat.noPrefixMessage((Player) s, "/q " + ChatColor.RED + "[" + ChatColor.YELLOW + "give, info, drop, done" + ChatColor.RED + "]");
 				}
 				else if(args[0].equalsIgnoreCase("info")) 
 				{
@@ -72,19 +72,24 @@ public class cmd implements CommandExecutor
 							Chat.noPrefixMessage((Player) s, ":======== Quest Info ========:");
 							Chat.noPrefixMessage((Player) s, "Name: " + q.name());
 							Chat.noPrefixMessage((Player) s, "Repeat: " + q.repeated());
-							Chat.noPrefixMessage((Player) s, "Amount Of Tasks: " + q.tasks().size());
-							Chat.noPrefixMessage((Player) s, "Tasks: " + q.tasks().toString());
-							/* if(q.tasks().get(0).type() == "collect" || q.tasks().get(0).type() == "destroy" || q.tasks().get(0).type() == "damage" || q.tasks().get(0).type() == "place")
-								Chat.noPrefixMessage((Player) s, q.tasks().get(0).type() + " " + q.tasks().get(0).amount() + " " + q.tasks().get(0).name() + "(ID:" + q.tasks().get(0).id() + ")");
-							else if(q.tasks().get(0).type() == "kill")
-								Chat.noPrefixMessage((Player) s, q.tasks().get(0).type() + " " + q.tasks().get(0).amount() + " " + q.tasks().get(0).name());
-							else if(q.tasks().get(0).type() == "kill_player")
-								Chat.noPrefixMessage((Player) s, "kill player '" + q.tasks().get(0).name() + "' " + q.tasks().get(0).amount() + " times");
-								*/
+							int i=0;
+							while(q.tasks().size() > i) 
+							{
+								if(q.tasks().get(i).type().equalsIgnoreCase("damage"))
+									Chat.noPrefixMessage((Player) s, (i + 1) + ". Damage " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + "(ID:" + q.tasks().get(i).idInt() + ")");
+								else if(q.tasks().get(i).type().equalsIgnoreCase("destroy"))
+									Chat.noPrefixMessage((Player) s, (i + 1) + ". Destroy " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + "(ID:" + q.tasks().get(i).idInt() + ")");
+								else if(q.tasks().get(i).type().equalsIgnoreCase("place"))
+									Chat.noPrefixMessage((Player) s, (i + 1) + ". Place " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + "(ID:" + q.tasks().get(i).idInt() + ")");
+								else if(q.tasks().get(i).type().equalsIgnoreCase("kill"))
+									Chat.noPrefixMessage((Player) s, (i + 1) + ". Kill " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
+								else if(q.tasks().get(i).type().equalsIgnoreCase("kill_player"))
+									Chat.noPrefixMessage((Player) s, (i + 1) + ". Kill the player '" + q.tasks().get(i).idString() + "' " + q.tasks().get(i).amount() + " times");
+								i++;
+							}
 						}
 					}
-					else
-						Chat.noPerms((Player) s);
+					else Chat.noPerms((Player) s);
 				}
 				else if(args[0].equalsIgnoreCase("drop")) 
 				{
@@ -93,19 +98,27 @@ public class cmd implements CommandExecutor
 						if(qQuests.plugin.qAPI.hasActiveQuest((Player) s))
 							qQuests.plugin.qAPI.dropQuest((Player) s);
 						else
-							Chat.error((Player) s, "You Don't Have An Active Quest! Type " + ChatColor.YELLOW + "/quest give" + ChatColor.RED + " To Get One.");
+							Chat.error((Player) s, "You Don't Have An Active Quest! Type " + ChatColor.YELLOW + "/q give" + ChatColor.RED + " To Get One.");
 					}
+					else Chat.noPerms((Player) s);
 				}
 				else if(args[0].equalsIgnoreCase("done")) 
 				{
 					if(qQuests.plugin.qAPI.checkPerms((Player) s, "done"))
 					{
-						// Finish Quest
+						if(qQuests.plugin.qAPI.hasActiveQuest((Player) s))
+							if(qQuests.plugin.qAPI.completeQuest((Player) s))
+								Chat.done((Player) s, "Quest Completed!");
+							else
+								Chat.error((Player) s, "You Haven't Completed All The Tasks! Type " + ChatColor.YELLOW + "/q info" + ChatColor.RED + " See Them.");
+						else
+							Chat.error((Player) s, "You Don't Have An Active Quest! Type " + ChatColor.YELLOW + "/q give" + ChatColor.RED + " To Get One.");
 					}
+					else Chat.noPerms((Player) s);
 				}
 				else
 				{
-					Chat.message((Player) s, "/quest " + ChatColor.RED + "[" + ChatColor.YELLOW + "give, info, drop" + ChatColor.RED + "]");
+					Chat.noPrefixMessage((Player) s, "/q " + ChatColor.RED + "[" + ChatColor.YELLOW + "give, info, drop" + ChatColor.RED + "]");
 				}
 			}
 		}
