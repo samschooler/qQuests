@@ -55,7 +55,7 @@ public class qQuests extends JavaPlugin
 		this.qAPI = new QuestAPI();
 		// Initialize The Configuration File
 		Config.initialize();
-		Config.dumpQuestConfig();
+		//Config.dumpQuestConfig();
 		
 		// Find Economy
 		this.startEconomy();
@@ -66,6 +66,7 @@ public class qQuests extends JavaPlugin
 		// Build Quests
 		qAPI.getQuestWorker().buildQuests();
 		Chat.logger("info", qAPI
+				.getQuestWorker()
 				.getQuests()
 				.get("d")
 				.onJoin()
@@ -90,16 +91,16 @@ public class qQuests extends JavaPlugin
 			}
 			else
 			{
-				Chat.logger("warning", "****************************************************************");
+				Chat.logger("warning", "################################################################");
 				Chat.logger("warning", "[Economy] Disabled - Economy Plugin Not Found! Go Dowmnload An Economy Plugin From: http://dev.bukkit.org/server-mods/iconomy");
-				Chat.logger("warning", "****************************************************************");
+				Chat.logger("warning", "################################################################");
 			}
 		}
 		else
 		{
-			Chat.logger("warning", "****************************************************************");
+			Chat.logger("warning", "################################################################");
 			Chat.logger("warning", "[Economy] Disabled - Vault Not Found! Go Download Vault From: http://dev.bukkit.org/server-mods/vault");
-			Chat.logger("warning", "****************************************************************");
+			Chat.logger("warning", "################################################################");
 		}
 	}
 	// Register Events

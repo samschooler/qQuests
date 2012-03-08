@@ -41,7 +41,6 @@ public class QuestWorker
 			this.valid = qQuests.plugin.Config.validate(root, this);
 				
 			BuildQuest quest = new BuildQuest(root);
-			quest.multiTaskMode(qQuests.plugin.Config.getQuestConfig().getBoolean(questName + ".setup.multiTaskMode"));
 			quest.repeated(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".setup.repeated"));
 			quest.invisible(qQuests.plugin.Config.getQuestConfig().getBoolean(questName + ".setup.invisible"));
 			quest.nextQuest(qQuests.plugin.Config.getQuestConfig().getString(questName + ".setup.nextQuest"));
@@ -76,16 +75,64 @@ public class QuestWorker
 			quest.BuildonJoin().money(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.money"));
 			quest.BuildonJoin().health(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.health"));
 			quest.BuildonJoin().hunger(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.hunger"));
+			int i=0;
+			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onJoin.market.items") != null)
+	        for (Object s : qQuests.plugin.Config.getQuestConfig().getList(questName + ".onJoin.market.items")) {
+	        	String[] strs = ((String) s).split(":");
+	        	try
+	        	{
+	        		quest.BuildonJoin().items().put(i, Integer.parseInt(strs[0]));
+	        		quest.BuildonJoin().items().put(i, Integer.parseInt(strs[1]));
+	        	}
+	        	catch(Exception e)
+	        	{
+	        		Chat.logger("severe", "The rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest");
+	        		this.valid = false;
+	        	}
+	        	i++;
+	        }
 
 			quest.BuildonDrop().message(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onDrop.message"));
 			quest.BuildonDrop().money(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.money"));
 			quest.BuildonDrop().health(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.health"));
 			quest.BuildonDrop().hunger(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.hunger"));
+			i=0;
+			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onDrop.market.items") != null)
+	        for (Object s : qQuests.plugin.Config.getQuestConfig().getList(questName + ".onDrop.market.items")) {
+	        	String[] strs = ((String) s).split(":");
+	        	try
+	        	{
+	        		quest.BuildonDrop().items().put(i, Integer.parseInt(strs[0]));
+	        		quest.BuildonDrop().items().put(i, Integer.parseInt(strs[1]));
+	        	}
+	        	catch(Exception e)
+	        	{
+	        		Chat.logger("severe", "The rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest");
+	        		this.valid = false;
+	        	}
+	        	i++;
+	        }
 			
 			quest.BuildonComplete().message(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onComplete.message"));
 			quest.BuildonComplete().money(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.money"));
 			quest.BuildonComplete().health(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.health"));
 			quest.BuildonComplete().hunger(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.hunger"));
+			i=0;
+			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onComplete.market.items") != null)
+	        for (Object s : qQuests.plugin.Config.getQuestConfig().getList(questName + ".onComplete.market.items")) {
+	        	String[] strs = ((String) s).split(":");
+	        	try
+	        	{
+	        		quest.BuildonComplete().items().put(i, Integer.parseInt(strs[0]));
+	        		quest.BuildonComplete().items().put(i, Integer.parseInt(strs[1]));
+	        	}
+	        	catch(Exception e)
+	        	{
+	        		Chat.logger("severe", "The rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest");
+	        		this.valid = false;
+	        	}
+	        	i++;
+	        }
 			
 			if(this.valid)
 				this.rememberQuest(quest.create());

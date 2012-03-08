@@ -3,6 +3,7 @@ package me.quaz3l.qQuests.Util;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.QuestWorker;
@@ -89,8 +90,6 @@ public class Config {
 			this.getQuestConfig().options().copyDefaults(true);
 			
 			// Set Setup Nodes
-			if(this.getQuestConfig().getBoolean("Diamonds!.setup.multiTaskMode") == false) 
-				this.getQuestConfig().set("Diamonds!.setup.multiTaskMode", false);
 			if(this.getQuestConfig().getInt("Diamonds!.setup.repeated") == 0) 
 				this.getQuestConfig().set("Diamonds!.setup.repeated", -1);
 			if(this.getQuestConfig().getBoolean("Diamonds!.setup.invisible") == false) 
@@ -139,13 +138,13 @@ public class Config {
 				this.getQuestConfig().set("Diamonds!.onComplete.market.health", 0);
 			if(this.getQuestConfig().getInt("Diamonds!.onComplete.market.hunger") == 0) 
 				this.getQuestConfig().set("Diamonds!.onComplete.market.hunger", 0);
+			if(this.getQuestConfig().getStringList("Diamonds!.onComplete.market.items") == null) 
+				this.getQuestConfig().set("Diamonds!.onComplete.market.items", Arrays.asList("3:10"));
 		}
 		this.saveQuestConfig();
 	}
 	public boolean validate(String questName, QuestWorker q) {
 		// Check The Setup Nodes
-		if(this.getQuestConfig().getBoolean(questName + ".setup.multiTaskMode") == false) 
-			this.getQuestConfig().set(questName + ".setup.multiTaskMode", false);
 		if(this.getQuestConfig().getInt(questName + ".setup.repeated") == 0) 
 			this.getQuestConfig().set(questName + ".setup.repeated", -1);
 		if(this.getQuestConfig().getBoolean(questName + ".setup.invisible") == false) 

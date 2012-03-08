@@ -19,7 +19,7 @@ public class cmd implements CommandExecutor
 		{
 			if(args.length < 1)
 			{
-				Chat.message((Player) s, "/Quest " + ChatColor.RED + "[" + ChatColor.YELLOW + "give, info, drop, done" + ChatColor.RED + "]");
+				Chat.message((Player) s, "/quest " + ChatColor.RED + "[" + ChatColor.YELLOW + "give, info, drop, done" + ChatColor.RED + "]");
 			}
 			else
 			{
@@ -30,10 +30,11 @@ public class cmd implements CommandExecutor
 						if(qQuests.plugin.qAPI.checkPerms((Player) s, "give"))
 						{
 							if(qQuests.plugin.qAPI.hasActiveQuest((Player) s))
-								Chat.error((Player) s, "You Already Have An Active Quest! Type " + ChatColor.YELLOW + "/Quest info" + ChatColor.RED + " To Get More Info On Your Quest.");
+								Chat.error((Player) s, "You Already Have An Active Quest! Type " + ChatColor.YELLOW + "/quest info" + ChatColor.RED + " To Get More Info On Your Quest.");
 							else
 							{
-								// Give Quest
+								qQuests.plugin.qAPI.getActiveQuests().put(((Player) s), qQuests.plugin.qAPI.giveQuest((Player) s));
+								Chat.message(((Player) s), qQuests.plugin.qAPI.getActiveQuest((Player) s).onJoin().message());
 							}
 						}
 						else
@@ -44,21 +45,22 @@ public class cmd implements CommandExecutor
 						if(qQuests.plugin.qAPI.checkPerms((Player) s, "give.specific"))
 						{
 							if(!qQuests.plugin.qAPI.hasActiveQuest((Player) s)) {
-								if(qQuests.plugin.qAPI.getQuests().containsKey(args[1]))
+								if(qQuests.plugin.qAPI.getQuestWorker().getQuests().containsKey(args[1]))
 								{
-									// Give Quest
+									qQuests.plugin.qAPI.getActiveQuests().put(((Player) s), qQuests.plugin.qAPI.getQuestWorker().getQuests().get(args[1]));
+									Chat.message(((Player) s), qQuests.plugin.qAPI.getActiveQuest((Player) s).onJoin().message());
 								}
 								else
 									Chat.error((Player) s, "This Isn't A Valid Quest!");
 							}
 							else
 							{
-								Chat.error((Player) s, "You Already Have An Active Quest! Type " + ChatColor.YELLOW + "/Quest info" + ChatColor.RED + " To Get More Info On Your Quest.");
+								Chat.error((Player) s, "You Already Have An Active Quest! Type " + ChatColor.YELLOW + "/quest info" + ChatColor.RED + " To Get More Info On Your Quest.");
 							}
 						}
 					}
 					else
-						Chat.message((Player) s, "/Quest " + ChatColor.RED + "[" + ChatColor.YELLOW + "give, info, drop, done" + ChatColor.RED + "]");
+						Chat.message((Player) s, "/quest " + ChatColor.RED + "[" + ChatColor.YELLOW + "give, info, drop, done" + ChatColor.RED + "]");
 				}
 				else if(args[0].equalsIgnoreCase("info")) 
 				{
@@ -89,11 +91,9 @@ public class cmd implements CommandExecutor
 					if(qQuests.plugin.qAPI.checkPerms((Player) s, "drop"))
 					{
 						if(qQuests.plugin.qAPI.hasActiveQuest((Player) s))
-						{
-							// Drop Quest
-						}
+							qQuests.plugin.qAPI.dropQuest((Player) s);
 						else
-							Chat.error((Player) s, "You Don't Have An Active Quest! Type " + ChatColor.YELLOW + "/Quest give" + ChatColor.RED + " To Get One.");
+							Chat.error((Player) s, "You Don't Have An Active Quest! Type " + ChatColor.YELLOW + "/quest give" + ChatColor.RED + " To Get One.");
 					}
 				}
 				else if(args[0].equalsIgnoreCase("done")) 
@@ -105,7 +105,7 @@ public class cmd implements CommandExecutor
 				}
 				else
 				{
-					Chat.message((Player) s, "/Quest " + ChatColor.RED + "[" + ChatColor.YELLOW + "give, info, drop" + ChatColor.RED + "]");
+					Chat.message((Player) s, "/quest " + ChatColor.RED + "[" + ChatColor.YELLOW + "give, info, drop" + ChatColor.RED + "]");
 				}
 			}
 		}

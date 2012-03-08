@@ -1,7 +1,6 @@
 package me.quaz3l.qQuests.API.Build;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import me.quaz3l.qQuests.API.Util.Quest;
 import me.quaz3l.qQuests.API.Util.Task;
@@ -10,11 +9,10 @@ import me.quaz3l.qQuests.Util.Chat;
 
 public class BuildQuest {
 	private String name = "Quest";
-	private Boolean multiTaskMode = false;
 	private Integer repeated  = -1;
 	private Boolean invisible = false;
 	private String nextQuest  = "";
-	private Map<Integer, Task> tasks = new HashMap<Integer, Task>();
+	private HashMap<Integer, Task> tasks = new HashMap<Integer, Task>();
 	private BuildonSomething BuildonJoin = new BuildonSomething();
 	private BuildonSomething BuildonDrop = new BuildonSomething();
 	private BuildonSomething BuildonComplete = new BuildonSomething();
@@ -34,10 +32,6 @@ public class BuildQuest {
 	}
 	
 	// Setting Variables
-	public BuildQuest multiTaskMode(Boolean b) {
-		this.multiTaskMode = b;
-		return this;
-	}
 	public BuildQuest repeated(Integer i) {
 		this.repeated = i;
 		return this;
@@ -50,7 +44,7 @@ public class BuildQuest {
 		this.nextQuest = s;
 		return this;
 	}
-	public BuildQuest tasks(Map<Integer, Task> m) {
+	public BuildQuest tasks(HashMap<Integer, Task> m) {
 		this.tasks = m;
 		return this;
 	}
@@ -58,9 +52,6 @@ public class BuildQuest {
 	// Getting Variables
 	public String name() {
 		return this.name;
-	}
-	public Boolean multiTaskMode() {
-		return this.multiTaskMode;
 	}
 	public Integer repeated() {
 		return this.repeated;
@@ -71,7 +62,7 @@ public class BuildQuest {
 	public String nextQuest() {
 		return this.nextQuest;
 	}
-	public Map<Integer, Task> tasks() {
+	public HashMap<Integer, Task> tasks() {
 		return this.tasks;
 	}
 	public onSomething onJoin() {

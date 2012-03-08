@@ -1,17 +1,15 @@
 package me.quaz3l.qQuests.API.Util;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import me.quaz3l.qQuests.API.Build.BuildQuest;
 
 public class Quest {	
 	private String name = "Quest";
-	private Boolean multiTaskMode = false;
 	private Integer repeated  = -1;
 	private Boolean invisible = false;
 	private String nextQuest  = "";
-	private Map<Integer, Task> tasks = new HashMap<Integer, Task>();
+	private HashMap<Integer, Task> tasks = new HashMap<Integer, Task>();
 	private onSomething onJoin;
 	private onSomething onDrop;
 	private onSomething onComplete;
@@ -19,7 +17,6 @@ public class Quest {
 	public Quest(BuildQuest build) 
 	{
 		name = build.name();
-		multiTaskMode = build.multiTaskMode();
 		repeated = build.repeated();
 		invisible = build.invisible();
 		tasks = build.tasks();
@@ -30,9 +27,6 @@ public class Quest {
 	public final String name() {
 		return this.name;
 	}
-	public final Boolean multiTaskMode() {
-		return this.multiTaskMode;
-	}
 	public final Integer repeated() {
 		return this.repeated;
 	}
@@ -42,7 +36,7 @@ public class Quest {
 	public final String nextQuest() {
 		return this.nextQuest;
 	}
-	public final Map<Integer, Task> tasks() {
+	public final HashMap<Integer, Task> tasks() {
 		return this.tasks;
 	}
 	public final onSomething onJoin() {

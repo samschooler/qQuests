@@ -31,6 +31,14 @@ public class Chat {
 	{
 		s.sendMessage(qQuests.plugin.prefix + ChatColor.RED + msg);
 	}
+	public static void done(Player p, String msg)
+	{
+		p.sendMessage(qQuests.plugin.chatPrefix + ChatColor.GREEN + msg);
+	}
+	public static void done(CommandSender s, String msg)
+	{
+		s.sendMessage(qQuests.plugin.prefix + ChatColor.GREEN + msg);
+	}
 	public static void noPerms(Player p)
 	{
 		p.sendMessage(qQuests.plugin.chatPrefix + ChatColor.RED + "You don't have permissions to do this!");
