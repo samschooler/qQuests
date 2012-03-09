@@ -70,7 +70,7 @@ public class qQuests extends JavaPlugin
 		stockPlugins();
 		
 		// Notify Logger
-		Chat.logger("info", qQuests.plugin.prefix + this.qPlugins + " qPlugins Linked.");
+		Chat.logger("info", this.qPlugins + " qPlugins Linked.");
 		Chat.logger("info", "v" + this.getDescription().getVersion() + " by Quaz3l: Enabled");
 	}
 	// Hooks Into The Economy

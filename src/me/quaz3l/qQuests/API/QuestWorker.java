@@ -67,7 +67,7 @@ public class QuestWorker
 			    }
 				catch (Exception e)
 				{
-					Chat.logger("severe", "The tasks of quest '" + root + "' are not correctly formatted! Disabling this quest");
+					Chat.logger("severe", "The tasks of quest '" + root + "' are not correctly formatted! Disabling this quest...");
 					this.valid = false;
 				}
 			}
@@ -86,7 +86,7 @@ public class QuestWorker
 	        	}
 	        	catch(Exception e)
 	        	{
-	        		Chat.logger("severe", "The rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest");
+	        		Chat.logger("severe", "The rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest...");
 	        		this.valid = false;
 	        	}
 	        	i++;
@@ -107,7 +107,7 @@ public class QuestWorker
 	        	}
 	        	catch(Exception e)
 	        	{
-	        		Chat.logger("severe", "The rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest");
+	        		Chat.logger("severe", "The rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest...");
 	        		this.valid = false;
 	        	}
 	        	i++;
@@ -128,7 +128,7 @@ public class QuestWorker
 	        	}
 	        	catch(Exception e)
 	        	{
-	        		Chat.logger("severe", "The rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest");
+	        		Chat.logger("severe", "The rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest...");
 	        		this.valid = false;
 	        	}
 	        	i++;

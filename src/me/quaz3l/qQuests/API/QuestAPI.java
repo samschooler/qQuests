@@ -122,7 +122,9 @@ public class QuestAPI {
 			{
 				if(getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("damage") || 
 					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("destroy") || 
-					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("place"))
+					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("place") ||
+					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("kill") ||
+					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("kill_player"))
 				{	
 					Integer a = Storage.currentTaskProgress.get(player).get(i);
 					if(a < getActiveQuest(player).tasks().get(i).amount())

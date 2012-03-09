@@ -13,24 +13,24 @@ public class Destroy implements Listener {
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) 
 	{
-		if(qQuests.plugin.qAPI.hasActiveQuest(e.getPlayer()))
+		if(e.isCancelled())
+			return;
+		if(!qQuests.plugin.qAPI.hasActiveQuest(e.getPlayer()))
+			return;
+		Player player = e.getPlayer();		
+		Block block = e.getBlock();
+		Integer blockId = block.getTypeId();
+		int i=0;
+		while(qQuests.plugin.qAPI.getActiveQuest(player).tasks().size() > i) 
 		{
-			Player player = e.getPlayer();		
-			Block block = e.getBlock();
-			Integer blockId = block.getTypeId();
-			int i=0;
-			while(qQuests.plugin.qAPI.getActiveQuest(player).tasks().size() > i) 
-			{
-				if(qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("destroy"))
-					if(qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).idInt() == blockId)
-					{
-						Integer a = Storage.currentTaskProgress.get(player).get(i);
-						if(a < qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).amount())
-							Storage.currentTaskProgress.get(player).put(i, (a + 1));
-					}
-				i++;
-			}
+			if(qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("destroy"))
+				if(qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).idInt() == blockId)
+				{
+					Integer a = Storage.currentTaskProgress.get(player).get(i);
+					if(a < qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).amount())
+						Storage.currentTaskProgress.get(player).put(i, (a + 1));
+				}
+			i++;
 		}
-		else return;
 	}
 }
