@@ -1,5 +1,6 @@
 package me.quaz3l.qQuests.API.Build;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import me.quaz3l.qQuests.API.Util.onSomething;
@@ -9,8 +10,7 @@ public class BuildonSomething {
 	private Integer money;
 	private Integer health;
 	private Integer hunger;
-	private HashMap<Integer, Integer> items = new HashMap<Integer, Integer>();
-	private HashMap<Integer, Integer> amounts = new HashMap<Integer, Integer>();
+	private HashMap<Integer, ArrayList<Integer>> items = new HashMap<Integer, ArrayList<Integer>>();
 	
 	public onSomething create() {
 		return new onSomething(this);
@@ -45,10 +45,7 @@ public class BuildonSomething {
 	public Integer hunger() {
 		return this.hunger;
 	}
-	public HashMap<Integer, Integer> items() {
+	public HashMap<Integer, ArrayList<Integer>> items() {
 		return this.items;
-	}
-	public HashMap<Integer, Integer> amounts() {
-		return this.amounts;
 	}
 }

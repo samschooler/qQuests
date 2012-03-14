@@ -33,8 +33,16 @@ public class cmd implements CommandExecutor
 								Chat.error((Player) s, "You Already Have An Active Quest! Type " + ChatColor.YELLOW + "/q info" + ChatColor.RED + " To Get More Info On Your Quest.");
 							else
 							{
-								qQuests.plugin.qAPI.getActiveQuests().put(((Player) s), qQuests.plugin.qAPI.giveQuest((Player) s));
-								Chat.message(((Player) s), qQuests.plugin.qAPI.getActiveQuest((Player) s).onJoin().message());
+								Quest q =qQuests.plugin.qAPI.giveQuest((Player) s);
+								if(q != null)
+								{
+									qQuests.plugin.qAPI.getActiveQuests().put(((Player) s), q);
+									Chat.message(((Player) s), qQuests.plugin.qAPI.getActiveQuest((Player) s).onJoin().message());
+								}
+								else
+								{
+									Chat.error((Player) s, "You Don't Have Enough To Get This Quest!");
+								}
 							}
 						}
 						else Chat.noPerms((Player) s);

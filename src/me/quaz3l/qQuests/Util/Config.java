@@ -84,60 +84,52 @@ public class Config {
 	    	Chat.logger("severe", "Could not save config to " + cConfigFile);
 	    }
 	}
-	public void initialize() {
+	public void initializeConfig() {
+		this.getConfig();
+		if(this.getConfig().getKeys(false).size() < 1) {
+			this.getConfig().options().copyDefaults(true);
+			
+			// Set General Nodes
+			this.getConfig().set("autoUpdate", true);
+			this.getConfig().set("tellMeYourUsingMyPlugin", true);
+
+		}
+		this.saveConfig();
+	}
+	public void initializeQuestConfig() {
 		this.getQuestConfig();
 		if(this.getQuestConfig().getKeys(false).size() < 1) {
 			this.getQuestConfig().options().copyDefaults(true);
 			
 			// Set Setup Nodes
-			if(this.getQuestConfig().getInt("Diamonds!.setup.repeated") == 0) 
 				this.getQuestConfig().set("Diamonds!.setup.repeated", -1);
-			if(this.getQuestConfig().getBoolean("Diamonds!.setup.invisible") == false) 
 				this.getQuestConfig().set("Diamonds!.setup.invisible", false);
-			if(this.getQuestConfig().getString("Diamonds!.setup.nextQuest") == null) 
 				this.getQuestConfig().set("Diamonds!.setup.nextQuest", "");
 			
 			// Set Task Nodes
-			if(this.getQuestConfig().getString("Diamonds!.tasks.0.type") == null) 
 				this.getQuestConfig().set("Diamonds!.tasks.0.type", "collect");
-			if(this.getQuestConfig().getInt("Diamonds!.tasks.0.itemId") == 0) 
-				this.getQuestConfig().set("Diamonds!.tasks.0.itemId", 264);
-			if(this.getQuestConfig().getString("Diamonds!.tasks.0.display") == null) 
+				this.getQuestConfig().set("Diamonds!.tasks.0.id", 264);
 				this.getQuestConfig().set("Diamonds!.tasks.0.display", "Diamond");
-			if(this.getQuestConfig().getInt("Diamonds!.tasks.0.amount") == 0) 
 				this.getQuestConfig().set("Diamonds!.tasks.0.amount", 5);
 			
 			// Set onJoin Nodes
-			if(this.getQuestConfig().getString("Diamonds!.onJoin.message") == null) 
 				this.getQuestConfig().set("Diamonds!.onJoin.message", "Hey! Can you go get my 5 diamonds! I'll pay you $500");
-			if(this.getQuestConfig().getInt("Diamonds!.onJoin.market.money") == 0) 
 				this.getQuestConfig().set("Diamonds!.onJoin.market.money", 0);
-			if(this.getQuestConfig().getInt("Diamonds!.onJoin.market.health") == 0) 
 				this.getQuestConfig().set("Diamonds!.onJoin.market.health", 0);
-			if(this.getQuestConfig().getInt("Diamonds!.onJoin.market.hunger") == 0) 
 				this.getQuestConfig().set("Diamonds!.onJoin.market.hunger", 0);
 			
 			// Set onDrop Nodes
-			if(this.getQuestConfig().getString("Diamonds!.onDrop.message") == null) 
 				this.getQuestConfig().set("Diamonds!.onDrop.message", "AwwÉ fineÉ I'll go find someone else :(");
-			if(this.getQuestConfig().getInt("Diamonds!.onDrop.market.money") == 0) 
 				this.getQuestConfig().set("Diamonds!.onDrop.market.money", -50);
-			if(this.getQuestConfig().getInt("Diamonds!.onDrop.market.health") == 0) 
 				this.getQuestConfig().set("Diamonds!.onDrop.market.health", 0);
-			if(this.getQuestConfig().getInt("Diamonds!.onDrop.market.hunger") == 0) 
 				this.getQuestConfig().set("Diamonds!.onDrop.market.hunger", 0);
 			
 			// Set onComplete Nodes
-			if(this.getQuestConfig().getString("Diamonds!.onComplete.message") == null) 
 				this.getQuestConfig().set("Diamonds!.onComplete.message", "Thanks! Now I can feed my lava dragon! ;)");
-			if(this.getQuestConfig().getInt("Diamonds!.onComplete.market.money") == 0) 
 				this.getQuestConfig().set("Diamonds!.onComplete.market.money", 500);
-			if(this.getQuestConfig().getInt("Diamonds!.onComplete.market.health") == 0) 
 				this.getQuestConfig().set("Diamonds!.onComplete.market.health", 0);
-			if(this.getQuestConfig().getInt("Diamonds!.onComplete.market.hunger") == 0) 
 				this.getQuestConfig().set("Diamonds!.onComplete.market.hunger", 0);
-			if(this.getQuestConfig().getStringList("Diamonds!.onComplete.market.items") == null) 
-				this.getQuestConfig().set("Diamonds!.onComplete.market.items", Arrays.asList("3:10"));
+				this.getQuestConfig().set("Diamonds!.onComplete.market.items", Arrays.asList("3 1", "4 5"));
 		}
 		this.saveQuestConfig();
 	}
@@ -152,8 +144,8 @@ public class Config {
 		
 		if(this.getQuestConfig().getString(questName + ".tasks.0.type") == null) 
 			this.getQuestConfig().set(questName + ".tasks.0.type", "collect");
-		if(this.getQuestConfig().getInt(questName + ".tasks.0.itemId") == 0) 
-			this.getQuestConfig().set(questName + ".tasks.0.itemId", 264);
+		if(this.getQuestConfig().getInt(questName + ".tasks.0.id") == 0) 
+			this.getQuestConfig().set(questName + ".tasks.0.id", 264);
 		if(this.getQuestConfig().getString(questName + ".tasks.0.display") == null) 
 			this.getQuestConfig().set(questName + ".tasks.0.display", "Diamond");
 		if(this.getQuestConfig().getInt(questName + ".tasks.0.amount") == 0) 

@@ -23,9 +23,9 @@ public class QuestAPI {
 	}
 	
 	/*
-	public Map<String, Quest> getQuests()
+	public Map<String, Quest> getVisibleQuests()
 	{
-		return QuestWorker.getQuests();
+		return QuestWorker.getVisibleQuests();
 	}
 	*/
 	public Map<Player, Quest> getActiveQuests()
@@ -50,7 +50,7 @@ public class QuestAPI {
 	public Quest giveQuest(Player player)
     {
 		Random generator = new Random();
-		Object[] values = QuestWorker.getQuests().values().toArray();
+		Object[] values = QuestWorker.getVisibleQuests().values().toArray();
 		Quest q = (Quest) values[generator.nextInt(values.length)];
 		
 		// Rewards/Fees
@@ -76,7 +76,7 @@ public class QuestAPI {
 	
 	public Quest giveQuest(Player player, String quest)
     {
-		Quest q = QuestWorker.getQuests().get(quest);
+		Quest q = QuestWorker.getVisibleQuests().get(quest);
 		if(q != null)
 			if(q.onJoin().feeReward(player))
 			{
@@ -124,7 +124,10 @@ public class QuestAPI {
 					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("destroy") || 
 					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("place") ||
 					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("kill") ||
-					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("kill_player"))
+					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("kill_player") //||
+					//type.equalsIgnoreCase("goto") ||
+					//type.equalsIgnoreCase("distance")
+					)
 				{	
 					Integer a = Storage.currentTaskProgress.get(player).get(i);
 					if(a < getActiveQuest(player).tasks().get(i).amount())

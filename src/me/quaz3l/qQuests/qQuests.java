@@ -3,6 +3,7 @@ package me.quaz3l.qQuests;
 import java.util.logging.Logger;
 
 import me.quaz3l.qQuests.API.QuestAPI;
+import me.quaz3l.qQuests.API.Listeners.Craft;
 import me.quaz3l.qQuests.API.Listeners.Damage;
 import me.quaz3l.qQuests.API.Listeners.Destroy;
 import me.quaz3l.qQuests.API.Listeners.Distance;
@@ -13,6 +14,7 @@ import me.quaz3l.qQuests.API.Listeners.Place;
 import me.quaz3l.qQuests.Plugins.cmd;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Config;
+import me.quaz3l.qQuests.Util.Interwebs;
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.ChatColor;
@@ -50,28 +52,38 @@ public class qQuests extends JavaPlugin
 	@Override
 	public void onEnable() 
 	{
-		
-		
-		this.qAPI = new QuestAPI();
 		// Initialize The Configuration File
-		Config.initialize();
-		//Config.dumpQuestConfig();
+		Config.initializeQuestConfig();
+		Config.initializeConfig();
+		Config.dumpQuestConfig();
 		
-		// Find Economy
-		this.startEconomy();
+		Interwebs.pingStatus();
 		
-		// Register Events
-		this.registerEvents();
-		
-		// Build Quests
-		qAPI.getQuestWorker().buildQuests();
-		
-		//Start Stock qPlugins
-		stockPlugins();
-		
-		// Notify Logger
-		Chat.logger("info", this.qPlugins + " qPlugins Linked.");
-		Chat.logger("info", "v" + this.getDescription().getVersion() + " by Quaz3l: Enabled");
+		// Check For Update
+		if(Interwebs.checkForUpdates())
+			getServer().getPluginManager().disablePlugin(this);
+		else
+		{
+			// Get The API
+			this.qAPI = new QuestAPI();
+			
+			// Find Economy
+			this.startEconomy();
+			
+			// Register Events
+			this.registerEvents();
+			
+			// Build Quests
+			qAPI.getQuestWorker().buildQuests();
+			//Chat.logger("info", "" + qAPI.getQuestWorker().getQuests().get("d").onJoin().amounts().get(0));
+			
+			//Start Stock qPlugins
+			stockPlugins();
+			
+			// Notify Logger
+			Chat.logger("info", this.qPlugins + " qPlugins Linked.");
+			Chat.logger("info", "v" + this.getDescription().getVersion() + " by Quaz3l: Enabled");
+		}
 	}
 	// Hooks Into The Economy
 	private void startEconomy()
@@ -110,6 +122,8 @@ public class qQuests extends JavaPlugin
 		
 		getServer().getPluginManager().registerEvents(new Kill_Player(), this);
 		getServer().getPluginManager().registerEvents(new Kill(), this);
+		
+		getServer().getPluginManager().registerEvents(new Craft(), this);
 	}
 	
 	// Starts The Stock Plugins
@@ -129,4 +143,24 @@ public class qQuests extends JavaPlugin
 			getCommand("QUESTS").setExecutor(cmd);
 			getCommand("qQUESTS").setExecutor(cmd);
 	}
+	// To connect to qQuests put this function in your plugin
+	// And "depend: [qQuests]" in your plugin.yml
+	/*
+	public qQuests qQuests = null;
+	public QuestAPI qAPI = null;
+	
+	public void setupQQuests()
+	  {
+	    this.qQuests = (qQuests) getServer().getPluginManager().getPlugin("qQuests");
+
+	    if (this.qAPI == null)
+	      if (this.qQuests != null) {
+	        this.qAPI = qQuests.qAPI;
+	        System.out.println("qQuests found!");
+	      } else {
+	        System.out.println("qQuests not found. Disabling plugin.");
+	        getServer().getPluginManager().disablePlugin(this);
+	      }
+	  }
+	  */
 }
