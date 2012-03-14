@@ -14,7 +14,6 @@ public class Destroy implements Listener {
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) 
 	{
-		Chat.logger("info", "0");
 		if(e.isCancelled())
 			return;
 		if(!qQuests.plugin.qAPI.hasActiveQuest(e.getPlayer()))
