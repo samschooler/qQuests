@@ -86,14 +86,12 @@ public class Config {
 	}
 	public void initializeConfig() {
 		this.getConfig();
-		if(this.getConfig().getKeys(false).size() < 1) {
-			this.getConfig().options().copyDefaults(true);
-			
-			// Set General Nodes
-			this.getConfig().set("autoUpdate", true);
-			this.getConfig().set("tellMeYourUsingMyPlugin", true);
+		this.getConfig().options().copyDefaults(true);
+		
+		// Set General Nodes
+		this.getConfig().set("autoUpdate", true);
+		this.getConfig().set("tellMeYourUsingMyPlugin", true);
 
-		}
 		this.saveConfig();
 	}
 	public void initializeQuestConfig() {

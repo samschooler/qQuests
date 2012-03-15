@@ -20,49 +20,24 @@ permissions:
             qquests.give: true
             qquests.give.specific: true
             qquests.info: true
-            qquests.info: true
+            qquests.tasks: true
             qquests.drop: true
             qquests.done: true
     qquests.give:
-        description: Gives all give permissions
+        description: Lets players randomly get a visible quest
         default: true
-        children:
-            qquests.give.collect: true
-            qquests.give.destroy: true
-            qquests.give.damage: true
-            qquests.give.place: true
-            qquests.give.kill.player: true
-            qquests.give.kill.mob: true
     qquests.give.specific:
-        description: Gives all specific give permissions
+        description: Lets players specify a quest they want
         default: op
-        children:
-            qquests.give.specific.collect: true
-            qquests.give.specific.destroy: true
-            qquests.give.specific.damage: true
-            qquests.give.specific.place: true
-            qquests.give.specific.kill.player: true
-            qquests.give.specific.kill.mob: true
     qquests.info:
-        description: Gives all info permissions
+        description: Lets players see info on there quest
         default: true
-        children:
-            qquests.info.collect: true
-            qquests.info.destroy: true
-            qquests.info.damage: true
-            qquests.info.place: true
-            qquests.info.kill.player: true
-            qquests.info.kill.mob: true
+    qquests.tasks:
+        description: Lets players see there tasks
+        default: true
     qquests.drop:
-        description: Gives all drop permissions
+        description: Enables players to drop quests
         default: true
-        children:
-            qquests.drop.collect: true
-            qquests.drop.destroy: true
-            qquests.drop.damage: true
-            qquests.drop.place: true
-            qquests.drop.kill.player: true
-            qquests.drop.kill.mob: true
     qquests.done:
         description: Lets players finish a quest
         default: true

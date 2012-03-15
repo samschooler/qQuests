@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Chat {
+	// General Message
 	public static void message(Player p, String msg)
 	{
 		p.sendMessage(qQuests.plugin.chatPrefix + msg);
@@ -15,6 +16,8 @@ public class Chat {
 	{
 		s.sendMessage(qQuests.plugin.prefix + msg);
 	}
+	
+	// Message With No Former Formatting
 	public static void noPrefixMessage(Player p, String msg)
 	{
 		p.sendMessage(msg);
@@ -23,29 +26,33 @@ public class Chat {
 	{
 		s.sendMessage(msg);
 	}
+	
+	// A Good Message For Successes
+	public static void quotaMessage(Player p, String msg, Integer currentAmount, Integer totalAmount, String unit)
+	{
+			p.sendMessage(qQuests.plugin.chatPrefix + ChatColor.LIGHT_PURPLE + msg + " " + ChatColor.GREEN + currentAmount + "/" + totalAmount + " " + unit);
+	}
+		
+	// Red Error With Prefix
 	public static void error(Player p, String msg)
 	{
 		p.sendMessage(qQuests.plugin.chatPrefix + ChatColor.RED + msg);
 	}
-	public static void error(CommandSender s, String msg)
-	{
-		s.sendMessage(qQuests.plugin.prefix + ChatColor.RED + msg);
-	}
-	public static void done(Player p, String msg)
+	
+	// A Good Message For Successes
+	public static void green(Player p, String msg)
 	{
 		p.sendMessage(qQuests.plugin.chatPrefix + ChatColor.GREEN + msg);
 	}
-	public static void done(CommandSender s, String msg)
-	{
-		s.sendMessage(qQuests.plugin.prefix + ChatColor.GREEN + msg);
-	}
+	
+	// No Permissions Message
 	public static void noPerms(Player p)
 	{
-		p.sendMessage(qQuests.plugin.chatPrefix + ChatColor.RED + "You don't have permissions to do this!");
+		p.sendMessage(ChatColor.RED + Texts.NO_PERMISSION);
 	}
 	public static void noPerms(CommandSender s)
 	{
-		s.sendMessage(qQuests.plugin.prefix + ChatColor.RED + "You don't have permissions to do this!");
+		s.sendMessage(ChatColor.RED + Texts.NO_PERMISSION);
 	}
 	
 	// Logger

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import me.quaz3l.qQuests.API.Util.Quest;
 import me.quaz3l.qQuests.API.Util.Task;
 import me.quaz3l.qQuests.API.Util.onSomething;
-import me.quaz3l.qQuests.Util.Chat;
 
 public class BuildQuest {
 	private String name = "Quest";
@@ -25,7 +24,6 @@ public class BuildQuest {
 	}
 	public Quest create() {
 		this.onJoin = new onSomething(BuildonJoin);
-		Chat.logger("info", this.onJoin().message());
 		this.onDrop = new onSomething(BuildonDrop);
 		this.onComplete = new onSomething(BuildonComplete);
 		return new Quest(this);

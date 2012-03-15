@@ -3,8 +3,9 @@ package me.quaz3l.qQuests.Plugins;
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.Util.Quest;
 import me.quaz3l.qQuests.Util.Chat;
+import me.quaz3l.qQuests.Util.Storage;
+import me.quaz3l.qQuests.Util.Texts;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -19,10 +20,16 @@ public class cmd implements CommandExecutor
 		{
 			if(args.length < 1)
 			{
-				Chat.noPrefixMessage((Player) s, "/q " + ChatColor.RED + "[" + ChatColor.YELLOW + "give, info, drop, done" + ChatColor.RED + "]");
+				Chat.noPrefixMessage((Player) s, Texts.HELP_TEXT);
 			}
 			else
 			{
+				if(Storage.wayCurrentQuestsWereGiven.get((Player) s) != null)
+					if(!Storage.wayCurrentQuestsWereGiven.get((Player) s).equalsIgnoreCase("Commands"))
+					{
+						Chat.message(((Player) s), Texts.NOT_CONTROLLED_BY((Player) s));
+						return false;
+					}
 				if(args[0].equalsIgnoreCase("give"))
 				{
 					if (args.length == 1)
@@ -30,18 +37,19 @@ public class cmd implements CommandExecutor
 						if(qQuests.plugin.qAPI.checkPerms((Player) s, "give"))
 						{
 							if(qQuests.plugin.qAPI.hasActiveQuest((Player) s))
-								Chat.error((Player) s, "You Already Have An Active Quest! Type " + ChatColor.YELLOW + "/q info" + ChatColor.RED + " To Get More Info On Your Quest.");
+								Chat.error((Player) s, Texts.HAS_ACTIVE_QUEST);
 							else
 							{
 								Quest q =qQuests.plugin.qAPI.giveQuest((Player) s);
 								if(q != null)
 								{
 									qQuests.plugin.qAPI.getActiveQuests().put(((Player) s), q);
+									Storage.wayCurrentQuestsWereGiven.put(((Player) s), "Commands");
 									Chat.message(((Player) s), qQuests.plugin.qAPI.getActiveQuest((Player) s).onJoin().message());
 								}
 								else
 								{
-									Chat.error((Player) s, "You Don't Have Enough To Get This Quest!");
+									Chat.error((Player) s, Texts.NOT_ENOUGH_FOR_QUEST);
 								}
 							}
 						}
@@ -55,31 +63,30 @@ public class cmd implements CommandExecutor
 								if(qQuests.plugin.qAPI.getQuestWorker().getQuests().containsKey(args[1]))
 								{
 									qQuests.plugin.qAPI.getActiveQuests().put(((Player) s), qQuests.plugin.qAPI.getQuestWorker().getQuests().get(args[1]));
+									Storage.wayCurrentQuestsWereGiven.put(((Player) s), "Commands");
 									Chat.message(((Player) s), qQuests.plugin.qAPI.getActiveQuest((Player) s).onJoin().message());
 								}
 								else
-									Chat.error((Player) s, "This Isn't A Valid Quest!");
+									Chat.error((Player) s, Texts.NOT_VALID_QUEST);
 							}
 							else
 							{
-								Chat.error((Player) s, "You Already Have An Active Quest! Type " + ChatColor.YELLOW + "/q info" + ChatColor.RED + " To Get More Info On Your Quest.");
+								Chat.error((Player) s, Texts.HAS_ACTIVE_QUEST);
 							}
 						}
 						else Chat.noPerms((Player) s);
 					}
 					else
-						Chat.noPrefixMessage((Player) s, "/q " + ChatColor.RED + "[" + ChatColor.YELLOW + "give, info, drop, done" + ChatColor.RED + "]");
+						Chat.noPrefixMessage((Player) s, Texts.HELP_TEXT);
 				}
-				else if(args[0].equalsIgnoreCase("info")) 
+				else if(args[0].equalsIgnoreCase("tasks")) 
 				{
-					if(qQuests.plugin.qAPI.checkPerms((Player) s, "info"))
+					if(qQuests.plugin.qAPI.checkPerms((Player) s, "tasks"))
 					{
 						if(qQuests.plugin.qAPI.hasActiveQuest((Player) s))
 						{
 							Quest q = qQuests.plugin.qAPI.getActiveQuest((Player) s);
-							Chat.noPrefixMessage((Player) s, ":======== Quest Info ========:");
-							Chat.noPrefixMessage((Player) s, "Name: " + q.name());
-							Chat.noPrefixMessage((Player) s, "Repeat: " + q.repeated());
+							Chat.noPrefixMessage((Player) s, ":======== Quest Tasks ========:");
 							int i=0;
 							while(q.tasks().size() > i) 
 							{
@@ -92,7 +99,7 @@ public class cmd implements CommandExecutor
 								else if(q.tasks().get(i).type().equalsIgnoreCase("kill"))
 									Chat.noPrefixMessage((Player) s, (i + 1) + ". Kill " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								else if(q.tasks().get(i).type().equalsIgnoreCase("kill_player"))
-									Chat.noPrefixMessage((Player) s, (i + 1) + ". Kill the player '" + q.tasks().get(i).idString() + "' " + q.tasks().get(i).amount() + " times");
+									Chat.noPrefixMessage((Player) s, (i + 1) + ". Kill The Player '" + q.tasks().get(i).idString() + "' " + q.tasks().get(i).amount() + " Times");
 								i++;
 							}
 						}
@@ -106,7 +113,7 @@ public class cmd implements CommandExecutor
 						if(qQuests.plugin.qAPI.hasActiveQuest((Player) s))
 							qQuests.plugin.qAPI.dropQuest((Player) s);
 						else
-							Chat.error((Player) s, "You Don't Have An Active Quest! Type " + ChatColor.YELLOW + "/q give" + ChatColor.RED + " To Get One.");
+							Chat.error((Player) s, Texts.HAS_ACTIVE_QUEST);
 					}
 					else Chat.noPerms((Player) s);
 				}
@@ -115,23 +122,26 @@ public class cmd implements CommandExecutor
 					if(qQuests.plugin.qAPI.checkPerms((Player) s, "done"))
 					{
 						if(qQuests.plugin.qAPI.hasActiveQuest((Player) s))
+						{
+							String msg = qQuests.plugin.qAPI.getActiveQuest((Player) s).onComplete().message();
 							if(qQuests.plugin.qAPI.completeQuest((Player) s))
-								Chat.done((Player) s, "Quest Completed!");
+								Chat.green((Player) s, msg);
 							else
-								Chat.error((Player) s, "You Haven't Completed All The Tasks! Type " + ChatColor.YELLOW + "/q info" + ChatColor.RED + " See Them.");
+								Chat.error((Player) s, Texts.TASKS_NOT_COMPLETED);
+						}
 						else
-							Chat.error((Player) s, "You Don't Have An Active Quest! Type " + ChatColor.YELLOW + "/q give" + ChatColor.RED + " To Get One.");
+							Chat.error((Player) s, Texts.NO_ACTIVE_QUEST);
 					}
 					else Chat.noPerms((Player) s);
 				}
 				else
 				{
-					Chat.noPrefixMessage((Player) s, "/q " + ChatColor.RED + "[" + ChatColor.YELLOW + "give, info, drop" + ChatColor.RED + "]");
+					Chat.noPrefixMessage((Player) s, Texts.HELP_TEXT);
 				}
 			}
 		}
 		else
-			Chat.error(s, "Sorry A Quest Can Only Be Used By Players!");
+			Chat.message(s, Texts.ONLY_PLAYERS);
 		return false;
 	}
 }

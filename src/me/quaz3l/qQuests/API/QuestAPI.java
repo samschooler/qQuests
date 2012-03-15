@@ -154,6 +154,7 @@ public class QuestAPI {
 	{
 		QuestWorker.getActiveQuests().remove(player);
 		Storage.currentTaskProgress.get(player).clear();
+		Storage.wayCurrentQuestsWereGiven.clear();
 	}
 	
 	// Streamline The Permissions

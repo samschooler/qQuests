@@ -28,7 +28,6 @@ public class qQuests extends JavaPlugin
 	public static qQuests plugin;
 	public final Logger logger = Logger.getLogger(("Minecraft"));
 	public Config Config = new Config(this);
-	public Integer qPlugins = 0;
 	public QuestAPI qAPI;
 	
 	// Economy
@@ -55,7 +54,7 @@ public class qQuests extends JavaPlugin
 		// Initialize The Configuration File
 		Config.initializeQuestConfig();
 		Config.initializeConfig();
-		Config.dumpQuestConfig();
+		// Config.dumpQuestConfig();
 		
 		Interwebs.pingStatus();
 		
@@ -75,14 +74,12 @@ public class qQuests extends JavaPlugin
 			
 			// Build Quests
 			qAPI.getQuestWorker().buildQuests();
-			//Chat.logger("info", "" + qAPI.getQuestWorker().getQuests().get("d").onJoin().amounts().get(0));
 			
 			//Start Stock qPlugins
 			stockPlugins();
 			
 			// Notify Logger
-			Chat.logger("info", this.qPlugins + " qPlugins Linked.");
-			Chat.logger("info", "v" + this.getDescription().getVersion() + " by Quaz3l: Enabled");
+			Chat.logger("info", "by Quaz3l: Enabled");
 		}
 	}
 	// Hooks Into The Economy

@@ -8,7 +8,6 @@ import org.bukkit.inventory.ItemStack;
 
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.Build.BuildonSomething;
-import me.quaz3l.qQuests.Util.Chat;
 
 public class onSomething {
 	private String message;
@@ -66,10 +65,8 @@ public class onSomething {
 		
 		// Items
 		int i=0;
-		Chat.logger("info", this.items().size() + "");
 		while(i < this.items().size())
 		{
-			Chat.logger("info", i + "");
 			if(this.items().get(i).get(1) > 0)
 			{
 				ItemStack items = new ItemStack(this.items().get(i).get(0), this.items().get(i).get(1));
