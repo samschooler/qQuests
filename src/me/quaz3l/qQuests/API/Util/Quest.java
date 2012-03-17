@@ -5,10 +5,11 @@ import java.util.HashMap;
 import me.quaz3l.qQuests.API.Build.BuildQuest;
 
 public class Quest {	
-	private String name = "Quest";
-	private Integer repeated  = -1;
-	private Boolean invisible = false;
-	private String nextQuest  = "";
+	private String name;
+	private Integer repeated;
+	private Boolean invisible;
+	private String nextQuest;
+	private Integer delay;
 	private HashMap<Integer, Task> tasks = new HashMap<Integer, Task>();
 	private onSomething onJoin;
 	private onSomething onDrop;
@@ -19,6 +20,8 @@ public class Quest {
 		name = build.name();
 		repeated = build.repeated();
 		invisible = build.invisible();
+		nextQuest = build.nextQuest();
+		delay = build.delay();
 		tasks = build.tasks();
 		onJoin = build.onJoin();
 		onDrop = build.onDrop();
@@ -35,6 +38,9 @@ public class Quest {
 	}
 	public final String nextQuest() {
 		return this.nextQuest;
+	}
+	public final Integer delay() {
+		return this.delay;
 	}
 	public final HashMap<Integer, Task> tasks() {
 		return this.tasks;

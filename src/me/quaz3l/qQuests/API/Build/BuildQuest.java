@@ -8,9 +8,10 @@ import me.quaz3l.qQuests.API.Util.onSomething;
 
 public class BuildQuest {
 	private String name = "Quest";
-	private Integer repeated  = -1;
+	private Integer repeated = -1;
 	private Boolean invisible = false;
-	private String nextQuest  = "";
+	private String nextQuest = "";
+	private Integer delay = 0;
 	private HashMap<Integer, Task> tasks = new HashMap<Integer, Task>();
 	private BuildonSomething BuildonJoin = new BuildonSomething();
 	private BuildonSomething BuildonDrop = new BuildonSomething();
@@ -42,6 +43,10 @@ public class BuildQuest {
 		this.nextQuest = s;
 		return this;
 	}
+	public BuildQuest delay(Integer i) {
+		this.delay = i;
+		return this;
+	}
 	public BuildQuest tasks(HashMap<Integer, Task> m) {
 		this.tasks = m;
 		return this;
@@ -59,6 +64,9 @@ public class BuildQuest {
 	}
 	public String nextQuest() {
 		return this.nextQuest;
+	}
+	public Integer delay() {
+		return this.delay;
 	}
 	public HashMap<Integer, Task> tasks() {
 		return this.tasks;

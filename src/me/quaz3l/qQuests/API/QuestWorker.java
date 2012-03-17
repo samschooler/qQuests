@@ -11,6 +11,7 @@ import me.quaz3l.qQuests.API.Util.Quest;
 import me.quaz3l.qQuests.API.Util.Task;
 import me.quaz3l.qQuests.Util.Chat;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 
@@ -46,32 +47,21 @@ public class QuestWorker
 			quest.repeated(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".setup.repeated"));
 			quest.invisible(qQuests.plugin.Config.getQuestConfig().getBoolean(questName + ".setup.invisible"));
 			quest.nextQuest(qQuests.plugin.Config.getQuestConfig().getString(questName + ".setup.nextQuest"));
+			quest.delay(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".setup.delay"));
 			for (Object taskNo : qQuests.plugin.Config.getQuestConfig().getConfigurationSection(questName + ".tasks").getKeys(false)) 
 			{
 				try
 			    {
 					Integer tRoot = Integer.parseInt(taskNo.toString().trim());
 					BuildTask task = new BuildTask(tRoot);
-					//String type = qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type");
-					/*
-					if(!(type.equalsIgnoreCase("collect")) ||
-							!(type.equalsIgnoreCase("destroy")) ||
-							!(type.equalsIgnoreCase("damage")) ||
-							!(type.equalsIgnoreCase("kill")) ||
-							!(type.equalsIgnoreCase("kill_player")) //||
-							//!(type.equalsIgnoreCase("goto")) ||
-							//!(type.equalsIgnoreCase("distance"))
-							)
-					{
-						Chat.logger("severe", "Sorry but the task type '"+ type + "' of quest '" + root + "' is not yet supported! Disabling quest...");
-						this.valid = false;
-					}
-					*/
 					task.type(qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type"));
 					if(task.type().equalsIgnoreCase("collect") ||
 							task.type().equalsIgnoreCase("destroy") ||
-							task.type().equalsIgnoreCase("damage"))
+							task.type().equalsIgnoreCase("damage") ||
+							task.type().equalsIgnoreCase("place"))
+					{
 						task.id(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".tasks." + tRoot + ".id"));
+					}
 					else if(task.type().equalsIgnoreCase("kill") ||
 							task.type().equalsIgnoreCase("kill_player"))
 						task.id(qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".id"));
@@ -95,19 +85,27 @@ public class QuestWorker
 			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onJoin.market.items") != null)
 				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onJoin.market.items")) {
 						strs = s.split(" ");
-
-					try
-					{
-						ArrayList<Integer> itms = new ArrayList<Integer>();
-						itms.add(Integer.parseInt(strs[0])); // Item ID
-						itms.add(Integer.parseInt(strs[1])); // Amount
-						quest.BuildonJoin().items().put(i, itms);
-					}
-					catch(Exception e)
-					{
-						Chat.logger("severe", "The 'onJoin' rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest...");
-						this.valid = false;
-					}
+						
+						if(Material.matchMaterial(strs[0]) != null)
+						{
+							try
+							{
+								ArrayList<Integer> itms = new ArrayList<Integer>();
+								itms.add(Integer.parseInt(strs[0])); // Item Id
+								itms.add(Integer.parseInt(strs[1])); // Amount
+								quest.BuildonJoin().items().put(i, itms);
+							}
+							catch(Exception e)
+							{
+								Chat.logger("severe", "The 'onJoin' rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest...");
+								this.valid = false;
+							}
+						}
+						else
+						{
+							Chat.logger("severe", "The 'onJoin' rewards/fees of '" + root + "' does not have valid material ids! Disabling this quest...");
+							this.valid = false;
+						}
 					i++;
 				}
 
@@ -118,22 +116,30 @@ public class QuestWorker
 			i=0;
 			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onDrop.market.items") != null)
 				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onDrop.market.items")) {
-						strs = s.split(" ");
-
-					try
+					strs = s.split(" ");
+					
+					if(Material.matchMaterial(strs[0]) != null)
 					{
-						ArrayList<Integer> itms = new ArrayList<Integer>();
-						itms.add(Integer.parseInt(strs[0])); // Item ID
-						itms.add(Integer.parseInt(strs[1])); // Amount
-						quest.BuildonDrop().items().put(i, itms);
+						try
+						{
+							ArrayList<Integer> itms = new ArrayList<Integer>();
+							itms.add(Integer.parseInt(strs[0])); // Item Id
+							itms.add(Integer.parseInt(strs[1])); // Amount
+							quest.BuildonJoin().items().put(i, itms);
+						}
+						catch(Exception e)
+						{
+							Chat.logger("severe", "The 'onDrop' rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest...");
+							this.valid = false;
+						}
 					}
-					catch(Exception e)
+					else
 					{
-						Chat.logger("severe", "The 'onDrop' rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest...");
+						Chat.logger("severe", "The 'onDrop' rewards/fees of '" + root + "' does not have valid material ids! Disabling this quest...");
 						this.valid = false;
 					}
-					i++;
-				}
+				i++;
+			}
 			
 			quest.BuildonComplete().message(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onComplete.message"));
 			quest.BuildonComplete().money(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.money"));
@@ -142,22 +148,30 @@ public class QuestWorker
 			i=0;
 			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onComplete.market.items") != null)
 				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onComplete.market.items")) {
-						strs = s.split(" ");
-
-					try
+					strs = s.split(" ");
+					
+					if(Material.matchMaterial(strs[0]) != null)
 					{
-						ArrayList<Integer> itms = new ArrayList<Integer>();
-						itms.add(Integer.parseInt(strs[0])); // Item ID
-						itms.add(Integer.parseInt(strs[1])); // Amount
-						quest.BuildonComplete().items().put(i, itms);
+						try
+						{
+							ArrayList<Integer> itms = new ArrayList<Integer>();
+							itms.add(Integer.parseInt(strs[0])); // Item Id
+							itms.add(Integer.parseInt(strs[1])); // Amount
+							quest.BuildonJoin().items().put(i, itms);
+						}
+						catch(Exception e)
+						{
+							Chat.logger("severe", "The 'onComplete' rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest...");
+							this.valid = false;
+						}
 					}
-					catch(Exception e)
+					else
 					{
-						Chat.logger("severe", "The 'onComplete' rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest...");
+						Chat.logger("severe", "The 'onComplete' rewards/fees of '" + root + "' does not have valid material ids! Disabling this quest...");
 						this.valid = false;
 					}
-					i++;
-				}
+				i++;
+			}
 			
 			if(this.valid)
 				this.rememberQuest(quest.create());

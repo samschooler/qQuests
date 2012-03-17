@@ -40,16 +40,16 @@ public class onSomething {
 		return this.items;
 	}
 	
-	public boolean feeReward(Player p)
+	public Integer feeReward(Player p)
 	{
 		// Requirements
 		if(qQuests.plugin.economy != null) 
 			if(qQuests.plugin.economy.getBalance(p.getDisplayName()) < this.money()) 
-				return false;
+				return 5;
 		if((p.getHealth() + this.health()) < 0)
-			return false;
+			return 6;
 		if((p.getFoodLevel() + this.hunger()) < 0)
-			return false;
+			return 7;
 		
 		// Transaction
 		// Money
@@ -90,13 +90,11 @@ public class onSomething {
 						else
 						{
 							ItemStack itms = new ItemStack(this.items().get(i).get(0), this.items().get(i).get(1));
-							if (p.getInventory().contains(this.items().get(i).get(0), this.items().get(i).get(1))) 
-								p.getInventory().removeItem(itms);
-							else return false;
+							p.getInventory().removeItem(itms);
 						}
 						i--;
 					}
-					return false;
+					return 8;
 				}
 			}
 			i++;
@@ -117,6 +115,6 @@ public class onSomething {
 			p.setHealth(hungerAmount);
 		
 		// Successful
-		return true;
+		return 0;
 	}
 }

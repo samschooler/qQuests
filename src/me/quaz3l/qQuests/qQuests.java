@@ -15,6 +15,7 @@ import me.quaz3l.qQuests.Plugins.cmd;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Config;
 import me.quaz3l.qQuests.Util.Interwebs;
+import me.quaz3l.qQuests.Util.LegacyConverter;
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.ChatColor;
@@ -29,6 +30,7 @@ public class qQuests extends JavaPlugin
 	public final Logger logger = Logger.getLogger(("Minecraft"));
 	public Config Config = new Config(this);
 	public QuestAPI qAPI;
+	
 	
 	// Economy
 	public Economy economy = null;
@@ -51,9 +53,13 @@ public class qQuests extends JavaPlugin
 	@Override
 	public void onEnable() 
 	{
+		// Converts Old quests.yml
+		if(qQuests.plugin.Config.getQuestConfig().getString("0.info.name") != null)
+			LegacyConverter.convert();
+		
 		// Initialize The Configuration File
-		Config.initializeQuestConfig();
 		Config.initializeConfig();
+		Config.initializeQuestConfig();
 		// Config.dumpQuestConfig();
 		
 		Interwebs.pingStatus();
@@ -65,6 +71,9 @@ public class qQuests extends JavaPlugin
 		{
 			// Get The API
 			this.qAPI = new QuestAPI();
+			
+			// Setup Player Profiles
+			qAPI.getProfiles().initializePlayerProfiles();
 			
 			// Find Economy
 			this.startEconomy();

@@ -15,10 +15,13 @@ public class Texts {
 	// Help Text
 	public static final String HELP_TEXT = PRIMARY_COMMAND + " " + ChatColor.RED + "[" + ChatColor.YELLOW + GIVE_COMMAND + ", " + INFO_COMMAND + ", " + TASKS_COMMAND + ", " + DONE_COMMAND + ", " + HELP_COMMAND + ChatColor.RED + "]";
 	public static final String TASKS_HELP = "Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + TASKS_COMMAND + ChatColor.GREEN + " For Your Other Tasks";
+	public static final String DONE_HELP = "Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + DONE_COMMAND + ChatColor.GREEN + " To Complete Your Quest!";
 	
-	// No Permission
+	// No
 	public static final String NO_PERMISSION = "You don't have permissions to do this!";
 	public static final String ONLY_PLAYERS = "Sorry A Quest Can Only Be Used By Players!";
+	public static final String NO_QUESTS_AVAILABLE = "There Are No Quests Available At This Time.";
+	public static final String DELAY_NOT_FINISHED = "You Cannot Get Quests Right Now! Wait A Bit And Try Again.";
 	
 	// Non-Fatal Quest Errors
 	public static final String HAS_ACTIVE_QUEST = "You Already Have An Active Quest! Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + INFO_COMMAND + ChatColor.RED + " To Get More Info On Your Quest.";
@@ -30,11 +33,11 @@ public class Texts {
 	public static final String TASKS_NOT_COMPLETED = "You Haven't Completed All The Tasks! Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + TASKS_COMMAND + ChatColor.RED + " To See Them.";
 	
 	// Listener Texts
-	public static final String DESTROY_COMPLETED_QUOTA = "You Have Broken Enough";
-	public static final String DAMAGE_COMPLETED_QUOTA = "You Have Damaged Enough";
-	public static final String PLACE_COMPLETED_QUOTA = "You Have Placed Enough";
+	public static final String DESTROY_COMPLETED_QUOTA = "You Have Broken";
+	public static final String DAMAGE_COMPLETED_QUOTA = "You Have Damaged";
+	public static final String PLACE_COMPLETED_QUOTA = "You Have Placed";
 	
-	public static final String KILL_COMPLETED_QUOTA = "You Have Killed Enough";
+	public static final String KILL_COMPLETED_QUOTA = "You Have Killed";
 	public static final String KILL_PLAYER_COMPLETED_QUOTA = "You Have Successfully Killed";
 	
 	public static final String GOTO_COMPLETED_QUOTA = "You Have Successfully Reached";
@@ -42,4 +45,22 @@ public class Texts {
 	
 	// Quest Plugin Control
 	public static final String NOT_CONTROLLED_BY(Player p) {return "Your Quest Is Controlled By " + Storage.wayCurrentQuestsWereGiven.get(p);}	
+	
+	// Config Words
+	public static final String QUEST = "Quest";
+	public static final String INVALID = "Has A Invalid";
+	public static final String NEXT_QUEST = "Next Quest";
+	public static final String REPEATABLE = "Repeatable";
+	
+	// Reward Names
+	public static final String MONEY = "Money";
+	public static final String HEALTH = "Health";
+	public static final String FOOD = "Food";
+	public static final String ITEMS = "Items";
+	
+	// Not Enough Fees
+	public static final String NOT_ENOUGH_MONEY = "You Don't Have Enough Money To Get This Quest!";
+	public static final String NOT_ENOUGH_HEALTH = "You Don't Have Enough Health To Get This Quest!";
+	public static final String NOT_ENOUGH_FOOD = "You Don't Have Enough Food To Get This Quest!";
+	public static final String NOT_ENOUGH_ITEMS = "You Don't Have Enough Items To Get This Quest!";
 }

@@ -6,10 +6,10 @@ import java.util.HashMap;
 import me.quaz3l.qQuests.API.Util.onSomething;
 
 public class BuildonSomething {
-	private String message;
-	private Integer money;
-	private Integer health;
-	private Integer hunger;
+	private String message = "";
+	private Integer money = 0;
+	private Integer health = 0;
+	private Integer hunger = 0;
 	private HashMap<Integer, ArrayList<Integer>> items = new HashMap<Integer, ArrayList<Integer>>();
 	
 	public onSomething create() {

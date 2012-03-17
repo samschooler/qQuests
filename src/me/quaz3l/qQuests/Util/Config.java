@@ -102,6 +102,7 @@ public class Config {
 			// Set Setup Nodes
 				this.getQuestConfig().set("Diamonds!.setup.repeated", -1);
 				this.getQuestConfig().set("Diamonds!.setup.invisible", false);
+				this.getQuestConfig().set("Diamonds!.setup.delay", 1);
 				this.getQuestConfig().set("Diamonds!.setup.nextQuest", "");
 			
 			// Set Task Nodes
@@ -132,64 +133,111 @@ public class Config {
 		this.saveQuestConfig();
 	}
 	public boolean validate(String questName, QuestWorker q) {
-		// Check The Setup Nodes
-		if(this.getQuestConfig().getInt(questName + ".setup.repeated") == 0) 
-			this.getQuestConfig().set(questName + ".setup.repeated", -1);
-		if(this.getQuestConfig().getBoolean(questName + ".setup.invisible") == false) 
-			this.getQuestConfig().set(questName + ".setup.invisible", false);
-		if(this.getQuestConfig().getString(questName + ".setup.nextQuest") == null) 
-			this.getQuestConfig().set(questName + ".setup.nextQuest", "");
+		Integer tRoot = 0;
+		boolean rturn = true;
+		for (Object taskNo : qQuests.plugin.Config.getQuestConfig().getConfigurationSection(questName + ".tasks").getKeys(false)) 
+		{
+			try
+		    {
+				tRoot = Integer.parseInt(taskNo.toString().trim());
+		    }
+			catch(Exception e)
+			{
+				Chat.logger("warning", "Quest " + questName + " disabled because node 'tasks." + tRoot + "' is not a number!");
+				return false;
+			}
+			if(this.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type") == null) 
+			{
+				this.getQuestConfig().set(questName + ".tasks." + tRoot + ".type", "UNDEFINED");
+				rturn = false;
+			}
+			if(this.getQuestConfig().getString(questName + ".tasks." + tRoot + ".id") == null) 
+			{
+				this.getQuestConfig().set(questName + ".tasks." + tRoot + ".id", "UNDEFINED");
+				rturn = false;
+			}
+			if(this.getQuestConfig().getString(questName + ".tasks." + tRoot + ".display") == null) 
+			{
+				this.getQuestConfig().set(questName + ".tasks." + tRoot + ".display", "UNDEFINED");
+				rturn = false;
+			}
+			if(this.getQuestConfig().getInt(questName + ".tasks." + tRoot + ".amount") == 0) 
+			{
+				this.getQuestConfig().set(questName + ".tasks." + tRoot + ".amount", -1);
+				Chat.logger("warning", "Quest " + questName + " disabled because node 'tasks." + tRoot + ".amount' is not set!");
+				rturn = false;
+			}
+		}
 		
-		if(this.getQuestConfig().getString(questName + ".tasks.0.type") == null) 
-			this.getQuestConfig().set(questName + ".tasks.0.type", "collect");
-		if(this.getQuestConfig().getInt(questName + ".tasks.0.id") == 0) 
-			this.getQuestConfig().set(questName + ".tasks.0.id", 264);
-		if(this.getQuestConfig().getString(questName + ".tasks.0.display") == null) 
-			this.getQuestConfig().set(questName + ".tasks.0.display", "Diamond");
-		if(this.getQuestConfig().getInt(questName + ".tasks.0.amount") == 0) 
-			this.getQuestConfig().set(questName + ".tasks.0.amount", 5);
-		
-		// Check onJoin Nodes
+		// Check Required onJoin Nodes
 		if(this.getQuestConfig().getString(questName + ".onJoin.message") == null) 
 		{
 			Chat.logger("warning", "Quest " + questName + " disabled because node 'onJoin.message' is not set!");
-			return false;
+			rturn = false;
 		}
-		if(this.getQuestConfig().getInt(questName + ".onJoin.market.money") == 0) 
-			this.getQuestConfig().set(questName + ".onJoin.market.money", 0);
-		if(this.getQuestConfig().getInt(questName + ".onJoin.market.health") == 0) 
-			this.getQuestConfig().set(questName + ".onJoin.market.health", 0);
-		if(this.getQuestConfig().getInt(questName + ".onJoin.market.hunger") == 0) 
-			this.getQuestConfig().set(questName + ".onJoin.market.hunger", 0);
 		
 		// Check onDrop Nodes
 		if(this.getQuestConfig().getString(questName + ".onDrop.message") == null) 
 		{
 			Chat.logger("warning", "Quest " + questName + " disabled because node 'onDrop.message' is not set!");
-			return false;
+			rturn = false;
 		}
-		if(this.getQuestConfig().getInt(questName + ".onDrop.market.money") == 0) 
-			this.getQuestConfig().set(questName + ".onDrop.market.money", 0);
-		if(this.getQuestConfig().getInt(questName + ".onDrop.market.health") == 0) 
-			this.getQuestConfig().set(questName + ".onDrop.market.health", 0);
-		if(this.getQuestConfig().getInt(questName + ".onDrop.market.hunger") == 0) 
-			this.getQuestConfig().set(questName + ".onDrop.market.hunger", 0);
 		
 		// Check onComplete Nodes
 		if(this.getQuestConfig().getString(questName + ".onComplete.message") == null) 
 		{
 			Chat.logger("warning", "Quest " + questName + " disabled because node 'onComplete.message' is not set!");
-			return false;
+			rturn = false;
 		}
-		if(this.getQuestConfig().getInt(questName + ".onComplete.market.money") == 0) 
-			this.getQuestConfig().set(questName + ".onComplete.market.money", 0);
-		if(this.getQuestConfig().getInt(questName + ".onComplete.market.health") == 0) 
-			this.getQuestConfig().set(questName + ".onComplete.market.health", 0);
-		if(this.getQuestConfig().getInt(questName + ".onComplete.market.hunger") == 0) 
-			this.getQuestConfig().set(questName + ".onComplete.market.hunger", 0);
 		
+		// Check Proper Values For Nodes
+		/*
+		if(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".setup.repeated") == 0 && qQuests.plugin.Config.getQuestConfig().getString(questName + ".setup.repeated") != null)
+		{
+			Chat.logger("severe", "The 'setup.repeated' should not be a string! Disabling this quest...");
+			rturn = false;
+		}
+		if(qQuests.plugin.Config.getQuestConfig().getString(questName + ".setup.invisible") != "true" && qQuests.plugin.Config.getQuestConfig().getString(questName + ".setup.invisible") != "false" && qQuests.plugin.Config.getQuestConfig().getString(questName + ".setup.invisible") != null)
+		{
+			Chat.logger("severe", "The 'setup.invisible' should not be a string, choose true or false! Disabling this quest...");
+			rturn = false;
+		}
+		if(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".setup.delay") == 0 && qQuests.plugin.Config.getQuestConfig().getString(questName + ".setup.delay") != null)
+		{
+			Chat.logger("severe", "The 'setup.delay' should not be a string! Disabling this quest...");
+			rturn = false;
+		}
+		*/
+		
+		for (Object taskNo : qQuests.plugin.Config.getQuestConfig().getConfigurationSection(questName + ".tasks").getKeys(false)) 
+		{
+			try
+		    {
+				tRoot = Integer.parseInt(taskNo.toString().trim());
+		    }
+			catch(Exception e)
+			{
+				Chat.logger("warning", "Quest " + questName + " disabled because node 'tasks." + tRoot + "' is not a number!");
+				return false;
+			}
+			String type = this.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type");
+			if(type != null)
+				if(!type.equalsIgnoreCase("collect") &&
+						!type.equalsIgnoreCase("destroy") &&
+						!type.equalsIgnoreCase("damage") &&
+						!type.equalsIgnoreCase("place") &&
+						!type.equalsIgnoreCase("kill") &&
+						!type.equalsIgnoreCase("kill_player"))
+				{
+					Chat.logger("severe", "Sorry but the task type '"+ type + "' of quest '" + questName + "' is not yet supported! Disabling quest...");
+					rturn = false;
+				}
+		}
 		this.saveQuestConfig();
-		return true;
+		if(!rturn)
+			return false;
+		else
+			return true;
 	}
 	public void dumpQuestConfig()
 	{

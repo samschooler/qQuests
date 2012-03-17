@@ -20,11 +20,11 @@ public class Chat {
 	// Message With No Former Formatting
 	public static void noPrefixMessage(Player p, String msg)
 	{
-		p.sendMessage(msg);
+		p.sendMessage(ChatColor.LIGHT_PURPLE + msg);
 	}
 	public static void noPrefixMessage(CommandSender s, String msg)
 	{
-		s.sendMessage(msg);
+		s.sendMessage(ChatColor.LIGHT_PURPLE + msg);
 	}
 	
 	// A Good Message For Successes
@@ -66,5 +66,37 @@ public class Chat {
 			qQuests.plugin.logger.severe(qQuests.plugin.prefix + s);
 		else
 			qQuests.plugin.logger.warning(qQuests.plugin.prefix + s);
+	}
+	
+	// Parses Error Codes To Phrases
+	public static String errorCode(Integer code)
+	{
+		switch(code)
+		{
+		case 0:
+			return "Success";
+		case 1:
+			return null;
+		case 2:
+			return Texts.NOT_ENOUGH_FOR_QUEST;
+		case 3:
+			return Texts.HAS_ACTIVE_QUEST;
+		case 4:
+			return Texts.TASKS_NOT_COMPLETED;
+		case 5:
+			return Texts.NOT_ENOUGH_MONEY;
+		case 6:
+			return Texts.NOT_ENOUGH_HEALTH;
+		case 7:
+			return Texts.NOT_ENOUGH_FOOD;
+		case 8:
+			return Texts.NOT_ENOUGH_ITEMS;
+		case 9:
+			return Texts.NO_ACTIVE_QUEST;
+		case 10:
+			return Texts.DELAY_NOT_FINISHED;
+		default:
+			return "Unknown";
+		}
 	}
 }
