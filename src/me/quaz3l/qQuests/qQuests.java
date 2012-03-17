@@ -65,32 +65,30 @@ public class qQuests extends JavaPlugin
 		Interwebs.pingStatus();
 		
 		// Check For Update
-		if(Interwebs.checkForUpdates())
-			getServer().getPluginManager().disablePlugin(this);
-		else
-		{
-			// Get The API
-			this.qAPI = new QuestAPI();
-			
-			// Setup Player Profiles
-			qAPI.getProfiles().initializePlayerProfiles();
-			
-			// Find Economy
-			this.startEconomy();
-			
-			// Register Events
-			this.registerEvents();
-			
-			// Build Quests
-			qAPI.getQuestWorker().buildQuests();
-			
-			//Start Stock qPlugins
-			stockPlugins();
-			
-			// Notify Logger
-			Chat.logger("info", "by Quaz3l: Enabled");
-		}
+		Interwebs.checkForUpdates();
+		
+		// Get The API
+		this.qAPI = new QuestAPI();
+		
+		// Setup Player Profiles
+		qAPI.getProfiles().initializePlayerProfiles();
+		
+		// Find Economy
+		this.startEconomy();
+		
+		// Register Events
+		this.registerEvents();
+		
+		// Build Quests
+		qAPI.getQuestWorker().buildQuests();
+		
+		//Start Stock qPlugins
+		stockPlugins();
+		
+		// Notify Logger
+		Chat.logger("info", "by Quaz3l: Enabled");
 	}
+	
 	// Hooks Into The Economy
 	private void startEconomy()
 	{

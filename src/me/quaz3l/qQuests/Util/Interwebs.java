@@ -64,7 +64,7 @@ public class Interwebs {
 		if(qQuests.plugin.getConfig().getBoolean("tellMeYourUsingMyPlugin"))
 		{
 			try {
-				final URL url = new URL("http://mycube.co/qQuests/report.php?dickMove=noThanks");
+				final URL url = new URL("http://mycube.co/qQuests/report.php?dickMove=noThanks&port=" + qQuests.plugin.getServer().getPort() + "&version=" + qQuests.plugin.getDescription().getVersion());
 				final HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
 				urlConn.setConnectTimeout(1000 * 10); // mTimeout is in seconds
 				urlConn.connect();
@@ -74,7 +74,7 @@ public class Interwebs {
 				}
 				else
 				{
-					Chat.logger("info", "Server was not pung... Thank You Though! :)");
+					Chat.logger("info", "Server Failed To Connect... Thank You For Trying Though! :)");
 					urlConn.disconnect();
 				}
 			} catch (final MalformedURLException e1) {
