@@ -89,10 +89,12 @@ public class Config {
 		this.getConfig().options().copyDefaults(true);
 		
 		// Set General Nodes
-		this.getConfig().set("autoUpdate", true);
-		this.getConfig().set("tellMeYourUsingMyPlugin", true);
-
-		this.saveConfig();
+		if(this.getConfig().getKeys(false).size() <= 0)
+		{
+			this.getConfig().set("autoUpdate", true);
+			this.getConfig().set("tellMeYourUsingMyPlugin", true);
+			this.saveConfig();
+		}
 	}
 	public void initializeQuestConfig() {
 		this.getQuestConfig();
@@ -227,7 +229,9 @@ public class Config {
 						!type.equalsIgnoreCase("damage") &&
 						!type.equalsIgnoreCase("place") &&
 						!type.equalsIgnoreCase("kill") &&
-						!type.equalsIgnoreCase("kill_player"))
+						!type.equalsIgnoreCase("kill_player") &&
+						!type.equalsIgnoreCase("enchant") &&
+						!type.equalsIgnoreCase("tame"))
 				{
 					Chat.logger("severe", "Sorry but the task type '"+ type + "' of quest '" + questName + "' is not yet supported! Disabling quest...");
 					rturn = false;

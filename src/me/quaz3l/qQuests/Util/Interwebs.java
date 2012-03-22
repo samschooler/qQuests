@@ -14,7 +14,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Interwebs {
-	public static boolean checkForUpdates()
+	public static void checkForUpdates()
 	{
 		File latestFile = newTempFile("http://www.mycube.co/qQuests/latest.yml");
 		if(latestFile != null)
@@ -31,17 +31,25 @@ public class Interwebs {
 			                latestVersion[1] > currentVersion[1] ||
 			                latestVersion[2] > currentVersion[2])
 			{
-				Chat.logger("warning", "################################################################");
-				Chat.logger("warning", "####################### UPDATE AVALIBLE! #######################");
-				Chat.logger("warning", "################################################################");
-				if(qQuests.plugin.getConfig().getBoolean("autoUpdate"))
+				if(!qQuests.updateNotified)
 				{
-					if(updatePlugin(latestConfig.getString("Source"), qQuests.plugin.getDataFolder().getPath() + ".jar"))
+					Chat.logger("warning", "################################################################");
+					Chat.logger("warning", "####################### UPDATE AVALIBLE! #######################");
+					Chat.logger("warning", "################################################################");
+					if(qQuests.plugin.getConfig().getBoolean("autoUpdate"))
 					{
-						Chat.logger("warning", "################### qQuests IS AUTOUPDATING! ###################");
-						Chat.logger("warning", "############# PLEASE RELOAD OR RESTART THE SERVER! #############");
-						Chat.logger("warning", "################################################################");
-						return true;
+						if(updatePlugin(latestConfig.getString("Source"), qQuests.plugin.getDataFolder().getPath() + ".jar"))
+						{
+							Chat.logger("warning", "################### qQuests IS AUTOUPDATING! ###################");
+							Chat.logger("warning", "############# PLEASE RELOAD OR RESTART THE SERVER! #############");
+							Chat.logger("warning", "################################################################");
+						}
+						else
+						{
+							Chat.logger("warning", "################## PLEASE UPDATE qQuests FROM ##################");
+							Chat.logger("warning", "######## http://www.github.com/quaz3l/qQuests/downloads ########");
+							Chat.logger("warning", "################################################################");
+						}
 					}
 					else
 					{
@@ -49,22 +57,21 @@ public class Interwebs {
 						Chat.logger("warning", "######## http://www.github.com/quaz3l/qQuests/downloads ########");
 						Chat.logger("warning", "################################################################");
 					}
-				}
-				else
-				{
-					Chat.logger("warning", "################## PLEASE UPDATE qQuests FROM ##################");
-					Chat.logger("warning", "######## http://www.github.com/quaz3l/qQuests/downloads ########");
+					Chat.logger("warning", "########################### CHANGELOG ##########################");
+					for(Object o : latestConfig.getStringList("Changelog"))
+						Chat.logger("warning", "- " + o);
 					Chat.logger("warning", "################################################################");
 				}
+				else
+					Chat.logger("warning", "There is an update avalible, get if from http://www.github.com/quaz3l/qQuests/downloads");
 			}
 		}
-		return false;
 	}
 	public static boolean pingStatus() {
 		if(qQuests.plugin.getConfig().getBoolean("tellMeYourUsingMyPlugin"))
 		{
 			try {
-				final URL url = new URL("http://mycube.co/qQuests/report.php?dickMove=noThanks&port=" + qQuests.plugin.getServer().getPort() + "&version=" + qQuests.plugin.getDescription().getVersion());
+				final URL url = new URL("http://mycube.co/qQuests/report.php?dickMove=noThanks&port=" + qQuests.plugin.getServer().getPort() + "&version=" + qQuests.plugin.getDescription().getVersion() + "&onlinePlayerCount=" + qQuests.plugin.getServer().getOnlinePlayers().length);
 				final HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
 				urlConn.setConnectTimeout(1000 * 10); // mTimeout is in seconds
 				urlConn.connect();

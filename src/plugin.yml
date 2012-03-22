@@ -1,6 +1,6 @@
 name: qQuests
 main: me.quaz3l.qQuests.qQuests
-version: 0.01.92
+version: 0.01.94
 description: A overly customizable quests plugin.
 softdepend: [Vault]
 commands:

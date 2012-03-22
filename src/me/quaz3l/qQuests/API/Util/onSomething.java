@@ -15,6 +15,8 @@ public class onSomething {
 	private Integer health;
 	private Integer hunger;
 	private HashMap<Integer, ArrayList<Integer>> items = new HashMap<Integer, ArrayList<Integer>>();
+	private HashMap<Integer, String> permissionsAdd = new HashMap<Integer, String>();
+	private HashMap<Integer, String> permissionsTake = new HashMap<Integer, String>();
 
 	public onSomething(BuildonSomething build) 
 	{
@@ -39,29 +41,45 @@ public class onSomething {
 	public HashMap<Integer, ArrayList<Integer>> items() {
 		return this.items;
 	}
+	public HashMap<Integer, String> permissionsAdd() {
+		return this.permissionsAdd;
+	}
+	public HashMap<Integer, String> permissionsTake() {
+		return this.permissionsTake;
+	}
 	
 	public Integer feeReward(Player p)
 	{
-		// Requirements
+		// Fee Requirements
 		if(qQuests.plugin.economy != null) 
-			if(qQuests.plugin.economy.getBalance(p.getDisplayName()) < this.money()) 
+			if(qQuests.plugin.economy.getBalance(p.getName()) < (this.money() * -1)) 
 				return 5;
 		if((p.getHealth() + this.health()) < 0)
 			return 6;
 		if((p.getFoodLevel() + this.hunger()) < 0)
 			return 7;
 		
-		// Transaction
 		// Money
 		if(qQuests.plugin.economy != null) 
 		{
-			if (qQuests.plugin.economy.bankBalance(p.getDisplayName()) != null) 
-				qQuests.plugin.economy.createPlayerAccount(p.getDisplayName());
+			if (qQuests.plugin.economy.bankBalance(p.getName()) != null) 
+				qQuests.plugin.economy.createPlayerAccount(p.getName());
 			if(this.money() < 0) 
-				qQuests.plugin.economy.withdrawPlayer(p.getDisplayName(), this.money() * -1);
+				qQuests.plugin.economy.withdrawPlayer(p.getName(), this.money() * -1);
 			else
-				qQuests.plugin.economy.depositPlayer(p.getDisplayName(), this.money());
+				qQuests.plugin.economy.depositPlayer(p.getName(), this.money());
 		}
+		
+		/*
+		int i=0;
+		while(i < this.permissionsAdd().size())
+			qQuests.plugin.permission.playerAdd(p, this.permissionsAdd().get(i));
+		
+		i=0;
+		while(i < this.permissionsTake().size())
+			if(qQuests.plugin.permission.has(p, this.permissionsTake().get(i)))
+				qQuests.plugin.permission.playerRemove(p, this.permissionsTake().get(i));
+		*/
 		
 		// Items
 		int i=0;
@@ -108,11 +126,11 @@ public class onSomething {
 			p.setHealth(healAmount);
 		
 		// Hunger
-		Integer hungerAmount = (p.getFoodLevel() + this.health());
+		Integer hungerAmount = (p.getFoodLevel() + this.hunger());
 		if(hungerAmount >= 20)
 			p.setFoodLevel(20);
 		else
-			p.setHealth(hungerAmount);
+			p.setFoodLevel(hungerAmount);
 		
 		// Successful
 		return 0;

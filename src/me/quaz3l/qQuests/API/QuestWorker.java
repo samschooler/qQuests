@@ -1,8 +1,6 @@
 package me.quaz3l.qQuests.API;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.Build.BuildQuest;
@@ -10,9 +8,9 @@ import me.quaz3l.qQuests.API.Build.BuildTask;
 import me.quaz3l.qQuests.API.Util.Quest;
 import me.quaz3l.qQuests.API.Util.Task;
 import me.quaz3l.qQuests.Util.Chat;
+import me.quaz3l.qQuests.Util.Storage;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 
 
 /**
@@ -20,9 +18,6 @@ import org.bukkit.entity.Player;
  */
 public class QuestWorker
 {
-	private Map<String, Quest> quests = new HashMap<String, Quest>();
-	private Map<String, Quest> visibleQuests = new HashMap<String, Quest>();
-	private Map<Player, Quest> currentQuests = new HashMap<Player, Quest>();
 	private boolean valid = true;
     
     /**
@@ -31,8 +26,8 @@ public class QuestWorker
     public void buildQuests()
 	{
     	this.valid = true;
-    	quests.clear();
-    	currentQuests.clear();
+    	Storage.quests.clear();
+    	Storage.currentQuests.clear();
     	qQuests.plugin.Config.reloadQuestConfig();
     	
 		for (Object questName :
@@ -48,40 +43,55 @@ public class QuestWorker
 			quest.invisible(qQuests.plugin.Config.getQuestConfig().getBoolean(questName + ".setup.invisible"));
 			quest.nextQuest(qQuests.plugin.Config.getQuestConfig().getString(questName + ".setup.nextQuest"));
 			quest.delay(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".setup.delay"));
+			
+			int i=0;
 			for (Object taskNo : qQuests.plugin.Config.getQuestConfig().getConfigurationSection(questName + ".tasks").getKeys(false)) 
 			{
 				try
 			    {
 					Integer tRoot = Integer.parseInt(taskNo.toString().trim());
-					BuildTask task = new BuildTask(tRoot);
-					task.type(qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type"));
-					if(task.type().equalsIgnoreCase("collect") ||
-							task.type().equalsIgnoreCase("destroy") ||
-							task.type().equalsIgnoreCase("damage") ||
-							task.type().equalsIgnoreCase("place"))
+					if(qQuests.plugin.Config.getQuestConfig().getConfigurationSection(questName + ".tasks." + i).getKeys(false).size() <= 0)
+						throw new NullPointerException();
+					else
 					{
-						task.id(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".tasks." + tRoot + ".id"));
+						BuildTask task = new BuildTask(tRoot);
+						task.type(qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type"));
+						if(task.type().equalsIgnoreCase("collect") ||
+								task.type().equalsIgnoreCase("destroy") ||
+								task.type().equalsIgnoreCase("damage") ||
+								task.type().equalsIgnoreCase("place") ||
+								task.type().equalsIgnoreCase("enchant"))
+						{
+							task.id(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".tasks." + tRoot + ".id"));
+						}
+						else if(task.type().equalsIgnoreCase("kill") ||
+								task.type().equalsIgnoreCase("kill_player") ||
+								task.type().equalsIgnoreCase("tame"))
+							task.id(qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".id"));
+						
+						task.display(qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".display"));
+						task.amount(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".tasks." + tRoot + ".amount"));
+						this.rememberTask(tRoot, task.create(), quest);
 					}
-					else if(task.type().equalsIgnoreCase("kill") ||
-							task.type().equalsIgnoreCase("kill_player"))
-						task.id(qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".id"));
-					
-					task.display(qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".display"));
-					task.amount(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".tasks." + tRoot + ".amount"));
-					this.rememberTask(tRoot, task.create(), quest);
 			    }
-				catch (Exception e)
+				catch (NullPointerException e)
 				{
-					Chat.logger("severe", "The tasks of quest '" + root + "' are not correctly formatted! Disabling this quest...");
+					Chat.logger("severe", "The task nodes of quest '" + root + "' do not start with 0 and go in order up! Disabling this quest...");
 					this.valid = false;
 				}
+				catch (NumberFormatException e)
+				{
+					Chat.logger("severe", "The task nodes of quest '" + root + "' are not numbers! Disabling this quest...");
+					this.valid = false;
+				}
+				i++;
 			}
 			quest.BuildonJoin().message(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onJoin.message"));
 			quest.BuildonJoin().money(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.money"));
 			quest.BuildonJoin().health(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.health"));
 			quest.BuildonJoin().hunger(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.hunger"));
 			String[] strs = {""};
-			int i=0;
+			i=0;
 			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onJoin.market.items") != null)
 				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onJoin.market.items")) {
 						strs = s.split(" ");
@@ -125,7 +135,7 @@ public class QuestWorker
 							ArrayList<Integer> itms = new ArrayList<Integer>();
 							itms.add(Integer.parseInt(strs[0])); // Item Id
 							itms.add(Integer.parseInt(strs[1])); // Amount
-							quest.BuildonJoin().items().put(i, itms);
+							quest.BuildonDrop().items().put(i, itms);
 						}
 						catch(Exception e)
 						{
@@ -157,7 +167,7 @@ public class QuestWorker
 							ArrayList<Integer> itms = new ArrayList<Integer>();
 							itms.add(Integer.parseInt(strs[0])); // Item Id
 							itms.add(Integer.parseInt(strs[1])); // Amount
-							quest.BuildonJoin().items().put(i, itms);
+							quest.BuildonComplete().items().put(i, itms);
 						}
 						catch(Exception e)
 						{
@@ -173,12 +183,23 @@ public class QuestWorker
 				i++;
 			}
 			
+			/*
+			// Permissions
+			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onComplete.permissions.give") != null)
+				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onComplete.permissions.give"))
+					quest.BuildonComplete().permissionsAdd().put(i, s);
+			
+			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onComplete.permissions.take") != null)
+				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onComplete.permissions.take"))
+					quest.BuildonComplete().permissionsTake().put(i, s);
+			*/
+			
 			if(this.valid)
 				this.rememberQuest(quest.create());
 			else
 				Chat.logger("severe", "Sorry! Quest '" + root + "' is not correctly formatted it has been disabled!");
 		}
-		Chat.logger("info", this.getQuests().size() + " Quests Successfully Loaded Into Memory.");
+		Chat.logger("info", Storage.quests.size() + " Quests Successfully Loaded Into Memory.");
 	}
 	
 	private void rememberTask(Integer taskNo, Task task, BuildQuest quest) 
@@ -187,30 +208,8 @@ public class QuestWorker
 	}
 	private void rememberQuest(Quest quest) 
 	{
-		quests.put(quest.name(), quest);
+		Storage.quests.put(quest.name(), quest);
 		if(!quest.invisible())
-			visibleQuests.put(quest.name(), quest);
-	}
-	
-	/**
-	 * <b>Use the same method from the base API</b>
-	 */
-	public Map<String, Quest> getQuests()
-	{
-		return this.quests;
-	}
-	/**
-	 * <b>Use the same method from the base API</b>
-	 */
-	public Map<String, Quest> getVisibleQuests()
-	{
-		return this.visibleQuests;
-	}
-	/**
-	 * <b>Use the same method from the base API</b>
-	 */
-	public Map<Player, Quest> getActiveQuests()
-	{
-		return this.currentQuests;
+			Storage.visibleQuests.put(quest.name(), quest);
 	}
 }

@@ -3,20 +3,22 @@ package me.quaz3l.qQuests;
 import java.util.logging.Logger;
 
 import me.quaz3l.qQuests.API.QuestAPI;
-import me.quaz3l.qQuests.API.Listeners.Craft;
 import me.quaz3l.qQuests.API.Listeners.Damage;
 import me.quaz3l.qQuests.API.Listeners.Destroy;
 import me.quaz3l.qQuests.API.Listeners.Distance;
+import me.quaz3l.qQuests.API.Listeners.Enchant;
 import me.quaz3l.qQuests.API.Listeners.GoTo;
 import me.quaz3l.qQuests.API.Listeners.Kill;
 import me.quaz3l.qQuests.API.Listeners.Kill_Player;
 import me.quaz3l.qQuests.API.Listeners.Place;
+import me.quaz3l.qQuests.API.Listeners.Tame;
 import me.quaz3l.qQuests.Plugins.cmd;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Config;
 import me.quaz3l.qQuests.Util.Interwebs;
 import me.quaz3l.qQuests.Util.LegacyConverter;
 import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandExecutor;
@@ -34,10 +36,13 @@ public class qQuests extends JavaPlugin
 	
 	// Economy
 	public Economy economy = null;
+	public Permission permission = null;
 	
 	// Prefixes
 	public final String chatPrefix = ChatColor.AQUA + "[" + ChatColor.LIGHT_PURPLE + "qQuests" + ChatColor.AQUA + "] " + ChatColor.LIGHT_PURPLE + " ";
 	public final String prefix = "[qQuests] ";
+	
+	public static boolean updateNotified = false;
 	
 	
 	public qQuests() {
@@ -62,10 +67,16 @@ public class qQuests extends JavaPlugin
 		Config.initializeQuestConfig();
 		// Config.dumpQuestConfig();
 		
-		Interwebs.pingStatus();
-		
-		// Check For Update
-		Interwebs.checkForUpdates();
+		this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
+
+		    public void run() {
+		    	// Ping My Server
+		    	Interwebs.pingStatus();
+				
+				// Check For Update
+				Interwebs.checkForUpdates();
+		    }
+		}, 1L, (60 * 1200));
 		
 		// Get The API
 		this.qAPI = new QuestAPI();
@@ -75,6 +86,9 @@ public class qQuests extends JavaPlugin
 		
 		// Find Economy
 		this.startEconomy();
+		
+		// Setup Permissions
+		this.setupPermissions();
 		
 		// Register Events
 		this.registerEvents();
@@ -89,7 +103,7 @@ public class qQuests extends JavaPlugin
 		Chat.logger("info", "by Quaz3l: Enabled");
 	}
 	
-	// Hooks Into The Economy
+	// Hooks Into The Economy Plugin
 	private void startEconomy()
 	{
 		if(getServer().getPluginManager().isPluginEnabled("Vault")) {
@@ -113,6 +127,30 @@ public class qQuests extends JavaPlugin
 			Chat.logger("warning", "################################################################");
 		}
 	}
+	// Hook Into The Permissions Plugin
+	private void setupPermissions()
+    {
+		if(getServer().getPluginManager().isPluginEnabled("Vault")) {
+			RegisteredServiceProvider<Permission> permissionProvider =
+					getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+			if (permissionProvider != null) {
+				this.permission = permissionProvider.getProvider();
+				Chat.logger("info", "[Permissions] Enabled - Vault And Permissions Plugin Found.");
+			}
+			else
+			{
+				Chat.logger("warning", "################################################################");
+				Chat.logger("warning", "[Permissions] Disabled - Permissions Plugin Not Found! Go Dowmnload An Permissions Plugin From: http://dev.bukkit.org/server-mods/bpermissions");
+				Chat.logger("warning", "################################################################");
+			}
+		}
+		else
+		{
+			Chat.logger("warning", "################################################################");
+			Chat.logger("warning", "[Permissions] Disabled - Vault Not Found! Go Download Vault From: http://dev.bukkit.org/server-mods/vault");
+			Chat.logger("warning", "################################################################");
+		}
+    }
 	// Register Events
 	private void registerEvents()
 	{
@@ -126,8 +164,9 @@ public class qQuests extends JavaPlugin
 		
 		getServer().getPluginManager().registerEvents(new Kill_Player(), this);
 		getServer().getPluginManager().registerEvents(new Kill(), this);
+		getServer().getPluginManager().registerEvents(new Tame(), this);
 		
-		getServer().getPluginManager().registerEvents(new Craft(), this);
+		getServer().getPluginManager().registerEvents(new Enchant(), this);
 	}
 	
 	// Starts The Stock Plugins

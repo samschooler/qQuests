@@ -1,7 +1,6 @@
 package me.quaz3l.qQuests.API;
 
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import org.bukkit.entity.Player;
@@ -9,8 +8,10 @@ import org.bukkit.entity.Player;
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.Listeners.Collect;
 import me.quaz3l.qQuests.API.Util.Quest;
+import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.PlayerProfiles;
 import me.quaz3l.qQuests.Util.Storage;
+import me.quaz3l.qQuests.Util.Texts;
 
 public class QuestAPI {
 	private QuestWorker QuestWorker;
@@ -31,25 +32,27 @@ public class QuestAPI {
 		return Profiles;
 	}
 	
-	/*
-	public Map<String, Quest> getVisibleQuests()
+	public HashMap<String, Quest> getQuests()
 	{
-		return QuestWorker.getVisibleQuests();
+		return Storage.quests;
 	}
-	*/
-	public Map<Player, Quest> getActiveQuests()
+	public HashMap<String, Quest> getVisibleQuests()
 	{
-		return QuestWorker.getActiveQuests();
+		return Storage.visibleQuests;
+	}
+	public HashMap<Player, Quest> getActiveQuests()
+	{
+		return Storage.currentQuests;
 	}
     
     public Quest getActiveQuest(Player player)
     {
-    	return QuestWorker.getActiveQuests().get(player);
+    	return Storage.currentQuests.get(player);
     }
     
     public boolean hasActiveQuest(Player p)
     {
-    	if(QuestWorker.getActiveQuests().get(p) == null) 
+    	if(Storage.currentQuests.get(p) == null) 
     		return false;
     	else 
     		return true;
@@ -66,12 +69,12 @@ public class QuestAPI {
 		if(Storage.cannotGetQuests.contains(player))
 			return 10;
 		// Check To See If There Are Any Quests Visible
-		if(QuestWorker.getVisibleQuests().size() == 0)
+		if(this.getVisibleQuests().size() == 0)
 			return 1;
 		
 		// Generate Random Starting Point
 		Random gen = new Random();
-		Object[] values = QuestWorker.getVisibleQuests().values().toArray();
+		Object[] values = this.getVisibleQuests().values().toArray();
 		Integer num_o = gen.nextInt(values.length);
 		Integer num = num_o;
 		boolean b = false;
@@ -122,9 +125,9 @@ public class QuestAPI {
 		
 		// Choose The Quest Map To Get Quests From
 		if(onlyVisible)
-			q = QuestWorker.getVisibleQuests().get(quest);
+			q = this.getVisibleQuests().get(quest);
 		else
-			q = QuestWorker.getQuests().get(quest);
+			q = this.getQuests().get(quest);
 		
 		// Check If Is A Valid Quest
 		if(q == null)
@@ -139,7 +142,7 @@ public class QuestAPI {
     }
 	
 	public Integer dropQuest(Player player){
-		Quest q = QuestWorker.getActiveQuests().get(player);
+		Quest q = this.getActiveQuests().get(player);
 		if(!qQuests.plugin.qAPI.hasActiveQuest(player))
 			return 9;
 		Integer u = q.onDrop().feeReward(player);
@@ -155,7 +158,7 @@ public class QuestAPI {
 	public Integer completeQuest(final Player player){
 		// Check if the player even has a quest
 		if(!hasActiveQuest(player))
-			return 3;
+			return 9;
 		
 		int i=0;
 		// Check If Tasks Are Completed
@@ -168,15 +171,14 @@ public class QuestAPI {
 					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("destroy") || 
 					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("place") ||
 					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("kill") ||
-					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("kill_player") //||
+					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("kill_player") ||
+					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("enchant") ||
+					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("tame")
 					//type.equalsIgnoreCase("goto") ||
 					//type.equalsIgnoreCase("distance")
 					)
-			{	
-				Integer a = Storage.currentTaskProgress.get(player).get(i);
-				if(a < getActiveQuest(player).tasks().get(i).amount())
+				if(Storage.currentTaskProgress.get(player).get(i) < getActiveQuest(player).tasks().get(i).amount())
 					return 4;
-			}
 			i++;
 		}
 		
@@ -192,21 +194,56 @@ public class QuestAPI {
 		Profiles.set(player, "Completed", (Profiles.getInt(player, "Completed") + 1));
 		Profiles.set(player, "FinishCount." + getActiveQuest(player).name(), (Profiles.getInt(player, "FinishCount." + getActiveQuest(player).name()) + 1));
 		
+		Chat.green(player, getActiveQuest(player).onComplete().message());
 		// Set Delay
 		if(getActiveQuest(player).delay() > 0)
 		{
 			Storage.cannotGetQuests.add(player);
+			Storage.previousQuest.put(player, getActiveQuest(player));
+			Storage.wayPreviousQuestWereGiven.put(player, Storage.wayCurrentQuestsWereGiven.get(player));
 			qQuests.plugin.getServer().getScheduler().scheduleSyncDelayedTask(qQuests.plugin, new Runnable() {
 				
 				public void run() {
 					Storage.cannotGetQuests.remove(player);
+					if(Storage.previousQuest.get(player).nextQuest() != null)
+					{
+						int result = giveQuest(player, Storage.previousQuest.get(player).nextQuest(), false);
+						if(result == 0)
+						{
+							getActiveQuests().put(player, getQuests().get(Storage.previousQuest.get(player).nextQuest()));
+							if(Storage.wayPreviousQuestWereGiven.get(player).equalsIgnoreCase("Commands"))
+								Chat.message(player, getActiveQuest(player).onJoin().message());
+						}
+						else
+							Chat.errorCode(result);
+					}
+					Storage.previousQuest.remove(player);
+					Storage.wayPreviousQuestWereGiven.remove(player);
 				}
 			}, (getActiveQuest(player).delay() * 1200));
 		}
 		
-		
+		Quest q = getActiveQuest(player);
 		// If it makes it here reset player data and return with no errors
 		this.resetPlayer(player);
+		
+		if(q.nextQuest() != null)
+		{
+			if(this.getQuests().containsKey(q.nextQuest().toLowerCase()))
+			{
+				Integer result = qQuests.plugin.qAPI.giveQuest(player, q.nextQuest().toLowerCase(), false);
+				if(result == 0)
+				{
+					qQuests.plugin.qAPI.getActiveQuests().put((player), getQuests().get(q.nextQuest().toLowerCase()));
+					Storage.wayCurrentQuestsWereGiven.put((player), "Commands");
+					Chat.message((player), qQuests.plugin.qAPI.getActiveQuest(player).onJoin().message());
+				}
+				else
+					Chat.error(player, Chat.errorCode(result));
+				}
+			else if(!q.nextQuest().isEmpty())
+				Chat.logger("warning", Texts.QUEST + " '" + q.name() + "' " + Texts.INVALID + " " + Texts.NEXT_QUEST + "! '" + q.nextQuest() + "'");
+		}
 		return 0;
 	}
 	
@@ -218,7 +255,7 @@ public class QuestAPI {
 	private void startQuest(Player player, Quest q)
 	{
 		// Give The Quest
-		QuestWorker.getActiveQuests().put(player, q);
+		this.getActiveQuests().put(player, q);
 		
 		// Setup Tasks
 		HashMap<Integer, Integer> ctp = new HashMap<Integer, Integer>();
@@ -235,18 +272,24 @@ public class QuestAPI {
 	
 	private void resetPlayer(Player player)
 	{
-		QuestWorker.getActiveQuests().remove(player);
-		Storage.currentTaskProgress.get(player).clear();
+		this.getActiveQuests().remove(player);
+		Storage.currentTaskProgress.remove(player);
 		Storage.tasksLeftInQuest.remove(player);
-		Storage.wayCurrentQuestsWereGiven.clear();
+		Storage.wayCurrentQuestsWereGiven.remove(player);
 	}
 	
 	// Streamline The Permissions
 	public boolean checkPerms(Player p, String perm)
 	{
-		if(p.hasPermission("qquests." + perm) || p.isOp())
-			return true;
+		if(qQuests.plugin.permission != null)
+			if(qQuests.plugin.permission.has(p, "qquests." + perm))
+				return true;
+			else
+				return false;
 		else
-			return false;
+			if(p.hasPermission("qquests." + perm))
+				return true;
+			else
+				return false;
 	}
 }

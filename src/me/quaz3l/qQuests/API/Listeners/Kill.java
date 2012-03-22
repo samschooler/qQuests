@@ -2,12 +2,10 @@ package me.quaz3l.qQuests.API.Listeners;
 
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.Util.Chat;
-import me.quaz3l.qQuests.Util.MobType;
 import me.quaz3l.qQuests.Util.Storage;
 import me.quaz3l.qQuests.Util.Texts;
 
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,8 +19,7 @@ public class Kill implements Listener {
 	{
 		if(e.getEntity().getLastDamageCause() instanceof EntityDamageByEntityEvent)
         {
-			Entity entity = e.getEntity();
-        	EntityDamageByEntityEvent nEvent = (EntityDamageByEntityEvent) entity.getLastDamageCause();
+        	EntityDamageByEntityEvent nEvent = (EntityDamageByEntityEvent) e.getEntity().getLastDamageCause();
         	Player player = null;
         	if(nEvent.getDamager() instanceof Player) 
         		player = (Player) nEvent.getDamager();
@@ -36,7 +33,7 @@ public class Kill implements Listener {
         			player = (Player) ((Arrow) nEvent.getDamager()).getShooter();
         	if(!qQuests.plugin.qAPI.hasActiveQuest(player))
         		return;
-        	String entityType =  MobType.isEntityType(entity);
+        	String entityType =  e.getEntityType().getName();
         	int i=0;
         	
         	// Go Through All The Tasks Of The Players Quest

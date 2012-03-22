@@ -134,6 +134,10 @@ public class cmd implements CommandExecutor
 									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Kill " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								else if(q.tasks().get(i).type().equalsIgnoreCase("kill_player"))
 									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Kill The Player '" + q.tasks().get(i).idString() + "' " + q.tasks().get(i).amount() + " Times");
+								else if(q.tasks().get(i).type().equalsIgnoreCase("enchant"))
+									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Enchant " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.YELLOW + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.YELLOW + ")");
+								else if(q.tasks().get(i).type().equalsIgnoreCase("tame"))
+									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Tame " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.YELLOW + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.YELLOW + ")");
 								i++;
 							}
 						} else Chat.error((Player) s, Texts.NO_ACTIVE_QUEST);
@@ -157,32 +161,8 @@ public class cmd implements CommandExecutor
 				{
 					if(qQuests.plugin.qAPI.checkPerms((Player) s, "done"))
 					{
-						Quest q = qQuests.plugin.qAPI.getActiveQuest((Player) s);
 						Integer result = qQuests.plugin.qAPI.completeQuest((Player) s);
-						if(result == 0)
-						{
-							Chat.green((Player) s, q.onComplete().message());
-							
-							// Next Quest
-							if(q.nextQuest() != null)
-							{
-								if(qQuests.plugin.qAPI.getQuestWorker().getQuests().containsKey(q.nextQuest().toLowerCase()))
-								{
-									result = qQuests.plugin.qAPI.giveQuest((Player) s, q.nextQuest().toLowerCase(), false);
-									if(result == 0)
-									{
-										qQuests.plugin.qAPI.getActiveQuests().put(((Player) s), qQuests.plugin.qAPI.getQuestWorker().getQuests().get(q.nextQuest().toLowerCase()));
-										Storage.wayCurrentQuestsWereGiven.put(((Player) s), "Commands");
-										Chat.message(((Player) s), qQuests.plugin.qAPI.getActiveQuest((Player) s).onJoin().message());
-									}
-									else
-										Chat.error((Player) s, Chat.errorCode(result));
-								}
-								else if(!q.nextQuest().isEmpty())
-									Chat.logger("warning", Texts.QUEST + " '" + q.name() + "' " + Texts.INVALID + " " + Texts.NEXT_QUEST + "! '" + q.nextQuest() + "'");
-							}
-						}
-						else
+						if(result != 0)
 							Chat.error((Player) s, Chat.errorCode(result));
 					}
 					else Chat.noPerms((Player) s);

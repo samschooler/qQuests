@@ -39,9 +39,12 @@ public class Texts {
 	
 	public static final String KILL_COMPLETED_QUOTA = "You Have Killed";
 	public static final String KILL_PLAYER_COMPLETED_QUOTA = "You Have Successfully Killed";
+	public static final String TAME_COMPLETED_QUOTA = "You Have Tamed";
 	
 	public static final String GOTO_COMPLETED_QUOTA = "You Have Successfully Reached";
 	public static final String DISTANCE_COMPLETED_QUOTA = "You Have Successfully Traveled";
+	
+	public static final String ENCHANT_COMPLETED_QUOTA = "You Have Enchanted";
 	
 	// Quest Plugin Control
 	public static final String NOT_CONTROLLED_BY(Player p) {return "Your Quest Is Controlled By " + Storage.wayCurrentQuestsWereGiven.get(p);}	
@@ -59,8 +62,8 @@ public class Texts {
 	public static final String ITEMS = "Items";
 	
 	// Not Enough Fees
-	public static final String NOT_ENOUGH_MONEY = "You Don't Have Enough Money To Get This Quest!";
-	public static final String NOT_ENOUGH_HEALTH = "You Don't Have Enough Health To Get This Quest!";
-	public static final String NOT_ENOUGH_FOOD = "You Don't Have Enough Food To Get This Quest!";
-	public static final String NOT_ENOUGH_ITEMS = "You Don't Have Enough Items To Get This Quest!";
+	public static final String NOT_ENOUGH_MONEY = "You Don't Have Enough Money!";
+	public static final String NOT_ENOUGH_HEALTH = "You Don't Have Enough Health!";
+	public static final String NOT_ENOUGH_FOOD = "You Don't Have Enough Food!";
+	public static final String NOT_ENOUGH_ITEMS = "You Don't Have Enough Items!";
 }

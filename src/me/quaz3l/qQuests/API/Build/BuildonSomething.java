@@ -11,6 +11,8 @@ public class BuildonSomething {
 	private Integer health = 0;
 	private Integer hunger = 0;
 	private HashMap<Integer, ArrayList<Integer>> items = new HashMap<Integer, ArrayList<Integer>>();
+	private HashMap<Integer, String> permissionsAdd = new HashMap<Integer, String>();
+	private HashMap<Integer, String> permissionsTake = new HashMap<Integer, String>();
 	
 	public onSomething create() {
 		return new onSomething(this);
@@ -47,5 +49,11 @@ public class BuildonSomething {
 	}
 	public HashMap<Integer, ArrayList<Integer>> items() {
 		return this.items;
+	}
+	public HashMap<Integer, String> permissionsAdd() {
+		return this.permissionsAdd;
+	}
+	public HashMap<Integer, String> permissionsTake() {
+		return this.permissionsTake;
 	}
 }
