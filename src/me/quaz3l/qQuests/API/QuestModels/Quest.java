@@ -1,8 +1,8 @@
-package me.quaz3l.qQuests.API.Util;
+package me.quaz3l.qQuests.API.QuestModels;
 
 import java.util.HashMap;
 
-import me.quaz3l.qQuests.API.Build.BuildQuest;
+import me.quaz3l.qQuests.API.QuestModels.Builders.BuildQuest;
 
 public class Quest {	
 	private String name;

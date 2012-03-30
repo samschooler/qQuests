@@ -137,6 +137,18 @@ public class Config {
 	public boolean validate(String questName, QuestWorker q) {
 		Integer tRoot = 0;
 		boolean rturn = true;
+		
+		if(qQuests.plugin.Config.getQuestConfig().getConfigurationSection(questName + ".tasks") == null)
+		{
+			Chat.logger("severe", "Quest " + questName + " disabled because the 'tasks' node does not exist!");
+			return false;
+		}
+		if(qQuests.plugin.Config.getQuestConfig().getConfigurationSection(questName + ".tasks").getKeys(false).size() < 1)
+		{
+			Chat.logger("severe", "Quest " + questName + " disabled because the 'tasks' node has no tasks!");
+			return false;
+		}
+		
 		for (Object taskNo : qQuests.plugin.Config.getQuestConfig().getConfigurationSection(questName + ".tasks").getKeys(false)) 
 		{
 			try
@@ -145,7 +157,7 @@ public class Config {
 		    }
 			catch(Exception e)
 			{
-				Chat.logger("warning", "Quest " + questName + " disabled because node 'tasks." + tRoot + "' is not a number!");
+				Chat.logger("severe", "Quest " + questName + " disabled because node 'tasks." + tRoot + "' is not a number!");
 				return false;
 			}
 			if(this.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type") == null) 
@@ -166,7 +178,7 @@ public class Config {
 			if(this.getQuestConfig().getInt(questName + ".tasks." + tRoot + ".amount") == 0) 
 			{
 				this.getQuestConfig().set(questName + ".tasks." + tRoot + ".amount", -1);
-				Chat.logger("warning", "Quest " + questName + " disabled because node 'tasks." + tRoot + ".amount' is not set!");
+				Chat.logger("severe", "Quest " + questName + " disabled because node 'tasks." + tRoot + ".amount' is not set!");
 				rturn = false;
 			}
 		}
@@ -174,21 +186,21 @@ public class Config {
 		// Check Required onJoin Nodes
 		if(this.getQuestConfig().getString(questName + ".onJoin.message") == null) 
 		{
-			Chat.logger("warning", "Quest " + questName + " disabled because node 'onJoin.message' is not set!");
+			Chat.logger("severe", "Quest " + questName + " disabled because node 'onJoin.message' is not set!");
 			rturn = false;
 		}
 		
 		// Check onDrop Nodes
 		if(this.getQuestConfig().getString(questName + ".onDrop.message") == null) 
 		{
-			Chat.logger("warning", "Quest " + questName + " disabled because node 'onDrop.message' is not set!");
+			Chat.logger("severe", "Quest " + questName + " disabled because node 'onDrop.message' is not set!");
 			rturn = false;
 		}
 		
 		// Check onComplete Nodes
 		if(this.getQuestConfig().getString(questName + ".onComplete.message") == null) 
 		{
-			Chat.logger("warning", "Quest " + questName + " disabled because node 'onComplete.message' is not set!");
+			Chat.logger("severe", "Quest " + questName + " disabled because node 'onComplete.message' is not set!");
 			rturn = false;
 		}
 		
@@ -219,7 +231,7 @@ public class Config {
 		    }
 			catch(Exception e)
 			{
-				Chat.logger("warning", "Quest " + questName + " disabled because node 'tasks." + tRoot + "' is not a number!");
+				Chat.logger("severe", "Quest " + questName + " disabled because node 'tasks." + tRoot + "' is not a number!");
 				return false;
 			}
 			String type = this.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type");

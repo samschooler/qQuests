@@ -3,7 +3,7 @@ package me.quaz3l.qQuests.Util;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import me.quaz3l.qQuests.API.Util.Quest;
+import me.quaz3l.qQuests.API.QuestModels.Quest;
 
 import org.bukkit.entity.Player;
 

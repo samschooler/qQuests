@@ -3,16 +3,17 @@ package me.quaz3l.qQuests;
 import java.util.logging.Logger;
 
 import me.quaz3l.qQuests.API.QuestAPI;
-import me.quaz3l.qQuests.API.Listeners.Damage;
-import me.quaz3l.qQuests.API.Listeners.Destroy;
-import me.quaz3l.qQuests.API.Listeners.Distance;
-import me.quaz3l.qQuests.API.Listeners.Enchant;
-import me.quaz3l.qQuests.API.Listeners.GoTo;
-import me.quaz3l.qQuests.API.Listeners.Kill;
-import me.quaz3l.qQuests.API.Listeners.Kill_Player;
-import me.quaz3l.qQuests.API.Listeners.Place;
-import me.quaz3l.qQuests.API.Listeners.Tame;
-import me.quaz3l.qQuests.Plugins.cmd;
+import me.quaz3l.qQuests.API.TaskTypes.Damage;
+import me.quaz3l.qQuests.API.TaskTypes.Destroy;
+import me.quaz3l.qQuests.API.TaskTypes.Distance;
+import me.quaz3l.qQuests.API.TaskTypes.Enchant;
+import me.quaz3l.qQuests.API.TaskTypes.GoTo;
+import me.quaz3l.qQuests.API.TaskTypes.Kill;
+import me.quaz3l.qQuests.API.TaskTypes.Kill_Player;
+import me.quaz3l.qQuests.API.TaskTypes.Place;
+import me.quaz3l.qQuests.API.TaskTypes.Tame;
+import me.quaz3l.qQuests.Plugins.Commands;
+import me.quaz3l.qQuests.Plugins.Signs;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Config;
 import me.quaz3l.qQuests.Util.Interwebs;
@@ -25,7 +26,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class qQuests extends JavaPlugin 
+public class qQuests extends JavaPlugin
 {
 	// General Setup
 	public static qQuests plugin;
@@ -42,7 +43,7 @@ public class qQuests extends JavaPlugin
 	public final String chatPrefix = ChatColor.AQUA + "[" + ChatColor.LIGHT_PURPLE + "qQuests" + ChatColor.AQUA + "] " + ChatColor.LIGHT_PURPLE + " ";
 	public final String prefix = "[qQuests] ";
 	
-	public static boolean updateNotified = false;
+	public boolean updateNotified = false;
 	
 	
 	public qQuests() {
@@ -76,7 +77,7 @@ public class qQuests extends JavaPlugin
 				// Check For Update
 				Interwebs.checkForUpdates();
 		    }
-		}, 1L, (60 * 1200));
+		}, 1L, (3 * 60 * 1200));
 		
 		// Get The API
 		this.qAPI = new QuestAPI();
@@ -167,6 +168,9 @@ public class qQuests extends JavaPlugin
 		getServer().getPluginManager().registerEvents(new Tame(), this);
 		
 		getServer().getPluginManager().registerEvents(new Enchant(), this);
+		
+		// Signs
+		getServer().getPluginManager().registerEvents(new Signs(), this);
 	}
 	
 	// Starts The Stock Plugins
@@ -180,7 +184,7 @@ public class qQuests extends JavaPlugin
 	private void qPluginCommands()
 	{
 		// Setup Command Executors
-		CommandExecutor cmd = new cmd();
+		CommandExecutor cmd = new Commands();
 			getCommand("Q").setExecutor(cmd);
 			getCommand("QUEST").setExecutor(cmd);
 			getCommand("QUESTS").setExecutor(cmd);

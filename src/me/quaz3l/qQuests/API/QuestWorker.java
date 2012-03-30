@@ -3,10 +3,10 @@ package me.quaz3l.qQuests.API;
 import java.util.ArrayList;
 
 import me.quaz3l.qQuests.qQuests;
-import me.quaz3l.qQuests.API.Build.BuildQuest;
-import me.quaz3l.qQuests.API.Build.BuildTask;
-import me.quaz3l.qQuests.API.Util.Quest;
-import me.quaz3l.qQuests.API.Util.Task;
+import me.quaz3l.qQuests.API.QuestModels.Quest;
+import me.quaz3l.qQuests.API.QuestModels.Task;
+import me.quaz3l.qQuests.API.QuestModels.Builders.BuildQuest;
+import me.quaz3l.qQuests.API.QuestModels.Builders.BuildTask;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Storage;
 
@@ -37,7 +37,8 @@ public class QuestWorker
 			String root = questName.toString();
 			// Validate The Quest
 			this.valid = qQuests.plugin.Config.validate(root, this);
-				
+			if(!valid) continue;
+			
 			BuildQuest quest = new BuildQuest(root);
 			quest.repeated(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".setup.repeated"));
 			quest.invisible(qQuests.plugin.Config.getQuestConfig().getBoolean(questName + ".setup.invisible"));

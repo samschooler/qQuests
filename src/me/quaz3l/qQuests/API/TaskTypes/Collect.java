@@ -1,4 +1,4 @@
-package me.quaz3l.qQuests.API.Listeners;
+package me.quaz3l.qQuests.API.TaskTypes;
 
 import me.quaz3l.qQuests.qQuests;
 

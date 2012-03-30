@@ -1,4 +1,4 @@
-package me.quaz3l.qQuests.API.Util;
+package me.quaz3l.qQuests.API.QuestModels;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import me.quaz3l.qQuests.qQuests;
-import me.quaz3l.qQuests.API.Build.BuildonSomething;
+import me.quaz3l.qQuests.API.QuestModels.Builders.BuildonSomething;
 
 public class onSomething {
 	private String message;

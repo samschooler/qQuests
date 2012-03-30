@@ -6,8 +6,8 @@ import java.util.Random;
 import org.bukkit.entity.Player;
 
 import me.quaz3l.qQuests.qQuests;
-import me.quaz3l.qQuests.API.Listeners.Collect;
-import me.quaz3l.qQuests.API.Util.Quest;
+import me.quaz3l.qQuests.API.QuestModels.Quest;
+import me.quaz3l.qQuests.API.TaskTypes.Collect;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.PlayerProfiles;
 import me.quaz3l.qQuests.Util.Storage;

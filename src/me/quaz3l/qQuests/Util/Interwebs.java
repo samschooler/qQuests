@@ -31,7 +31,7 @@ public class Interwebs {
 			                latestVersion[1] > currentVersion[1] ||
 			                latestVersion[2] > currentVersion[2])
 			{
-				if(!qQuests.updateNotified)
+				if(!qQuests.plugin.updateNotified)
 				{
 					Chat.logger("warning", "################################################################");
 					Chat.logger("warning", "####################### UPDATE AVALIBLE! #######################");

@@ -1,4 +1,4 @@
-package me.quaz3l.qQuests.API.Listeners;
+package me.quaz3l.qQuests.API.TaskTypes;
 
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.Util.Chat;
@@ -9,11 +9,11 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 
-public class Destroy implements Listener {
+public class Place implements Listener {
 	@EventHandler
-	public void onBlockBreak(BlockBreakEvent e) 
+    public void onBlockPlace(BlockPlaceEvent e) 
 	{
 		if(e.isCancelled())
 			return;
@@ -23,12 +23,11 @@ public class Destroy implements Listener {
 		Block block = e.getBlock();
 		Integer blockId = block.getTypeId();
 		int i=0;
-		
 		// Go Through All The Tasks Of The Players Quest
 		while(qQuests.plugin.qAPI.getActiveQuest(player).tasks().size() > i) 
 		{
 			// Check For Destroy Quests
-			if(qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("destroy"))
+			if(qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("place"))
 				// Check For The Correct Block Id
 				if(qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).idInt() == blockId)
 				{
@@ -43,7 +42,7 @@ public class Destroy implements Listener {
 							if(Storage.wayCurrentQuestsWereGiven.get(player).equalsIgnoreCase("Commands"))
 								
 								// If The Source Is Commands, Tell The Player They're Current Status
-								Chat.quotaMessage(player, Texts.DESTROY_COMPLETED_QUOTA, Storage.currentTaskProgress.get(player).get(i), qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).amount(), qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).display());
+								Chat.quotaMessage(player, Texts.PLACE_COMPLETED_QUOTA, Storage.currentTaskProgress.get(player).get(i), qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).amount(), qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).display());
 					}
 					// Check If The Player Is Just Finished
 					else if(Storage.currentTaskProgress.get(player).get(i) == (qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).amount() - 1))
@@ -57,7 +56,7 @@ public class Destroy implements Listener {
 							if(Storage.wayCurrentQuestsWereGiven.get(player).equalsIgnoreCase("Commands"))
 							{
 								// If The Source Is Commands, Tell The Player They're Done With The Task
-								Chat.green(player, Texts.DESTROY_COMPLETED_QUOTA + " Enough " + qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).display() + ",");
+								Chat.green(player, Texts.PLACE_COMPLETED_QUOTA + " Enough " + qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).display() + ",");
 								if(Storage.tasksLeftInQuest.get(player) != 0)
 									Chat.green(player, Texts.TASKS_HELP);
 								else

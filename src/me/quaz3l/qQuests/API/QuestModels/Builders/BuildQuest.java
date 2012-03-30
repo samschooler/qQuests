@@ -1,10 +1,10 @@
-package me.quaz3l.qQuests.API.Build;
+package me.quaz3l.qQuests.API.QuestModels.Builders;
 
 import java.util.HashMap;
 
-import me.quaz3l.qQuests.API.Util.Quest;
-import me.quaz3l.qQuests.API.Util.Task;
-import me.quaz3l.qQuests.API.Util.onSomething;
+import me.quaz3l.qQuests.API.QuestModels.Quest;
+import me.quaz3l.qQuests.API.QuestModels.Task;
+import me.quaz3l.qQuests.API.QuestModels.onSomething;
 
 public class BuildQuest {
 	private String name = "Quest";

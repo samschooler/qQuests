@@ -1,4 +1,4 @@
-package me.quaz3l.qQuests.API.Listeners;
+package me.quaz3l.qQuests.API.TaskTypes;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

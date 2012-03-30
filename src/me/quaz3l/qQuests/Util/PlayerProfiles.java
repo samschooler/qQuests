@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import me.quaz3l.qQuests.qQuests;
-import me.quaz3l.qQuests.API.Util.Quest;
+import me.quaz3l.qQuests.API.QuestModels.Quest;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

@@ -1,9 +1,9 @@
-package me.quaz3l.qQuests.API.Build;
+package me.quaz3l.qQuests.API.QuestModels.Builders;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import me.quaz3l.qQuests.API.Util.onSomething;
+import me.quaz3l.qQuests.API.QuestModels.onSomething;
 
 public class BuildonSomething {
 	private String message = "";
