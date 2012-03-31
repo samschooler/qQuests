@@ -93,6 +93,17 @@ public class Config {
 		{
 			this.getConfig().set("autoUpdate", true);
 			this.getConfig().set("tellMeYourUsingMyPlugin", true);
+			this.getConfig().set("primaryCommand", "quest");
+			this.saveConfig();
+		}
+		else if(!this.getConfig().getString("primaryCommand").equalsIgnoreCase("q") &&
+				!this.getConfig().getString("primaryCommand").equalsIgnoreCase("qu") &&
+				!this.getConfig().getString("primaryCommand").equalsIgnoreCase("quest") &&
+				!this.getConfig().getString("primaryCommand").equalsIgnoreCase("quests") &&
+				!this.getConfig().getString("primaryCommand").equalsIgnoreCase("qquests"))
+		{
+			Chat.logger("warning", "Your primary command must be q, qu, quest, quests, or qquests, resetting to quest...");
+			this.getConfig().set("primaryCommand", "quest");
 			this.saveConfig();
 		}
 	}

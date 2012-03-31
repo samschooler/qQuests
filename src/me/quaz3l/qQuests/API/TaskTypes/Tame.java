@@ -57,9 +57,9 @@ public class Tame implements Listener {
 								// If The Source Is Commands, Tell The Player They're Done With The Task
 								Chat.green(player, Texts.TAME_COMPLETED_QUOTA + " Enough " + qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).display() + ",");
 								if(Storage.tasksLeftInQuest.get(player) != 0)
-									Chat.green(player, Texts.TASKS_HELP);
+									Chat.green(player, Texts.COMMANDS_TASKS_HELP);
 								else
-									Chat.green(player, Texts.DONE_HELP);
+									Chat.green(player, Texts.COMMANDS_DONE_HELP);
 							}
 						
 					}

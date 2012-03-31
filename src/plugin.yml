@@ -1,10 +1,12 @@
 name: qQuests
 main: me.quaz3l.qQuests.qQuests
-version: 0.01.94
+version: 0.01.95
 description: A overly customizable quests plugin.
 softdepend: [Vault]
 commands:
   Q:
+    description: Alias Command To Use qQuests
+  QU:
     description: Alias Command To Use qQuests
   QUEST:
     description: Main Command To Use qQuests
@@ -26,18 +28,28 @@ permissions:
     qquests.give:
         description: Lets players randomly get a visible quest
         default: true
+        children:
+            qquests.give.sign: true
     qquests.give.specific:
         description: Lets players specify a quest they want
         default: op
     qquests.info:
         description: Lets players see info on there quest
         default: true
+        children:
+            qquests.info.sign: true
     qquests.tasks:
         description: Lets players see there tasks
         default: true
+        children:
+            qquests.tasks.sign: true
     qquests.drop:
         description: Enables players to drop quests
         default: true
+        children:
+            qquests.drop.sign: true
     qquests.done:
         description: Lets players finish a quest
         default: true
+        children:
+            qquests.done.sign: true

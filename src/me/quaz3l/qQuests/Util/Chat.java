@@ -73,34 +73,67 @@ public class Chat {
 	}
 	
 	// Parses Error Codes To Phrases
-	public static String errorCode(Integer code)
+	public static String errorCode(Integer code, String type)
 	{
-		switch(code)
+		if(type.equalsIgnoreCase("Commands"))
 		{
-		case 0:
-			return "Success";
-		case 1:
-			return null;
-		case 2:
-			return Texts.NOT_ENOUGH_FOR_QUEST;
-		case 3:
-			return Texts.HAS_ACTIVE_QUEST;
-		case 4:
-			return Texts.TASKS_NOT_COMPLETED;
-		case 5:
-			return Texts.NOT_ENOUGH_MONEY;
-		case 6:
-			return Texts.NOT_ENOUGH_HEALTH;
-		case 7:
-			return Texts.NOT_ENOUGH_FOOD;
-		case 8:
-			return Texts.NOT_ENOUGH_ITEMS;
-		case 9:
-			return Texts.NO_ACTIVE_QUEST;
-		case 10:
-			return Texts.DELAY_NOT_FINISHED;
-		default:
-			return "Unknown";
+			switch(code)
+			{
+			case 0:
+				return "Success";
+			case 1:
+				return null;
+			case 2:
+				return Texts.NOT_ENOUGH_FOR_QUEST;
+			case 3:
+				return Texts.COMMANDS_HAS_ACTIVE_QUEST;
+			case 4:
+				return Texts.COMMANDS_TASKS_NOT_COMPLETED;
+			case 5:
+				return Texts.NOT_ENOUGH_MONEY;
+			case 6:
+				return Texts.NOT_ENOUGH_HEALTH;
+			case 7:
+				return Texts.NOT_ENOUGH_FOOD;
+			case 8:
+				return Texts.NOT_ENOUGH_ITEMS;
+			case 9:
+				return Texts.COMMANDS_NO_ACTIVE_QUEST;
+			case 10:
+				return Texts.DELAY_NOT_FINISHED;
+			default:
+				return "Unknown";
+			}
+		}
+		else
+		{
+			switch(code)
+			{
+			case 0:
+				return "Success";
+			case 1:
+				return null;
+			case 2:
+				return Texts.NOT_ENOUGH_FOR_QUEST;
+			case 3:
+				return Texts.HAS_ACTIVE_QUEST;
+			case 4:
+				return Texts.TASKS_NOT_COMPLETED;
+			case 5:
+				return Texts.NOT_ENOUGH_MONEY;
+			case 6:
+				return Texts.NOT_ENOUGH_HEALTH;
+			case 7:
+				return Texts.NOT_ENOUGH_FOOD;
+			case 8:
+				return Texts.NOT_ENOUGH_ITEMS;
+			case 9:
+				return Texts.NO_ACTIVE_QUEST;
+			case 10:
+				return Texts.DELAY_NOT_FINISHED;
+			default:
+				return "Unknown";
+			}
 		}
 	}
 	

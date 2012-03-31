@@ -22,14 +22,14 @@ public class Commands implements CommandExecutor
 		{
 			if(args.length < 1)
 			{
-				Chat.noPrefixMessage((Player) s, Texts.HELP_TEXT);
+				Chat.noPrefixMessage((Player) s, Texts.COMMANDS_HELP_TEXT);
 			}
 			else
 			{
 				if(Storage.wayCurrentQuestsWereGiven.get((Player) s) != null)
 					if(!Storage.wayCurrentQuestsWereGiven.get((Player) s).equalsIgnoreCase("Commands"))
 					{
-						Chat.message(((Player) s), Texts.NOT_CONTROLLED_BY((Player) s));
+						Chat.error(((Player) s), Texts.NOT_CONTROLLED_BY((Player) s));
 						return false;
 					}
 				if(args[0].equalsIgnoreCase("give"))
@@ -49,7 +49,7 @@ public class Commands implements CommandExecutor
 								Chat.error(((Player) s), Texts.NO_QUESTS_AVAILABLE);
 							}
 							else
-								Chat.error((Player) s, Chat.errorCode(result));
+								Chat.error((Player) s, Chat.errorCode(result, "Commands"));
 						}
 						else Chat.noPerms((Player) s);
 					}
@@ -66,12 +66,12 @@ public class Commands implements CommandExecutor
 							else if(result == 1)
 								Chat.error((Player) s, Texts.NOT_VALID_QUEST);
 							else
-								Chat.error((Player) s, Chat.errorCode(result));
+								Chat.error((Player) s, Chat.errorCode(result, "Commands"));
 						}
 						else Chat.noPerms((Player) s);
 					}
 					else
-						Chat.noPrefixMessage((Player) s, Texts.HELP_TEXT);
+						Chat.noPrefixMessage((Player) s, Texts.COMMANDS_HELP_TEXT);
 				}
 				else if(args[0].equalsIgnoreCase("info")) 
 				{
@@ -153,7 +153,7 @@ public class Commands implements CommandExecutor
 						if(result == 0)
 							Chat.message(((Player) s), q.onDrop().message());
 						else
-							Chat.error((Player) s, Chat.errorCode(result));
+							Chat.error((Player) s, Chat.errorCode(result, "Commands"));
 					}
 					else Chat.noPerms((Player) s);
 				}
@@ -163,13 +163,13 @@ public class Commands implements CommandExecutor
 					{
 						Integer result = qQuests.plugin.qAPI.completeQuest((Player) s);
 						if(result != 0)
-							Chat.error((Player) s, Chat.errorCode(result));
+							Chat.error((Player) s, Chat.errorCode(result, "Commands"));
 					}
 					else Chat.noPerms((Player) s);
 				}
 				else
 				{
-					Chat.noPrefixMessage((Player) s, Texts.HELP_TEXT);
+					Chat.noPrefixMessage((Player) s, Texts.COMMANDS_HELP_TEXT);
 				}
 			}
 		}

@@ -215,7 +215,7 @@ public class QuestAPI {
 								Chat.message(player, getActiveQuest(player).onJoin().message());
 						}
 						else
-							Chat.errorCode(result);
+							Chat.errorCode(result, Storage.wayPreviousQuestWereGiven.get(player));
 					}
 					Storage.previousQuest.remove(player);
 					Storage.wayPreviousQuestWereGiven.remove(player);
@@ -239,7 +239,7 @@ public class QuestAPI {
 					Chat.message((player), qQuests.plugin.qAPI.getActiveQuest(player).onJoin().message());
 				}
 				else
-					Chat.error(player, Chat.errorCode(result));
+					Chat.error(player, Chat.errorCode(result, Storage.wayPreviousQuestWereGiven.get(player)));
 				}
 			else if(!q.nextQuest().isEmpty())
 				Chat.logger("warning", Texts.QUEST + " '" + q.name() + "' " + Texts.INVALID + " " + Texts.NEXT_QUEST + "! '" + q.nextQuest() + "'");

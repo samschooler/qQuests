@@ -55,7 +55,7 @@ public class QQCircuit extends Circuit
 	        	else if(result == 1)
 	        		Chat.error(p, Texts.NOT_VALID_QUEST);
 	        	else
-	        		Chat.error(p, Chat.errorCode(result));
+	        		Chat.error(p, Chat.errorCode(result, "Circuit"));
 	        }
 	        else if (this.task.equals("drop"))
 	        {
@@ -63,7 +63,7 @@ public class QQCircuit extends Circuit
 	        	if(result == 0)
 	        		Chat.message(p, q.onDrop().message());
 	        	else
-	        		Chat.error(p, Chat.errorCode(result));
+	        		Chat.error(p, Chat.errorCode(result, "Circuit"));
 	        } else if (this.task.equals("info"))
 	        {
 	        	

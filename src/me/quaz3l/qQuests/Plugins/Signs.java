@@ -28,13 +28,39 @@ public class Signs implements Listener {
 		Sign sign = (Sign) e.getClickedBlock().getState();
 		if(!sign.getLine(0).equalsIgnoreCase("[qQuests]"))
 			return;
-		if(sign.getLine(2).equalsIgnoreCase("give") || !sign.getLine(1).isEmpty())
+		if(Storage.wayCurrentQuestsWereGiven.get(e.getPlayer()) != null)
+			if(!Storage.wayCurrentQuestsWereGiven.get(e.getPlayer()).equalsIgnoreCase("Signs"))
+			{
+				Chat.error((e.getPlayer()), Texts.NOT_CONTROLLED_BY(e.getPlayer()));
+				return;
+			}
+		if(sign.getLine(2).equalsIgnoreCase("give") && !sign.getLine(1).isEmpty())
 		{
 			if(!qQuests.plugin.qAPI.getQuests().containsKey(sign.getLine(1).toLowerCase()))
 			{
 				Chat.error(e.getPlayer(), "The quest is not a vaild quest on line 2 of the sign!");
 				return;
 			}
+		}
+		if(sign.getLine(2).equalsIgnoreCase("give") && sign.getLine(1).isEmpty())
+		{
+			if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "give.specific.sign"))
+			{
+				Integer result = qQuests.plugin.qAPI.giveQuest(e.getPlayer());
+				if(result == 0)
+				{
+					Storage.wayCurrentQuestsWereGiven.put((e.getPlayer()), "Signs");
+					Chat.message((e.getPlayer()), qQuests.plugin.qAPI.getActiveQuest(e.getPlayer()).onJoin().message());
+					return;
+				}
+				else if(result == 1)
+				{
+					Chat.error((e.getPlayer()), Texts.NO_QUESTS_AVAILABLE);
+				}
+				else
+					Chat.error(e.getPlayer(), Chat.errorCode(result, "Signs"));
+			}
+			else Chat.noPerms(e.getPlayer());
 		}
 		if(!sign.getLine(1).isEmpty() && !sign.getLine(2).equalsIgnoreCase("give"))
 		{
@@ -66,7 +92,7 @@ public class Signs implements Listener {
 				else if(result == 1)
 					Chat.error(e.getPlayer(), Texts.NOT_VALID_QUEST);
 				else
-					Chat.error(e.getPlayer(), Chat.errorCode(result));
+					Chat.error(e.getPlayer(), Chat.errorCode(result, "Signs"));
 			}
 			else Chat.noPerms(e.getPlayer());
 			
@@ -88,7 +114,7 @@ public class Signs implements Listener {
 						Chat.noPrefixMessage(e.getPlayer(), "Repeatable: " + ChatColor.GREEN + "None");
 					else
 						Chat.noPrefixMessage(e.getPlayer(), "Repeatable: " + ChatColor.GREEN + (q.repeated() - qQuests.plugin.qAPI.getProfiles().getQuestsTimesCompleted(e.getPlayer(), q)) + " More Times");
-					Chat.noPrefixMessage(e.getPlayer(), "Tasks: " + ChatColor.YELLOW + Texts.PRIMARY_COMMAND + " " + Texts.TASKS_COMMAND + ChatColor.GREEN + " For The Tasks.");
+					Chat.noPrefixMessage(e.getPlayer(), "Tasks: " + ChatColor.GREEN + "For The Tasks, Find A Tasks Sign");
 					Chat.noPrefixMessage(e.getPlayer(), "Rewards:");
 					if(qQuests.plugin.economy != null && q.onComplete().money() != 0)
 						Chat.noPrefixMessage(e.getPlayer(), "     " + Texts.MONEY + ": " + ChatColor.GREEN + q.onComplete().money());
@@ -151,7 +177,7 @@ public class Signs implements Listener {
 				if(result == 0)
 					Chat.message((e.getPlayer()), q.onDrop().message());
 				else
-					Chat.error(e.getPlayer(), Chat.errorCode(result));
+					Chat.error(e.getPlayer(), Chat.errorCode(result, "Signs"));
 			}
 			else Chat.noPerms(e.getPlayer());
 		}
@@ -161,7 +187,7 @@ public class Signs implements Listener {
 			{
 				Integer result = qQuests.plugin.qAPI.completeQuest(e.getPlayer());
 				if(result != 0)
-					Chat.error(e.getPlayer(), Chat.errorCode(result));
+					Chat.error(e.getPlayer(), Chat.errorCode(result, "Signs"));
 			}
 			else Chat.noPerms(e.getPlayer());
 		}
