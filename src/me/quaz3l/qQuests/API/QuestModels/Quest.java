@@ -5,12 +5,20 @@ import java.util.HashMap;
 import me.quaz3l.qQuests.API.QuestModels.Builders.BuildQuest;
 
 public class Quest {	
+	// Setup
 	private String name;
-	private Integer repeated;
+	private int repeated;
 	private Boolean invisible;
 	private String nextQuest;
-	private Integer delay;
+	private int delay;
+	
+	// Requirements
+	private int level;
+	
+	// Tasks
 	private HashMap<Integer, Task> tasks = new HashMap<Integer, Task>();
+	
+	// onWhatever
 	private onSomething onJoin;
 	private onSomething onDrop;
 	private onSomething onComplete;
@@ -22,7 +30,11 @@ public class Quest {
 		invisible = build.invisible();
 		nextQuest = build.nextQuest();
 		delay = build.delay();
+		
+		
+		
 		tasks = build.tasks();
+		
 		onJoin = build.onJoin();
 		onDrop = build.onDrop();
 		onComplete = build.onComplete();
@@ -30,7 +42,7 @@ public class Quest {
 	public final String name() {
 		return this.name;
 	}
-	public final Integer repeated() {
+	public final int repeated() {
 		return this.repeated;
 	}
 	public final Boolean invisible() {
@@ -39,12 +51,18 @@ public class Quest {
 	public final String nextQuest() {
 		return this.nextQuest;
 	}
-	public final Integer delay() {
+	public final int delay() {
 		return this.delay;
 	}
+	
+	public final int level() {
+		return this.level;
+	}
+	
 	public final HashMap<Integer, Task> tasks() {
 		return this.tasks;
 	}
+	
 	public final onSomething onJoin() {
 		return this.onJoin;
 	}

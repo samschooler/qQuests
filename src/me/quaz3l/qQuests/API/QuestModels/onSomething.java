@@ -11,9 +11,9 @@ import me.quaz3l.qQuests.API.QuestModels.Builders.BuildonSomething;
 
 public class onSomething {
 	private String message;
-	private Integer money;
-	private Integer health;
-	private Integer hunger;
+	private double money;
+	private int health;
+	private int hunger;
 	private HashMap<Integer, ArrayList<Integer>> items = new HashMap<Integer, ArrayList<Integer>>();
 	private HashMap<Integer, String> permissionsAdd = new HashMap<Integer, String>();
 	private HashMap<Integer, String> permissionsTake = new HashMap<Integer, String>();
@@ -29,13 +29,13 @@ public class onSomething {
 	public String message() {
 		return this.message;
 	}
-	public Integer money() {
+	public double money() {
 		return this.money;
 	}
-	public Integer health() {
+	public int health() {
 		return this.health;
 	}
-	public Integer hunger() {
+	public int hunger() {
 		return this.hunger;
 	}
 	public HashMap<Integer, ArrayList<Integer>> items() {

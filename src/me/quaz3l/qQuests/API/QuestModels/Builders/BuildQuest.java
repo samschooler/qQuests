@@ -7,15 +7,20 @@ import me.quaz3l.qQuests.API.QuestModels.Task;
 import me.quaz3l.qQuests.API.QuestModels.onSomething;
 
 public class BuildQuest {
+	// Setup
 	private String name = "Quest";
-	private Integer repeated = -1;
+	private int repeated = -1;
 	private Boolean invisible = false;
 	private String nextQuest = "";
-	private Integer delay = 0;
+	private int delay = 0;
+	
+	// Requirements
+	private int level = 0;
+	
+	// Tasks
 	private HashMap<Integer, Task> tasks = new HashMap<Integer, Task>();
-	private BuildonSomething BuildonJoin = new BuildonSomething();
-	private BuildonSomething BuildonDrop = new BuildonSomething();
-	private BuildonSomething BuildonComplete = new BuildonSomething();
+	
+	// onWhatever
 	private onSomething onJoin;
 	private onSomething onDrop;
 	private onSomething onComplete;
@@ -24,14 +29,13 @@ public class BuildQuest {
 		this.name = quest.toLowerCase();
 	}
 	public Quest create() {
-		this.onJoin = new onSomething(BuildonJoin);
-		this.onDrop = new onSomething(BuildonDrop);
-		this.onComplete = new onSomething(BuildonComplete);
 		return new Quest(this);
 	}
 	
 	// Setting Variables
-	public BuildQuest repeated(Integer i) {
+	
+	// Setup
+	public BuildQuest repeated(int i) {
 		this.repeated = i;
 		return this;
 	}
@@ -43,20 +47,44 @@ public class BuildQuest {
 		this.nextQuest = s;
 		return this;
 	}
-	public BuildQuest delay(Integer i) {
+	public BuildQuest delay(int i) {
 		this.delay = i;
 		return this;
 	}
+	
+	// Requirements
+	public BuildQuest level(int i) {
+		this.level = i;
+		return this;
+	}
+	
+	// Tasks
 	public BuildQuest tasks(HashMap<Integer, Task> m) {
 		this.tasks = m;
 		return this;
 	}
 	
+	// onWhatever
+	public BuildQuest onJoin(BuildonSomething b) {
+		this.onJoin = b.create();
+		return this;
+	}
+	public BuildQuest onDrop(BuildonSomething b) {
+		this.onDrop = b.create();
+		return this;
+	}
+	public BuildQuest onComplete(BuildonSomething b) {
+		this.onComplete = b.create();
+		return this;
+	}
+	
 	// Getting Variables
+	
+	// Setup
 	public String name() {
 		return this.name;
 	}
-	public Integer repeated() {
+	public int repeated() {
 		return this.repeated;
 	}
 	public Boolean invisible() {
@@ -65,12 +93,21 @@ public class BuildQuest {
 	public String nextQuest() {
 		return this.nextQuest;
 	}
-	public Integer delay() {
+	public int delay() {
 		return this.delay;
 	}
+	
+	// Requirements
+	public int level() {
+		return this.level;
+	}
+	
+	// Tasks
 	public HashMap<Integer, Task> tasks() {
 		return this.tasks;
 	}
+	
+	// onWhatever
 	public onSomething onJoin() {
 		return this.onJoin;
 	}
@@ -79,14 +116,5 @@ public class BuildQuest {
 	}
 	public onSomething onComplete() {
 		return this.onComplete;
-	}
-	public BuildonSomething BuildonJoin() {
-		return this.BuildonJoin;
-	}
-	public BuildonSomething BuildonDrop() {
-		return this.BuildonDrop;
-	}
-	public BuildonSomething BuildonComplete() {
-		return this.BuildonComplete;
 	}
 }

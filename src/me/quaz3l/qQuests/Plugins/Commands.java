@@ -137,7 +137,7 @@ public class Commands implements CommandExecutor
 								else if(q.tasks().get(i).type().equalsIgnoreCase("enchant"))
 									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Enchant " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.YELLOW + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.YELLOW + ")");
 								else if(q.tasks().get(i).type().equalsIgnoreCase("tame"))
-									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Tame " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.YELLOW + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.YELLOW + ")");
+									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Tame " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								i++;
 							}
 						} else Chat.error((Player) s, Texts.NO_ACTIVE_QUEST);

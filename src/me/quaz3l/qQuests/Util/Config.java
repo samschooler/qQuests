@@ -88,24 +88,32 @@ public class Config {
 		this.getConfig();
 		this.getConfig().options().copyDefaults(true);
 		
-		// Set General Nodes
-		if(this.getConfig().getKeys(false).size() <= 0)
-		{
+		if(this.getConfig().getString("autoUpdate") != "true" &&
+				this.getConfig().getString("autoUpdate") != "false")
 			this.getConfig().set("autoUpdate", true);
+		
+		if(this.getConfig().getString("tellMeYourUsingMyPlugin") != "true" &&
+				this.getConfig().getString("tellMeYourUsingMyPlugin") != "false")
 			this.getConfig().set("tellMeYourUsingMyPlugin", true);
-			this.getConfig().set("primaryCommand", "quest");
-			this.saveConfig();
-		}
-		else if(!this.getConfig().getString("primaryCommand").equalsIgnoreCase("q") &&
+		
+		if(!this.getConfig().getString("primaryCommand").equalsIgnoreCase("q") &&
 				!this.getConfig().getString("primaryCommand").equalsIgnoreCase("qu") &&
 				!this.getConfig().getString("primaryCommand").equalsIgnoreCase("quest") &&
 				!this.getConfig().getString("primaryCommand").equalsIgnoreCase("quests") &&
-				!this.getConfig().getString("primaryCommand").equalsIgnoreCase("qquests"))
+				!this.getConfig().getString("primaryCommand").equalsIgnoreCase("qquests") &&
+				this.getConfig().getString("primaryCommand") != null)
 		{
 			Chat.logger("warning", "Your primary command must be q, qu, quest, quests, or qquests, resetting to quest...");
 			this.getConfig().set("primaryCommand", "quest");
-			this.saveConfig();
 		}
+		else if(this.getConfig().getString("primaryCommand") == null)
+				this.getConfig().set("primaryCommand", "quest");
+		
+		if(this.getConfig().getString("showMoreInfo") != "true" &&
+				this.getConfig().getString("showMoreInfo") != "false")
+			this.getConfig().set("showMoreInfo", true);
+		
+		this.saveConfig();
 	}
 	public void initializeQuestConfig() {
 		this.getQuestConfig();
@@ -117,6 +125,9 @@ public class Config {
 				this.getQuestConfig().set("Diamonds!.setup.invisible", false);
 				this.getQuestConfig().set("Diamonds!.setup.delay", 1);
 				this.getQuestConfig().set("Diamonds!.setup.nextQuest", "");
+			
+			// Set Requirements Nodes
+				this.getQuestConfig().set("Diamonds!.requirements.level", 0);
 			
 			// Set Task Nodes
 				this.getQuestConfig().set("Diamonds!.tasks.0.type", "collect");
@@ -145,6 +156,7 @@ public class Config {
 		}
 		this.saveQuestConfig();
 	}
+	
 	public boolean validate(String questName, QuestWorker q) {
 		Integer tRoot = 0;
 		boolean rturn = true;
@@ -186,7 +198,7 @@ public class Config {
 				this.getQuestConfig().set(questName + ".tasks." + tRoot + ".display", "UNDEFINED");
 				rturn = false;
 			}
-			if(this.getQuestConfig().getInt(questName + ".tasks." + tRoot + ".amount") == 0) 
+			if(this.getQuestConfig().getInt(questName + ".tasks." + tRoot + ".amount") <= 0) 
 			{
 				this.getQuestConfig().set(questName + ".tasks." + tRoot + ".amount", -1);
 				Chat.logger("severe", "Quest " + questName + " disabled because node 'tasks." + tRoot + ".amount' is not set!");
@@ -266,6 +278,7 @@ public class Config {
 		else
 			return true;
 	}
+	
 	public void dumpQuestConfig()
 	{
 		Chat.logger("warning", "################################################################");
