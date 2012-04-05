@@ -8,12 +8,6 @@ import me.quaz3l.qQuests.API.QuestModels.Quest;
 import org.bukkit.entity.Player;
 
 public class Storage {
-	// Config Values
-	public static boolean autoUpdate = true;
-	public static boolean tellMeYourUsingMyPlugin = true;
-	public static String primaryCommand = "quest";
-	public static boolean showMoreInfo = true;
-	
 	// Quests
 	public static HashMap<String, Quest> quests = new HashMap<String, Quest>();
 	public static HashMap<String, Quest> visibleQuests = new HashMap<String, Quest>();
@@ -32,4 +26,9 @@ public class Storage {
 	
 	// Players That Can't Get Quests
 	public static ArrayList<Player> cannotGetQuests = new ArrayList<Player>();
+	
+	public static void persist()
+	{
+		
+	}
 }

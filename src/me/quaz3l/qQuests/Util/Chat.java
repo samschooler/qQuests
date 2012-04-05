@@ -101,8 +101,6 @@ public class Chat {
 				return Texts.COMMANDS_NO_ACTIVE_QUEST;
 			case 10:
 				return Texts.DELAY_NOT_FINISHED;
-			case 11:
-				return Texts.NO_QUESTS_AVAILABLE;
 			default:
 				return "Unknown";
 			}
@@ -133,8 +131,6 @@ public class Chat {
 				return Texts.NO_ACTIVE_QUEST;
 			case 10:
 				return Texts.DELAY_NOT_FINISHED;
-			case 11:
-				return Texts.NO_QUESTS_AVAILABLE;
 			default:
 				return "Unknown";
 			}

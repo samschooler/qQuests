@@ -11,73 +11,79 @@ import me.quaz3l.qQuests.API.QuestWorker;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class Config {	
+public class Config {
+	private qQuests plugin;
+	
 	// Configuration Files Variables
-	private YamlConfiguration quests = null;
-	private File qFile = null;
-	private YamlConfiguration profiles = null;
-	private File pFile = null;
-	private YamlConfiguration config = null;
-	private File cFile = null;
+	private FileConfiguration qConfig = null;
+	private File qConfigFile = null;
+	private FileConfiguration cConfig = null;
+	private File cConfigFile = null;
 	
-	public Config()
-	{
-		loadConfigs();
+	public Config(qQuests plugin) {
+		this.plugin = plugin;
 	}
-	
-	public void loadConfigs()
-	{
-		this.cFile = new File(qQuests.plugin.getDataFolder(), "config.yml");
-	    this.config = loadConfig(this.cFile);
-	    this.qFile = new File(qQuests.plugin.getDataFolder(), "quests.yml");
-	    this.quests = loadConfig(this.qFile);
-	    this.pFile = new File(qQuests.plugin.getDataFolder(), "profiles.yml");
-	    this.quests = loadConfig(this.pFile);
-	}
-	private YamlConfiguration loadConfig(File file) {
-		if (!file.exists()) {
-			InputStream defConfigStream = qQuests.plugin.getResource(file.getName());
-			if (defConfigStream != null) {
-				YamlConfiguration customConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-				try {
-					customConfig.save(file);
-				} catch (IOException ex) {
-					Chat.logger("severe", "Can't Save " + file.getName() + " File!");
-				}
-				return customConfig;
-			}
-			try
-			{
-				file.createNewFile();
-				Chat.logger("info", "New " + file.getName() + " File Created");
-			} catch (IOException ex) {
-				Chat.logger("severe", "Can't Create " + file.getName() + " File!");
-			}
-		}
-		
-		return YamlConfiguration.loadConfiguration(file);
-	}
-	private void saveConfig(File file, YamlConfiguration config) {
-		try {
-			config.save(file);
-		} catch (IOException ex) {
-			Chat.logger("severe", "Can't Write To File '" + file.getName() + "'!");
-		}
-	}
-	
+			
 	// Configuration Functions
-	public YamlConfiguration getConfig() {
-		return config;
-	}
-	// Quest Configuration Functions
 	public FileConfiguration getQuestConfig() {
-		return quests;
+		if (qConfig == null) {
+			reloadQuestConfig();
+		}
+		return qConfig;
 	}
-	public FileConfiguration getProfilesConfig() {
-		return profiles;
+	public void reloadQuestConfig() {
+		if (qConfigFile == null) 
+		{
+			qConfigFile = new File(plugin.getDataFolder(), "quests.yml");
+		}
+		qConfig = YamlConfiguration.loadConfiguration(qConfigFile);
+		
+		InputStream defConfigStream = plugin.getResource("quests.yml");
+		if (defConfigStream != null) {
+			YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+			qConfig.setDefaults(defConfig);
+		}
 	}
-	
-	
+	public void saveQuestConfig() {
+		if (qConfig == null || qConfigFile == null) {
+			return;
+		}
+		try {
+			qConfig.save(qConfigFile);
+		} catch (IOException ex) {
+			plugin.logger.severe(plugin.prefix + "Could not save config to " + qConfigFile);
+		}
+	}
+	public FileConfiguration getConfig() {
+		if (cConfig == null) {
+			reloadConfig();
+		}
+		return cConfig;
+	}
+	public void reloadConfig() {
+		if (cConfigFile == null) 
+		{
+			cConfigFile = new File(plugin.getDataFolder(), "config.yml");
+		}
+		cConfig = YamlConfiguration.loadConfiguration(cConfigFile);
+		
+		InputStream defConfigStream = plugin.getResource("config.yml");
+		if (defConfigStream != null) {
+			YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+			cConfig.setDefaults(defConfig);
+			cConfig.options().copyDefaults(true);
+		}
+	}
+	public void saveConfig() {
+		if (cConfig == null || cConfigFile == null) {
+	    return;
+	    }
+		try {
+	        cConfig.save(cConfigFile);
+	    } catch (IOException ex) {
+	    	Chat.logger("severe", "Could not save config to " + cConfigFile);
+	    }
+	}
 	public void initializeConfig() {
 		this.getConfig();
 		this.getConfig().options().copyDefaults(true);
@@ -90,34 +96,31 @@ public class Config {
 				this.getConfig().getString("tellMeYourUsingMyPlugin") != "false")
 			this.getConfig().set("tellMeYourUsingMyPlugin", true);
 		
-		if(!this.getConfig().getString("primaryCommand").equalsIgnoreCase("q") &&
-				!this.getConfig().getString("primaryCommand").equalsIgnoreCase("qu") &&
-				!this.getConfig().getString("primaryCommand").equalsIgnoreCase("quest") &&
-				!this.getConfig().getString("primaryCommand").equalsIgnoreCase("quests") &&
-				!this.getConfig().getString("primaryCommand").equalsIgnoreCase("qquests") &&
-				this.getConfig().getString("primaryCommand") != null)
+		if(this.getConfig().getString("primaryCommand") != null)
 		{
-			Chat.logger("warning", "Your primary command must be q, qu, quest, quests, or qquests, resetting to quest...");
-			this.getConfig().set("primaryCommand", "quest");
-		}
-		else if(this.getConfig().getString("primaryCommand") == null)
+			if(!this.getConfig().getString("primaryCommand").equalsIgnoreCase("q") &&
+					!this.getConfig().getString("primaryCommand").equalsIgnoreCase("qu") &&
+					!this.getConfig().getString("primaryCommand").equalsIgnoreCase("quest") &&
+					!this.getConfig().getString("primaryCommand").equalsIgnoreCase("quests") &&
+					!this.getConfig().getString("primaryCommand").equalsIgnoreCase("qquests"))
+			{
+				Chat.logger("warning", "Your primary command must be q, qu, quest, quests, or qquests, resetting to quest...");
 				this.getConfig().set("primaryCommand", "quest");
+			}
+			else if(this.getConfig().getString("primaryCommand") == null)
+				this.getConfig().set("primaryCommand", "quest");
+		}
+		else
+			this.getConfig().set("primaryCommand", "quest");
 		
 		if(this.getConfig().getString("showMoreInfo") != "true" &&
 				this.getConfig().getString("showMoreInfo") != "false")
 			this.getConfig().set("showMoreInfo", true);
 		
-		Storage.autoUpdate = this.getConfig().getBoolean("autoUpdate");
-		Storage.tellMeYourUsingMyPlugin = this.getConfig().getBoolean("tellMeYourUsingMyPlugin");
-		Storage.primaryCommand = this.getConfig().getString("primaryCommand");
-		Storage.showMoreInfo = this.getConfig().getBoolean("showMoreInfo");
-		
-		this.saveConfig(this.cFile, this.config);
+		this.saveConfig();
 	}
-	
 	public void initializeQuestConfig() {
 		this.getQuestConfig();
-		
 		if(this.getQuestConfig().getKeys(false).size() < 1) {
 			this.getQuestConfig().options().copyDefaults(true);
 			
@@ -147,36 +150,33 @@ public class Config {
 				this.getQuestConfig().set("Diamonds!.onDrop.market.money", -50);
 				this.getQuestConfig().set("Diamonds!.onDrop.market.health", 0);
 				this.getQuestConfig().set("Diamonds!.onDrop.market.hunger", 0);
-				this.getQuestConfig().set("Diamonds!.onDrop.market.levelSet", 0);
 			
 			// Set onComplete Nodes
 				this.getQuestConfig().set("Diamonds!.onComplete.message", "Thanks! Now I can feed my lava dragon! ;)");
 				this.getQuestConfig().set("Diamonds!.onComplete.market.money", 500);
 				this.getQuestConfig().set("Diamonds!.onComplete.market.health", 0);
 				this.getQuestConfig().set("Diamonds!.onComplete.market.hunger", 0);
-				this.getQuestConfig().set("Diamonds!.onComplete.market.levelAdd", 1);
 				this.getQuestConfig().set("Diamonds!.onComplete.market.items", Arrays.asList("3 1", "4 5"));
 		}
-		this.saveConfig(this.qFile, this.quests);
+		this.saveQuestConfig();
 	}
 	
-	// Validate The Quest Configuration
 	public boolean validate(String questName, QuestWorker q) {
 		Integer tRoot = 0;
 		boolean rturn = true;
 		
-		if(this.getQuestConfig().getConfigurationSection(questName + ".tasks") == null)
+		if(qQuests.plugin.Config.getQuestConfig().getConfigurationSection(questName + ".tasks") == null)
 		{
 			Chat.logger("severe", "Quest " + questName + " disabled because the 'tasks' node does not exist!");
 			return false;
 		}
-		if(this.getQuestConfig().getConfigurationSection(questName + ".tasks").getKeys(false).size() < 1)
+		if(qQuests.plugin.Config.getQuestConfig().getConfigurationSection(questName + ".tasks").getKeys(false).size() < 1)
 		{
 			Chat.logger("severe", "Quest " + questName + " disabled because the 'tasks' node has no tasks!");
 			return false;
 		}
 		
-		for (Object taskNo : this.getQuestConfig().getConfigurationSection(questName + ".tasks").getKeys(false)) 
+		for (Object taskNo : qQuests.plugin.Config.getQuestConfig().getConfigurationSection(questName + ".tasks").getKeys(false)) 
 		{
 			try
 		    {
@@ -233,24 +233,24 @@ public class Config {
 		
 		// Check Proper Values For Nodes
 		/*
-		if(this.getQuestConfig().getInt(questName + ".setup.repeated") == 0 && this.getQuestConfig().getString(questName + ".setup.repeated") != null)
+		if(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".setup.repeated") == 0 && qQuests.plugin.Config.getQuestConfig().getString(questName + ".setup.repeated") != null)
 		{
 			Chat.logger("severe", "The 'setup.repeated' should not be a string! Disabling this quest...");
 			rturn = false;
 		}
-		if(this.getQuestConfig().getString(questName + ".setup.invisible") != "true" && this.getQuestConfig().getString(questName + ".setup.invisible") != "false" && this.getQuestConfig().getString(questName + ".setup.invisible") != null)
+		if(qQuests.plugin.Config.getQuestConfig().getString(questName + ".setup.invisible") != "true" && qQuests.plugin.Config.getQuestConfig().getString(questName + ".setup.invisible") != "false" && qQuests.plugin.Config.getQuestConfig().getString(questName + ".setup.invisible") != null)
 		{
 			Chat.logger("severe", "The 'setup.invisible' should not be a string, choose true or false! Disabling this quest...");
 			rturn = false;
 		}
-		if(this.getQuestConfig().getInt(questName + ".setup.delay") == 0 && this.getQuestConfig().getString(questName + ".setup.delay") != null)
+		if(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".setup.delay") == 0 && qQuests.plugin.Config.getQuestConfig().getString(questName + ".setup.delay") != null)
 		{
 			Chat.logger("severe", "The 'setup.delay' should not be a string! Disabling this quest...");
 			rturn = false;
 		}
 		*/
 		
-		for (Object taskNo : this.getQuestConfig().getConfigurationSection(questName + ".tasks").getKeys(false)) 
+		for (Object taskNo : qQuests.plugin.Config.getQuestConfig().getConfigurationSection(questName + ".tasks").getKeys(false)) 
 		{
 			try
 		    {
@@ -276,22 +276,21 @@ public class Config {
 					rturn = false;
 				}
 		}
-		this.saveConfig(this.qFile, this.quests);
+		this.saveQuestConfig();
 		if(!rturn)
 			return false;
 		else
 			return true;
 	}
 	
-	// For Debugging
 	public void dumpQuestConfig()
 	{
 		Chat.logger("warning", "################################################################");
 		Chat.logger("warning", "##################### Starting Config Dump #####################");
 		Chat.logger("warning", "################################################################");
 		
-		for (String o :this.getQuestConfig().getKeys(true))
-			Chat.logger("info", o + ": " + this.getQuestConfig().get(o));
+		for (String o : plugin.Config.getQuestConfig().getKeys(true))
+			Chat.logger("info", o + ": " + plugin.Config.getQuestConfig().get(o));
 		
 		Chat.logger("warning", "################################################################");
 		Chat.logger("warning", "###################### Ending Config Dump ######################");
