@@ -41,13 +41,20 @@ public class QuestWorker
 			BuildQuest quest = new BuildQuest(root);
 			
 			// Set Setup Variables
-			quest.repeated(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".setup.repeated"));
+			if(qQuests.plugin.Config.getQuestConfig().getString(questName + ".setup.repeated") == null)
+				quest.repeated(-1);
+			else
+				quest.repeated(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".setup.repeated"));
 			quest.invisible(qQuests.plugin.Config.getQuestConfig().getBoolean(questName + ".setup.invisible"));
 			quest.nextQuest(qQuests.plugin.Config.getQuestConfig().getString(questName + ".setup.nextQuest"));
 			quest.delay(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".setup.delay"));
 			
 			// Set Requirements Variables
-			quest.level(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".requirements.level"));
+			quest.levelMin(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".requirements.levelMin"));
+			if(qQuests.plugin.Config.getQuestConfig().getString(questName + ".requirements.levelMax") == null)
+				quest.levelMax(-1);
+			else
+				quest.levelMax(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".requirements.levelMax"));
 			
 			// Set Tasks Variables
 			int i=0;

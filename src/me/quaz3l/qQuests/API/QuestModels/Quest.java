@@ -13,7 +13,8 @@ public class Quest {
 	private int delay;
 	
 	// Requirements
-	private int level;
+	private int levelMin;
+	private int levelMax;
 	
 	// Tasks
 	private HashMap<Integer, Task> tasks = new HashMap<Integer, Task>();
@@ -31,7 +32,8 @@ public class Quest {
 		nextQuest = build.nextQuest();
 		delay = build.delay();
 		
-		level = build.level();
+		levelMin = build.levelMin();
+		levelMax = build.levelMax();
 		
 		tasks = build.tasks();
 		
@@ -55,8 +57,11 @@ public class Quest {
 		return this.delay;
 	}
 	
-	public final int level() {
-		return this.level;
+	public final int levelMin() {
+		return this.levelMin;
+	}
+	public final int levelMax() {
+		return this.levelMax;
 	}
 	
 	public final HashMap<Integer, Task> tasks() {

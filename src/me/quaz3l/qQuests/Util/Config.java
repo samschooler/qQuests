@@ -111,7 +111,7 @@ public class Config {
 				this.getQuestConfig().set("Diamonds!.setup.nextQuest", "");
 			
 			// Set Requirements Nodes
-				this.getQuestConfig().set("Diamonds!.requirements.level", 0);
+				this.getQuestConfig().set("Diamonds!.requirements.levelMin", 0);
 			
 			// Set Task Nodes
 				this.getQuestConfig().set("Diamonds!.tasks.0.type", "collect");
