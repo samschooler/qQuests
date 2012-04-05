@@ -17,7 +17,6 @@ import me.quaz3l.qQuests.Plugins.Signs;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Config;
 import me.quaz3l.qQuests.Util.Interwebs;
-import me.quaz3l.qQuests.Util.LegacyConverter;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
@@ -31,25 +30,23 @@ public class qQuests extends JavaPlugin
 	// General Setup
 	public static qQuests plugin;
 	public final Logger logger = Logger.getLogger(("Minecraft"));
-	public Config Config = new Config(this);
+	public Config Config;
 	public QuestAPI qAPI;
 	
-	
-	// Economy
+	// Services
 	public Economy economy = null;
 	public Permission permission = null;
 	
 	// Prefixes
 	public final String chatPrefix = ChatColor.AQUA + "[" + ChatColor.LIGHT_PURPLE + "qQuests" + ChatColor.AQUA + "] " + ChatColor.LIGHT_PURPLE + " ";
-	public final String prefix = "[qQuests] ";
+	public final String prefix = "[qQuests] ";	
 	
-	public boolean updateNotified = false;
-	
-	
+	// Super Variable
 	public qQuests() {
 		super();
 		qQuests.plugin = this;
 	}
+	
 	@Override
 	public void onDisable() 
 	{
@@ -59,53 +56,39 @@ public class qQuests extends JavaPlugin
 	@Override
 	public void onEnable() 
 	{
-		// Converts Old quests.yml
-		if(qQuests.plugin.Config.getQuestConfig().getString("0.info.name") != null)
-			LegacyConverter.convert();
+		// Setup Configuration
+		this.Config = new Config();
 		
-		// Initialize The Configuration File
-		Config.initializeConfig();
-		Config.initializeQuestConfig();
-		// Config.dumpQuestConfig();
+		// Setup Economy
+		this.setupEconomy();
 		
-		this.getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Runnable() {
-
-		    public void run() {
-		    	// Ping My Server
-		    	Interwebs.pingStatus();
-				
-				// Check For Update
-				Interwebs.checkForUpdates();
-		    }
-		}, 1L, (3 * 60 * 1200));
+		// Setup Permissions
+		this.setupPermissions();
+		
+		// Setup Quest Types
+		this.setupTaskTypes();
 		
 		// Get The API
 		this.qAPI = new QuestAPI();
 		
 		// Setup Player Profiles
-		qAPI.getProfiles().initializePlayerProfiles();
-		
-		// Find Economy
-		this.startEconomy();
-		
-		// Setup Permissions
-		this.setupPermissions();
-		
-		// Register Events
-		this.registerEvents();
+		this.qAPI.getProfiles().initializePlayerProfiles();
 		
 		// Build Quests
-		qAPI.getQuestWorker().buildQuests();
+		this.qAPI.getQuestWorker().buildQuests();
 		
-		//Start Stock qPlugins
-		stockPlugins();
+		//Setup Stock qPlugins
+		this.setupStockPlugins();
+		
+		// Check For Updates; Ping Server
+		Interwebs.repeat();
 		
 		// Notify Logger
 		Chat.logger("info", "by Quaz3l: Enabled");
 	}
 	
 	// Hooks Into The Economy Plugin
-	private void startEconomy()
+	private void setupEconomy()
 	{
 		if(getServer().getPluginManager().isPluginEnabled("Vault")) {
 			RegisteredServiceProvider<Economy> economyProvider =
@@ -152,8 +135,8 @@ public class qQuests extends JavaPlugin
 			Chat.logger("warning", "################################################################");
 		}
     }
-	// Register Events
-	private void registerEvents()
+	// Setup Task Types
+	private void setupTaskTypes()
 	{
 		// Collect Is Handled By The Command
 		getServer().getPluginManager().registerEvents(new Damage(), this);
@@ -168,16 +151,13 @@ public class qQuests extends JavaPlugin
 		getServer().getPluginManager().registerEvents(new Tame(), this);
 		
 		getServer().getPluginManager().registerEvents(new Enchant(), this);
-		
-		// Signs
-		getServer().getPluginManager().registerEvents(new Signs(), this);
 	}
 	
 	// Starts The Stock Plugins
-	private void stockPlugins()
+	private void setupStockPlugins()
 	{
 		qPluginCommands();
-		//qPluginSigns();
+		qPluginSigns();
 		//qPluginNPCs();
 	}
 	// Stock Plugins
@@ -191,7 +171,13 @@ public class qQuests extends JavaPlugin
 			getCommand("QUESTS").setExecutor(cmd);
 			getCommand("qQUESTS").setExecutor(cmd);
 	}
-	// To connect to qQuests put this function in your plugin
+	private void qPluginSigns()
+	{
+		// Setup Signs
+		getServer().getPluginManager().registerEvents(new Signs(), this);
+	}
+	
+	// To connect to qQuests put this function in your plugin;
 	// And "depend: [qQuests]" in your plugin.yml
 	/*
 	public qQuests qQuests = null;

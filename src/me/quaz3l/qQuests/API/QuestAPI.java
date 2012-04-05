@@ -61,7 +61,6 @@ public class QuestAPI {
 	// Quest Functions
 	public Integer giveQuest(Player player)
     {
-		Integer endResult = 0;
 		// Check For Active Quest
 		if(qQuests.plugin.qAPI.hasActiveQuest(player))
 			return 3;
@@ -77,6 +76,7 @@ public class QuestAPI {
 		Object[] values = this.getVisibleQuests().values().toArray();
 		Integer num_o = gen.nextInt(values.length);
 		Integer num = num_o;
+		Integer u = 0;
 		boolean b = false;
 		boolean first = true;
 		
@@ -94,23 +94,13 @@ public class QuestAPI {
 				num = 0;
 			Quest q = (Quest) values[num];
 			
-			// Check If The Quest Is Repeatable For The Player
-			if(q.repeated() == -1 || (q.repeated() - qQuests.plugin.qAPI.getProfiles().getInt(player, "FinishCount." + q.name()) >= 0))
-			{
-				// Rewards/Fees
-				Integer u = q.onJoin().feeReward(player);
-				if(u == 0)
-				{
-					// Start Quest
-					startQuest(player, q);
-					
-					b = true;
-					return 0;
-				}
-				else endResult = u;
-			}
+			// Try To Give The Quest
+			u = this.giveQuest(player, q.name(), true);
+			if(u == 0)
+				return u;
+			else continue;
 		}
-		return endResult;
+		return u;
     }
 	
 	public Integer giveQuest(Player player, String quest, boolean onlyVisible)
@@ -118,11 +108,12 @@ public class QuestAPI {
 		// Check If The Player Already Has A Quest
 		if(qQuests.plugin.qAPI.hasActiveQuest(player))
 			return 3;
+		
 		// Check If The Player Can Get Quests
 		if(Storage.cannotGetQuests.contains(player))
 			return 10;
-		Quest q;
 		
+		Quest q;
 		// Choose The Quest Map To Get Quests From
 		if(onlyVisible)
 			q = this.getVisibleQuests().get(quest);
@@ -132,9 +123,15 @@ public class QuestAPI {
 		// Check If Is A Valid Quest
 		if(q == null)
 			return 1;
+		
+		// Give/Take Rewards/Fees
 		Integer u = q.onJoin().feeReward(player);
 		if(u != 0)
 			return u;
+		
+		// Check If The Quest Is Repeatable For The Player
+		if(q.repeated() > -1 && (q.repeated() - qQuests.plugin.qAPI.getProfiles().getInt(player, "FinishCount." + q.name()) <= 0))
+			return 11;
 		
 		// Start Quest
 		startQuest(player, q);

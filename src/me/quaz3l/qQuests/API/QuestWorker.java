@@ -26,7 +26,7 @@ public class QuestWorker
 	{
     	Storage.quests.clear();
     	Storage.currentQuests.clear();
-    	qQuests.plugin.Config.reloadQuestConfig();
+    	qQuests.plugin.Config.loadConfigs();
     	
 		for (Object questName :
 			qQuests.plugin.Config.getQuestConfig()

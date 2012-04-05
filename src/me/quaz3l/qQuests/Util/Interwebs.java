@@ -3,9 +3,7 @@ package me.quaz3l.qQuests.Util;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import me.quaz3l.qQuests.qQuests;
@@ -14,6 +12,21 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Interwebs {
+	private static boolean updateNotified = false;
+	
+	public static void repeat()
+	{
+		qQuests.plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(qQuests.plugin, new Runnable() {
+
+		    public void run() {
+		    	// Ping My Server
+		    	pingStatus();
+				
+				// Check For Update
+				checkForUpdates();
+		    }
+		}, 1L, (3 * 60 * 1200));
+	}
 	public static void checkForUpdates()
 	{
 		File latestFile = newTempFile("http://www.mycube.co/qQuests/latest.yml");
@@ -31,7 +44,7 @@ public class Interwebs {
 			                latestVersion[1] > currentVersion[1] ||
 			                latestVersion[2] > currentVersion[2])
 			{
-				if(!qQuests.plugin.updateNotified)
+				if(!updateNotified)
 				{
 					Chat.logger("warning", "################################################################");
 					Chat.logger("warning", "####################### UPDATE AVALIBLE! #######################");
@@ -80,15 +93,8 @@ public class Interwebs {
 					return true;
 				}
 				else
-				{
-					Chat.logger("info", "Server Failed To Connect... Thank You For Trying Though! :)");
 					urlConn.disconnect();
-				}
-			} catch (final MalformedURLException e1) {
-				e1.printStackTrace();
-			} catch (final IOException e) {
-				e.printStackTrace();
-			}
+			} catch (Exception e) {}
 		}
 		return false;
 	}
@@ -112,9 +118,7 @@ public class Interwebs {
 	                fout.close();
 	 
 	                return file;
-	        } 
-	        catch(MalformedURLException e) {} 
-	        catch(IOException e) {}
+	        } catch (Exception e) {}
 	 
 	        return null;
 	}
@@ -133,10 +137,8 @@ public class Interwebs {
 	 
 	                in.close();
 	                fout.close();
-	        } catch(MalformedURLException e) {
+	        } catch(Exception e) {
 	        	return false;
-	        } catch(IOException e) {
-				return false;
 	        }
 	        return true;
 	}
