@@ -26,7 +26,7 @@ public class QuestWorker
 	{
     	Storage.quests.clear();
     	Storage.currentQuests.clear();
-    	qQuests.plugin.Config.reloadQuestConfig();
+    	qQuests.plugin.Config.loadConfigs();
     	
 		for (Object questName :
 			qQuests.plugin.Config.getQuestConfig()
@@ -45,6 +45,9 @@ public class QuestWorker
 			quest.invisible(qQuests.plugin.Config.getQuestConfig().getBoolean(questName + ".setup.invisible"));
 			quest.nextQuest(qQuests.plugin.Config.getQuestConfig().getString(questName + ".setup.nextQuest"));
 			quest.delay(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".setup.delay"));
+			
+			// Set Requirements Variables
+			quest.level(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".requirements.level"));
 			
 			// Set Tasks Variables
 			int i=0;
@@ -93,14 +96,16 @@ public class QuestWorker
 			String[] strs = {""};
 			// Set onJoin Variables
 			BuildonSomething BuildonJoin = new BuildonSomething();
-			BuildonJoin.message(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onDrop.message"));
-			BuildonJoin.money(qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".onDrop.market.money"));
-			BuildonJoin.health(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.health"));
-			BuildonJoin.hunger(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.hunger"));
+			BuildonJoin.message(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onJoin.message"));
+			BuildonJoin.money(qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".onJoin.market.money"));
+			BuildonJoin.health(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.health"));
+			BuildonJoin.hunger(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.hunger"));
+			BuildonJoin.levelAdd(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.levelAdd"));
+			BuildonJoin.levelSet(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.levelSet"));
 			i=0;
-			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onDrop.market.items") != null)
+			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onJoin.market.items") != null)
 			{
-				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onDrop.market.items")) {
+				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onJoin.market.items")) {
 					strs = s.split(" ");
 					
 					if(Material.matchMaterial(strs[0]) != null)
@@ -114,13 +119,13 @@ public class QuestWorker
 						}
 						catch(Exception e)
 						{
-							Chat.logger("severe", "The 'onDrop' rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest...");
+							Chat.logger("severe", "The 'onJoin' rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest...");
 							continue;
 						}
 					}
 					else
 					{
-						Chat.logger("severe", "The 'onDrop' rewards/fees of '" + root + "' does not have valid material ids! Disabling this quest...");
+						Chat.logger("severe", "The 'onJoin' rewards/fees of '" + root + "' does not have valid material ids! Disabling this quest...");
 						continue;
 					}
 					i++;
@@ -134,6 +139,8 @@ public class QuestWorker
 			BuildonDrop.money(qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".onDrop.market.money"));
 			BuildonDrop.health(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.health"));
 			BuildonDrop.hunger(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.hunger"));
+			BuildonDrop.levelAdd(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.levelAdd"));
+			BuildonDrop.levelSet(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.levelSet"));
 			i=0;
 			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onDrop.market.items") != null)
 			{
@@ -167,14 +174,16 @@ public class QuestWorker
 			
 			// Set onComplete Variables
 			BuildonSomething BuildonComplete = new BuildonSomething();
-			BuildonComplete.message(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onDrop.message"));
-			BuildonComplete.money(qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".onDrop.market.money"));
-			BuildonComplete.health(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.health"));
-			BuildonComplete.hunger(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.hunger"));
+			BuildonComplete.message(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onComplete.message"));
+			BuildonComplete.money(qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".onComplete.market.money"));
+			BuildonComplete.health(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.health"));
+			BuildonComplete.hunger(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.hunger"));
+			BuildonComplete.levelAdd(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.levelAdd"));
+			BuildonComplete.levelSet(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.levelSet"));
 			i=0;
-			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onDrop.market.items") != null)
+			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onComplete.market.items") != null)
 			{
-				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onDrop.market.items")) {
+				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onComplete.market.items")) {
 					strs = s.split(" ");
 					
 					if(Material.matchMaterial(strs[0]) != null)
@@ -188,13 +197,13 @@ public class QuestWorker
 						}
 						catch(Exception e)
 						{
-							Chat.logger("severe", "The 'onDrop' rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest...");
+							Chat.logger("severe", "The 'onComplete' rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest...");
 							continue;
 						}
 					}
 					else
 					{
-						Chat.logger("severe", "The 'onDrop' rewards/fees of '" + root + "' does not have valid material ids! Disabling this quest...");
+						Chat.logger("severe", "The 'onComplete' rewards/fees of '" + root + "' does not have valid material ids! Disabling this quest...");
 						continue;
 					}
 					i++;

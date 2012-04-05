@@ -9,17 +9,17 @@ import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.QuestModels.Quest;
 import me.quaz3l.qQuests.API.TaskTypes.Collect;
 import me.quaz3l.qQuests.Util.Chat;
-import me.quaz3l.qQuests.Util.PlayerProfiles;
+import me.quaz3l.qQuests.Util.Profiles;
 import me.quaz3l.qQuests.Util.Storage;
 import me.quaz3l.qQuests.Util.Texts;
 
 public class QuestAPI {
 	private QuestWorker QuestWorker;
-	private PlayerProfiles Profiles;
+	private Profiles Profiles;
 	
 	public QuestAPI() {
 		this.QuestWorker = new QuestWorker();
-		this.Profiles = new PlayerProfiles();
+		this.Profiles = new Profiles();
 	}
 	
 	public QuestWorker getQuestWorker() 
@@ -27,7 +27,7 @@ public class QuestAPI {
 		return QuestWorker;
 	}
 	
-	public PlayerProfiles getProfiles() 
+	public Profiles getProfiles() 
 	{
 		return Profiles;
 	}
@@ -61,7 +61,6 @@ public class QuestAPI {
 	// Quest Functions
 	public Integer giveQuest(Player player)
     {
-		Integer endResult = 0;
 		// Check For Active Quest
 		if(qQuests.plugin.qAPI.hasActiveQuest(player))
 			return 3;
@@ -75,10 +74,11 @@ public class QuestAPI {
 		// Generate Random Starting Point
 		Random gen = new Random();
 		Object[] values = this.getVisibleQuests().values().toArray();
-		Integer num_o = gen.nextInt(values.length);
-		Integer num = num_o;
+		int num_o = gen.nextInt(values.length);
+		int num = num_o;
 		boolean b = false;
 		boolean first = true;
+		int u = 0;
 		
 		// Loop Until The Player Gets A Quest, Or Goes Through All The Quests
 		while(b == false)
@@ -94,23 +94,15 @@ public class QuestAPI {
 				num = 0;
 			Quest q = (Quest) values[num];
 			
-			// Check If The Quest Is Repeatable For The Player
-			if(q.repeated() == -1 || (q.repeated() - qQuests.plugin.qAPI.getProfiles().getInt(player, "FinishCount." + q.name()) >= 0))
-			{
-				// Rewards/Fees
-				Integer u = q.onJoin().feeReward(player);
-				if(u == 0)
-				{
-					// Start Quest
-					startQuest(player, q);
-					
-					b = true;
-					return 0;
-				}
-				else endResult = u;
-			}
+			// Attempt To Give Quest
+			u = this.giveQuest(player, q.name(), true);
+			if(u != 0)
+				continue;
+			
+			b = true;
+			return u;
 		}
-		return endResult;
+		return u;
     }
 	
 	public Integer giveQuest(Player player, String quest, boolean onlyVisible)
@@ -132,6 +124,13 @@ public class QuestAPI {
 		// Check If Is A Valid Quest
 		if(q == null)
 			return 1;
+		
+		if(q.repeated() != -1 && (q.repeated() - qQuests.plugin.qAPI.getProfiles().getInt(player, "FinishCount." + q.name()) <= 0))
+			return 11;
+		
+		if(q.level() > qQuests.plugin.qAPI.getProfiles().getInt(player, "Level"))
+			return 12;
+		
 		Integer u = q.onJoin().feeReward(player);
 		if(u != 0)
 			return u;

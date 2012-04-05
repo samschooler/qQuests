@@ -14,6 +14,22 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Interwebs {
+	private static boolean updateNotified = false;
+	
+	public static void repeatCheck()
+	{
+		qQuests.plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(qQuests.plugin, new Runnable() {
+
+		    public void run() {
+		    	// Ping My Server
+		    	Interwebs.pingStatus();
+				
+				// Check For Update
+				Interwebs.checkForUpdates();
+		    }
+		}, 1L, (3 * 60 * 1200));
+	}
+	
 	public static void checkForUpdates()
 	{
 		File latestFile = newTempFile("http://www.mycube.co/qQuests/latest.yml");
@@ -31,12 +47,12 @@ public class Interwebs {
 			                latestVersion[1] > currentVersion[1] ||
 			                latestVersion[2] > currentVersion[2])
 			{
-				if(!qQuests.plugin.updateNotified)
+				if(updateNotified)
 				{
 					Chat.logger("warning", "################################################################");
 					Chat.logger("warning", "####################### UPDATE AVALIBLE! #######################");
 					Chat.logger("warning", "################################################################");
-					if(qQuests.plugin.getConfig().getBoolean("autoUpdate"))
+					if(Storage.autoUpdate)
 					{
 						if(updatePlugin(latestConfig.getString("Source"), qQuests.plugin.getDataFolder().getPath() + ".jar"))
 						{
@@ -68,76 +84,71 @@ public class Interwebs {
 		}
 	}
 	public static boolean pingStatus() {
-		if(qQuests.plugin.getConfig().getBoolean("tellMeYourUsingMyPlugin"))
+		if(Storage.tellMeYourUsingMyPlugin)
 		{
-			try {
+			try 
+			{
 				final URL url = new URL("http://mycube.co/qQuests/report.php?dickMove=noThanks&port=" + qQuests.plugin.getServer().getPort() + "&version=" + qQuests.plugin.getDescription().getVersion() + "&onlinePlayerCount=" + qQuests.plugin.getServer().getOnlinePlayers().length);
 				final HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
 				urlConn.setConnectTimeout(1000 * 10); // mTimeout is in seconds
 				urlConn.connect();
-				if (urlConn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-					Chat.logger("info", "Server was pung... Thank You! :)");
+				if (urlConn.getResponseCode() == HttpURLConnection.HTTP_OK)
 					return true;
-				}
 				else
-				{
-					Chat.logger("info", "Server Failed To Connect... Thank You For Trying Though! :)");
 					urlConn.disconnect();
-				}
-			} catch (final MalformedURLException e1) {
-				e1.printStackTrace();
-			} catch (final IOException e) {
-				e.printStackTrace();
-			}
+			} 
+			catch (final Exception e) {} 
 		}
 		return false;
 	}
 	private static File newTempFile(String site)
 	{
-	        try {
-	                File file = File.createTempFile("latest", "");
-	                file.deleteOnExit();
-	 
-	                BufferedInputStream in = new BufferedInputStream(new URL(site).openStream());
-	                FileOutputStream fout = new FileOutputStream(file);
-	 
-	                byte data[] = new byte[1024]; //Download 1 KB at a time
-	                int count;
-	                while((count = in.read(data, 0, 1024)) != -1)
-	                {
-	                        fout.write(data, 0, count);
-	                }
-	 
-	                in.close();
-	                fout.close();
-	 
-	                return file;
-	        } 
-	        catch(MalformedURLException e) {} 
-	        catch(IOException e) {}
-	 
-	        return null;
+		try {
+			File file = File.createTempFile("latest", "");
+			file.deleteOnExit();
+			
+			BufferedInputStream in = new BufferedInputStream(new URL(site).openStream());
+			FileOutputStream fout = new FileOutputStream(file);
+			
+			byte data[] = new byte[1024]; //Download 1 KB at a time
+			int count;
+			while((count = in.read(data, 0, 1024)) != -1)
+			{
+				fout.write(data, 0, count);
+			}
+			
+			in.close();
+			fout.close();
+			
+			return file;
+		} 
+		catch(MalformedURLException e) {} 
+		catch(IOException e) {}
+		return null;
 	}
 	private static boolean updatePlugin(String site, String destination)
 	{
-	        try {
-	                BufferedInputStream in = new BufferedInputStream(new URL(site).openStream());
-	                FileOutputStream fout = new FileOutputStream(destination);
-	 
-	                byte data[] = new byte[1024]; //Download 1 KB at a time
-	                int count;
-	                while((count = in.read(data, 0, 1024)) != -1)
-	                {
-	                        fout.write(data, 0, count);
-	                }
-	 
-	                in.close();
-	                fout.close();
-	        } catch(MalformedURLException e) {
-	        	return false;
-	        } catch(IOException e) {
-				return false;
-	        }
-	        return true;
+		try 
+		{
+			BufferedInputStream in = new BufferedInputStream(new URL(site).openStream());
+			FileOutputStream fout = new FileOutputStream(destination);
+			
+			byte data[] = new byte[1024]; //Download 1 KB at a time
+			int count;
+			while((count = in.read(data, 0, 1024)) != -1)
+			{
+				fout.write(data, 0, count);
+			}
+			
+			in.close();
+			fout.close();
+		} 
+		catch(MalformedURLException e) {
+			return false;
+		} 
+		catch(IOException e) {
+			return false;
+		}
+		return true;
 	}
 }

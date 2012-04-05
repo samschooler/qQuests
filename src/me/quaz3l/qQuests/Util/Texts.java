@@ -1,13 +1,11 @@
 package me.quaz3l.qQuests.Util;
 
-import me.quaz3l.qQuests.qQuests;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public class Texts {
 	// Commands
-	public static String PRIMARY_COMMAND = "/" + qQuests.plugin.Config.getConfig().getString("primaryCommand");;
+	public static String PRIMARY_COMMAND = "/" + Storage.primaryCommand;
 	public static final String GIVE_COMMAND = "give";
 	public static final String INFO_COMMAND = "info";
 	public static final String TASKS_COMMAND = "tasks";
