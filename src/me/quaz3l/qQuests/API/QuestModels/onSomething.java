@@ -14,6 +14,10 @@ public class onSomething {
 	private double money;
 	private int health;
 	private int hunger;
+
+	private int levelAdd = 0;
+	private int levelSet = 0;
+	
 	private HashMap<Integer, ArrayList<Integer>> items = new HashMap<Integer, ArrayList<Integer>>();
 	private HashMap<Integer, String> permissionsAdd = new HashMap<Integer, String>();
 	private HashMap<Integer, String> permissionsTake = new HashMap<Integer, String>();
@@ -38,6 +42,14 @@ public class onSomething {
 	public int hunger() {
 		return this.hunger;
 	}
+
+	public int levelAdd() {
+		return this.levelAdd;
+	}
+	public int levelSet() {
+		return this.levelSet;
+	}
+	
 	public HashMap<Integer, ArrayList<Integer>> items() {
 		return this.items;
 	}

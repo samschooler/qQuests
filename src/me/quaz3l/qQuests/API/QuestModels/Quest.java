@@ -31,7 +31,7 @@ public class Quest {
 		nextQuest = build.nextQuest();
 		delay = build.delay();
 		
-		
+		level = build.level();
 		
 		tasks = build.tasks();
 		

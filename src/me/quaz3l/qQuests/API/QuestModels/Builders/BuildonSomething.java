@@ -10,6 +10,10 @@ public class BuildonSomething {
 	private double money = 0;
 	private int health = 0;
 	private int hunger = 0;
+	
+	private int levelAdd = 0;
+	private int levelSet = 0;
+	
 	private HashMap<Integer, ArrayList<Integer>> items = new HashMap<Integer, ArrayList<Integer>>();
 	private HashMap<Integer, String> permissionsAdd = new HashMap<Integer, String>();
 	private HashMap<Integer, String> permissionsTake = new HashMap<Integer, String>();
@@ -35,6 +39,15 @@ public class BuildonSomething {
 		return this;
 	}
 	
+	public BuildonSomething levelAdd(int i) {
+		this.levelAdd = i;
+		return this;
+	}
+	public BuildonSomething levelSet(int i) {
+		this.levelSet = i;
+		return this;
+	}
+	
 	public String message() {
 		return this.message;
 	}
@@ -47,6 +60,14 @@ public class BuildonSomething {
 	public int hunger() {
 		return this.hunger;
 	}
+	
+	public int levelAdd() {
+		return this.levelAdd;
+	}
+	public int levelSet() {
+		return this.levelSet;
+	}
+	
 	public HashMap<Integer, ArrayList<Integer>> items() {
 		return this.items;
 	}
