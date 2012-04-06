@@ -35,7 +35,7 @@ public class QuestWorker
 			String root = questName.toString();
 			
 			// Validate The Quest
-			if(!qQuests.plugin.Config.validate(root, this)) 
+			if(!qQuests.plugin.Config.validate(root)) 
 				continue;
 			
 			BuildQuest quest = new BuildQuest(root);

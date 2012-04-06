@@ -6,7 +6,7 @@ import java.util.HashMap;
 import me.quaz3l.qQuests.API.QuestModels.onSomething;
 
 public class BuildonSomething {
-	private String message = "";
+	private String message = "Quest Message!";
 	private double money = 0;
 	private int health = 0;
 	private int hunger = 0;

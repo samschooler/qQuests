@@ -6,9 +6,10 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 import me.quaz3l.qQuests.qQuests;
-import me.quaz3l.qQuests.API.QuestWorker;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.EntityType;
 
 public class Config {	
 	// Configuration Files Variables
@@ -141,6 +142,392 @@ public class Config {
 		this.saveQuestConfig();
 	}
 	
+	public boolean validate(String quest)
+	{
+		boolean rturn = true;
+		
+		// Setup
+		if(this.getQuestConfig().getString(quest + ".setup.repeated") != null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".setup.repeated"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'setup.repeated' node of quest '" + quest + "' is not number!");
+				rturn = false;
+			}
+		}
+		if(this.getQuestConfig().getString(quest + ".setup.invisible") != null && this.getQuestConfig().getString(quest + ".setup.invisible") != "true" && this.getQuestConfig().getString(quest + ".setup.invisible") != "false")
+		{
+			Chat.attention(2);
+			Chat.logger("severe", "The 'setup.invisible' node of quest '" + quest + "' is not a boolean statement [true/false]!");
+			rturn = false;
+		}
+		if(this.getQuestConfig().getString(quest + ".setup.delay") != null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".setup.delay"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'setup.delay' node of quest '" + quest + "' is not a number!");
+				rturn = false;
+			}
+		}
+		if(this.getQuestConfig().getString(quest + ".setup.nextQuest") != null)
+		{
+			
+		}
+		
+		// Requirements
+		if(this.getQuestConfig().getString(quest + ".requirements.levelMin") != null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".requirements.levelMin"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'requirements.levelMin' node of quest '" + quest + "' is not number!");
+				rturn = false;
+			}
+		}
+		if(this.getQuestConfig().getString(quest + ".requirements.levelMax") != null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".requirements.levelMax"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'requirements.levelMax' node of quest '" + quest + "' is not number!");
+				rturn = false;
+			}
+		}
+		
+		// Tasks
+		for(Object o : this.getQuestConfig().getConfigurationSection(quest + ".tasks").getKeys(false))
+		{
+			if(this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".type") == null)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'tasks." + o + ".type' node of quest '" + quest + "' is not defined, adding default now!");
+				this.getQuestConfig().set(quest + ".tasks." + o.toString() + ".type", "UNDEFINED");
+				rturn = false;
+			}
+			else
+				if(!this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".type").equalsIgnoreCase("collect") &&
+						!this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".type").equalsIgnoreCase("destroy") &&
+						!this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".type").equalsIgnoreCase("damage") &&
+						!this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".type").equalsIgnoreCase("place") &&
+						!this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".type").equalsIgnoreCase("kill") &&
+						!this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".type").equalsIgnoreCase("kill_player") &&
+						!this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".type").equalsIgnoreCase("enchant") &&
+						!this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".type").equalsIgnoreCase("tame"))
+				{
+					Chat.attention(2);
+					Chat.logger("severe", "The 'tasks." + o + ".type' node of quest '" + quest + "' is not a valid task type!");
+					rturn = false;
+				}
+			if(this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".id") != null)
+			{
+				if(this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".type").equalsIgnoreCase("collect") ||
+						this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".type").equalsIgnoreCase("destroy") ||
+						this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".type").equalsIgnoreCase("damage") ||
+						this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".type").equalsIgnoreCase("place") ||
+						this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".type").equalsIgnoreCase("enchant"))
+				{
+					try
+					{
+						Integer.parseInt(this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".id"));
+					}
+					catch(NumberFormatException e)
+					{
+						Chat.attention(2);
+						Chat.logger("severe", "The 'tasks." + o.toString() + ".id' node of quest '" + quest + "', it needs to be a number for this task type, it is not number!");
+						rturn = false;
+					}
+				}
+				else if(this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".type").equalsIgnoreCase("kill") ||
+						this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".type").equalsIgnoreCase("tame"))
+				{
+					if(EntityType.fromName(this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".id")) == null)
+					{
+						Chat.attention(2);
+						Chat.logger("severe", "The 'tasks." + o.toString() + ".id' node of quest '" + quest + "', it needs to be a valid entity name for this task type, it is not a valid entity!");
+						rturn = false;
+					}
+				}
+			}
+			else
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'tasks." + o.toString() + ".id' node of quest '" + quest + "' is not defined!");
+				this.getQuestConfig().set(quest + ".tasks." + o.toString() + ".id", "UNDEFINED");
+				rturn = false;
+			}
+			if(this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".display") == null)
+			{
+				Chat.logger("severe", "The 'tasks." + o.toString() + ".display' node of quest '" + quest + "', it needs to be defined!");
+				this.getQuestConfig().set(quest + ".tasks." + o.toString() + ".display", "UNDEFINED");
+				rturn = false;
+			}
+			if(this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".amount") != null)
+			{
+				try
+				{
+					Integer.parseInt(this.getQuestConfig().getString(quest + ".tasks." + o.toString() + ".amount"));
+				}
+				catch(NumberFormatException e)
+				{
+					Chat.attention(2);
+					Chat.logger("severe", "The 'tasks." + o.toString() + ".amount' node of quest '" + quest + "' is not number!");
+					rturn = false;
+				}
+			}
+			else
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'tasks." + o.toString() + ".amount' node of quest '" + quest + "' is not defined!");
+				this.getQuestConfig().set(quest + ".tasks." + o.toString() + ".amount", "UNDEFINED");
+				rturn = false;
+			}
+		}
+		
+		// onJoin
+		if(this.getQuestConfig().getString(quest + ".onJoin.message") == null)
+		{
+			Chat.attention(2);
+			Chat.logger("severe", "The 'onJoin.message' node of quest '" + quest + "' is not defined!");
+			this.getQuestConfig().set(quest + ".onJoin.message", "UNDEFINED");
+			rturn = false;
+		}
+		if(this.getQuestConfig().getString(quest + ".onJoin.market.money") != null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".onJoin.market.money"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'onJoin.market.money' node of quest '" + quest + "', it needs to be a number!");
+				rturn = false;
+			}
+		}
+		if(this.getQuestConfig().getString(quest + ".onJoin.market.health") != null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".onJoin.market.health"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'onJoin.market.health' node of quest '" + quest + "', it needs to be a number!");
+				rturn = false;
+			}
+		}
+		if(this.getQuestConfig().getString(quest + ".onJoin.market.hunger") == null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".onJoin.market.hunger"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'onJoin.market.hunger' node of quest '" + quest + "', it needs to be a number!");
+				rturn = false;
+			}
+		}
+		if(this.getQuestConfig().getStringList(quest + ".onJoin.market.items").isEmpty())
+		{
+			String[] strs = {""};
+			for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(quest + ".onJoin.market.items")) {
+				strs = s.split(" ");
+				
+				if(Material.matchMaterial(strs[0]) != null)
+				{
+					try
+					{
+						Integer.parseInt(strs[0]);
+						Integer.parseInt(strs[1]);
+					}
+					catch(Exception e)
+					{
+						Chat.logger("severe", "The 'onJoin' rewards/fees of '" + quest + "' are not correctly formatted! Disabling this quest...");
+						continue;
+					}
+				}
+				else
+				{
+					Chat.logger("severe", "The 'onJoin' rewards/fees of '" + quest + "' does not have valid material ids! Disabling this quest...");
+					continue;
+				}
+			}
+		}
+		
+		// onDrop
+		if(this.getQuestConfig().getString(quest + ".onDrop.message") == null)
+		{
+			Chat.attention(2);
+			Chat.logger("severe", "The 'onDrop.message' node of quest '" + quest + "' is not defined!");
+			this.getQuestConfig().set(quest + ".onDrop.message", "UNDEFINED");
+			rturn = false;
+		}
+		if(this.getQuestConfig().getString(quest + ".onDrop.market.money") != null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".onDrop.market.money"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'onDrop.market.money' node of quest '" + quest + "', it needs to be a number!");
+				rturn = false;
+			}
+		}
+		if(this.getQuestConfig().getString(quest + ".onDrop.market.health") != null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".onDrop.market.health"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'onDrop.market.health' node of quest '" + quest + "', it needs to be a number!");
+				rturn = false;
+			}
+		}
+		if(this.getQuestConfig().getString(quest + ".onDrop.market.hunger") == null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".onDrop.market.hunger"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'onDrop.market.hunger' node of quest '" + quest + "', it needs to be a number!");
+				rturn = false;
+			}
+		}
+		if(!this.getQuestConfig().getStringList(quest + ".onDrop.market.items").isEmpty())
+		{
+			String[] strs = {""};
+			for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(quest + ".onDrop.market.items")) {
+				strs = s.split(" ");
+				
+				if(Material.matchMaterial(strs[0]) != null)
+				{
+					try
+					{
+						Integer.parseInt(strs[0]);
+						Integer.parseInt(strs[1]);
+					}
+					catch(Exception e)
+					{
+						Chat.logger("severe", "The 'onDrop' rewards/fees of '" + quest + "' are not correctly formatted! Disabling this quest...");
+						continue;
+					}
+				}
+				else
+				{
+					Chat.logger("severe", "The 'onDrop' rewards/fees of '" + quest + "' does not have valid material ids! Disabling this quest...");
+					continue;
+				}
+			}
+		}
+		
+		// onComplete
+		if(this.getQuestConfig().getString(quest + ".onComplete.message") == null)
+		{
+			Chat.attention(2);
+			Chat.logger("severe", "The 'onComplete.message' node of quest '" + quest + "' is not defined!");
+			this.getQuestConfig().set(quest + ".onComplete.message", "UNDEFINED");
+			rturn = false;
+		}
+		if(this.getQuestConfig().getString(quest + ".onComplete.market.money") != null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".onComplete.market.money"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'onComplete.market.money' node of quest '" + quest + "', it needs to be a number!");
+				rturn = false;
+			}
+		}
+		if(this.getQuestConfig().getString(quest + ".onComplete.market.health") != null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".onComplete.market.health"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'onComplete.market.health' node of quest '" + quest + "', it needs to be a number!");
+				rturn = false;
+			}
+		}
+		if(this.getQuestConfig().getString(quest + ".onComplete.market.hunger") == null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".onComplete.market.hunger"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'onComplete.market.hunger' node of quest '" + quest + "', it needs to be a number!");
+				rturn = false;
+			}
+		}
+		if(this.getQuestConfig().getStringList(quest + ".onComplete.market.items").isEmpty())
+		{
+			String[] strs = {""};
+			for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(quest + ".onComplete.market.items")) {
+				strs = s.split(" ");
+				
+				if(Material.matchMaterial(strs[0]) != null)
+				{
+					try
+					{
+						Integer.parseInt(strs[0]);
+						Integer.parseInt(strs[1]);
+					}
+					catch(Exception e)
+					{
+						Chat.logger("severe", "The 'onComplete' rewards/fees of '" + quest + "' are not correctly formatted! Disabling this quest...");
+						continue;
+					}
+				}
+				else
+				{
+					Chat.logger("severe", "The 'onComplete' rewards/fees of '" + quest + "' does not have valid material ids! Disabling this quest...");
+					continue;
+				}
+			}
+		}
+		
+		// Return
+		this.saveQuestConfig();
+		return rturn;
+	}
+	/*
 	public boolean validate(String questName, QuestWorker q) {
 		Integer tRoot = 0;
 		boolean rturn = true;
@@ -211,25 +598,6 @@ public class Config {
 			rturn = false;
 		}
 		
-		// Check Proper Values For Nodes
-		/*
-		if(this.getQuestConfig().getInt(questName + ".setup.repeated") == 0 && this.getQuestConfig().getString(questName + ".setup.repeated") != null)
-		{
-			Chat.logger("severe", "The 'setup.repeated' should not be a string! Disabling this quest...");
-			rturn = false;
-		}
-		if(this.getQuestConfig().getString(questName + ".setup.invisible") != "true" && this.getQuestConfig().getString(questName + ".setup.invisible") != "false" && this.getQuestConfig().getString(questName + ".setup.invisible") != null)
-		{
-			Chat.logger("severe", "The 'setup.invisible' should not be a string, choose true or false! Disabling this quest...");
-			rturn = false;
-		}
-		if(this.getQuestConfig().getInt(questName + ".setup.delay") == 0 && this.getQuestConfig().getString(questName + ".setup.delay") != null)
-		{
-			Chat.logger("severe", "The 'setup.delay' should not be a string! Disabling this quest...");
-			rturn = false;
-		}
-		*/
-		
 		for (Object taskNo : this.getQuestConfig().getConfigurationSection(questName + ".tasks").getKeys(false)) 
 		{
 			try
@@ -262,6 +630,7 @@ public class Config {
 		else
 			return true;
 	}
+	*/
 	
 	// Base Functions
 	private YamlConfiguration loadConfig(File file) 
