@@ -30,6 +30,8 @@ public class Texts {
 	public static final String COMMANDS_NO_ACTIVE_QUEST = "You Don't Have An Active Quest! Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + GIVE_COMMAND + ChatColor.RED + " To Get One.";
 	public static final String HAS_ACTIVE_QUEST = "You Already Have An Active Quest!";
 	public static final String NO_ACTIVE_QUEST = "You Don't Have An Active Quest!";
+	public static final String LEVEL_TOO_HIGH = "Your Level Is To High!";
+	public static final String LEVEL_TOO_LOW = "Your Level Is To Low!";
 	
 	public static final String NOT_ENOUGH_FOR_QUEST = "You Don't Have Enough To Get This Quest!";
 	public static final String NOT_VALID_QUEST = "This Isn't A Valid Quest!";
@@ -65,6 +67,9 @@ public class Texts {
 	public static final String MONEY = "Money";
 	public static final String HEALTH = "Health";
 	public static final String FOOD = "Food";
+	public static final String COMMANDS = "Commands";
+	public static final String LEVELSET = "Set Level";
+	public static final String LEVELADD = "Add To Level";
 	public static final String ITEMS = "Items";
 	
 	// Not Enough Fees

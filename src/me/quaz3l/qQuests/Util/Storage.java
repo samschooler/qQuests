@@ -8,6 +8,22 @@ import me.quaz3l.qQuests.API.QuestModels.Quest;
 import org.bukkit.entity.Player;
 
 public class Storage {
+	// Config Values
+	public static boolean autoUpdate = true;
+	public static boolean tellMeYourUsingMyPlugin = true;
+	public static String primaryCommand = "quest";
+	
+	// 
+	public static boolean showMoney = true;
+	public static String moneyName = "";
+	public static boolean showHealth = true;
+	public static boolean showFood = true;
+	public static boolean showItems = true;
+	public static boolean showItemIds = true;
+	public static boolean showCommands = true;
+	public static boolean showLevelsAdded = true;
+	public static boolean showSetLevel = true;
+		
 	// Quests
 	public static HashMap<String, Quest> quests = new HashMap<String, Quest>();
 	public static HashMap<String, Quest> visibleQuests = new HashMap<String, Quest>();

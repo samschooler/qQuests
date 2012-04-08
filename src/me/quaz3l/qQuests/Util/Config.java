@@ -15,6 +15,7 @@ public class Config {
 	// Configuration Files Variables
 	private YamlConfiguration qConfig = null;
 	private File qFile = null;
+	private boolean qConfigIsNew = false;
 	private YamlConfiguration cConfig = null;
 	private File cFile = null;
 	
@@ -31,7 +32,7 @@ public class Config {
 		this.initializeQuestConfig();
 		
 		// Debugging
-		// Config.dumpQuestConfig();
+		//this.dumpQuestConfig();
 	}
 	
 	public void loadConfigs()
@@ -40,8 +41,12 @@ public class Config {
 		this.cConfig = loadConfig(this.cFile);
 		
 		this.qFile = new File(qQuests.plugin.getDataFolder(), "quests.yml");
+		if(!this.qFile.exists())
+			this.qConfigIsNew = true;
 		this.qConfig = loadConfig(this.qFile);
 	}
+	
+	// Getters
 	public YamlConfiguration getConfig()
 	{
 		if (cConfig == null) {
@@ -56,6 +61,8 @@ public class Config {
 		}
 		return qConfig;
 	}
+	
+	// Setters
 	public void saveConfig()
 	{
 		this.saveConfig(this.cFile, this.cConfig);
@@ -65,6 +72,7 @@ public class Config {
 		this.saveConfig(this.qFile, this.qConfig);
 	}
 	
+	// Starters
 	public void initializeConfig() {
 		this.getConfig();
 		this.getConfig().options().copyDefaults(true);
@@ -94,17 +102,62 @@ public class Config {
 		else
 			this.getConfig().set("primaryCommand", "quest");
 		
-		if(this.getConfig().getString("showMoreInfo") != "true" &&
-				this.getConfig().getString("showMoreInfo") != "false")
-			this.getConfig().set("showMoreInfo", true);
+		if(this.getConfig().getString("showItemIds") != "true" &&
+				this.getConfig().getString("showItemIds") != "false")
+			this.getConfig().set("showItemIds", true);
+		
+		if(this.getConfig().getString("info.showMoney") != "true" &&
+				this.getConfig().getString("info.showMoney") != "false")
+			this.getConfig().set("info.showMoney", true);
+		
+		if(this.getConfig().getString("info.moneyName") == null)
+			this.getConfig().set("info.moneyName", "coins");
+		
+		if(this.getConfig().getString("info.showHealth") != "true" &&
+				this.getConfig().getString("info.showHealth") != "false")
+			this.getConfig().set("info.showHealth", true);
+		
+		if(this.getConfig().getString("info.showFood") != "true" &&
+				this.getConfig().getString("info.showFood") != "false")
+			this.getConfig().set("info.showFood", true);
+		
+		if(this.getConfig().getString("info.showCommands") != "true" &&
+				this.getConfig().getString("info.showCommands") != "false")
+			this.getConfig().set("info.showCommands", true);
+		
+		if(this.getConfig().getString("info.showItems") != "true" &&
+				this.getConfig().getString("info.showItems") != "false")
+			this.getConfig().set("info.showItems", true);
+		
+		if(this.getConfig().getString("info.showLevelsAdded") != "true" &&
+				this.getConfig().getString("info.showLevelsAdded") != "false")
+			this.getConfig().set("info.showLevelsAdded", true);
+		
+		if(this.getConfig().getString("info.showSetLevel") != "true" &&
+				this.getConfig().getString("info.showSetLevel") != "false")
+			this.getConfig().set("info.showSetLevel", true);
+		
+		Storage.autoUpdate = this.getConfig().getBoolean("autoUpdate");
+		Storage.tellMeYourUsingMyPlugin = this.getConfig().getBoolean("tellMeYourUsingMyPlugin");
+		Storage.primaryCommand = this.getConfig().getString("primaryCommand");
+		Storage.showItemIds = this.getConfig().getBoolean("showItemIds");
+		Storage.showMoney = this.getConfig().getBoolean("showMoney");
+		Storage.moneyName = this.getConfig().getString("info.moneyName");
+		Storage.showHealth = this.getConfig().getBoolean("info.showHealth");
+		Storage.showFood = this.getConfig().getBoolean("info.showFood");
+		Storage.showCommands = this.getConfig().getBoolean("info.showCommands");
+		Storage.showItems = this.getConfig().getBoolean("info.showItems");
+		Storage.showLevelsAdded = this.getConfig().getBoolean("info.showLevelsAdded");
+		Storage.showSetLevel = this.getConfig().getBoolean("info.showSetLevel");
 		
 		this.saveConfig();
 	}
 	public void initializeQuestConfig() {
 		this.getQuestConfig();
-		if(this.getQuestConfig().getKeys(false).size() < 1) {
+		if(this.qConfigIsNew) 
+		{
+			this.qConfigIsNew = false;
 			this.getQuestConfig().options().copyDefaults(true);
-			
 			// Set Setup Nodes
 				this.getQuestConfig().set("Diamonds!.setup.repeated", -1);
 				this.getQuestConfig().set("Diamonds!.setup.invisible", false);
@@ -142,6 +195,8 @@ public class Config {
 		this.saveQuestConfig();
 	}
 	
+	
+	// Validator
 	public boolean validate(String quest)
 	{
 		boolean rturn = true;
@@ -374,6 +429,32 @@ public class Config {
 				}
 			}
 		}
+		if(this.getQuestConfig().getString(quest + ".onJoin.market.levelAdd") != null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".onJoin.market.levelAdd"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'onJoin.market.levelAdd' node of quest '" + quest + "', it needs to be a number!");
+				rturn = false;
+			}
+		}
+		if(this.getQuestConfig().getString(quest + ".onJoin.market.levelSet") != null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".onJoin.market.levelSet"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'onJoin.market.levelSet' node of quest '" + quest + "', it needs to be a number!");
+				rturn = false;
+			}
+		}
 		
 		// onDrop
 		if(this.getQuestConfig().getString(quest + ".onDrop.message") == null)
@@ -446,6 +527,32 @@ public class Config {
 					Chat.logger("severe", "The 'onDrop' rewards/fees of '" + quest + "' does not have valid material ids! Disabling this quest...");
 					continue;
 				}
+			}
+		}
+		if(this.getQuestConfig().getString(quest + ".onDrop.market.levelAdd") != null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".onDrop.market.levelAdd"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'onDrop.market.levelAdd' node of quest '" + quest + "', it needs to be a number!");
+				rturn = false;
+			}
+		}
+		if(this.getQuestConfig().getString(quest + ".onDrop.market.levelSet") != null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".onDrop.market.levelSet"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'onDrop.market.levelSet' node of quest '" + quest + "', it needs to be a number!");
+				rturn = false;
 			}
 		}
 		
@@ -522,115 +629,37 @@ public class Config {
 				}
 			}
 		}
+		if(this.getQuestConfig().getString(quest + ".onComplete.market.levelAdd") != null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".onComplete.market.levelAdd"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'onComplete.market.levelAdd' node of quest '" + quest + "', it needs to be a number!");
+				rturn = false;
+			}
+		}
+		if(this.getQuestConfig().getString(quest + ".onComplete.market.levelSet") != null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".onComplete.market.levelSet"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'onComplete.market.levelSet' node of quest '" + quest + "', it needs to be a number!");
+				rturn = false;
+			}
+		}
 		
 		// Return
 		this.saveQuestConfig();
 		return rturn;
 	}
-	/*
-	public boolean validate(String questName, QuestWorker q) {
-		Integer tRoot = 0;
-		boolean rturn = true;
-		
-		if(this.getQuestConfig().getConfigurationSection(questName + ".tasks") == null)
-		{
-			Chat.logger("severe", "Quest " + questName + " disabled because the 'tasks' node does not exist!");
-			return false;
-		}
-		if(this.getQuestConfig().getConfigurationSection(questName + ".tasks").getKeys(false).size() < 1)
-		{
-			Chat.logger("severe", "Quest " + questName + " disabled because the 'tasks' node has no tasks!");
-			return false;
-		}
-		
-		for (Object taskNo : this.getQuestConfig().getConfigurationSection(questName + ".tasks").getKeys(false)) 
-		{
-			try
-		    {
-				tRoot = Integer.parseInt(taskNo.toString().trim());
-		    }
-			catch(Exception e)
-			{
-				Chat.logger("severe", "Quest " + questName + " disabled because node 'tasks." + tRoot + "' is not a number!");
-				return false;
-			}
-			if(this.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type") == null) 
-			{
-				this.getQuestConfig().set(questName + ".tasks." + tRoot + ".type", "UNDEFINED");
-				rturn = false;
-			}
-			if(this.getQuestConfig().getString(questName + ".tasks." + tRoot + ".id") == null) 
-			{
-				this.getQuestConfig().set(questName + ".tasks." + tRoot + ".id", "UNDEFINED");
-				rturn = false;
-			}
-			if(this.getQuestConfig().getString(questName + ".tasks." + tRoot + ".display") == null) 
-			{
-				this.getQuestConfig().set(questName + ".tasks." + tRoot + ".display", "UNDEFINED");
-				rturn = false;
-			}
-			if(this.getQuestConfig().getInt(questName + ".tasks." + tRoot + ".amount") <= 0) 
-			{
-				this.getQuestConfig().set(questName + ".tasks." + tRoot + ".amount", -1);
-				Chat.logger("severe", "Quest " + questName + " disabled because node 'tasks." + tRoot + ".amount' is not set!");
-				rturn = false;
-			}
-		}
-		
-		// Check Required onJoin Nodes
-		if(this.getQuestConfig().getString(questName + ".onJoin.message") == null) 
-		{
-			Chat.logger("severe", "Quest " + questName + " disabled because node 'onJoin.message' is not set!");
-			rturn = false;
-		}
-		
-		// Check onDrop Nodes
-		if(this.getQuestConfig().getString(questName + ".onDrop.message") == null) 
-		{
-			Chat.logger("severe", "Quest " + questName + " disabled because node 'onDrop.message' is not set!");
-			rturn = false;
-		}
-		
-		// Check onComplete Nodes
-		if(this.getQuestConfig().getString(questName + ".onComplete.message") == null) 
-		{
-			Chat.logger("severe", "Quest " + questName + " disabled because node 'onComplete.message' is not set!");
-			rturn = false;
-		}
-		
-		for (Object taskNo : this.getQuestConfig().getConfigurationSection(questName + ".tasks").getKeys(false)) 
-		{
-			try
-		    {
-				tRoot = Integer.parseInt(taskNo.toString().trim());
-		    }
-			catch(Exception e)
-			{
-				Chat.logger("severe", "Quest " + questName + " disabled because node 'tasks." + tRoot + "' is not a number!");
-				return false;
-			}
-			String type = this.getQuestConfig().getString(questName + ".tasks." + tRoot + ".type");
-			if(type != null)
-				if(!type.equalsIgnoreCase("collect") &&
-						!type.equalsIgnoreCase("destroy") &&
-						!type.equalsIgnoreCase("damage") &&
-						!type.equalsIgnoreCase("place") &&
-						!type.equalsIgnoreCase("kill") &&
-						!type.equalsIgnoreCase("kill_player") &&
-						!type.equalsIgnoreCase("enchant") &&
-						!type.equalsIgnoreCase("tame"))
-				{
-					Chat.logger("severe", "Sorry but the task type '"+ type + "' of quest '" + questName + "' is not yet supported! Disabling quest...");
-					rturn = false;
-				}
-		}
-		this.saveQuestConfig();
-		if(!rturn)
-			return false;
-		else
-			return true;
-	}
-	*/
 	
 	// Base Functions
 	private YamlConfiguration loadConfig(File file) 
