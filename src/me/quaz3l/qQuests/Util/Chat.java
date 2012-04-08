@@ -101,6 +101,12 @@ public class Chat {
 				return Texts.COMMANDS_NO_ACTIVE_QUEST;
 			case 10:
 				return Texts.DELAY_NOT_FINISHED;
+			case 11:
+				return Texts.NO_QUESTS_AVAILABLE;
+			case 12:
+				return Texts.LEVEL_TOO_HIGH;
+			case 13:
+				return Texts.LEVEL_TOO_LOW;
 			default:
 				return "Unknown";
 			}
@@ -131,6 +137,12 @@ public class Chat {
 				return Texts.NO_ACTIVE_QUEST;
 			case 10:
 				return Texts.DELAY_NOT_FINISHED;
+			case 11:
+				return Texts.NO_QUESTS_AVAILABLE;
+			case 12:
+				return Texts.LEVEL_TOO_HIGH;
+			case 13:
+				return Texts.LEVEL_TOO_LOW;
 			default:
 				return "Unknown";
 			}

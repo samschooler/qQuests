@@ -1,5 +1,7 @@
 package me.quaz3l.qQuests.Plugins;
 
+import java.util.HashMap;
+
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.QuestModels.Quest;
 import me.quaz3l.qQuests.Util.Chat;
@@ -92,20 +94,39 @@ public class Commands implements CommandExecutor
 								Chat.noPrefixMessage((Player) s, "Repeatable: " + ChatColor.GREEN + (q.repeated() - qQuests.plugin.qAPI.getProfiles().getQuestsTimesCompleted((Player) s, q)) + " More Times");
 							Chat.noPrefixMessage((Player) s, "Tasks: " + ChatColor.YELLOW + Texts.PRIMARY_COMMAND + " " + Texts.TASKS_COMMAND + ChatColor.GREEN + " For The Tasks.");
 							Chat.noPrefixMessage((Player) s, "Rewards:");
-							if(qQuests.plugin.economy != null && q.onComplete().money() != 0)
-								Chat.noPrefixMessage((Player) s, "     " + Texts.MONEY + ": " + ChatColor.GREEN + q.onComplete().money());
-							if(q.onComplete().health() != 0)
-								Chat.noPrefixMessage((Player) s, "     " + Texts.HEALTH + ": " + ChatColor.GREEN + q.onComplete().health());
-							if(q.onComplete().hunger() != 0)
-								Chat.noPrefixMessage((Player) s, "     " + Texts.FOOD + ": " + ChatColor.GREEN + q.onComplete().hunger());
-							if(q.onComplete().items().size() > 0)
-							{
-								Chat.noPrefixMessage((Player) s, "     " + Texts.ITEMS + ":");
-								for(int i=0;i<(q.onComplete().items().size()); i++)
+							if(Storage.showMoney)
+								if(qQuests.plugin.economy != null && q.onComplete().money() != 0)
+									Chat.noPrefixMessage((Player) s, "     " + Texts.MONEY + ": " + ChatColor.GREEN + q.onComplete().money());
+							if(Storage.showHealth)
+								if(q.onComplete().health() != 0)
+									Chat.noPrefixMessage((Player) s, "     " + Texts.HEALTH + ": " + ChatColor.GREEN + q.onComplete().health());
+							if(Storage.showFood)
+								if(q.onComplete().hunger() != 0)
+									Chat.noPrefixMessage((Player) s, "     " + Texts.FOOD + ": " + ChatColor.GREEN + q.onComplete().hunger());
+							if(Storage.showLevelsAdded)
+								if(q.onComplete().levelAdd() != 0)
+									Chat.noPrefixMessage((Player) s, "     " + Texts.LEVELADD + ": " + ChatColor.GREEN + q.onComplete().levelAdd());
+							if(Storage.showSetLevel)
+								if(q.onComplete().levelSet() != 0)
+									Chat.noPrefixMessage((Player) s, "     " + Texts.LEVELSET + ": " + ChatColor.GREEN + q.onComplete().levelSet());
+							if(Storage.showCommands)
+								if(q.onComplete().items().size() > 0)
 								{
-									Chat.noPrefixMessage((Player) s, "     " + ChatColor.GREEN + q.onComplete().items().get(i).get(1).toString() + " " + ChatColor.GOLD + Material.getMaterial(q.onComplete().items().get(i).get(0)).toString());
+									Chat.noPrefixMessage((Player) s, "     " + Texts.COMMANDS + ":");
+									for(int i=0;i<(q.onComplete().commands().size()); i++)
+									{
+										Chat.noPrefixMessage((Player) s, "     " + ChatColor.GREEN + "- /" + ChatColor.GOLD + q.onComplete().commands().get(i).replace("`player", ((Player) s).getName()));
+									}
 								}
-							}
+							if(Storage.showItems)
+								if(q.onComplete().items().size() > 0)
+								{
+									Chat.noPrefixMessage((Player) s, "     " + Texts.ITEMS + ":");
+									for(int i=0;i<(q.onComplete().items().size()); i++)
+									{
+										Chat.noPrefixMessage((Player) s, "     " + ChatColor.GREEN + q.onComplete().items().get(i).get(1).toString() + " " + ChatColor.GOLD + Material.getMaterial(q.onComplete().items().get(i).get(0)).toString());
+									}
+								}
 						}
 						else Chat.error((Player) s, Texts.NO_ACTIVE_QUEST);
 					}
@@ -123,19 +144,34 @@ public class Commands implements CommandExecutor
 							while(q.tasks().size() > i) 
 							{
 								if(q.tasks().get(i).type().equalsIgnoreCase("collect"))
-									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Collect " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
+									if(Storage.showItemIds)
+										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Collect " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
+									else
+										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Collect " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								else if(q.tasks().get(i).type().equalsIgnoreCase("damage"))
-									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Damage " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
+									if(Storage.showItemIds)
+										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Damage " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
+									else
+										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Damage " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								else if(q.tasks().get(i).type().equalsIgnoreCase("destroy"))
-									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Destroy " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.YELLOW + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.YELLOW + ")");
+									if(Storage.showItemIds)
+										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Destroy " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
+									else
+										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Destroy " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								else if(q.tasks().get(i).type().equalsIgnoreCase("place"))
-									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Place " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.YELLOW + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.YELLOW + ")");
+									if(Storage.showItemIds)
+										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Place " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
+									else
+										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Place " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								else if(q.tasks().get(i).type().equalsIgnoreCase("kill"))
 									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Kill " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								else if(q.tasks().get(i).type().equalsIgnoreCase("kill_player"))
 									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Kill The Player '" + q.tasks().get(i).idString() + "' " + q.tasks().get(i).amount() + " Times");
 								else if(q.tasks().get(i).type().equalsIgnoreCase("enchant"))
-									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Enchant " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.YELLOW + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.YELLOW + ")");
+									if(Storage.showItemIds)
+									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Enchant " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
+								else
+									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Enchant " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								else if(q.tasks().get(i).type().equalsIgnoreCase("tame"))
 									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Tame " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								i++;
@@ -164,6 +200,43 @@ public class Commands implements CommandExecutor
 						Integer result = qQuests.plugin.qAPI.completeQuest((Player) s);
 						if(result != 0)
 							Chat.error((Player) s, Chat.errorCode(result, "Commands"));
+					}
+					else Chat.noPerms((Player) s);
+				}
+				else if(args[0].equalsIgnoreCase("reload")) 
+				{
+					if(qQuests.plugin.qAPI.checkPerms((Player) s, "reload"))
+					{
+						qQuests.plugin.onEnable();
+					}
+					else Chat.noPerms((Player) s);
+				}
+				else if(args[0].equalsIgnoreCase("list")) 
+				{
+					if(qQuests.plugin.qAPI.checkPerms((Player) s, "list"))
+					{
+						if(qQuests.plugin.qAPI.hasActiveQuest((Player) s))
+							Chat.error((Player) s, Texts.HAS_ACTIVE_QUEST);
+						if(Storage.cannotGetQuests.contains((Player) s))
+							Chat.error((Player) s, Texts.DELAY_NOT_FINISHED);
+						if(qQuests.plugin.qAPI.getVisibleQuests().size() == 0)
+							Chat.error((Player) s, Texts.NO_QUESTS_AVAILABLE);
+						HashMap<Integer, Quest> q = qQuests.plugin.qAPI.getAvailableQuests((Player) s);
+						if(!q.isEmpty())
+						{
+							Chat.noPrefixMessage((Player) s, ChatColor.AQUA + ":" + ChatColor.BLUE + "========" + ChatColor.GOLD + " Available Quests " + ChatColor.BLUE + "========" + ChatColor.AQUA + ":");
+							for(Quest a : q.values())
+								Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "- " + ChatColor.LIGHT_PURPLE + a.name());
+						}
+						else Chat.error((Player) s, Texts.NO_QUESTS_AVAILABLE);
+					}
+					else Chat.noPerms((Player) s);
+				}
+				else if(args[0].equalsIgnoreCase("stats")) 
+				{
+					if(qQuests.plugin.qAPI.checkPerms((Player) s, "stats"))
+					{
+						
 					}
 					else Chat.noPerms((Player) s);
 				}

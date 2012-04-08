@@ -124,18 +124,43 @@ public class QuestAPI {
 		if(q == null)
 			return 1;
 		
-		// Give/Take Rewards/Fees
-		Integer u = q.onJoin().feeReward(player);
-		if(u != 0)
-			return u;
-		
 		// Check If The Quest Is Repeatable For The Player
 		if(q.repeated() > -1 && (q.repeated() - qQuests.plugin.qAPI.getProfiles().getInt(player, "FinishCount." + q.name()) <= 0))
 			return 11;
 		
+		// Check Level
+		if(q.levelMin() > qQuests.plugin.qAPI.getProfiles().getInt(player, "Level"))
+			return 12;
+		if(q.levelMax() != -1)
+			if(q.levelMax() < qQuests.plugin.qAPI.getProfiles().getInt(player, "Level"))
+				return 13;
+		
+		// Give/Take Rewards/Fees
+		int u = q.onJoin().feeReward(player);
+		if(u != 0)
+			return u;
+		
 		// Start Quest
 		startQuest(player, q);
 		return 0;
+    }
+	
+	public HashMap<Integer, Quest> getAvailableQuests(Player player)
+    {
+		// Generate Random Starting Point
+		HashMap<Integer, Quest> u = new HashMap<Integer, Quest>();
+		
+		// Loop Until The Player Gets A Quest, Or Goes Through All The Quests
+		int i=-1;
+		for(Quest q : this.getVisibleQuests().values())
+		{
+			i++;
+			// Try To Give The Quest
+			if(this.giveQuest(player, q.name(), true) == 0)
+				u.put(i, q);
+			else continue;
+		}
+		return u;
     }
 	
 	public Integer dropQuest(Player player){
