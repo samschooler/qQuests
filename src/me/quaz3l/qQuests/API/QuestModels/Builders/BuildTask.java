@@ -3,12 +3,12 @@ package me.quaz3l.qQuests.API.QuestModels.Builders;
 import me.quaz3l.qQuests.API.QuestModels.Task;
 
 public class BuildTask {
-	private Integer no;
+	private int no;
 	private String type;
-	private Integer id;
+	private int id;
 	private String ids;
 	private String display;
-	private Integer amount;
+	private int amount;
 	
 	public BuildTask(Integer task) {
 		this.no = task;
@@ -40,22 +40,22 @@ public class BuildTask {
 	}
 	
 	// Getting Variables
-	public Integer no() {
+	public final int no() {
 		return this.no;
 	}
-	public String type() {
+	public final  String type() {
 		return this.type;
 	}
-	public Integer id() {
+	public final int id() {
 		return this.id;
 	}
-	public String ids() {
+	public final String ids() {
 		return this.ids;
 	}
-	public String display() {
+	public final String display() {
 		return this.display;
 	}
-	public Integer amount() {
+	public final int amount() {
 		return this.amount;
 	}
 }

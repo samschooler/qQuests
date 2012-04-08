@@ -12,9 +12,10 @@ public class BuildonSomething {
 	private int hunger = 0;
 	
 	private int levelAdd = 0;
-	private int levelSet = 0;
+	private int levelSet = -1;
 	
 	private HashMap<Integer, ArrayList<Integer>> items = new HashMap<Integer, ArrayList<Integer>>();
+	private HashMap<Integer, String> commands = new HashMap<Integer, String>();
 	private HashMap<Integer, String> permissionsAdd = new HashMap<Integer, String>();
 	private HashMap<Integer, String> permissionsTake = new HashMap<Integer, String>();
 	
@@ -23,7 +24,8 @@ public class BuildonSomething {
 	}
 	
 	public BuildonSomething message(String s) {
-		this.message = s;
+		if(s != null)
+			this.message = s;
 		return this;
 	}
 	public BuildonSomething money(double i) {
@@ -47,34 +49,45 @@ public class BuildonSomething {
 		this.levelSet = i;
 		return this;
 	}
+	public BuildonSomething items(int i, ArrayList<Integer> itms) {
+		this.items.put(i, itms);
+		return this;
+	}
+	public BuildonSomething commands(int i, String s) {
+		this.commands.put(i, s);
+		return this;
+	}
 	
-	public String message() {
+	public final String message() {
 		return this.message;
 	}
-	public double money() {
+	public final double money() {
 		return this.money;
 	}
-	public int health() {
+	public final int health() {
 		return this.health;
 	}
-	public int hunger() {
+	public final int hunger() {
 		return this.hunger;
 	}
 	
-	public int levelAdd() {
+	public final int levelAdd() {
 		return this.levelAdd;
 	}
-	public int levelSet() {
+	public final int levelSet() {
 		return this.levelSet;
 	}
 	
-	public HashMap<Integer, ArrayList<Integer>> items() {
+	public final HashMap<Integer, ArrayList<Integer>> items() {
 		return this.items;
 	}
-	public HashMap<Integer, String> permissionsAdd() {
+	public final HashMap<Integer, String> commands() {
+		return this.commands;
+	}
+	public final HashMap<Integer, String> permissionsAdd() {
 		return this.permissionsAdd;
 	}
-	public HashMap<Integer, String> permissionsTake() {
+	public final HashMap<Integer, String> permissionsTake() {
 		return this.permissionsTake;
 	}
 }

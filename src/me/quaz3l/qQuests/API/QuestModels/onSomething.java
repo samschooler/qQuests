@@ -3,6 +3,7 @@ package me.quaz3l.qQuests.API.QuestModels;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,9 +17,10 @@ public class onSomething {
 	private int hunger;
 
 	private int levelAdd = 0;
-	private int levelSet = 0;
+	private int levelSet = -1;
 	
 	private HashMap<Integer, ArrayList<Integer>> items = new HashMap<Integer, ArrayList<Integer>>();
+	private HashMap<Integer, String> commands = new HashMap<Integer, String>();
 	private HashMap<Integer, String> permissionsAdd = new HashMap<Integer, String>();
 	private HashMap<Integer, String> permissionsTake = new HashMap<Integer, String>();
 
@@ -28,7 +30,10 @@ public class onSomething {
 		this.money = build.money();
 		this.health = build.health();
 		this.hunger = build.hunger();
+		this.levelAdd = build.levelAdd();
+		this.levelSet = build.levelSet();
 		this.items = build.items();
+		this.commands = build.commands();
 	}
 	public String message() {
 		return this.message;
@@ -52,6 +57,9 @@ public class onSomething {
 	
 	public HashMap<Integer, ArrayList<Integer>> items() {
 		return this.items;
+	}
+	public HashMap<Integer, String> commands() {
+		return this.commands;
 	}
 	public HashMap<Integer, String> permissionsAdd() {
 		return this.permissionsAdd;
@@ -129,6 +137,25 @@ public class onSomething {
 			}
 			i++;
 		}
+		
+		// Commands
+		i=0;
+		while(i < this.commands().size())
+		{
+			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.commands().get(i).replace("`player", p.getName()));
+			i++;
+		}
+		
+		// Level
+		if(this.levelSet > -1)
+			qQuests.plugin.qAPI.getProfiles().set(p, "Level", this.levelSet);
+
+		if(this.levelAdd != 0)
+			qQuests.plugin.qAPI.getProfiles().set(p, "Level", qQuests.plugin.qAPI.getProfiles().getInt(p, "Level") + this.levelAdd);
+		
+		if(qQuests.plugin.qAPI.getProfiles().getInt(p, "Level") < 0)
+			qQuests.plugin.qAPI.getProfiles().set(p, "Level", 0);
+		
 		
 		// Health
 		Integer healAmount = (p.getHealth() + this.health());

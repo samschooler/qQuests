@@ -12,7 +12,7 @@ public class BuildQuest {
 	private int repeated = -1;
 	private Boolean invisible = false;
 	private String nextQuest = "";
-	private int delay = 0;
+	private int delay = -1;
 	
 	// Requirements
 	private int levelMin = 0;
@@ -64,8 +64,8 @@ public class BuildQuest {
 	}
 	
 	// Tasks
-	public BuildQuest tasks(HashMap<Integer, Task> m) {
-		this.tasks = m;
+	public BuildQuest tasks(int i, Task t) {
+		this.tasks.put(i, t);
 		return this;
 	}
 	
@@ -86,19 +86,19 @@ public class BuildQuest {
 	// Getting Variables
 	
 	// Setup
-	public String name() {
+	public final String name() {
 		return this.name;
 	}
-	public int repeated() {
+	public final int repeated() {
 		return this.repeated;
 	}
-	public Boolean invisible() {
+	public final Boolean invisible() {
 		return this.invisible;
 	}
-	public String nextQuest() {
+	public final String nextQuest() {
 		return this.nextQuest;
 	}
-	public int delay() {
+	public final int delay() {
 		return this.delay;
 	}
 	
@@ -111,18 +111,18 @@ public class BuildQuest {
 	}
 	
 	// Tasks
-	public HashMap<Integer, Task> tasks() {
+	public final HashMap<Integer, Task> tasks() {
 		return this.tasks;
 	}
 	
 	// onWhatever
-	public onSomething onJoin() {
+	public final onSomething onJoin() {
 		return this.onJoin;
 	}
-	public onSomething onDrop() {
+	public final onSomething onDrop() {
 		return this.onDrop;
 	}
-	public onSomething onComplete() {
+	public final onSomething onComplete() {
 		return this.onComplete;
 	}
 }
