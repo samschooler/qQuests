@@ -10,13 +10,28 @@ import me.quaz3l.qQuests.Util.Texts;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class Signs implements Listener {
+	@EventHandler
+	public void onSignChange(SignChangeEvent e)
+	{
+		if(!e.getLines()[0].equalsIgnoreCase("[qQuests]"))
+			return;
+		if(!qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "create.sign"))
+		{
+			Chat.noPerms(e.getPlayer());
+			dropSign(e);
+		}
+		
+	}
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e)
 	{
@@ -248,10 +263,30 @@ public class Signs implements Listener {
 			}
 			else Chat.noPerms(e.getPlayer());
 		}
+		else if(sign.getLine(2).equalsIgnoreCase("stats"))
+		{
+			if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "stats.sign"))
+			{
+				Chat.noPrefixMessage(e.getPlayer(), "Level: " + ChatColor.GREEN + qQuests.plugin.qAPI.getProfiles().getInt(e.getPlayer(), "Level"));
+				Chat.noPrefixMessage(e.getPlayer(), "Quests Given: " + ChatColor.GREEN + qQuests.plugin.qAPI.getProfiles().getInt(e.getPlayer(), "Given"));
+				Chat.noPrefixMessage(e.getPlayer(), "Quests Dropped: " + ChatColor.GREEN + qQuests.plugin.qAPI.getProfiles().getInt(e.getPlayer(), "Dropped"));
+				Chat.noPrefixMessage(e.getPlayer(), "Quests Completed: " + ChatColor.GREEN + qQuests.plugin.qAPI.getProfiles().getInt(e.getPlayer(), "Completed"));
+			}
+			else Chat.noPerms(e.getPlayer());
+		}
 		else
 		{
 			Chat.error(e.getPlayer(), "This is not a valid action on line 3! (Give, Info, Tasks, Drop, Done)");
 			return;
 		}
 	}
+	private static void dropSign(SignChangeEvent event)
+	  {
+	    event.setCancelled(true);
+	
+	    Block block = event.getBlock();
+	    block.setType(Material.AIR);
+	    block.getWorld().dropItemNaturally(block.getLocation(), new ItemStack(Material.SIGN, 1));
+	  }
+	
 }

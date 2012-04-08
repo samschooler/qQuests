@@ -4,16 +4,15 @@ version: 0.01.95
 description: A overly customizable quests plugin.
 softdepend: [Vault]
 commands:
-  Q:
-    description: Alias Command To Use qQuests
-  QU:
-    description: Alias Command To Use qQuests
-  QUEST:
-    description: Main Command To Use qQuests
-  QUESTS:
-    description: Alias Command To Use qQuests
   QQUESTS:
-    description: Alternate Command To Use qQuests (Just In-Case)
+    description: Main Command To Use qQuests
+    aliases:
+    - q
+    - qu
+    - quest
+    - quests
+    - qquest
+    - qquests
 permissions:
     qquests.*:
         description: Gives all qQuest permissions
@@ -54,6 +53,19 @@ permissions:
         default: true
         children:
             qquests.done.sign: true
+    qquests.list:
+        description: Lists All Available Quests
+        default: true
+        children:
+            qquests.list.sign: true
+        qquests.stats:
+        description: Shows Quest Stats Of The Player
+        default: true
+        children:
+            qquests.stats.sign: true
+    qquests.sign.create:
+        description: Lets players create qQuests signs
+        default: op
     qquests.reload:
         description: Reloads qQuests
         default: op

@@ -12,10 +12,13 @@ public class Texts {
 	public static final String INFO_COMMAND = "info";
 	public static final String TASKS_COMMAND = "tasks";
 	public static final String DONE_COMMAND = "done";
+	public static final String LIST_COMMAND = "list";
+	public static final String STATS_COMMAND = "stats";
 	public static final String HELP_COMMAND = "help";
+	public static final String RELOAD_COMMAND = "reload";
 	
 	// Help Text
-	public static final String COMMANDS_HELP_TEXT = PRIMARY_COMMAND + " " + ChatColor.RED + "[" + ChatColor.YELLOW + GIVE_COMMAND + ", " + INFO_COMMAND + ", " + TASKS_COMMAND + ", " + DONE_COMMAND + ", " + HELP_COMMAND + ChatColor.RED + "]";
+	public static final String COMMANDS_HELP_TEXT = PRIMARY_COMMAND + " " + ChatColor.RED + "[" + ChatColor.YELLOW + GIVE_COMMAND + ", " + INFO_COMMAND + ", " + TASKS_COMMAND + ", " + DONE_COMMAND + ", " + LIST_COMMAND + ", " + STATS_COMMAND + ", " + RELOAD_COMMAND + ", " + HELP_COMMAND + ChatColor.RED + "]";
 	public static final String COMMANDS_TASKS_HELP = "Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + TASKS_COMMAND + ChatColor.GREEN + " For Your Other Tasks";
 	public static final String COMMANDS_DONE_HELP = "Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + DONE_COMMAND + ChatColor.GREEN + " To Complete Your Quest!";
 	

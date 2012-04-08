@@ -236,7 +236,10 @@ public class Commands implements CommandExecutor
 				{
 					if(qQuests.plugin.qAPI.checkPerms((Player) s, "stats"))
 					{
-						
+						Chat.noPrefixMessage((Player) s, "Level: " + ChatColor.GREEN + qQuests.plugin.qAPI.getProfiles().getInt((Player) s, "Level"));
+						Chat.noPrefixMessage((Player) s, "Quests Given: " + ChatColor.GREEN + qQuests.plugin.qAPI.getProfiles().getInt((Player) s, "Given"));
+						Chat.noPrefixMessage((Player) s, "Quests Dropped: " + ChatColor.GREEN + qQuests.plugin.qAPI.getProfiles().getInt((Player) s, "Dropped"));
+						Chat.noPrefixMessage((Player) s, "Quests Completed: " + ChatColor.GREEN + qQuests.plugin.qAPI.getProfiles().getInt((Player) s, "Completed"));
 					}
 					else Chat.noPerms((Player) s);
 				}
