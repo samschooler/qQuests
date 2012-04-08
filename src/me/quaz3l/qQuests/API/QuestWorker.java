@@ -107,8 +107,9 @@ public class QuestWorker
 			BuildonJoin.money(qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".onJoin.market.money"));
 			BuildonJoin.health(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.health"));
 			BuildonJoin.hunger(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.hunger"));
-			BuildonJoin.levelAdd(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.levelAdd"));
-			BuildonJoin.levelSet(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.levelSet"));
+			BuildonJoin.levelAdd(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.levelAdd"));
+			if(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onJoin.market.levelSet") != null)
+				BuildonJoin.levelSet(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.levelSet"));
 			i=0;
 			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onJoin.market.items") != null)
 			{
@@ -122,7 +123,7 @@ public class QuestWorker
 							ArrayList<Integer> itms = new ArrayList<Integer>();
 							itms.add(Integer.parseInt(strs[0])); // Item Id
 							itms.add(Integer.parseInt(strs[1])); // Amount
-							BuildonJoin.items().put(i, itms);
+							BuildonJoin.items(i, itms);
 						}
 						catch(Exception e)
 						{
@@ -138,6 +139,14 @@ public class QuestWorker
 					i++;
 				}
 			}
+			i=0;
+			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onJoin.market.commands") != null)
+			{
+				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onJoin.market.commands")) {
+					BuildonJoin.commands(i, s);
+					i++;
+				}
+			}
 			quest.onJoin(BuildonJoin);
 			
 			// Set onDrop Variables
@@ -146,8 +155,9 @@ public class QuestWorker
 			BuildonDrop.money(qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".onDrop.market.money"));
 			BuildonDrop.health(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.health"));
 			BuildonDrop.hunger(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.hunger"));
-			BuildonDrop.levelAdd(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.levelAdd"));
-			BuildonDrop.levelSet(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.levelSet"));
+			BuildonDrop.levelAdd(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.levelAdd"));
+			if(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onDrop.market.levelSet") != null)
+				BuildonDrop.levelSet(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.levelSet"));
 			i=0;
 			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onDrop.market.items") != null)
 			{
@@ -177,6 +187,14 @@ public class QuestWorker
 					i++;
 				}
 			}
+			i=0;
+			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onDrop.market.commands") != null)
+			{
+				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onDrop.market.commands")) {
+					BuildonDrop.commands(i, s);
+					i++;
+				}
+			}
 			quest.onDrop(BuildonDrop);
 			
 			// Set onComplete Variables
@@ -185,8 +203,9 @@ public class QuestWorker
 			BuildonComplete.money(qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".onComplete.market.money"));
 			BuildonComplete.health(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.health"));
 			BuildonComplete.hunger(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.hunger"));
-			BuildonComplete.levelAdd(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.levelAdd"));
-			BuildonComplete.levelSet(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.levelSet"));
+			BuildonComplete.levelAdd(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.levelAdd"));
+			if(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onComplete.market.levelSet") != null)
+				BuildonComplete.levelSet(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.levelSet"));
 			i=0;
 			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onComplete.market.items") != null)
 			{
@@ -216,6 +235,14 @@ public class QuestWorker
 					i++;
 				}
 			}
+			i=0;
+			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onComplete.market.commands") != null)
+			{
+				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onComplete.market.commands")) {
+					BuildonComplete.commands(i, s);
+					i++;
+				}
+			}
 			quest.onComplete(BuildonComplete);
 			
 			// Only if the quest is valid, save the quest.
@@ -226,7 +253,7 @@ public class QuestWorker
 	
 	private void rememberTask(Integer taskNo, Task task, BuildQuest quest) 
 	{
-		quest.tasks().put(taskNo, task);
+		quest.tasks(taskNo, task);
 	}
 	private void rememberQuest(Quest quest) 
 	{
