@@ -156,9 +156,30 @@ public class QuestAPI {
 		{
 			i++;
 			// Try To Give The Quest
-			if(this.giveQuest(player, q.name(), true) == 0)
-				u.put(i, q);
-			else continue;
+			// Check If The Player Already Has A Quest
+			if(qQuests.plugin.qAPI.hasActiveQuest(player))
+				continue;
+			
+			// Check If The Player Can Get Quests
+			if(Storage.cannotGetQuests.contains(player))
+				continue;
+			
+			// Check If Is A Valid Quest
+			if(q == null)
+				continue;
+			
+			// Check If The Quest Is Repeatable For The Player
+			if(q.repeated() > -1 && (q.repeated() - qQuests.plugin.qAPI.getProfiles().getInt(player, "FinishCount." + q.name()) <= 0))
+				continue;
+			
+			// Check Level
+			if(q.levelMin() > qQuests.plugin.qAPI.getProfiles().getInt(player, "Level"))
+				continue;
+			if(q.levelMax() != -1)
+				if(q.levelMax() < qQuests.plugin.qAPI.getProfiles().getInt(player, "Level"))
+					continue;
+			
+			u.put(i, q);
 		}
 		return u;
     }

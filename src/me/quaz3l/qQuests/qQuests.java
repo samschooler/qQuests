@@ -165,10 +165,6 @@ public class qQuests extends JavaPlugin
 	{
 		// Setup Command Executors
 		CommandExecutor cmd = new Commands();
-			getCommand("Q").setExecutor(cmd);
-			getCommand("QU").setExecutor(cmd);
-			getCommand("QUEST").setExecutor(cmd);
-			getCommand("QUESTS").setExecutor(cmd);
 			getCommand("qQUESTS").setExecutor(cmd);
 	}
 	private void qPluginSigns()

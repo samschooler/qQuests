@@ -368,7 +368,7 @@ public class Config {
 		{
 			try
 			{
-				Integer.parseInt(this.getQuestConfig().getString(quest + ".onJoin.market.money"));
+				Double.parseDouble(this.getQuestConfig().getString(quest + ".onJoin.market.money"));
 			}
 			catch(NumberFormatException e)
 			{
@@ -390,7 +390,7 @@ public class Config {
 				rturn = false;
 			}
 		}
-		if(this.getQuestConfig().getString(quest + ".onJoin.market.hunger") == null)
+		if(this.getQuestConfig().getString(quest + ".onJoin.market.hunger") != null)
 		{
 			try
 			{
@@ -468,7 +468,7 @@ public class Config {
 		{
 			try
 			{
-				Integer.parseInt(this.getQuestConfig().getString(quest + ".onDrop.market.money"));
+				Double.parseDouble(this.getQuestConfig().getString(quest + ".onDrop.market.money"));
 			}
 			catch(NumberFormatException e)
 			{
@@ -490,7 +490,7 @@ public class Config {
 				rturn = false;
 			}
 		}
-		if(this.getQuestConfig().getString(quest + ".onDrop.market.hunger") == null)
+		if(this.getQuestConfig().getString(quest + ".onDrop.market.hunger") != null)
 		{
 			try
 			{
@@ -568,7 +568,7 @@ public class Config {
 		{
 			try
 			{
-				Integer.parseInt(this.getQuestConfig().getString(quest + ".onComplete.market.money"));
+				Double.parseDouble(this.getQuestConfig().getString(quest + ".onComplete.market.money"));
 			}
 			catch(NumberFormatException e)
 			{
@@ -590,7 +590,7 @@ public class Config {
 				rturn = false;
 			}
 		}
-		if(this.getQuestConfig().getString(quest + ".onComplete.market.hunger") == null)
+		if(this.getQuestConfig().getString(quest + ".onComplete.market.hunger") != null)
 		{
 			try
 			{

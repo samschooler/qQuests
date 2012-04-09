@@ -146,7 +146,7 @@ public class Signs implements Listener {
 						if(q.onComplete().levelAdd() != 0)
 							Chat.noPrefixMessage(e.getPlayer(), "     " + Texts.LEVELADD + ": " + ChatColor.GREEN + q.onComplete().levelAdd());
 					if(Storage.showSetLevel)
-						if(q.onComplete().levelSet() != 0)
+						if(q.onComplete().levelSet() != -1)
 							Chat.noPrefixMessage(e.getPlayer(), "     " + Texts.LEVELSET + ": " + ChatColor.GREEN + q.onComplete().levelSet());
 					if(Storage.showCommands)
 						if(q.onComplete().items().size() > 0)
