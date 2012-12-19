@@ -16,7 +16,6 @@ import me.quaz3l.qQuests.Plugins.Commands;
 import me.quaz3l.qQuests.Plugins.Signs;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Config;
-import me.quaz3l.qQuests.Util.Interwebs;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
@@ -79,9 +78,6 @@ public class qQuests extends JavaPlugin
 		
 		//Setup Stock qPlugins
 		this.setupStockPlugins();
-		
-		// Check For Updates; Ping Server
-		Interwebs.repeat();
 		
 		// Notify Logger
 		Chat.logger("info", "by Quaz3l: Enabled");
