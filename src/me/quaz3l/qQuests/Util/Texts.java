@@ -22,6 +22,9 @@ public class Texts {
 	public static final String COMMANDS_TASKS_HELP = "Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + TASKS_COMMAND + ChatColor.GREEN + " For Your Other Tasks";
 	public static final String COMMANDS_DONE_HELP = "Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + DONE_COMMAND + ChatColor.GREEN + " To Complete Your Quest!";
 	
+	public static final String SIGNS_TASKS_HELP = "Find A Tasks Sign To See Your Other Tasks";
+	public static final String SIGNS_DONE_HELP = "Find A Done Sign To Complete Your Quest!";
+	
 	// No
 	public static final String NO_PERMISSION = "You don't have permissions to do this!";
 	public static final String ONLY_PLAYERS = "Sorry A Quest Can Only Be Used By Players!";

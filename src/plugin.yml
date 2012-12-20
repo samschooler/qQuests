@@ -25,6 +25,7 @@ permissions:
             qquests.drop: true
             qquests.done: true
             qquests.reload: true
+            qquests.admin: true
     qquests.give:
         description: Lets players randomly get a visible quest
         default: true
@@ -63,9 +64,19 @@ permissions:
         default: true
         children:
             qquests.stats.sign: true
-    qquests.sign.create:
+    qquests.create.sign:
         description: Lets players create qQuests signs
         default: op
+    qquests.destroy.sign:
+        description: Lets players destroy qQuests signs
+        default: op
+    qquests.admin:
+        description: Lets players edit things like signs, and other dangerous things
+        default: true
+        children:
+            qquests.admin.sign: true
+            qquests.create.sign: true
+            qquests.destroy.sign: true
     qquests.reload:
         description: Reloads qQuests
         default: op

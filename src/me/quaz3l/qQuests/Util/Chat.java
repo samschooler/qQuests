@@ -104,9 +104,9 @@ public class Chat {
 			case 11:
 				return Texts.NO_QUESTS_AVAILABLE;
 			case 12:
-				return Texts.LEVEL_TOO_HIGH;
-			case 13:
 				return Texts.LEVEL_TOO_LOW;
+			case 13:
+				return Texts.LEVEL_TOO_HIGH;
 			default:
 				return "Unknown";
 			}

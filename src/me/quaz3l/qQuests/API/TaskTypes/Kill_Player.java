@@ -17,9 +17,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 public class Kill_Player implements Listener {
-	
 	private HashMap<Player, Player> damageList = new HashMap<Player, Player>();
-	
 	@EventHandler
 	public void onEntityDamage(EntityDamageEvent e) 
 	{
@@ -55,57 +53,64 @@ public class Kill_Player implements Listener {
 	@EventHandler
     public void onEntityDeath(EntityDeathEvent e) 
 	{
-        	if(!(e.getEntity() instanceof Player))
-        		return;
-        	
-        	Player player = damageList.get((Player)e.getEntity());
-    		if(!qQuests.plugin.qAPI.hasActiveQuest(player))
-        		return;
-        		
-    		int i=0;
+    	if(!(e.getEntity() instanceof Player))
+    		return;
+    	
+    	Player player = damageList.get((Player)e.getEntity());
+		if(!qQuests.plugin.qAPI.hasActiveQuest(player))
+    		return;
     		
-    		
-    		while(qQuests.plugin.qAPI.getActiveQuest(player).tasks().size() > i) 
-    		{
-    			// Check For Destroy Quests
-    			if(qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("kill_player"))
-    				// Check For The Correct Mob
-    				if(qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).idString().equalsIgnoreCase(((Player)e.getEntity()).getName()))
-    				{
-    					// Check If The Player Is Done With The Task
-    					if(Storage.currentTaskProgress.get(player).get(i) < (qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).amount() - 1))
-    					{
-    						// Add To The Players Task Progress
-    						Storage.currentTaskProgress.get(player).put(i, (Storage.currentTaskProgress.get(player).get(i) + 1));
-    						
-    						// Check For The Source Of The Players Quest
-    						if(Storage.wayCurrentQuestsWereGiven.get(player) != null)
-    							if(Storage.wayCurrentQuestsWereGiven.get(player).equalsIgnoreCase("Commands"))
-    								
-    								// If The Source Is Commands, Tell The Player They're Current Status
-    								Chat.quotaMessage(player, Texts.KILL_PLAYER_COMPLETED_QUOTA, Storage.currentTaskProgress.get(player).get(i), qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).amount(), qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).display());
-    					}
-    					// Check If The Player Is Just Finished
-    					else if(Storage.currentTaskProgress.get(player).get(i) == (qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).amount() - 1))
-    					{
-    						// Add To The Players Task Progress
-    						Storage.currentTaskProgress.get(player).put(i, (Storage.currentTaskProgress.get(player).get(i) + 1));
-    						Storage.tasksLeftInQuest.put(player, Storage.tasksLeftInQuest.get(player) - 1);
-    						
-    						// Check For The Source Of The Players Quest
-    						if(Storage.wayCurrentQuestsWereGiven.get(player) != null)
-    							if(Storage.wayCurrentQuestsWereGiven.get(player).equalsIgnoreCase("Commands"))
-    							{
-    								// If The Source Is Commands, Tell The Player They're Done With The Task
-    								Chat.green(player, Texts.KILL_PLAYER_COMPLETED_QUOTA + " Enough " + qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).display() + ",");
-    								if(Storage.tasksLeftInQuest.get(player) != 0)
-    									Chat.green(player, Texts.COMMANDS_TASKS_HELP);
-    								else
-    									Chat.green(player, Texts.COMMANDS_DONE_HELP);
-    							}
-        					}
-        				}
-    			i++;
-    		}
+		int i=0;
+		// Go Through All The Tasks Of The Players Quest
+		while(qQuests.plugin.qAPI.getActiveQuest(player).tasks().size() > i) 
+		{
+			// Check For Destroy Quests
+			if(qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("kill_player"))
+			{
+				// Check For The Correct Mob
+				if(qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).idString().equalsIgnoreCase(((Player)e.getEntity()).getName()))
+				{
+					// Check If The Player Is Done With The Task
+					if(Storage.currentTaskProgress.get(player).get(i) < (qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).amount() - 1))
+					{
+						// Add To The Players Task Progress
+						Storage.currentTaskProgress.get(player).put(i, (Storage.currentTaskProgress.get(player).get(i) + 1));
+						
+						// Tell The Player They're Current Status
+						Chat.quotaMessage(player, Texts.KILL_PLAYER_COMPLETED_QUOTA, Storage.currentTaskProgress.get(player).get(i), qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).amount(), qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).display());
+					}
+					// Check If The Player Is Just Finished
+					else if(Storage.currentTaskProgress.get(player).get(i) == (qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).amount() - 1))
+					{
+						// Add To The Players Task Progress
+						Storage.currentTaskProgress.get(player).put(i, (Storage.currentTaskProgress.get(player).get(i) + 1));
+						Storage.tasksLeftInQuest.put(player, Storage.tasksLeftInQuest.get(player) - 1);
+						
+						// Check For The Source Of The Players Quest
+						if(Storage.wayCurrentQuestsWereGiven.get(player) != null) {
+							if(Storage.wayCurrentQuestsWereGiven.get(player).equalsIgnoreCase("Commands"))
+							{
+								// If The Source Is Commands, Tell The Player They're Done With The Task
+								Chat.green(player, Texts.KILL_PLAYER_COMPLETED_QUOTA + " Enough " + qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).display() + ",");
+								if(Storage.tasksLeftInQuest.get(player) != 0)
+									Chat.green(player, Texts.COMMANDS_TASKS_HELP);
+								else
+									Chat.green(player, Texts.COMMANDS_DONE_HELP);
+        					} 
+    						else if(Storage.wayCurrentQuestsWereGiven.get(player).equalsIgnoreCase("Signs"))
+    						{
+    							// If The Source Is Commands, Tell The Player They're Done With The Task
+    							Chat.green(player, Texts.KILL_PLAYER_COMPLETED_QUOTA + " Enough " + qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).display() + ",");
+    							if(Storage.tasksLeftInQuest.get(player) != 0)
+    									Chat.green(player, Texts.SIGNS_TASKS_HELP);
+    							else
+    								Chat.green(player, Texts.SIGNS_DONE_HELP);
+    						}
+						}
+    				}
+				}
+			}
+			i++;
+		}
 	}
 }

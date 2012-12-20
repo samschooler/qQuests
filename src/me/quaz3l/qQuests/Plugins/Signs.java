@@ -9,17 +9,49 @@ import me.quaz3l.qQuests.Util.Storage;
 import me.quaz3l.qQuests.Util.Texts;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class Signs implements Listener {
+	@EventHandler
+	public void onBlockBreak(BlockBreakEvent e) 
+	{
+		if(e.isCancelled())
+			return;
+		Block blockAbove = e.getBlock().getLocation().getWorld().getBlockAt(new Location(e.getBlock().getLocation().getWorld(), e.getBlock().getLocation().getX(), e.getBlock().getLocation().getY()+1, e.getBlock().getLocation().getZ()));
+		if((e.getBlock().getType() == Material.WALL_SIGN || 
+				e.getBlock().getType() == Material.SIGN_POST || 
+				e.getBlock().getType() == Material.SIGN))
+		{
+			Sign sign = (Sign) e.getBlock().getState();
+			if(!sign.getLine(0).equalsIgnoreCase("[qQuests]"))
+				return;
+			else
+				if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "destroy.sign"))
+					e.setCancelled(true);
+		}
+		else if((blockAbove.getType() == Material.WALL_SIGN || 
+					blockAbove.getType() == Material.SIGN_POST || 
+					blockAbove.getType() == Material.SIGN)) 
+		{
+			Sign sign = (Sign) blockAbove.getState();
+			if(!sign.getLine(0).equalsIgnoreCase("[qQuests]"))
+				return;
+			else
+				if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "destroy.sign"))
+					e.setCancelled(true);
+		}
+		else return;
+	}
 	@EventHandler
 	public void onSignChange(SignChangeEvent e)
 	{
@@ -42,6 +74,7 @@ public class Signs implements Listener {
 				e.getClickedBlock().getType() != Material.SIGN_POST && 
 				e.getClickedBlock().getType() != Material.SIGN)
 			return;
+		else e.setCancelled(true);
 		Sign sign = (Sign) e.getClickedBlock().getState();
 		if(!sign.getLine(0).equalsIgnoreCase("[qQuests]"))
 			return;
@@ -63,7 +96,7 @@ public class Signs implements Listener {
 		{
 			if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "give.specific.sign"))
 			{
-				Integer result = qQuests.plugin.qAPI.giveQuest(e.getPlayer());
+				Integer result = qQuests.plugin.qAPI.giveQuest(e.getPlayer(), "Signs");
 				if(result == 0)
 				{
 					Storage.wayCurrentQuestsWereGiven.put((e.getPlayer()), "Signs");
@@ -100,10 +133,9 @@ public class Signs implements Listener {
 		{
 			if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "give.sign"))
 			{
-				Integer result = qQuests.plugin.qAPI.giveQuest(e.getPlayer(), sign.getLine(1).toLowerCase(), false);
+				Integer result = qQuests.plugin.qAPI.giveQuest(e.getPlayer(), sign.getLine(1).toLowerCase(), false, "Signs");
 				if(result == 0)
 				{
-					Storage.wayCurrentQuestsWereGiven.put(e.getPlayer(), "Signs");
 					Chat.message(e.getPlayer(), qQuests.plugin.qAPI.getActiveQuest(e.getPlayer()).onJoin().message());
 				}
 				else if(result == 1)

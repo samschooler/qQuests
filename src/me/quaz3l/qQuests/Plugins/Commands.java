@@ -40,7 +40,7 @@ public class Commands implements CommandExecutor
 					{
 						if(qQuests.plugin.qAPI.checkPerms((Player) s, "give"))
 						{
-							Integer result = qQuests.plugin.qAPI.giveQuest((Player) s);
+							Integer result = qQuests.plugin.qAPI.giveQuest((Player) s, "Commands");
 							if(result == 0)
 							{
 								Storage.wayCurrentQuestsWereGiven.put(((Player) s), "Commands");
@@ -59,7 +59,7 @@ public class Commands implements CommandExecutor
 					{
 						if(qQuests.plugin.qAPI.checkPerms((Player) s, "give.specific"))
 						{
-							Integer result = qQuests.plugin.qAPI.giveQuest((Player) s, args[1].toLowerCase(), true);
+							Integer result = qQuests.plugin.qAPI.giveQuest((Player) s, args[1].toLowerCase(), true, "Commands");
 							if(result == 0)
 							{
 								Storage.wayCurrentQuestsWereGiven.put(((Player) s), "Commands");
