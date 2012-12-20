@@ -41,6 +41,8 @@ public class Kill_Player implements Listener {
 					attacker = (Player) ((Arrow) nEvent.getDamager()).getShooter();
 			}
 			break;
+		default:
+			break;
 		}
 		
 		if(attacker != null && e.getEntity() != null)
