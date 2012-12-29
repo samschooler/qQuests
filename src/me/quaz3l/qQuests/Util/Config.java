@@ -191,8 +191,10 @@ public class Config {
 				this.getQuestConfig().set("Diamonds!.onComplete.market.health", 0);
 				this.getQuestConfig().set("Diamonds!.onComplete.market.hunger", 0);
 				this.getQuestConfig().set("Diamonds!.onComplete.market.items", Arrays.asList("3 1", "4 5"));
+			
+			// Save changes
+			this.saveQuestConfig();
 		}
-		this.saveQuestConfig();
 	}
 	
 	
