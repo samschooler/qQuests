@@ -10,15 +10,18 @@ import me.quaz3l.qQuests.API.QuestModels.Quest;
 import me.quaz3l.qQuests.API.TaskTypes.Collect;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.PlayerProfiles;
+import me.quaz3l.qQuests.Util.Reloader;
 import me.quaz3l.qQuests.Util.Storage;
 import me.quaz3l.qQuests.Util.Texts;
 
 public class QuestAPI {
 	private QuestWorker QuestWorker;
 	private PlayerProfiles Profiles;
+	public Reloader Index;
 	
 	public QuestAPI() {
 		this.QuestWorker = new QuestWorker();
+		this.Index = new Reloader();
 		this.Profiles = new PlayerProfiles();
 	}
 	

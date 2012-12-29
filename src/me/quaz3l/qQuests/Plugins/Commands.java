@@ -207,7 +207,8 @@ public class Commands implements CommandExecutor
 				{
 					if(qQuests.plugin.qAPI.checkPerms((Player) s, "reload"))
 					{
-						qQuests.plugin.onEnable();
+						qQuests.plugin.qAPI.Index.unloadPlugin();
+						qQuests.plugin.qAPI.Index.loadPlugin();
 					}
 					else Chat.noPerms((Player) s);
 				}
