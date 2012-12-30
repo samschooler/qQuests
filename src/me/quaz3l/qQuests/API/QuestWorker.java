@@ -46,8 +46,6 @@ public class QuestWorker
 			else
 				quest.repeated(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".setup.repeated"));
 			quest.invisible(qQuests.plugin.Config.getQuestConfig().getBoolean(questName + ".setup.invisible"));
-			quest.nextQuest(qQuests.plugin.Config.getQuestConfig().getString(questName + ".setup.nextQuest"));
-			quest.delay(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".setup.delay"));
 			
 			// Set Requirements Variables
 			quest.levelMin(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".requirements.levelMin"));
@@ -104,6 +102,7 @@ public class QuestWorker
 			// Set onJoin Variables
 			BuildonSomething BuildonJoin = new BuildonSomething();
 			BuildonJoin.message(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onJoin.message"));
+			BuildonJoin.delay(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.delay"));
 			BuildonJoin.money(qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".onJoin.market.money"));
 			BuildonJoin.health(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.health"));
 			BuildonJoin.hunger(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.hunger"));
@@ -152,6 +151,8 @@ public class QuestWorker
 			// Set onDrop Variables
 			BuildonSomething BuildonDrop = new BuildonSomething();
 			BuildonDrop.message(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onDrop.message"));
+			BuildonDrop.delay(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.delay"));
+			BuildonDrop.nextQuest(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onDrop.nextQuest"));
 			BuildonDrop.money(qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".onDrop.market.money"));
 			BuildonDrop.health(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.health"));
 			BuildonDrop.hunger(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.hunger"));
@@ -200,6 +201,8 @@ public class QuestWorker
 			// Set onComplete Variables
 			BuildonSomething BuildonComplete = new BuildonSomething();
 			BuildonComplete.message(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onComplete.message"));
+			BuildonComplete.delay(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.delay"));
+			BuildonComplete.nextQuest(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onComplete.nextQuest"));
 			BuildonComplete.money(qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".onComplete.market.money"));
 			BuildonComplete.health(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.health"));
 			BuildonComplete.hunger(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.hunger"));

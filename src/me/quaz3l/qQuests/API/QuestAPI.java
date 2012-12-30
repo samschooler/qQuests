@@ -12,7 +12,6 @@ import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.PlayerProfiles;
 import me.quaz3l.qQuests.Util.Reloader;
 import me.quaz3l.qQuests.Util.Storage;
-import me.quaz3l.qQuests.Util.Texts;
 
 public class QuestAPI {
 	private QuestWorker QuestWorker;
@@ -188,7 +187,7 @@ public class QuestAPI {
 		return u;
     }
 	
-	public Integer dropQuest(Player player){
+	public Integer dropQuest(final Player player){
 		Quest q = this.getActiveQuests().get(player);
 		if(!qQuests.plugin.qAPI.hasActiveQuest(player))
 			return 9;
@@ -196,7 +195,34 @@ public class QuestAPI {
 		if(u == 0)
 		{
 			Profiles.set(player, "Dropped", (Profiles.getInt(player, "Dropped") + 1));
+			
+			// Store previous quest
+			Storage.previousQuest.put(player, getActiveQuest(player));
+			Storage.wayPreviousQuestWereGiven.put(player, Storage.wayCurrentQuestsWereGiven.get(player));
+			
+			// If it makes it here reset player data
 			this.resetPlayer(player);
+			
+			// Set Delay/Give Next Quest
+			qQuests.plugin.getServer().getScheduler().scheduleSyncDelayedTask(qQuests.plugin, new Runnable() {
+
+				public void run() {
+					if(Storage.previousQuest.get(player).onDrop().nextQuest() != null)
+					{
+						int result = giveQuest(player, Storage.previousQuest.get(player).onDrop().nextQuest(), false, Storage.wayPreviousQuestWereGiven.get(player));
+						if(result == 0)
+						{
+							getActiveQuests().put(player, getQuests().get(Storage.previousQuest.get(player).onDrop().nextQuest()));
+							Chat.message(player, getActiveQuest(player).onJoin().message());
+						}
+						else
+							Chat.errorCode(result, Storage.wayPreviousQuestWereGiven.get(player));
+					}
+					Storage.previousQuest.remove(player);
+					Storage.wayPreviousQuestWereGiven.remove(player);
+				}
+			}, (Storage.previousQuest.get(player).onDrop().delay() * 20));
+			
 			return 0;
 		}
 		else return u;
@@ -247,51 +273,30 @@ public class QuestAPI {
 		Storage.previousQuest.put(player, getActiveQuest(player));
 		Storage.wayPreviousQuestWereGiven.put(player, Storage.wayCurrentQuestsWereGiven.get(player));
 		
-		// Set Delay
-		if(getActiveQuest(player).delay() > 0)
-		{
-			Storage.cannotGetQuests.add(player);
-			qQuests.plugin.getServer().getScheduler().scheduleSyncDelayedTask(qQuests.plugin, new Runnable() {
-				
-				public void run() {
-					Storage.cannotGetQuests.remove(player);
-					if(Storage.previousQuest.get(player).nextQuest() != null)
-					{
-						int result = giveQuest(player, Storage.previousQuest.get(player).nextQuest(), false, Storage.wayPreviousQuestWereGiven.get(player));
-						if(result == 0)
-						{
-							getActiveQuests().put(player, getQuests().get(Storage.previousQuest.get(player).nextQuest()));
-							Chat.message(player, getActiveQuest(player).onJoin().message());
-						}
-						else
-							Chat.errorCode(result, Storage.wayPreviousQuestWereGiven.get(player));
-					}
-					Storage.previousQuest.remove(player);
-					Storage.wayPreviousQuestWereGiven.remove(player);
-				}
-			}, (getActiveQuest(player).delay() * 1200));
-		}
-		
-		Quest q = getActiveQuest(player);
-		// If it makes it here reset player data and return with no errors
+		// If it makes it here reset player data
 		this.resetPlayer(player);
 		
-		if(q.nextQuest() != null)
-		{
-			if(this.getQuests().containsKey(q.nextQuest().toLowerCase()))
-			{
-				Integer result = qQuests.plugin.qAPI.giveQuest(player, q.nextQuest().toLowerCase(), false, Storage.wayPreviousQuestWereGiven.get(player));
-				if(result == 0)
+		// Set Delay/Give Next Quest
+		qQuests.plugin.getServer().getScheduler().scheduleSyncDelayedTask(qQuests.plugin, new Runnable() {
+
+			public void run() {
+				Chat.logger("info", Storage.previousQuest.get(player).onComplete().nextQuest());
+				if(Storage.previousQuest.get(player).onComplete().nextQuest() != null)
 				{
-					qQuests.plugin.qAPI.getActiveQuests().put((player), getQuests().get(q.nextQuest().toLowerCase()));
-					Chat.message((player), qQuests.plugin.qAPI.getActiveQuest(player).onJoin().message());
+					int result = giveQuest(player, Storage.previousQuest.get(player).onComplete().nextQuest(), false, Storage.wayPreviousQuestWereGiven.get(player));
+					if(result == 0)
+					{
+						getActiveQuests().put(player, getQuests().get(Storage.previousQuest.get(player).onComplete().nextQuest()));
+						Chat.message(player, getActiveQuest(player).onJoin().message());
+					}
+					else
+						Chat.errorCode(result, Storage.wayPreviousQuestWereGiven.get(player));
 				}
-				else
-					Chat.error(player, Chat.errorCode(result, Storage.wayPreviousQuestWereGiven.get(player)));
-				}
-			else if(!q.nextQuest().isEmpty())
-				Chat.logger("warning", Texts.QUEST + " '" + q.name() + "' " + Texts.INVALID + " " + Texts.NEXT_QUEST + "! '" + q.nextQuest() + "'");
-		}
+				Storage.previousQuest.remove(player);
+				Storage.wayPreviousQuestWereGiven.remove(player);
+			}
+		}, (Storage.previousQuest.get(player).onComplete().delay() * 20));
+		
 		return 0;
 	}
 	

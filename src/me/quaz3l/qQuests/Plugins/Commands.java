@@ -84,8 +84,8 @@ public class Commands implements CommandExecutor
 							Quest q = qQuests.plugin.qAPI.getActiveQuest((Player) s);
 							Chat.noPrefixMessage((Player) s, ChatColor.AQUA + ":" + ChatColor.BLUE + "========" + ChatColor.GOLD + " Quest Info " + ChatColor.BLUE + "========" + ChatColor.AQUA + ":");
 							Chat.noPrefixMessage((Player) s, "Name: " + ChatColor.GREEN + q.name());
-							if(q.nextQuest() != null && !q.nextQuest().isEmpty())
-								Chat.noPrefixMessage((Player) s, "Next Quest: " + ChatColor.GREEN + q.nextQuest());
+							if(q.onComplete().nextQuest() != null && !q.onComplete().nextQuest().isEmpty())
+								Chat.noPrefixMessage((Player) s, "Next Quest: " + ChatColor.GREEN + q.onComplete().nextQuest());
 							if(q.repeated() == -1)
 								Chat.noPrefixMessage((Player) s, "Repeatable: " + ChatColor.GREEN + "Infinite");
 							else if((q.repeated() - qQuests.plugin.qAPI.getProfiles().getQuestsTimesCompleted((Player) s, q)) == 0)

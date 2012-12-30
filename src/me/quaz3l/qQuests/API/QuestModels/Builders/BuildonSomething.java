@@ -7,6 +7,9 @@ import me.quaz3l.qQuests.API.QuestModels.onSomething;
 
 public class BuildonSomething {
 	private String message = "Quest Message!";
+	private int delay = 0;
+	private String nextQuest ="";
+	
 	private double money = 0;
 	private int health = 0;
 	private int hunger = 0;
@@ -28,6 +31,15 @@ public class BuildonSomething {
 			this.message = s;
 		return this;
 	}
+	public BuildonSomething nextQuest(String s) {
+		this.nextQuest = s;
+		return this;
+	}
+	public BuildonSomething delay(int i) {
+		this.delay = i;
+		return this;
+	}
+	
 	public BuildonSomething money(double i) {
 		this.money = i;
 		return this;
@@ -49,6 +61,7 @@ public class BuildonSomething {
 		this.levelSet = i;
 		return this;
 	}
+	
 	public BuildonSomething items(int i, ArrayList<Integer> itms) {
 		this.items.put(i, itms);
 		return this;
@@ -61,6 +74,13 @@ public class BuildonSomething {
 	public final String message() {
 		return this.message;
 	}
+	public final String nextQuest() {
+		return this.nextQuest;
+	}
+	public final int delay() {
+		return this.delay;
+	}
+	
 	public final double money() {
 		return this.money;
 	}

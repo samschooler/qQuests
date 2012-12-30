@@ -161,7 +161,6 @@ public class Config {
 			// Set Setup Nodes
 				this.getQuestConfig().set("Diamonds!.setup.repeated", -1);
 				this.getQuestConfig().set("Diamonds!.setup.invisible", false);
-				this.getQuestConfig().set("Diamonds!.setup.delay", 1);
 				this.getQuestConfig().set("Diamonds!.setup.nextQuest", "");
 			
 			// Set Requirements Nodes
@@ -187,6 +186,7 @@ public class Config {
 			
 			// Set onComplete Nodes
 				this.getQuestConfig().set("Diamonds!.onComplete.message", "Thanks! Now I can feed my lava dragon! ;)");
+				this.getQuestConfig().set("Diamonds!.onComplete.delay", 10);
 				this.getQuestConfig().set("Diamonds!.onComplete.market.money", 500);
 				this.getQuestConfig().set("Diamonds!.onComplete.market.health", 0);
 				this.getQuestConfig().set("Diamonds!.onComplete.market.hunger", 0);
@@ -225,20 +225,15 @@ public class Config {
 		}
 		if(this.getQuestConfig().getString(quest + ".setup.delay") != null)
 		{
-			try
-			{
-				Integer.parseInt(this.getQuestConfig().getString(quest + ".setup.delay"));
-			}
-			catch(NumberFormatException e)
-			{
-				Chat.attention(2);
-				Chat.logger("severe", "The 'setup.delay' node of quest '" + quest + "' is not a number!");
-				rturn = false;
-			}
+			Chat.attention(0);
+			Chat.logger("severe", "The 'setup.delay' node is not supported anymore! Put your delay in 'onComplete.delay' of quest '" + quest + "', also DELAYS ARE MEASURED SECONDS NOW, SO ADJUST ACCORDINGLY!");
+			rturn = false;
 		}
 		if(this.getQuestConfig().getString(quest + ".setup.nextQuest") != null)
 		{
-			
+			Chat.attention(0);
+			Chat.logger("severe", "The 'setup.nextQuest' node is not supported anymore! Put your nextQuest in 'onComplete.nextQuest' of quest '" + quest + "'!");
+			rturn = false;
 		}
 		
 		// Requirements
@@ -366,6 +361,19 @@ public class Config {
 			this.getQuestConfig().set(quest + ".onJoin.message", "UNDEFINED");
 			rturn = false;
 		}
+		if(this.getQuestConfig().getString(quest + ".onJoin.delay") != null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".onJoin.delay"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'onJoin.delay' node of quest '" + quest + "' is not a number!");
+				rturn = false;
+			}
+		}
 		if(this.getQuestConfig().getString(quest + ".onJoin.market.money") != null)
 		{
 			try
@@ -466,6 +474,19 @@ public class Config {
 			this.getQuestConfig().set(quest + ".onDrop.message", "UNDEFINED");
 			rturn = false;
 		}
+		if(this.getQuestConfig().getString(quest + ".onDrop.delay") != null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".onDrop.delay"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'onDrop.delay' node of quest '" + quest + "' is not a number!");
+				rturn = false;
+			}
+		}
 		if(this.getQuestConfig().getString(quest + ".onDrop.market.money") != null)
 		{
 			try
@@ -565,6 +586,19 @@ public class Config {
 			Chat.logger("severe", "The 'onComplete.message' node of quest '" + quest + "' is not defined!");
 			this.getQuestConfig().set(quest + ".onComplete.message", "UNDEFINED");
 			rturn = false;
+		}
+		if(this.getQuestConfig().getString(quest + ".onComplete.delay") != null)
+		{
+			try
+			{
+				Integer.parseInt(this.getQuestConfig().getString(quest + ".onComplete.delay"));
+			}
+			catch(NumberFormatException e)
+			{
+				Chat.attention(2);
+				Chat.logger("severe", "The 'onComplete.delay' node of quest '" + quest + "' is not a number!");
+				rturn = false;
+			}
 		}
 		if(this.getQuestConfig().getString(quest + ".onComplete.market.money") != null)
 		{

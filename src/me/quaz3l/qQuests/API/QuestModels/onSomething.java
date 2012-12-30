@@ -9,16 +9,20 @@ import org.bukkit.inventory.ItemStack;
 
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.QuestModels.Builders.BuildonSomething;
+import me.quaz3l.qQuests.Util.Storage;
 
 public class onSomething {
 	private String message;
+	private int delay;
+	private String nextQuest;
+	
 	private double money;
 	private int health;
 	private int hunger;
 
-	private int levelAdd = 0;
+	private int levelAdd;
 	private int levelSet = -1;
-	
+		
 	private HashMap<Integer, ArrayList<Integer>> items = new HashMap<Integer, ArrayList<Integer>>();
 	private HashMap<Integer, String> commands = new HashMap<Integer, String>();
 	private HashMap<Integer, String> permissionsAdd = new HashMap<Integer, String>();
@@ -27,6 +31,8 @@ public class onSomething {
 	public onSomething(BuildonSomething build) 
 	{
 		this.message = build.message();
+		this.delay = build.delay();
+		this.nextQuest = build.nextQuest();
 		this.money = build.money();
 		this.health = build.health();
 		this.hunger = build.hunger();
@@ -38,6 +44,13 @@ public class onSomething {
 	public String message() {
 		return this.message;
 	}
+	public int delay() {
+		return this.delay;
+	}
+	public final String nextQuest() {
+		return this.nextQuest;
+	}
+	
 	public double money() {
 		return this.money;
 	}
@@ -68,7 +81,7 @@ public class onSomething {
 		return this.permissionsTake;
 	}
 	
-	public Integer feeReward(Player p)
+	public Integer feeReward(final Player p)
 	{
 		// Fee Requirements
 		if(qQuests.plugin.economy != null) 
@@ -170,6 +183,14 @@ public class onSomething {
 			p.setFoodLevel(20);
 		else
 			p.setFoodLevel(hungerAmount);
+		
+		// Delay
+		Storage.cannotGetQuests.add(p);
+		qQuests.plugin.getServer().getScheduler().scheduleSyncDelayedTask(qQuests.plugin, new Runnable() {
+			public void run() {
+				Storage.cannotGetQuests.remove(p);
+			}
+		}, (this.delay() * 20));
 		
 		// Successful
 		return 0;

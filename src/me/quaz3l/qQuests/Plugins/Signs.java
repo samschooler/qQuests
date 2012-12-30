@@ -155,8 +155,8 @@ public class Signs implements Listener {
 					Quest q = qQuests.plugin.qAPI.getActiveQuest(e.getPlayer());
 					Chat.noPrefixMessage(e.getPlayer(), ChatColor.AQUA + ":" + ChatColor.BLUE + "========" + ChatColor.GOLD + " Quest Info " + ChatColor.BLUE + "========" + ChatColor.AQUA + ":");
 					Chat.noPrefixMessage(e.getPlayer(), "Name: " + ChatColor.GREEN + q.name());
-					if(q.nextQuest() != null && !q.nextQuest().isEmpty())
-						Chat.noPrefixMessage(e.getPlayer(), "Next Quest: " + ChatColor.GREEN + q.nextQuest());
+					if(q.onComplete().nextQuest() != null && !q.onComplete().nextQuest().isEmpty())
+						Chat.noPrefixMessage(e.getPlayer(), "Next Quest: " + ChatColor.GREEN + q.onComplete().nextQuest());
 					if(q.repeated() == -1)
 						Chat.noPrefixMessage(e.getPlayer(), "Repeatable: " + ChatColor.GREEN + "Infinite");
 					else if((q.repeated() - qQuests.plugin.qAPI.getProfiles().getQuestsTimesCompleted(e.getPlayer(), q)) == 0)

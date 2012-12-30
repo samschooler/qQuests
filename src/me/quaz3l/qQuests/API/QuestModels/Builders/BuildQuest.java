@@ -11,8 +11,6 @@ public class BuildQuest {
 	private String name = "Quest";
 	private int repeated = -1;
 	private Boolean invisible = false;
-	private String nextQuest = "";
-	private int delay = -1;
 	
 	// Requirements
 	private int levelMin = 0;
@@ -42,14 +40,6 @@ public class BuildQuest {
 	}
 	public BuildQuest invisible(Boolean b) {
 		this.invisible = b;
-		return this;
-	}
-	public BuildQuest nextQuest(String s) {
-		this.nextQuest = s;
-		return this;
-	}
-	public BuildQuest delay(int i) {
-		this.delay = i;
 		return this;
 	}
 	
@@ -94,12 +84,6 @@ public class BuildQuest {
 	}
 	public final Boolean invisible() {
 		return this.invisible;
-	}
-	public final String nextQuest() {
-		return this.nextQuest;
-	}
-	public final int delay() {
-		return this.delay;
 	}
 	
 	// Requirements

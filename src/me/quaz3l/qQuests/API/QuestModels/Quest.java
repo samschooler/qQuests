@@ -9,8 +9,6 @@ public class Quest {
 	private String name;
 	private int repeated;
 	private Boolean invisible;
-	private String nextQuest;
-	private int delay;
 	
 	// Requirements
 	private int levelMin;
@@ -29,8 +27,6 @@ public class Quest {
 		name = build.name();
 		repeated = build.repeated();
 		invisible = build.invisible();
-		nextQuest = build.nextQuest();
-		delay = build.delay();
 		
 		levelMin = build.levelMin();
 		levelMax = build.levelMax();
@@ -49,12 +45,6 @@ public class Quest {
 	}
 	public final Boolean invisible() {
 		return this.invisible;
-	}
-	public final String nextQuest() {
-		return this.nextQuest;
-	}
-	public final int delay() {
-		return this.delay;
 	}
 	
 	public final int levelMin() {
