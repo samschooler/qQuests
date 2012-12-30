@@ -23,10 +23,6 @@ public class Config {
 	{
 		this.loadConfigs();
 		
-		// Converts Old quests.yml
-		if(this.getQuestConfig().getString("0.info.name") != null)
-			LegacyConverter.convert();
-		
 		// Initialize The Configuration Files
 		this.initializeConfig();
 		this.initializeQuestConfig();
@@ -226,13 +222,17 @@ public class Config {
 		if(this.getQuestConfig().getString(quest + ".setup.delay") != null)
 		{
 			Chat.attention(0);
-			Chat.logger("severe", "The 'setup.delay' node is not supported anymore! Put your delay in 'onComplete.delay' of quest '" + quest + "', also DELAYS ARE MEASURED SECONDS NOW, SO ADJUST ACCORDINGLY!");
+			Chat.logger("warning", "The 'setup.delay' node is not supported anymore! Put your delay in 'onComplete.delay' of quest '" + quest + "', also DELAYS ARE MEASURED SECONDS NOW!");
+			Chat.logger("info", "Auto fixing for you :)");
+			LegacyConverter.convert(0);
 			rturn = false;
 		}
 		if(this.getQuestConfig().getString(quest + ".setup.nextQuest") != null)
 		{
 			Chat.attention(0);
-			Chat.logger("severe", "The 'setup.nextQuest' node is not supported anymore! Put your nextQuest in 'onComplete.nextQuest' of quest '" + quest + "'!");
+			Chat.logger("warning", "The 'setup.nextQuest' node is not supported anymore! Put your nextQuest in 'onComplete.nextQuest' of quest '" + quest + "'!");
+			Chat.logger("info", "Auto fixing for you :)");
+			LegacyConverter.convert(1);
 			rturn = false;
 		}
 		
