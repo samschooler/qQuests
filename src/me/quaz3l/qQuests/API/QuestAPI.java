@@ -107,6 +107,7 @@ public class QuestAPI {
 	
 	public Integer giveQuest(Player player, String quest, boolean onlyVisible, String via)
     {
+		quest = quest.toLowerCase();
 		// Check If The Player Already Has A Quest
 		if(qQuests.plugin.qAPI.hasActiveQuest(player))
 			return 3;
@@ -212,7 +213,6 @@ public class QuestAPI {
 						int result = giveQuest(player, Storage.previousQuest.get(player).onDrop().nextQuest(), false, Storage.wayPreviousQuestWereGiven.get(player));
 						if(result == 0)
 						{
-							getActiveQuests().put(player, getQuests().get(Storage.previousQuest.get(player).onDrop().nextQuest()));
 							Chat.message(player, getActiveQuest(player).onJoin().message());
 						}
 						else
@@ -276,17 +276,17 @@ public class QuestAPI {
 		// If it makes it here reset player data
 		this.resetPlayer(player);
 		
+		Chat.logger("info", Storage.previousQuest.get(player).onComplete().nextQuest());
+		
 		// Set Delay/Give Next Quest
 		qQuests.plugin.getServer().getScheduler().scheduleSyncDelayedTask(qQuests.plugin, new Runnable() {
 
 			public void run() {
-				Chat.logger("info", Storage.previousQuest.get(player).onComplete().nextQuest());
 				if(Storage.previousQuest.get(player).onComplete().nextQuest() != null)
 				{
 					int result = giveQuest(player, Storage.previousQuest.get(player).onComplete().nextQuest(), false, Storage.wayPreviousQuestWereGiven.get(player));
 					if(result == 0)
 					{
-						getActiveQuests().put(player, getQuests().get(Storage.previousQuest.get(player).onComplete().nextQuest()));
 						Chat.message(player, getActiveQuest(player).onJoin().message());
 					}
 					else
@@ -295,7 +295,7 @@ public class QuestAPI {
 				Storage.previousQuest.remove(player);
 				Storage.wayPreviousQuestWereGiven.remove(player);
 			}
-		}, (Storage.previousQuest.get(player).onComplete().delay() * 20));
+		}, (Storage.previousQuest.get(player).onComplete().delay() * 20)+10);
 		
 		return 0;
 	}
