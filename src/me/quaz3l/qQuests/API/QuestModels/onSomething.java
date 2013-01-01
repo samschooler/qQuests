@@ -82,7 +82,6 @@ public class onSomething {
 		return this.permissionsTake;
 	}
 	
-	@SuppressWarnings("unused")
 	public Integer feeReward(final Player p)
 	{
 		// Fee Requirements
@@ -117,6 +116,8 @@ public class onSomething {
 		*/
 		
 		// Items
+		
+		// Find removable items
 		ItemStack[] itemz = null;
 		for(int i=0; i < this.items().size(); i++) {
 			if(this.items().get(i).get(1) < 0)
@@ -128,49 +129,24 @@ public class onSomething {
 					itemz[i] = item;
 			}
 		}
+		// Remove the items
 		if(itemz!=null)
 			if(!InventoryUtil.removeItems(itemz, p.getInventory()))
 				return 8;
-		int i=0;
-		while(i < this.items().size())
+		
+		// Add items
+		for(int i=0; i < this.items().size(); i++)
 		{
 			if(this.items().get(i).get(1) > 0) // If amount is positive
 			{
 				ItemStack items = new ItemStack(this.items().get(i).get(0), this.items().get(i).get(1));
 				p.getInventory().addItem(new ItemStack[] { items });
 			}
-			else if(0==1) // If amount is negative
-			{
-				ItemStack items = new ItemStack(this.items().get(i).get(0), (this.items().get(i).get(1) * -1));
-				if (p.getInventory().contains(this.items().get(i).get(0), (this.items().get(i).get(1) * -1))) // If it contains the item amount
-					p.getInventory().removeItem(items);
-					
-				else // If the player doesn't have the item, put all the items back
-				{
-					i--;
-					while(i > -1)
-					{
-						if(this.items().get(i).get(1) < 0)
-						{
-							ItemStack itms = new ItemStack(this.items().get(i).get(0), (this.items().get(i).get(1) * -1));
-							p.getInventory().addItem(new ItemStack[] { itms });
-						}
-						else
-						{
-							ItemStack itms = new ItemStack(this.items().get(i).get(0), this.items().get(i).get(1));
-							p.getInventory().removeItem(itms);
-						}
-						i--;
-					}
-					return 8;
-				}
-			}
 			i++;
 		}
 		
 		// Commands
-		i=0;
-		while(i < this.commands().size())
+		for(int i=0; i < this.commands().size(); i++)
 		{
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.commands().get(i).replace("`player", p.getName()));
 			i++;
