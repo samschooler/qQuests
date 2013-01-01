@@ -1,0 +1,5 @@
+name: qQuests
+version: 2005
+changelog:
+- 'Added item damage to tasks and rewards'
+- 'NOTE: in tasks you must wrap items with damage in quotes like: "35:1"'
