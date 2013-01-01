@@ -49,10 +49,16 @@ public class InventoryUtil {
 		}
 		for(int i=0; i < items.length; i++) {
 			HashMap<Integer, ? extends ItemStack> inv = inventory.all(items[i].getType());
+			
 			for (ItemStack stack : inv.values()) {
 				if(items[i].getAmount() <= 0)
 					break; // Got requested amount
 				
+				Chat.logger("debug", "Inv Damage: " + stack.getDurability());
+				Chat.logger("debug", "Request Damage: " + items[i].getDurability());
+				if(items[i].getDurability() != stack.getDurability())
+					continue;
+								
 				if((stack.getAmount() - items[i].getAmount()) > 0) { // Remove the requested amount, and
 					amounts.set(i, 0);
 				} else { // Remove stack, and amount that it had from requested

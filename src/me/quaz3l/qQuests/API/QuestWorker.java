@@ -99,6 +99,7 @@ public class QuestWorker
 			}
 			
 			String[] strs = {""};
+			String[] qtrs = {""};
 			// Set onJoin Variables
 			BuildonSomething BuildonJoin = new BuildonSomething();
 			BuildonJoin.message(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onJoin.message"));
@@ -114,14 +115,17 @@ public class QuestWorker
 			{
 				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onJoin.market.items")) {
 					strs = s.split(" ");
+					qtrs = strs[0].split(":");
 					
-					if(Material.matchMaterial(strs[0]) != null)
+					if(Material.matchMaterial(qtrs[0]) != null)
 					{
 						try
 						{
 							ArrayList<Integer> itms = new ArrayList<Integer>();
-							itms.add(Integer.parseInt(strs[0])); // Item Id
+							itms.add(Integer.parseInt(qtrs[0])); // Item Id
 							itms.add(Integer.parseInt(strs[1])); // Amount
+							if(qtrs.length == 2)
+								itms.add(Integer.parseInt(qtrs[1])); // Item Damage
 							BuildonJoin.items(i, itms);
 						}
 						catch(Exception e)
@@ -164,14 +168,17 @@ public class QuestWorker
 			{
 				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onDrop.market.items")) {
 					strs = s.split(" ");
+					qtrs = strs[0].split(":");
 					
-					if(Material.matchMaterial(strs[0]) != null)
+					if(Material.matchMaterial(qtrs[0]) != null)
 					{
 						try
 						{
 							ArrayList<Integer> itms = new ArrayList<Integer>();
-							itms.add(Integer.parseInt(strs[0])); // Item Id
+							itms.add(Integer.parseInt(qtrs[0])); // Item Id
 							itms.add(Integer.parseInt(strs[1])); // Amount
+							if(qtrs.length == 2)
+								itms.add(Integer.parseInt(qtrs[1])); // Item Damage
 							BuildonDrop.items().put(i, itms);
 						}
 						catch(Exception e)
@@ -214,14 +221,17 @@ public class QuestWorker
 			{
 				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onComplete.market.items")) {
 					strs = s.split(" ");
+					qtrs = strs[0].split(":");
 					
-					if(Material.matchMaterial(strs[0]) != null)
+					if(Material.matchMaterial(qtrs[0]) != null)
 					{
 						try
 						{
 							ArrayList<Integer> itms = new ArrayList<Integer>();
-							itms.add(Integer.parseInt(strs[0])); // Item Id
+							itms.add(Integer.parseInt(qtrs[0])); // Item Id
 							itms.add(Integer.parseInt(strs[1])); // Amount
+							if(qtrs.length == 2)
+								itms.add(Integer.parseInt(qtrs[1])); // Item Damage
 							BuildonComplete.items().put(i, itms);
 						}
 						catch(Exception e)

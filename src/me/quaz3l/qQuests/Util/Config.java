@@ -416,26 +416,32 @@ public class Config {
 		if(this.getQuestConfig().getStringList(quest + ".onJoin.market.items").isEmpty())
 		{
 			String[] strs = {""};
+			String[] qtrs = {""};
 			for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(quest + ".onJoin.market.items")) {
 				strs = s.split(" ");
+				qtrs = strs[0].split(":");
 				
-				if(Material.matchMaterial(strs[0]) != null)
+				if(Material.matchMaterial(qtrs[0]) != null)
 				{
 					try
 					{
-						Integer.parseInt(strs[0]);
+						Integer.parseInt(qtrs[0]);
 						Integer.parseInt(strs[1]);
+						if(qtrs.length == 2)
+							Integer.parseInt(qtrs[1]);
 					}
 					catch(Exception e)
 					{
 						Chat.logger("severe", "The 'onJoin' rewards/fees of '" + quest + "' are not correctly formatted! Disabling this quest...");
-						continue;
+						rturn = false;
+						break;
 					}
 				}
 				else
 				{
-					Chat.logger("severe", "The 'onJoin' rewards/fees of '" + quest + "' does not have valid material ids! Disabling this quest...");
-					continue;
+					Chat.logger("severe", "The 'onJoin' rewards/fees of '" + quest + "' do not have valid material ids! Disabling this quest...");
+					rturn = false;
+					break;
 				}
 			}
 		}
@@ -529,26 +535,32 @@ public class Config {
 		if(!this.getQuestConfig().getStringList(quest + ".onDrop.market.items").isEmpty())
 		{
 			String[] strs = {""};
+			String[] qtrs = {""};
 			for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(quest + ".onDrop.market.items")) {
 				strs = s.split(" ");
+				qtrs = strs[0].split(":");
 				
-				if(Material.matchMaterial(strs[0]) != null)
+				if(Material.matchMaterial(qtrs[0]) != null)
 				{
 					try
 					{
-						Integer.parseInt(strs[0]);
+						Integer.parseInt(qtrs[0]);
 						Integer.parseInt(strs[1]);
+						if(qtrs.length == 2)
+							Integer.parseInt(qtrs[1]);
 					}
 					catch(Exception e)
 					{
 						Chat.logger("severe", "The 'onDrop' rewards/fees of '" + quest + "' are not correctly formatted! Disabling this quest...");
-						continue;
+						rturn = false;
+						break;
 					}
 				}
 				else
 				{
 					Chat.logger("severe", "The 'onDrop' rewards/fees of '" + quest + "' does not have valid material ids! Disabling this quest...");
-					continue;
+					rturn = false;
+					break;
 				}
 			}
 		}
@@ -642,26 +654,32 @@ public class Config {
 		if(this.getQuestConfig().getStringList(quest + ".onComplete.market.items").isEmpty())
 		{
 			String[] strs = {""};
+			String[] qtrs = {""};
 			for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(quest + ".onComplete.market.items")) {
 				strs = s.split(" ");
+				qtrs = strs[0].split(":");
 				
-				if(Material.matchMaterial(strs[0]) != null)
+				if(Material.matchMaterial(qtrs[0]) != null)
 				{
 					try
 					{
-						Integer.parseInt(strs[0]);
+						Integer.parseInt(qtrs[0]);
 						Integer.parseInt(strs[1]);
+						if(qtrs.length == 2)
+							Integer.parseInt(qtrs[1]);
 					}
 					catch(Exception e)
 					{
 						Chat.logger("severe", "The 'onComplete' rewards/fees of '" + quest + "' are not correctly formatted! Disabling this quest...");
-						continue;
+						rturn = false;
+						break;
 					}
 				}
 				else
 				{
 					Chat.logger("severe", "The 'onComplete' rewards/fees of '" + quest + "' does not have valid material ids! Disabling this quest...");
-					continue;
+					rturn = false;
+					break;
 				}
 			}
 		}

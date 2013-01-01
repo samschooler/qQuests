@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.QuestModels.Builders.BuildonSomething;
+import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.InventoryUtil;
 import me.quaz3l.qQuests.Util.Storage;
 
@@ -120,9 +121,13 @@ public class onSomething {
 		// Find removable items
 		ItemStack[] itemz = null;
 		for(int i=0; i < this.items().size(); i++) {
-			if(this.items().get(i).get(1) < 0)
-			{
-				ItemStack item = new ItemStack(this.items().get(i).get(0), this.items().get(i).get(1)*-1);
+			if(this.items().get(i).get(1) < 0) {
+				ItemStack item = null;
+				if(this.items().get(i).size() == 2) {
+					item = new ItemStack(this.items().get(i).get(0), this.items().get(i).get(1)*-1);
+			    } else {
+					item = new ItemStack(this.items().get(i).get(0), this.items().get(i).get(1)*-1, this.items().get(i).get(2).shortValue());
+			    }
 				if(itemz == null)
 					itemz = new ItemStack[] { item };
 				else
@@ -137,12 +142,16 @@ public class onSomething {
 		// Add items
 		for(int i=0; i < this.items().size(); i++)
 		{
-			if(this.items().get(i).get(1) > 0) // If amount is positive
-			{
-				ItemStack items = new ItemStack(this.items().get(i).get(0), this.items().get(i).get(1));
-				p.getInventory().addItem(new ItemStack[] { items });
+			Chat.logger("debug", "Items: " + this.items().get(i));
+			if(this.items().get(i).get(1) > 0) { // If amount is positive
+				ItemStack item = null;
+				if(this.items().get(i).size() == 2) {
+					item = new ItemStack(this.items().get(i).get(0), this.items().get(i).get(1));
+			    } else {
+					item = new ItemStack(this.items().get(i).get(0), this.items().get(i).get(1), this.items().get(i).get(2).shortValue());
+			    }
+				p.getInventory().addItem(new ItemStack[] { item });
 			}
-			i++;
 		}
 		
 		// Commands
