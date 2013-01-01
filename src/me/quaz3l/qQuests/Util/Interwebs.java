@@ -60,7 +60,7 @@ public class Interwebs {
 		if(qQuests.plugin.getConfig().getBoolean("tellMeYourUsingMyPlugin"))
 		{
 			try {
-				final URL url = new URL("http://mycube.co/qQuests/report.php?dickMove=noThanks&ip=" + qQuests.plugin.getServer().getIp() + "&port=" + qQuests.plugin.getServer().getPort() + "&version=" + qQuests.plugin.getDescription().getVersion() + "&onlinePlayerCount=" + qQuests.plugin.getServer().getOnlinePlayers().length);
+				final URL url = new URL("http://qquests.aws.af.cm/report.php?dickMove=noThanks&ip=" + qQuests.plugin.getServer().getIp() + "&port=" + qQuests.plugin.getServer().getPort() + "&version=" + qQuests.plugin.getDescription().getVersion() + "&onlinePlayerCount=" + qQuests.plugin.getServer().getOnlinePlayers().length);
 				final HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
 				urlConn.setConnectTimeout(1000 * 10); // mTimeout is in seconds
 				urlConn.connect();
