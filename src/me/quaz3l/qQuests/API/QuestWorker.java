@@ -35,8 +35,8 @@ public class QuestWorker
 			String root = questName.toString();
 			
 			// Validate The Quest
-			if(!qQuests.plugin.Config.validate(root)) 
-				continue;
+			//if(!qQuests.plugin.Config.validate(root)) 
+				//continue;
 			
 			BuildQuest quest = new BuildQuest(root);
 			
@@ -73,7 +73,25 @@ public class QuestWorker
 								task.type().equalsIgnoreCase("place") ||
 								task.type().equalsIgnoreCase("enchant"))
 						{
-							task.id(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".tasks." + tRoot + ".id"));
+							String slug = qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".id");
+							String[] info = slug.split(":");
+							Chat.logger("debug", "Slug: " + slug);
+							Chat.logger("debug", "ID: " + info[0]);
+							if(info.length == 2) {
+								try {
+									Chat.logger("debug", "DR: " + info[1]);
+									task.id(Integer.parseInt(info[0]));
+									task.durability(((Integer)Integer.parseInt(info[1])).shortValue());
+								} catch(Exception e) {
+									Chat.logger("severe", "The #" + tRoot +" task of '" + root + "' does not have valid material ids! Disabling this quest...");
+								}
+							} else {
+								try {
+									task.id(Integer.parseInt(info[0]));
+								} catch(Exception e) {
+									Chat.logger("severe", "The #" + tRoot +" task of '" + root + "' does not have valid material ids! Disabling this quest...");
+								}
+							}
 						}
 						else if(task.type().equalsIgnoreCase("kill") ||
 								task.type().equalsIgnoreCase("kill_player") ||

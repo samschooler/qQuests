@@ -117,10 +117,11 @@ public class onSomething {
 		*/
 		
 		// Items
-		
+		Chat.logger("debug", "Items To Remove: " + this.items().size());
 		// Find removable items
 		ItemStack[] itemz = null;
 		for(int i=0; i < this.items().size(); i++) {
+			Chat.logger("debug", "Removable: " + this.items().get(i));
 			if(this.items().get(i).get(1) < 0) {
 				ItemStack item = null;
 				if(this.items().get(i).size() == 2) {
@@ -135,10 +136,11 @@ public class onSomething {
 			}
 		}
 		// Remove the items
-		if(itemz!=null)
+		if(itemz!=null) {
+			Chat.logger("debug", "Itemz: " + itemz[0]);
 			if(!InventoryUtil.removeItems(itemz, p.getInventory()))
 				return 8;
-		
+		}
 		// Add items
 		for(int i=0; i < this.items().size(); i++)
 		{

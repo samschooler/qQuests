@@ -6,6 +6,7 @@ public class Task {
 	private Integer no;
 	private String type;
 	private Integer id;
+	private short durability;
 	private String ids;
 	private String display;
 	private Integer amount;
@@ -15,6 +16,7 @@ public class Task {
 		no = build.no();
 		type = build.type();
 		id = build.id();
+		durability = build.durability();
 		ids = build.ids();
 		display = build.display();
 		amount = build.amount();
@@ -29,6 +31,9 @@ public class Task {
 	}
 	public final Integer idInt() {
 		return this.id;
+	}
+	public final short durability() {
+		return this.durability;
 	}
 	public final String idString() {
 		return this.ids;

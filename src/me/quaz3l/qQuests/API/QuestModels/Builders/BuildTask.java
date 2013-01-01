@@ -6,6 +6,7 @@ public class BuildTask {
 	private int no;
 	private String type;
 	private int id;
+		private short durability;
 	private String ids;
 	private String display;
 	private int amount;
@@ -24,6 +25,10 @@ public class BuildTask {
 	}
 	public BuildTask id(Integer i) {
 		this.id = i;
+		return this;
+	}
+	public BuildTask durability(short i) {
+		this.durability = i;
 		return this;
 	}
 	public BuildTask id(String s) {
@@ -48,6 +53,9 @@ public class BuildTask {
 	}
 	public final int id() {
 		return this.id;
+	}
+	public final short durability() {
+		return this.durability;
 	}
 	public final String ids() {
 		return this.ids;

@@ -31,6 +31,9 @@ public class InventoryUtil {
 			for (ItemStack stack : inv.values()) {
 				if(items[i].getAmount() <= 0)
 					continue;
+				if(items[i].getDurability() > 0)
+					if(items[i].getDurability() != stack.getDurability())
+						continue;
 				if((stack.getAmount() - items[i].getAmount()) > 0) { // Remove the requested amount, and
 					stack.setAmount(stack.getAmount() - items[i].getAmount());
 					items[i].setAmount(0);
@@ -49,15 +52,18 @@ public class InventoryUtil {
 		}
 		for(int i=0; i < items.length; i++) {
 			HashMap<Integer, ? extends ItemStack> inv = inventory.all(items[i].getType());
-			
+			Chat.logger("debug", "Type: " + items[i].getType());
+			Chat.logger("debug", "Matches: " + inv.values().size());
 			for (ItemStack stack : inv.values()) {
 				if(items[i].getAmount() <= 0)
 					break; // Got requested amount
 				
 				Chat.logger("debug", "Inv Damage: " + stack.getDurability());
 				Chat.logger("debug", "Request Damage: " + items[i].getDurability());
-				if(items[i].getDurability() != stack.getDurability())
-					continue;
+				
+				if(items[i].getDurability() > 0)
+					if(items[i].getDurability() != stack.getDurability())
+						continue;
 								
 				if((stack.getAmount() - items[i].getAmount()) > 0) { // Remove the requested amount, and
 					amounts.set(i, 0);
@@ -67,7 +73,7 @@ public class InventoryUtil {
 			}		
 		}
 		for (int amount : amounts) {
-			Chat.logger("debug", "A Amount: " + amount);
+			Chat.logger("debug", "Z Amount: " + amount);
 			if(amount > 0)
 				return false;
 		}

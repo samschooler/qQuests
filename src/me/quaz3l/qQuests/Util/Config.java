@@ -711,7 +711,6 @@ public class Config {
 		}
 		
 		// Return
-		this.saveQuestConfig();
 		return rturn;
 	}
 	
