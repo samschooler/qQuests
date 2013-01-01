@@ -275,9 +275,7 @@ public class QuestAPI {
 		
 		// If it makes it here reset player data
 		this.resetPlayer(player);
-		
-		Chat.logger("info", Storage.previousQuest.get(player).onComplete().nextQuest());
-		
+				
 		// Set Delay/Give Next Quest
 		qQuests.plugin.getServer().getScheduler().scheduleSyncDelayedTask(qQuests.plugin, new Runnable() {
 
