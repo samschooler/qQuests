@@ -21,11 +21,11 @@ public class InventoryUtil {
 	 * @return if the items were taken
 	 */
 	public static boolean removeItems(ItemStack[] items, Inventory inventory) {	
-		Chat.logger("info", "Amount: " + items[0].getAmount());
+		Chat.logger("debug", "Amount: " + items[0].getAmount());
 		// Check to see if the inventory has the items
 		if(!hasSimilarItems(items, inventory))
 			return false;
-		Chat.logger("info", "Amount: " + items[0].getAmount());
+		Chat.logger("debug", "Amount: " + items[0].getAmount());
 		for(int i=0; i < items.length; i++) {
 			HashMap<Integer, ? extends ItemStack> inv = inventory.all(items[i].getType());
 			for (ItemStack stack : inv.values()) {
@@ -61,7 +61,7 @@ public class InventoryUtil {
 			}		
 		}
 		for (int amount : amounts) {
-			Chat.logger("info", "A Amount: " + amount);
+			Chat.logger("debug", "A Amount: " + amount);
 			if(amount > 0)
 				return false;
 		}

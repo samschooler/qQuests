@@ -62,14 +62,14 @@ public class Chat {
 	// Logger
 	public static void logger(String lvl, String s)
 	{
-		if(lvl.equalsIgnoreCase("info"))
+		if(lvl.equalsIgnoreCase("debug") && qQuests.plugin.debug)
+			qQuests.plugin.logger.info("[" + Thread.currentThread().getStackTrace()[2].getLineNumber() + "] " + parseColors(qQuests.plugin.prefix + s));
+		else if(lvl.equalsIgnoreCase("info"))
 			qQuests.plugin.logger.info(parseColors(qQuests.plugin.prefix + s));
 		else if(lvl.equalsIgnoreCase("warning"))
 			qQuests.plugin.logger.warning(parseColors(qQuests.plugin.prefix + s));
 		else if(lvl.equalsIgnoreCase("severe"))
 			qQuests.plugin.logger.severe(parseColors(qQuests.plugin.prefix + s));
-		else
-			qQuests.plugin.logger.warning(parseColors(qQuests.plugin.prefix + s));
 	}
 	
 	// Parses Error Codes To Phrases

@@ -32,6 +32,9 @@ public class qQuests extends JavaPlugin
 	public Config Config;
 	public QuestAPI qAPI;
 	
+	// SHOULD BE FALSE
+	public boolean debug = true;
+	
 	// Services
 	public Economy economy = null;
 	public Permission permission = null;
