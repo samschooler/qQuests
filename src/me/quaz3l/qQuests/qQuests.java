@@ -33,7 +33,7 @@ public class qQuests extends JavaPlugin
 	public QuestAPI qAPI;
 	
 	// SHOULD BE FALSE
-	public boolean debug = false;
+	public boolean debug = true;
 	
 	// Services
 	public Economy economy = null;
