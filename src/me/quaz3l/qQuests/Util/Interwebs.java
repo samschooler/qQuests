@@ -37,6 +37,8 @@ public class Interwebs {
 			 
 			long currentVersion = Long.valueOf(qQuests.plugin.getDescription().getVersion());
 			long latestVersion = latestConfig.getLong("version");
+			Chat.logger("debug", "Current Version: " + currentVersion);
+			Chat.logger("debug", "Latest Version: " + latestVersion);
 			if(latestVersion > currentVersion)
 			{
 				if(!updateNotified)
