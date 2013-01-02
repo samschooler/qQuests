@@ -83,7 +83,7 @@ public class qQuests extends JavaPlugin
 		//Setup Stock qPlugins
 		this.setupStockPlugins();
 		
-		Interwebs.repeat();
+		Interwebs.start();
 		
 		// Notify Logger
 		Chat.logger("info", "by Quaz3l: Enabled");

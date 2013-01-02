@@ -5,6 +5,7 @@ import java.util.HashMap;
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.QuestModels.Quest;
 import me.quaz3l.qQuests.Util.Chat;
+import me.quaz3l.qQuests.Util.Interwebs;
 import me.quaz3l.qQuests.Util.Storage;
 import me.quaz3l.qQuests.Util.Texts;
 
@@ -13,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 public class Commands implements CommandExecutor 
@@ -250,7 +252,14 @@ public class Commands implements CommandExecutor
 				}
 			}
 		}
-		else
+		else if(s instanceof ConsoleCommandSender) {
+			if(args[0].equalsIgnoreCase("update"))
+			{
+				if(!Interwebs.tryUpdate(s))
+					Chat.message(s, "qQuests is up to date.");
+			} else 
+				Chat.message(s, Texts.ONLY_PLAYERS);
+		} else
 			Chat.message(s, Texts.ONLY_PLAYERS);
 		return false;
 	}

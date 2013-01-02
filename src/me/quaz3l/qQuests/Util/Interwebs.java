@@ -8,24 +8,25 @@ import java.net.URL;
 
 import me.quaz3l.qQuests.qQuests;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Interwebs {
 	private static boolean updateNotified = false;
 	
-	public static void repeat()
+	public static void start()
 	{
 		qQuests.plugin.getServer().getScheduler().runTaskTimerAsynchronously(qQuests.plugin, new Runnable() {
-
-		    public void run() {
-		    	// Ping My Server
-		    	pingStatus();
-				
-				// Check For Update
-				checkForUpdates();
-		    }
+			public void run() {talk();}
 		}, 1L, (12 * 60 * 1200));
+	}
+	public static void talk() {
+		// Ping My Server
+    	pingStatus();
+		
+		// Check For Update
+		checkForUpdates();
 	}
 	public static void checkForUpdates()
 	{
@@ -35,7 +36,7 @@ public class Interwebs {
 			FileConfiguration latestConfig = YamlConfiguration.loadConfiguration(latestFile);
 			 
 			long currentVersion = Long.valueOf(qQuests.plugin.getDescription().getVersion());
-			long latestVersion = latestConfig.getLong("Build");
+			long latestVersion = latestConfig.getLong("version");
 			if(latestVersion > currentVersion)
 			{
 				if(!updateNotified)
@@ -44,7 +45,7 @@ public class Interwebs {
 					Chat.logger("warning", "####################### UPDATE AVALIBLE! #######################");
 					Chat.logger("warning", "################################################################");
 					Chat.logger("warning", "########################### CHANGELOG ##########################");
-					for(Object o : latestConfig.getStringList("Changelog"))
+					for(Object o : latestConfig.getStringList("changelog"))
 						Chat.logger("warning", "> " + o);
 					Chat.logger("warning", "################################################################");
 					Chat.logger("warning", "############### Type 'qQuests update' to update. ###############");
@@ -60,12 +61,12 @@ public class Interwebs {
 		if(qQuests.plugin.getConfig().getBoolean("tellMeYourUsingMyPlugin"))
 		{
 			try {
-				final URL url = new URL("http://qquests.aws.af.cm/report.php?dickMove=noThanks&ip=" + qQuests.plugin.getServer().getIp() + "&port=" + qQuests.plugin.getServer().getPort() + "&version=" + qQuests.plugin.getDescription().getVersion() + "&onlinePlayerCount=" + qQuests.plugin.getServer().getOnlinePlayers().length);
+				final URL url = new URL("http://qquests.aws.af.cm/report.php?dickMove=noThanks&port=" + qQuests.plugin.getServer().getPort() + "&version=" + qQuests.plugin.getDescription().getVersion() + "&onlinePlayerCount=" + qQuests.plugin.getServer().getOnlinePlayers().length);
 				final HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
 				urlConn.setConnectTimeout(1000 * 10); // mTimeout is in seconds
 				urlConn.connect();
 				if (urlConn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-					Chat.logger("info", "Server was pung... Thank You! :)");
+					Chat.logger("debug", "Server was pung... Thank You! :)");
 					return true;
 				}
 				else
@@ -98,7 +99,24 @@ public class Interwebs {
 	 
 	        return null;
 	}
-	public static boolean updatePlugin(String site, String destination)
+	public static boolean tryUpdate(CommandSender s) {
+		File latestFile = newTempFile("https://raw.github.com/quaz3l/qQuests/master/latest.yml");
+		if(latestFile != null)
+		{
+			FileConfiguration latestConfig = YamlConfiguration.loadConfiguration(latestFile);
+			 
+			long currentVersion = Long.valueOf(qQuests.plugin.getDescription().getVersion());
+			long latestVersion = latestConfig.getLong("version");
+			if(latestVersion > currentVersion)
+			{
+				if(updatePlugin(latestConfig.getString("source"), qQuests.plugin.getDataFolder().getPath() + ".jar")) {
+					Chat.message(s, "Reload server for update to take effect!");
+				} else Chat.message(s, "qQuests didn't download! Now the JAR is most likely corrupt! Go download the update from: " + latestConfig.getString("source"));
+			}
+		}
+		return false;
+	}
+	private static boolean updatePlugin(String site, String destination)
 	{
 	        try {
 	                BufferedInputStream in = new BufferedInputStream(new URL(site).openStream());
