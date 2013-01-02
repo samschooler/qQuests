@@ -112,7 +112,9 @@ public class Interwebs {
 			if(latestVersion > currentVersion)
 			{
 				if(updatePlugin(latestConfig.getString("source"), qQuests.plugin.getDataFolder().getPath() + ".jar")) {
+					Chat.message(s, "qQuest Updated!");
 					Chat.message(s, "Reload server for update to take effect!");
+					return true;
 				} else Chat.message(s, "qQuests didn't download! Now the JAR is most likely corrupt! Go download the update from: " + latestConfig.getString("source"));
 			}
 		}
