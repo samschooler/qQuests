@@ -150,6 +150,23 @@ public class Interwebs {
 	 
 	                lin.close();
 	                lfout.close();
+	                
+	                try{
+	                	 
+	            		File file = new File(destination + ".temp");
+	         
+	            		if(file.delete()){
+	            			Chat.logger("debug", "Temp file deleted.");
+	            		}else{
+	            			Chat.logger("debug", "Temp file failed to delete.");
+	            		}
+	         
+	            	}catch(Exception e){
+	         
+	            		e.printStackTrace();
+	         
+	            	}
+	                
 	                Chat.logger("info", "Installed.");
 	                
 	        } catch(Exception e) {
