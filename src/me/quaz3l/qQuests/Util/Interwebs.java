@@ -111,7 +111,7 @@ public class Interwebs {
 			long latestVersion = latestConfig.getLong("version");
 			if(latestVersion > currentVersion)
 			{
-				if(updatePlugin(latestConfig.getString("source"), qQuests.plugin.getDataFolder().getPath() + ".jar")) {
+				if(updatePlugin(latestConfig.getString("source"), qQuests.plugin.getDataFolder().getPath())) {
 					Chat.message(s, "qQuest Updated!");
 					Chat.message(s, "Reload server for update to take effect!");
 					return true;
@@ -123,8 +123,9 @@ public class Interwebs {
 	private static boolean updatePlugin(String site, String destination)
 	{
 	        try {
+	        		Chat.logger("info", "Downloading...");
 	                BufferedInputStream in = new BufferedInputStream(new URL(site).openStream());
-	                FileOutputStream fout = new FileOutputStream(destination);
+	                FileOutputStream fout = new FileOutputStream(destination + ".temp");
 	 
 	                byte data[] = new byte[1024]; //Download 1 KB at a time
 	                int count;
@@ -135,7 +136,24 @@ public class Interwebs {
 	 
 	                in.close();
 	                fout.close();
+	                Chat.logger("info", "Downloaded.");
+	                Chat.logger("info", "Installing...");
+	                BufferedInputStream lin = new BufferedInputStream(new URL(site).openStream());
+	                FileOutputStream lfout = new FileOutputStream(destination + ".jar");
+	 
+	                byte ldata[] = new byte[1024]; //Download 1 KB at a time
+	                int lcount;
+	                while((lcount = lin.read(ldata, 0, 1024)) != -1)
+	                {
+	                        lfout.write(ldata, 0, lcount);
+	                }
+	 
+	                lin.close();
+	                lfout.close();
+	                Chat.logger("info", "Installed.");
+	                
 	        } catch(Exception e) {
+	        	Chat.logger("info", "Failed to Download.");
 	        	return false;
 	        }
 	        return true;

@@ -1,5 +1,5 @@
 name: qQuests
-version: 2005
+version: 2006
 source: "https://github.com/quaz3l/qQuests/blob/master/builds/qQuests2005.jar?raw=true"
 changelog:
 - 'Added item damage to tasks and rewards'
