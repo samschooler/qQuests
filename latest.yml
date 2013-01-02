@@ -1,6 +1,6 @@
 name: qQuests
-version: 2004
-source: "https://github.com/quaz3l/qQuests/blob/master/builds/qQuests2004.jar?raw=true"
+version: 2005
+source: "https://github.com/quaz3l/qQuests/blob/master/builds/qQuests2005.jar?raw=true"
 changelog:
 - 'Added item damage to tasks and rewards'
 - 'NOTE: in tasks you must wrap items with damage in quotes like: "35:1"'
