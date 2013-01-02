@@ -77,7 +77,7 @@ permissions:
         description: Lets players edit things like signs, and other dangerous things
         default: true
         children:
-        	qquests.update: true
+            qquests.update: true
             qquests.admin.sign: true
             qquests.create.sign: true
             qquests.destroy.sign: true
