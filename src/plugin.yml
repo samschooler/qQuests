@@ -1,6 +1,6 @@
 name: qQuests
 main: me.quaz3l.qQuests.qQuests
-version: 2005
+version: 2006
 description: A overly customizable quests plugin.
 softdepend: [Vault, Citizens]
 commands:
@@ -70,10 +70,14 @@ permissions:
     qquests.destroy.sign:
         description: Lets players destroy qQuests signs
         default: op
+    qquests.update:
+        description: Lets players update qQuests
+        default: op
     qquests.admin:
         description: Lets players edit things like signs, and other dangerous things
         default: true
         children:
+        	qquests.update: true
             qquests.admin.sign: true
             qquests.create.sign: true
             qquests.destroy.sign: true

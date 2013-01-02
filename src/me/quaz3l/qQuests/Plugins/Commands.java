@@ -246,6 +246,14 @@ public class Commands implements CommandExecutor
 					}
 					else Chat.noPerms((Player) s);
 				}
+				else if(args[0].equalsIgnoreCase("update"))
+				{
+					if(qQuests.plugin.qAPI.checkPerms((Player) s, "update"))
+					{
+						if(!Interwebs.tryUpdate(s))
+							Chat.message(s, "qQuests is up to date.");
+					}
+				}
 				else
 				{
 					Chat.noPrefixMessage((Player) s, Texts.COMMANDS_HELP_TEXT);
