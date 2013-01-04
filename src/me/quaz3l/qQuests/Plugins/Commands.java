@@ -57,11 +57,17 @@ public class Commands implements CommandExecutor
 						}
 						else Chat.noPerms((Player) s);
 					}
-					else if(args.length == 2)
+					else if(args.length >= 2)
 					{
 						if(qQuests.plugin.qAPI.checkPerms((Player) s, "give.specific"))
 						{
-							Integer result = qQuests.plugin.qAPI.giveQuest((Player) s, args[1], true, "Commands");
+							String fullName = args[1];
+							if(args.length > 2) {
+								for(int i=2; i < args.length; i++) {
+									fullName += args[i];
+								}
+							}
+							Integer result = qQuests.plugin.qAPI.giveQuest((Player) s, fullName, true, "Commands");
 							if(result == 0)
 							{
 								Storage.wayCurrentQuestsWereGiven.put(((Player) s), "Commands");

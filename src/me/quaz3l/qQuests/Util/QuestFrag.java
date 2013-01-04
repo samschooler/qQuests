@@ -34,6 +34,6 @@ public class QuestFrag {
 				}
 			}
 			return matches.get(index).name();
-		} else return null;
+		} else return "";
 	}
 }
