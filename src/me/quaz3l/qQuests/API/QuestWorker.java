@@ -288,8 +288,8 @@ public class QuestWorker
 	}
 	private void rememberQuest(Quest quest) 
 	{
-		Storage.quests.put(quest.name(), quest);
+		Storage.quests.put(quest.name().toLowerCase(), quest);
 		if(!quest.invisible())
-			Storage.visibleQuests.put(quest.name(), quest);
+			Storage.visibleQuests.put(quest.name().toLowerCase(), quest);
 	}
 }

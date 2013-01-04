@@ -108,7 +108,8 @@ public class QuestAPI {
 	
 	public Integer giveQuest(Player player, String quest, boolean onlyVisible, String via)
     {
-		quest = QuestFrag.get(quest.toLowerCase());
+		Chat.logger("debug", quest);
+		quest = QuestFrag.get(quest.toLowerCase()).toLowerCase();
 		// Check If The Player Already Has A Quest
 		if(qQuests.plugin.qAPI.hasActiveQuest(player))
 			return 3;
@@ -123,6 +124,8 @@ public class QuestAPI {
 			q = this.getVisibleQuests().get(quest);
 		else
 			q = this.getQuests().get(quest);
+		
+		Chat.logger("debug", quest);
 		
 		// Check If Is A Valid Quest
 		if(q == null)

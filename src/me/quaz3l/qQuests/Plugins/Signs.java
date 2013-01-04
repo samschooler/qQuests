@@ -5,6 +5,7 @@ import java.util.HashMap;
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.QuestModels.Quest;
 import me.quaz3l.qQuests.Util.Chat;
+import me.quaz3l.qQuests.Util.QuestFrag;
 import me.quaz3l.qQuests.Util.Storage;
 import me.quaz3l.qQuests.Util.Texts;
 
@@ -86,7 +87,7 @@ public class Signs implements Listener {
 			}
 		if(sign.getLine(2).equalsIgnoreCase("give") && !sign.getLine(1).isEmpty())
 		{
-			if(!qQuests.plugin.qAPI.getQuests().containsKey(sign.getLine(1).toLowerCase()))
+			if(!qQuests.plugin.qAPI.getQuests().containsKey(QuestFrag.get(sign.getLine(1).toLowerCase()).toLowerCase()))
 			{
 				Chat.error(e.getPlayer(), "The quest is not a vaild quest on line 2 of the sign!");
 				return;
@@ -133,7 +134,7 @@ public class Signs implements Listener {
 		{
 			if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "give.sign"))
 			{
-				Integer result = qQuests.plugin.qAPI.giveQuest(e.getPlayer(), sign.getLine(1).toLowerCase(), false, "Signs");
+				Integer result = qQuests.plugin.qAPI.giveQuest(e.getPlayer(), sign.getLine(1), false, "Signs");
 				if(result == 0)
 				{
 					Chat.message(e.getPlayer(), qQuests.plugin.qAPI.getActiveQuest(e.getPlayer()).onJoin().message());

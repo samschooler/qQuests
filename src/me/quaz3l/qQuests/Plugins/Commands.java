@@ -61,7 +61,7 @@ public class Commands implements CommandExecutor
 					{
 						if(qQuests.plugin.qAPI.checkPerms((Player) s, "give.specific"))
 						{
-							Integer result = qQuests.plugin.qAPI.giveQuest((Player) s, args[1].toLowerCase(), true, "Commands");
+							Integer result = qQuests.plugin.qAPI.giveQuest((Player) s, args[1], true, "Commands");
 							if(result == 0)
 							{
 								Storage.wayCurrentQuestsWereGiven.put(((Player) s), "Commands");
@@ -134,7 +134,7 @@ public class Commands implements CommandExecutor
 					}
 					else Chat.noPerms((Player) s);
 				}
-				else if(args[0].equalsIgnoreCase("tasks")) 
+				else if(args[0].equalsIgnoreCase("tasks") || args[0].equalsIgnoreCase("progress")) 
 				{
 					if(qQuests.plugin.qAPI.checkPerms((Player) s, "tasks"))
 					{
