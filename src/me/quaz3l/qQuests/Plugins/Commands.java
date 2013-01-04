@@ -36,7 +36,7 @@ public class Commands implements CommandExecutor
 						Chat.error(((Player) s), Texts.NOT_CONTROLLED_BY((Player) s));
 						return false;
 					}
-				if(args[0].equalsIgnoreCase("give"))
+				if(args[0].equalsIgnoreCase("give") || args[0].equalsIgnoreCase("start"))
 				{
 					if (args.length == 1)
 					{

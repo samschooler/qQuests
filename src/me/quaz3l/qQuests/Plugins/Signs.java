@@ -85,7 +85,7 @@ public class Signs implements Listener {
 				Chat.error((e.getPlayer()), Texts.NOT_CONTROLLED_BY(e.getPlayer()));
 				return;
 			}
-		if(getLine(sign, 2).equalsIgnoreCase("give") && !getLine(sign, 1).isEmpty())
+		if((getLine(sign, 2).equalsIgnoreCase("give") || getLine(sign, 2).equalsIgnoreCase("start")) && !getLine(sign, 1).isEmpty())
 		{
 			if(!qQuests.plugin.qAPI.getQuests().containsKey(QuestFrag.get(getLine(sign, 1).toLowerCase()).toLowerCase()))
 			{
@@ -93,7 +93,7 @@ public class Signs implements Listener {
 				return;
 			}
 		}
-		if(getLine(sign, 2).equalsIgnoreCase("give") && getLine(sign, 1).isEmpty())
+		if((getLine(sign, 2).equalsIgnoreCase("give") || getLine(sign, 2).equalsIgnoreCase("start")) && getLine(sign, 1).isEmpty())
 		{
 			if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "give.specific.sign"))
 			{
@@ -113,11 +113,11 @@ public class Signs implements Listener {
 			}
 			else Chat.noPerms(e.getPlayer());
 		}
-		if(!getLine(sign, 1).isEmpty() && !getLine(sign, 2).equalsIgnoreCase("give"))
+		if(!getLine(sign, 1).isEmpty() && (!getLine(sign, 2).equalsIgnoreCase("give") || !getLine(sign, 2).equalsIgnoreCase("start")))
 		{
 			if(qQuests.plugin.qAPI.hasActiveQuest(e.getPlayer()))
 			{
-				if(!qQuests.plugin.qAPI.getActiveQuests().get(e.getPlayer()).name().equalsIgnoreCase(getLine(sign, 1)))
+				if(!qQuests.plugin.qAPI.getActiveQuests().get(e.getPlayer()).name().equalsIgnoreCase(QuestFrag.get(getLine(sign, 1))))
 				{
 					Chat.error(e.getPlayer(), "This quest does not match your quest!");
 					return;
@@ -130,7 +130,7 @@ public class Signs implements Listener {
 			return;
 			
 		}
-		if(getLine(sign, 2).equalsIgnoreCase("give"))
+		if(getLine(sign, 2).equalsIgnoreCase("give") || getLine(sign, 2).equalsIgnoreCase("start"))
 		{
 			if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "give.sign"))
 			{
@@ -204,7 +204,7 @@ public class Signs implements Listener {
 			}
 			else Chat.noPerms(e.getPlayer());
 		}
-		else if(getLine(sign, 2).equalsIgnoreCase("tasks"))
+		else if(getLine(sign, 2).equalsIgnoreCase("tasks") || getLine(sign, 2).equalsIgnoreCase("progress"))
 		{
 			if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "tasks.sign"))
 			{
