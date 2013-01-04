@@ -171,6 +171,31 @@ public class Chat {
 				.replaceAll("`f", ChatColor.WHITE + "")
 				.replaceAll("`g", ChatColor.MAGIC + "");
 	}
+	/**
+	 * @author destro168
+	 */
+	public static String removeColors(String line)
+	{
+		//Replace colors
+		line = line.replaceAll(ChatColor.BLACK + "", "");
+		line = line.replaceAll(ChatColor.DARK_BLUE + "", "");
+		line = line.replaceAll(ChatColor.DARK_GREEN + "", "");
+		line = line.replaceAll(ChatColor.DARK_AQUA + "", "");
+		line = line.replaceAll(ChatColor.DARK_RED + "", "");
+		line = line.replaceAll(ChatColor.DARK_PURPLE + "", "");
+		line = line.replaceAll(ChatColor.GOLD + "", "");
+		line = line.replaceAll(ChatColor.GRAY + "", "");
+		line = line.replaceAll(ChatColor.DARK_GRAY + "", "");
+		line = line.replaceAll(ChatColor.BLUE + "", "");
+		line = line.replaceAll(ChatColor.GREEN + "", "");
+		line = line.replaceAll(ChatColor.AQUA + "", "");
+		line = line.replaceAll(ChatColor.RED + "", "");
+		line = line.replaceAll(ChatColor.LIGHT_PURPLE + "", "");
+		line = line.replaceAll(ChatColor.YELLOW + "", "");
+		line = line.replaceAll(ChatColor.WHITE + "", "");
+
+		return line;
+	}
 	public static void attention(int type) {
 		switch(type)
 		{

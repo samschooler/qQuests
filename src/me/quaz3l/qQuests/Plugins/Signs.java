@@ -34,7 +34,7 @@ public class Signs implements Listener {
 				e.getBlock().getType() == Material.SIGN))
 		{
 			Sign sign = (Sign) e.getBlock().getState();
-			if(!sign.getLine(0).equalsIgnoreCase("[qQuests]"))
+			if(!getLine(sign, 0).equalsIgnoreCase("[qQuests]"))
 				return;
 			else
 				if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "destroy.sign"))
@@ -45,7 +45,7 @@ public class Signs implements Listener {
 					blockAbove.getType() == Material.SIGN)) 
 		{
 			Sign sign = (Sign) blockAbove.getState();
-			if(!sign.getLine(0).equalsIgnoreCase("[qQuests]"))
+			if(!getLine(sign, 0).equalsIgnoreCase("[qQuests]"))
 				return;
 			else
 				if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "destroy.sign"))
@@ -77,7 +77,7 @@ public class Signs implements Listener {
 			return;
 		else e.setCancelled(true);
 		Sign sign = (Sign) e.getClickedBlock().getState();
-		if(!sign.getLine(0).equalsIgnoreCase("[qQuests]"))
+		if(!getLine(sign, 0).equalsIgnoreCase("[qQuests]"))
 			return;
 		if(Storage.wayCurrentQuestsWereGiven.get(e.getPlayer()) != null)
 			if(!Storage.wayCurrentQuestsWereGiven.get(e.getPlayer()).equalsIgnoreCase("Signs"))
@@ -85,15 +85,15 @@ public class Signs implements Listener {
 				Chat.error((e.getPlayer()), Texts.NOT_CONTROLLED_BY(e.getPlayer()));
 				return;
 			}
-		if(sign.getLine(2).equalsIgnoreCase("give") && !sign.getLine(1).isEmpty())
+		if(getLine(sign, 2).equalsIgnoreCase("give") && !getLine(sign, 1).isEmpty())
 		{
-			if(!qQuests.plugin.qAPI.getQuests().containsKey(QuestFrag.get(sign.getLine(1).toLowerCase()).toLowerCase()))
+			if(!qQuests.plugin.qAPI.getQuests().containsKey(QuestFrag.get(getLine(sign, 1).toLowerCase()).toLowerCase()))
 			{
 				Chat.error(e.getPlayer(), "The quest is not a vaild quest on line 2 of the sign!");
 				return;
 			}
 		}
-		if(sign.getLine(2).equalsIgnoreCase("give") && sign.getLine(1).isEmpty())
+		if(getLine(sign, 2).equalsIgnoreCase("give") && getLine(sign, 1).isEmpty())
 		{
 			if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "give.specific.sign"))
 			{
@@ -113,28 +113,28 @@ public class Signs implements Listener {
 			}
 			else Chat.noPerms(e.getPlayer());
 		}
-		if(!sign.getLine(1).isEmpty() && !sign.getLine(2).equalsIgnoreCase("give"))
+		if(!getLine(sign, 1).isEmpty() && !getLine(sign, 2).equalsIgnoreCase("give"))
 		{
 			if(qQuests.plugin.qAPI.hasActiveQuest(e.getPlayer()))
 			{
-				if(!qQuests.plugin.qAPI.getActiveQuests().get(e.getPlayer()).name().equalsIgnoreCase(sign.getLine(1)))
+				if(!qQuests.plugin.qAPI.getActiveQuests().get(e.getPlayer()).name().equalsIgnoreCase(getLine(sign, 1)))
 				{
 					Chat.error(e.getPlayer(), "This quest does not match your quest!");
 					return;
 				}
 			}
 		}
-		if(sign.getLine(2).isEmpty())
+		if(getLine(sign, 2).isEmpty())
 		{
 			Chat.error(e.getPlayer(), "There is no action on line 3! (Give, Info, Tasks, Drop, Done)");
 			return;
 			
 		}
-		if(sign.getLine(2).equalsIgnoreCase("give"))
+		if(getLine(sign, 2).equalsIgnoreCase("give"))
 		{
 			if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "give.sign"))
 			{
-				Integer result = qQuests.plugin.qAPI.giveQuest(e.getPlayer(), sign.getLine(1), false, "Signs");
+				Integer result = qQuests.plugin.qAPI.giveQuest(e.getPlayer(), getLine(sign, 1), false, "Signs");
 				if(result == 0)
 				{
 					Chat.message(e.getPlayer(), qQuests.plugin.qAPI.getActiveQuest(e.getPlayer()).onJoin().message());
@@ -147,7 +147,7 @@ public class Signs implements Listener {
 			else Chat.noPerms(e.getPlayer());
 			
 		}
-		else if(sign.getLine(2).equalsIgnoreCase("info"))
+		else if(getLine(sign, 2).equalsIgnoreCase("info"))
 		{
 			if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "info.sign"))
 			{
@@ -204,7 +204,7 @@ public class Signs implements Listener {
 			}
 			else Chat.noPerms(e.getPlayer());
 		}
-		else if(sign.getLine(2).equalsIgnoreCase("tasks"))
+		else if(getLine(sign, 2).equalsIgnoreCase("tasks"))
 		{
 			if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "tasks.sign"))
 			{
@@ -252,7 +252,7 @@ public class Signs implements Listener {
 			}
 			else Chat.noPerms(e.getPlayer());
 		}
-		else if(sign.getLine(2).equalsIgnoreCase("drop"))
+		else if(getLine(sign, 2).equalsIgnoreCase("drop"))
 		{
 			if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "drop.sign"))
 			{
@@ -265,7 +265,7 @@ public class Signs implements Listener {
 			}
 			else Chat.noPerms(e.getPlayer());
 		}
-		else if(sign.getLine(2).equalsIgnoreCase("done"))
+		else if(getLine(sign, 2).equalsIgnoreCase("done"))
 		{
 			if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "done.sign"))
 			{
@@ -275,7 +275,7 @@ public class Signs implements Listener {
 			}
 			else Chat.noPerms(e.getPlayer());
 		}
-		else if(sign.getLine(2).equalsIgnoreCase("list"))
+		else if(getLine(sign, 2).equalsIgnoreCase("list"))
 		{
 			if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "list.sign"))
 			{
@@ -296,7 +296,7 @@ public class Signs implements Listener {
 			}
 			else Chat.noPerms(e.getPlayer());
 		}
-		else if(sign.getLine(2).equalsIgnoreCase("stats"))
+		else if(getLine(sign, 2).equalsIgnoreCase("stats"))
 		{
 			if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "stats.sign"))
 			{
@@ -312,6 +312,9 @@ public class Signs implements Listener {
 			Chat.error(e.getPlayer(), "This is not a valid action on line 3! (Give, Info, Tasks, Drop, Done)");
 			return;
 		}
+	}
+	private static String getLine(Sign sign, int line) {
+		return Chat.removeColors(sign.getLine(line));
 	}
 	private static void dropSign(SignChangeEvent event)
 	  {
