@@ -10,6 +10,7 @@ import me.quaz3l.qQuests.API.QuestModels.Quest;
 import me.quaz3l.qQuests.API.TaskTypes.Collect;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.PlayerProfiles;
+import me.quaz3l.qQuests.Util.QuestFrag;
 import me.quaz3l.qQuests.Util.Reloader;
 import me.quaz3l.qQuests.Util.Storage;
 
@@ -107,7 +108,7 @@ public class QuestAPI {
 	
 	public Integer giveQuest(Player player, String quest, boolean onlyVisible, String via)
     {
-		quest = quest.toLowerCase();
+		quest = QuestFrag.get(quest.toLowerCase());
 		// Check If The Player Already Has A Quest
 		if(qQuests.plugin.qAPI.hasActiveQuest(player))
 			return 3;

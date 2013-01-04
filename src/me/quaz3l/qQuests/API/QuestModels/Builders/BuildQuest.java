@@ -25,7 +25,7 @@ public class BuildQuest {
 	private onSomething onComplete;
 	
 	public BuildQuest(String quest) {
-		this.name = quest.toLowerCase();
+		this.name = quest;
 	}
 	public Quest create() {
 		return new Quest(this);

@@ -66,11 +66,11 @@ public class Kill_Player implements Listener {
 		// Go Through All The Tasks Of The Players Quest
 		while(qQuests.plugin.qAPI.getActiveQuest(player).tasks().size() > i) 
 		{
-			// Check For Destroy Quests
+			// Check For Kill_Player Quests
 			if(qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("kill_player"))
 			{
 				// Check For The Correct Mob
-				if(qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).idString().equalsIgnoreCase(((Player)e.getEntity()).getName()))
+				if(qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).idString().equalsIgnoreCase(((Player)e.getEntity()).getName()) || qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).idString().equalsIgnoreCase("`player"))
 				{
 					// Check If The Player Is Done With The Task
 					if(Storage.currentTaskProgress.get(player).get(i) < (qQuests.plugin.qAPI.getActiveQuest(player).tasks().get(i).amount() - 1))

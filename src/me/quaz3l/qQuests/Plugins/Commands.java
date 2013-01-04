@@ -228,8 +228,11 @@ public class Commands implements CommandExecutor
 						if(!q.isEmpty())
 						{
 							Chat.noPrefixMessage((Player) s, ChatColor.AQUA + ":" + ChatColor.BLUE + "========" + ChatColor.GOLD + " Available Quests " + ChatColor.BLUE + "========" + ChatColor.AQUA + ":");
-							for(Quest a : q.values())
-								Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "- " + ChatColor.LIGHT_PURPLE + a.name());
+							Integer i=1;
+							for(Quest a : q.values()) {
+								Chat.noPrefixMessage((Player) s, ChatColor.GREEN + i.toString() + ". " + ChatColor.LIGHT_PURPLE + a.name());
+								i++;
+							}
 						}
 						else Chat.error((Player) s, Texts.NO_QUESTS_AVAILABLE);
 					}

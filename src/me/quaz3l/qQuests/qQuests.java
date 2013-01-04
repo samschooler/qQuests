@@ -1,5 +1,6 @@
 package me.quaz3l.qQuests;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
 import me.quaz3l.qQuests.API.QuestAPI;
@@ -17,6 +18,8 @@ import me.quaz3l.qQuests.Plugins.Signs;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Config;
 import me.quaz3l.qQuests.Util.Interwebs;
+import me.quaz3l.qQuests.Util.Metrics;
+import me.quaz3l.qQuests.Util.QuestFrag;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
@@ -83,10 +86,20 @@ public class qQuests extends JavaPlugin
 		//Setup Stock qPlugins
 		this.setupStockPlugins();
 		
+		// Check for upates
 		Interwebs.start();
+		
+		// http://mcstats.org/qQuests
+		try {
+		    Metrics metrics = new Metrics(this);
+		    metrics.start();
+		} catch (IOException e) {
+		    // Failed to submit the stats :-(
+		}
 		
 		// Notify Logger
 		Chat.logger("info", "by Quaz3l: Enabled");
+		Chat.logger("debug", QuestFrag.get("hellowo"));
 	}
 	
 	// Hooks Into The Economy Plugin
