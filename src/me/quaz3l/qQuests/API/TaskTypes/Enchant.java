@@ -25,20 +25,21 @@ public class Enchant implements Listener {
 		Integer itemId = item.getTypeId();
 		short itemDam = item.getDurability();
 		
-		int i=0;
+		int i=-1;
 		// Go Through All The Tasks Of The Players Quest
 		for(Task task : qQuests.plugin.qAPI.getActiveQuest(player).tasks().values()) 
 		{
+			i++;
 			// Check For Enchant Quests
 			if(!task.type().equalsIgnoreCase("enchant"))
-				return;
+				continue;
 			// Check For The Correct Block Id
 			if(task.idInt() != itemId)
-				return;
+				continue;
 			// Check For The Correct Block Id
 			if(task.durability() > 0)
 				if(task.durability() != itemDam)
-					return;
+					continue;
 			// Check If The Player Is Done With The Task
 			if(Storage.currentTaskProgress.get(player).get(i) < (task.amount() - 1))
 			{
@@ -77,7 +78,6 @@ public class Enchant implements Listener {
 					}
 				}
 			}
-			i++;
 		}
 	}
 }

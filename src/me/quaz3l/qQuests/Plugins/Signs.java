@@ -28,6 +28,7 @@ public class Signs implements Listener {
 	{
 		if(e.isCancelled())
 			return;
+		
 		Block blockAbove = e.getBlock().getLocation().getWorld().getBlockAt(new Location(e.getBlock().getLocation().getWorld(), e.getBlock().getLocation().getX(), e.getBlock().getLocation().getY()+1, e.getBlock().getLocation().getZ()));
 		if((e.getBlock().getType() == Material.WALL_SIGN || 
 				e.getBlock().getType() == Material.SIGN_POST || 
@@ -37,7 +38,7 @@ public class Signs implements Listener {
 			if(!getLine(sign, 0).equalsIgnoreCase("[qQuests]"))
 				return;
 			else
-				if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "destroy.sign"))
+				if(!qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "destroy.sign"))
 					e.setCancelled(true);
 		}
 		else if((blockAbove.getType() == Material.WALL_SIGN || 
@@ -48,7 +49,7 @@ public class Signs implements Listener {
 			if(!getLine(sign, 0).equalsIgnoreCase("[qQuests]"))
 				return;
 			else
-				if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "destroy.sign"))
+				if(!qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "destroy.sign"))
 					e.setCancelled(true);
 		}
 		else return;
@@ -63,6 +64,7 @@ public class Signs implements Listener {
 			Chat.noPerms(e.getPlayer());
 			dropSign(e);
 		}
+		else Chat.green(e.getPlayer(), "Quest sign created!");
 		
 	}
 	@EventHandler
@@ -166,22 +168,22 @@ public class Signs implements Listener {
 						Chat.noPrefixMessage(e.getPlayer(), "Repeatable: " + ChatColor.GREEN + (q.repeated() - qQuests.plugin.qAPI.getProfiles().getQuestsTimesCompleted(e.getPlayer(), q)) + " More Times");
 					Chat.noPrefixMessage(e.getPlayer(), "Tasks: " + ChatColor.GREEN + "For The Tasks, Find A Tasks Sign");
 					Chat.noPrefixMessage(e.getPlayer(), "Rewards:");
-					if(Storage.showMoney)
+					if(Storage.info.showMoney)
 						if(qQuests.plugin.economy != null && q.onComplete().money() != 0)
 							Chat.noPrefixMessage(e.getPlayer(), "     " + Texts.MONEY + ": " + ChatColor.GREEN + q.onComplete().money());
-					if(Storage.showHealth)
+					if(Storage.info.showHealth)
 						if(q.onComplete().health() != 0)
 							Chat.noPrefixMessage(e.getPlayer(), "     " + Texts.HEALTH + ": " + ChatColor.GREEN + q.onComplete().health());
-					if(Storage.showFood)
+					if(Storage.info.showFood)
 						if(q.onComplete().hunger() != 0)
 							Chat.noPrefixMessage(e.getPlayer(), "     " + Texts.FOOD + ": " + ChatColor.GREEN + q.onComplete().hunger());
-					if(Storage.showLevelsAdded)
+					if(Storage.info.showLevelsAdded)
 						if(q.onComplete().levelAdd() != 0)
 							Chat.noPrefixMessage(e.getPlayer(), "     " + Texts.LEVELADD + ": " + ChatColor.GREEN + q.onComplete().levelAdd());
-					if(Storage.showSetLevel)
+					if(Storage.info.showSetLevel)
 						if(q.onComplete().levelSet() != -1)
 							Chat.noPrefixMessage(e.getPlayer(), "     " + Texts.LEVELSET + ": " + ChatColor.GREEN + q.onComplete().levelSet());
-					if(Storage.showCommands)
+					if(Storage.info.showCommands)
 						if(q.onComplete().items().size() > 0)
 						{
 							Chat.noPrefixMessage(e.getPlayer(), "     " + Texts.COMMANDS + ":");
@@ -190,7 +192,7 @@ public class Signs implements Listener {
 								Chat.noPrefixMessage(e.getPlayer(), "     " + ChatColor.GREEN + q.onComplete().commands().get(i));
 							}
 						}
-					if(Storage.showCommands)
+					if(Storage.info.showCommands)
 						if(q.onComplete().items().size() > 0)
 						{
 							Chat.noPrefixMessage(e.getPlayer(), "     " + Texts.COMMANDS + ":");
@@ -216,22 +218,22 @@ public class Signs implements Listener {
 					while(q.tasks().size() > i) 
 					{
 						if(q.tasks().get(i).type().equalsIgnoreCase("collect"))
-							if(Storage.showItemIds)
+							if(Storage.info.showItemIds)
 								Chat.noPrefixMessage(e.getPlayer(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Collect " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
 							else
 								Chat.noPrefixMessage(e.getPlayer(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Collect " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 						else if(q.tasks().get(i).type().equalsIgnoreCase("damage"))
-							if(Storage.showItemIds)
+							if(Storage.info.showItemIds)
 								Chat.noPrefixMessage(e.getPlayer(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Damage " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
 							else
 								Chat.noPrefixMessage(e.getPlayer(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Damage " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 						else if(q.tasks().get(i).type().equalsIgnoreCase("destroy"))
-							if(Storage.showItemIds)
+							if(Storage.info.showItemIds)
 								Chat.noPrefixMessage(e.getPlayer(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Destroy " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
 							else
 								Chat.noPrefixMessage(e.getPlayer(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Destroy " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 						else if(q.tasks().get(i).type().equalsIgnoreCase("place"))
-							if(Storage.showItemIds)
+							if(Storage.info.showItemIds)
 								Chat.noPrefixMessage(e.getPlayer(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Place " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
 							else
 								Chat.noPrefixMessage(e.getPlayer(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Place " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
@@ -240,7 +242,7 @@ public class Signs implements Listener {
 						else if(q.tasks().get(i).type().equalsIgnoreCase("kill_player"))
 							Chat.noPrefixMessage(e.getPlayer(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Kill The Player '" + q.tasks().get(i).idString() + "' " + q.tasks().get(i).amount() + " Times");
 						else if(q.tasks().get(i).type().equalsIgnoreCase("enchant"))
-							if(Storage.showItemIds)
+							if(Storage.info.showItemIds)
 							Chat.noPrefixMessage(e.getPlayer(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Enchant " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
 						else
 							Chat.noPrefixMessage(e.getPlayer(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Enchant " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
@@ -265,7 +267,7 @@ public class Signs implements Listener {
 			}
 			else Chat.noPerms(e.getPlayer());
 		}
-		else if(getLine(sign, 2).equalsIgnoreCase("done"))
+		else if(getLine(sign, 2).equalsIgnoreCase("done") || getLine(sign, 2).equalsIgnoreCase("finish") || getLine(sign, 2).equalsIgnoreCase("end"))
 		{
 			if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "done.sign"))
 			{

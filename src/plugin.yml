@@ -75,7 +75,7 @@ permissions:
         default: op
     qquests.admin:
         description: Lets players edit things like signs, and other dangerous things
-        default: true
+        default: op
         children:
             qquests.update: true
             qquests.admin.sign: true

@@ -19,7 +19,6 @@ import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Config;
 import me.quaz3l.qQuests.Util.Interwebs;
 import me.quaz3l.qQuests.Util.Metrics;
-import me.quaz3l.qQuests.Util.QuestFrag;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
@@ -37,7 +36,7 @@ public class qQuests extends JavaPlugin
 	public QuestAPI qAPI;
 	
 	// SHOULD BE FALSE
-	public boolean debug = false;
+	public boolean debug = true;
 	
 	// Services
 	public Economy economy = null;
@@ -96,10 +95,9 @@ public class qQuests extends JavaPlugin
 		} catch (IOException e) {
 		    // Failed to submit the stats :-(
 		}
-		
+				
 		// Notify Logger
 		Chat.logger("info", "by Quaz3l: Enabled");
-		Chat.logger("debug", QuestFrag.get("hellowo"));
 	}
 	
 	// Hooks Into The Economy Plugin
@@ -166,6 +164,8 @@ public class qQuests extends JavaPlugin
 		getServer().getPluginManager().registerEvents(new Tame(), this);
 		
 		getServer().getPluginManager().registerEvents(new Enchant(), this);
+		
+		Chat.logger("debug", "Listeners Registered.");
 	}
 	
 	// Starts The Stock Plugins

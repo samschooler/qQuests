@@ -16,29 +16,33 @@ public class Damage implements Listener {
 	@EventHandler
 	public void onBlockDamage(BlockDamageEvent e) 
 	{
+		Chat.logger("debug", "Damage! Fuck YEAH!");
 		if(e.isCancelled())
 			return;
+		Chat.logger("debug", "1");
 		if(!qQuests.plugin.qAPI.hasActiveQuest(e.getPlayer()))
 			return;
+		Chat.logger("debug", "2");
 		Player player = e.getPlayer();		
 		Block block = e.getBlock();
 		Integer blockId = block.getTypeId();
 		byte blockDam = block.getData();
-
-		int i=0;
+		int i=-1;
 		// Go Through All The Tasks Of The Players Quest
 		for(Task task : qQuests.plugin.qAPI.getActiveQuest(player).tasks().values()) 
 		{
+			i++;
+			Chat.logger("debug", i + "");
 			// Check For Damage Quests
 			if(!task.type().equalsIgnoreCase("damage"))
-				return;
+				continue;
 			// Check For The Correct Block Id
 			if(task.idInt() != blockId)
-				return;
+				continue;
 			// Check For The Correct Block Id
 			if(task.durability() > 0)
 				if(task.durability() != blockDam)
-					return;
+					continue;
 			// Check If The Player Is Done With The Task
 			if(Storage.currentTaskProgress.get(player).get(i) < (task.amount() - 1))
 			{
@@ -77,7 +81,6 @@ public class Damage implements Listener {
 					}
 				}
 			}
-			i++;
 		}
 	}
 }

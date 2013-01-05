@@ -25,20 +25,21 @@ public class Place implements Listener {
 		Integer blockId = block.getTypeId();
 		byte blockDam = block.getData();
 
-		int i=0;
+		int i=-1;
 		// Go Through All The Tasks Of The Players Quest
 		for(Task task : qQuests.plugin.qAPI.getActiveQuest(player).tasks().values()) 
 		{
+			i++;
 			// Check For Place Quests
 			if(!task.type().equalsIgnoreCase("place"))
-				return;
+				continue;
 			// Check For The Correct Block Id
 			if(task.idInt() != blockId)
-				return;
+				continue;
 			// Check For The Correct Block Id
 			if(task.durability() > 0)
 				if(task.durability() != blockDam)
-					return;
+					continue;
 			// Check If The Player Is Done With The Task
 			if(Storage.currentTaskProgress.get(player).get(i) < (task.amount() - 1))
 			{
@@ -77,7 +78,6 @@ public class Place implements Listener {
 					}
 				}
 			}
-			i++;
 		}
 	}
 }

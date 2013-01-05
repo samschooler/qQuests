@@ -73,13 +73,10 @@ public class Config {
 		this.getConfig();
 		this.getConfig().options().copyDefaults(true);
 		
-		if(this.getConfig().getString("autoUpdate") != "true" &&
-				this.getConfig().getString("autoUpdate") != "false")
-			this.getConfig().set("autoUpdate", true);
-		
-		if(this.getConfig().getString("tellMeYourUsingMyPlugin") != "true" &&
-				this.getConfig().getString("tellMeYourUsingMyPlugin") != "false")
-			this.getConfig().set("tellMeYourUsingMyPlugin", true);
+		if(this.getConfig().getString("autoUpdate") != null)
+			this.getConfig().set("autoUpdate", null);
+		if(this.getConfig().getString("tellMeYourUsingMyPlugin") != null)
+			this.getConfig().set("tellMeYourUsingMyPlugin", null);
 		
 		if(this.getConfig().getString("primaryCommand") != null)
 		{
@@ -133,18 +130,16 @@ public class Config {
 				this.getConfig().getString("info.showSetLevel") != "false")
 			this.getConfig().set("info.showSetLevel", true);
 		
-		Storage.autoUpdate = this.getConfig().getBoolean("autoUpdate");
-		Storage.tellMeYourUsingMyPlugin = this.getConfig().getBoolean("tellMeYourUsingMyPlugin");
 		Storage.primaryCommand = this.getConfig().getString("primaryCommand");
-		Storage.showItemIds = this.getConfig().getBoolean("showItemIds");
-		Storage.showMoney = this.getConfig().getBoolean("showMoney");
-		Storage.moneyName = this.getConfig().getString("info.moneyName");
-		Storage.showHealth = this.getConfig().getBoolean("info.showHealth");
-		Storage.showFood = this.getConfig().getBoolean("info.showFood");
-		Storage.showCommands = this.getConfig().getBoolean("info.showCommands");
-		Storage.showItems = this.getConfig().getBoolean("info.showItems");
-		Storage.showLevelsAdded = this.getConfig().getBoolean("info.showLevelsAdded");
-		Storage.showSetLevel = this.getConfig().getBoolean("info.showSetLevel");
+		Storage.info.showItemIds = this.getConfig().getBoolean("showItemIds");
+		Storage.info.showMoney = this.getConfig().getBoolean("showMoney");
+		Storage.info.moneyName = this.getConfig().getString("info.moneyName");
+		Storage.info.showHealth = this.getConfig().getBoolean("info.showHealth");
+		Storage.info.showFood = this.getConfig().getBoolean("info.showFood");
+		Storage.info.showCommands = this.getConfig().getBoolean("info.showCommands");
+		Storage.info.showItems = this.getConfig().getBoolean("info.showItems");
+		Storage.info.showLevelsAdded = this.getConfig().getBoolean("info.showLevelsAdded");
+		Storage.info.showSetLevel = this.getConfig().getBoolean("info.showSetLevel");
 		
 		this.saveConfig();
 	}

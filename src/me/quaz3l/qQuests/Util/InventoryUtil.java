@@ -21,6 +21,11 @@ public class InventoryUtil {
 	 * @return if the items were taken
 	 */
 	public static boolean removeItems(ItemStack[] items, Inventory inventory) {	
+		Chat.logger("debug", "+++++++++++++++++++++");
+		ArrayList<Integer> amounts = new ArrayList<Integer>();
+		for (ItemStack item : items) {
+			amounts.add(item.getAmount());
+		}
 		Chat.logger("debug", "Amount: " + items[0].getAmount());
 		// Check to see if the inventory has the items
 		if(!hasSimilarItems(items, inventory))
@@ -29,33 +34,7 @@ public class InventoryUtil {
 		for(int i=0; i < items.length; i++) {
 			HashMap<Integer, ? extends ItemStack> inv = inventory.all(items[i].getType());
 			for (ItemStack stack : inv.values()) {
-				if(items[i].getAmount() <= 0)
-					continue;
-				if(items[i].getDurability() > 0)
-					if(items[i].getDurability() != stack.getDurability())
-						continue;
-				if((stack.getAmount() - items[i].getAmount()) > 0) { // Remove the requested amount, and
-					stack.setAmount(stack.getAmount() - items[i].getAmount());
-					items[i].setAmount(0);
-				} else { // Remove stack, and amount that it had from requested
-					items[i].setAmount(items[i].getAmount() - stack.getAmount());
-					inventory.removeItem(stack);
-				}
-			}
-		}
-		return true;
-	}
-	public static boolean hasSimilarItems(ItemStack[] items, Inventory inventory) {
-		ArrayList<Integer> amounts = new ArrayList<Integer>();
-		for (ItemStack stack : items) {
-			amounts.add(stack.getAmount());
-		}
-		for(int i=0; i < items.length; i++) {
-			HashMap<Integer, ? extends ItemStack> inv = inventory.all(items[i].getType());
-			Chat.logger("debug", "Type: " + items[i].getType());
-			Chat.logger("debug", "Matches: " + inv.values().size());
-			for (ItemStack stack : inv.values()) {
-				if(items[i].getAmount() <= 0)
+				if(amounts.get(i) <= 0)
 					break; // Got requested amount
 				
 				Chat.logger("debug", "Inv Damage: " + stack.getDurability());
@@ -64,20 +43,67 @@ public class InventoryUtil {
 				if(items[i].getDurability() > 0)
 					if(items[i].getDurability() != stack.getDurability())
 						continue;
-								
-				if((stack.getAmount() - items[i].getAmount()) > 0) { // Remove the requested amount, and
+				
+				Chat.logger("debug", "I: " + String.valueOf(i));
+				Chat.logger("debug", "F Amount: " + (amounts.get(i) - stack.getAmount()));
+				Chat.logger("debug", "Item Amount: " + amounts.get(i));
+				Chat.logger("debug", "Stack Amount: " + stack.getAmount());
+				
+				if((amounts.get(i) - stack.getAmount()) < 0) { // Remove the requested amount, and
+					Chat.logger("debug", "Dick.");
+					stack.setAmount(stack.getAmount() - amounts.get(i));
+					Chat.logger("debug", "Stack Result: " + (stack.getAmount() - amounts.get(i)));
 					amounts.set(i, 0);
 				} else { // Remove stack, and amount that it had from requested
-					amounts.set(i, items[i].getAmount() - stack.getAmount());
+					amounts.set(i, amounts.get(i) - stack.getAmount());
+					Chat.logger("debug", "Removed. BITCH");
+					inventory.removeItem(stack);
+				}
+			}
+		}
+		return true;
+	}
+	public static boolean hasSimilarItems(ItemStack[] items, Inventory inventory) {
+		ArrayList<Integer> amounts = new ArrayList<Integer>();
+		for (ItemStack item : items) {
+			amounts.add(item.getAmount());
+		}
+		for(int i=0; i < items.length; i++) {
+			HashMap<Integer, ? extends ItemStack> inv = inventory.all(items[i].getType());
+			Chat.logger("debug", "Type: " + items[i].getType());
+			Chat.logger("debug", "Matches: " + inv.values().size());
+			for (ItemStack stack : inv.values()) {
+				if(amounts.get(i) <= 0)
+					break; // Got requested amount
+				
+				Chat.logger("debug", "Inv Damage: " + stack.getDurability());
+				Chat.logger("debug", "Request Damage: " + items[i].getDurability());
+				
+				if(items[i].getDurability() > 0)
+					if(items[i].getDurability() != stack.getDurability())
+						continue;
+				
+				Chat.logger("debug", "I: " + String.valueOf(i));
+				Chat.logger("debug", "F Amount: " + (amounts.get(i) - stack.getAmount()));
+				Chat.logger("debug", "Item Amount: " + amounts.get(i));
+				Chat.logger("debug", "Stack Amount: " + stack.getAmount());
+				
+				if((amounts.get(i) - stack.getAmount()) < 0) { // Remove the requested amount, and
+					amounts.set(i, 0);
+				} else { // Remove stack, and amount that it had from requested
+					amounts.set(i, amounts.get(i) - stack.getAmount());
 				}
 			}		
 		}
+		Chat.logger("debug", "Amounts: " + amounts);
 		for (int amount : amounts) {
 			Chat.logger("debug", "Z Amount: " + amount);
-			if(amount > 0)
-				return false;
+			if(amount <= 0) {
+				Chat.logger("debug", "It's FUCKING true!@!");
+				return true;
+			}
 		}
-		return true;
+		return false;
 	}
     /**
      * Returns the amount of the item inside the inventory

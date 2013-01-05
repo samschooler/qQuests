@@ -11,17 +11,14 @@ import me.quaz3l.qQuests.API.TaskTypes.Collect;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.PlayerProfiles;
 import me.quaz3l.qQuests.Util.QuestFrag;
-import me.quaz3l.qQuests.Util.Reloader;
 import me.quaz3l.qQuests.Util.Storage;
 
 public class QuestAPI {
 	private QuestWorker QuestWorker;
 	private PlayerProfiles Profiles;
-	public Reloader Index;
 	
 	public QuestAPI() {
 		this.QuestWorker = new QuestWorker();
-		this.Index = new Reloader();
 		this.Profiles = new PlayerProfiles();
 	}
 	
@@ -244,6 +241,9 @@ public class QuestAPI {
 			if(getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("collect"))
 				if(!Collect.check(player))
 					return 4;
+			Chat.logger("debug", "Has items!");
+			Chat.logger("debug", getActiveQuest(player).tasks().get(i).type());
+			Chat.logger("debug", "Left: " + Storage.currentTaskProgress.get(player).get(i) + " " + getActiveQuest(player).tasks().get(i).amount());
 			if(getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("damage") || 
 					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("destroy") || 
 					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("place") ||
@@ -258,15 +258,15 @@ public class QuestAPI {
 					return 4;
 			i++;
 		}
-		
+		Chat.logger("debug", "101");
 		// Charge/Give Fee/Reward
 		Integer u = getActiveQuest(player).onComplete().feeReward(player);
 		if(u != 0)
 			return u;
-		
+		Chat.logger("debug", "102");
 		// Take Items In Collect Tasks
 		Collect.take(player);
-		
+		Chat.logger("debug", "103");
 		// Update Player Profile
 		Profiles.set(player, "Completed", (Profiles.getInt(player, "Completed") + 1));
 		Profiles.set(player, "FinishCount." + getActiveQuest(player).name(), (Profiles.getInt(player, "FinishCount." + getActiveQuest(player).name()) + 1));

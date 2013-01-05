@@ -9,6 +9,7 @@ import me.quaz3l.qQuests.Util.Interwebs;
 import me.quaz3l.qQuests.Util.Storage;
 import me.quaz3l.qQuests.Util.Texts;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -102,22 +103,22 @@ public class Commands implements CommandExecutor
 								Chat.noPrefixMessage((Player) s, "Repeatable: " + ChatColor.GREEN + (q.repeated() - qQuests.plugin.qAPI.getProfiles().getQuestsTimesCompleted((Player) s, q)) + " More Times");
 							Chat.noPrefixMessage((Player) s, "Tasks: " + ChatColor.YELLOW + Texts.PRIMARY_COMMAND + " " + Texts.TASKS_COMMAND + ChatColor.GREEN + " For The Tasks.");
 							Chat.noPrefixMessage((Player) s, "Rewards:");
-							if(Storage.showMoney)
+							if(Storage.info.showMoney)
 								if(qQuests.plugin.economy != null && q.onComplete().money() != 0)
 									Chat.noPrefixMessage((Player) s, "     " + Texts.MONEY + ": " + ChatColor.GREEN + q.onComplete().money());
-							if(Storage.showHealth)
+							if(Storage.info.showHealth)
 								if(q.onComplete().health() != 0)
 									Chat.noPrefixMessage((Player) s, "     " + Texts.HEALTH + ": " + ChatColor.GREEN + q.onComplete().health());
-							if(Storage.showFood)
+							if(Storage.info.showFood)
 								if(q.onComplete().hunger() != 0)
 									Chat.noPrefixMessage((Player) s, "     " + Texts.FOOD + ": " + ChatColor.GREEN + q.onComplete().hunger());
-							if(Storage.showLevelsAdded)
+							if(Storage.info.showLevelsAdded)
 								if(q.onComplete().levelAdd() != 0)
 									Chat.noPrefixMessage((Player) s, "     " + Texts.LEVELADD + ": " + ChatColor.GREEN + q.onComplete().levelAdd());
-							if(Storage.showSetLevel)
+							if(Storage.info.showSetLevel)
 								if(q.onComplete().levelSet() != -1)
 									Chat.noPrefixMessage((Player) s, "     " + Texts.LEVELSET + ": " + ChatColor.GREEN + q.onComplete().levelSet());
-							if(Storage.showCommands)
+							if(Storage.info.showCommands)
 								if(q.onComplete().items().size() > 0)
 								{
 									Chat.noPrefixMessage((Player) s, "     " + Texts.COMMANDS + ":");
@@ -126,7 +127,7 @@ public class Commands implements CommandExecutor
 										Chat.noPrefixMessage((Player) s, "     " + ChatColor.GREEN + "- /" + ChatColor.GOLD + q.onComplete().commands().get(i).replace("`player", ((Player) s).getName()));
 									}
 								}
-							if(Storage.showItems)
+							if(Storage.info.showItems)
 								if(q.onComplete().items().size() > 0)
 								{
 									Chat.noPrefixMessage((Player) s, "     " + Texts.ITEMS + ":");
@@ -152,22 +153,22 @@ public class Commands implements CommandExecutor
 							while(q.tasks().size() > i) 
 							{
 								if(q.tasks().get(i).type().equalsIgnoreCase("collect"))
-									if(Storage.showItemIds)
+									if(Storage.info.showItemIds)
 										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Collect " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
 									else
 										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Collect " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								else if(q.tasks().get(i).type().equalsIgnoreCase("damage"))
-									if(Storage.showItemIds)
+									if(Storage.info.showItemIds)
 										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Damage " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
 									else
 										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Damage " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								else if(q.tasks().get(i).type().equalsIgnoreCase("destroy"))
-									if(Storage.showItemIds)
+									if(Storage.info.showItemIds)
 										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Destroy " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
 									else
 										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Destroy " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								else if(q.tasks().get(i).type().equalsIgnoreCase("place"))
-									if(Storage.showItemIds)
+									if(Storage.info.showItemIds)
 										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Place " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
 									else
 										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Place " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
@@ -176,7 +177,7 @@ public class Commands implements CommandExecutor
 								else if(q.tasks().get(i).type().equalsIgnoreCase("kill_player"))
 									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Kill The Player '" + q.tasks().get(i).idString() + "' " + q.tasks().get(i).amount() + " Times");
 								else if(q.tasks().get(i).type().equalsIgnoreCase("enchant"))
-									if(Storage.showItemIds)
+									if(Storage.info.showItemIds)
 									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Enchant " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
 								else
 									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Enchant " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
@@ -215,8 +216,10 @@ public class Commands implements CommandExecutor
 				{
 					if(qQuests.plugin.qAPI.checkPerms((Player) s, "reload"))
 					{
-						qQuests.plugin.qAPI.Index.unloadPlugin();
-						qQuests.plugin.qAPI.Index.loadPlugin();
+						Bukkit.getPluginManager().disablePlugin(qQuests.plugin);
+						Bukkit.getPluginManager().enablePlugin(qQuests.plugin);
+						Chat.logger("info", "Reloaded.");
+						Chat.green((Player) s, "Reloaded.");
 					}
 					else Chat.noPerms((Player) s);
 				}
@@ -274,7 +277,14 @@ public class Commands implements CommandExecutor
 			{
 				if(!Interwebs.tryUpdate(s))
 					Chat.message(s, "qQuests is up to date.");
-			} else 
+			} 
+			else if(args[0].equalsIgnoreCase("reload")) 
+			{
+				Bukkit.getPluginManager().disablePlugin(qQuests.plugin);
+				Bukkit.getPluginManager().enablePlugin(qQuests.plugin);
+				Chat.logger("info", "Reloaded.");
+			}
+			else 
 				Chat.message(s, Texts.ONLY_PLAYERS);
 		} else
 			Chat.message(s, Texts.ONLY_PLAYERS);
