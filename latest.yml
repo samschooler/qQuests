@@ -1,6 +1,12 @@
 name: qQuests
-version: 2006
-source: "https://github.com/quaz3l/qQuests/blob/master/builds/qQuests2006.jar?raw=true"
+version: 2007
+source: "https://github.com/quaz3l/qQuests/blob/master/builds/qQuests2007.jar?raw=true"
 changelog:
-- 'Added item damage to tasks and rewards'
-- 'NOTE: in tasks you must wrap items with damage in quotes like: "35:1"'
+- 'Added `any for any mob or player for the kill and kill_player task types'
+- 'Customize prefix; prefix can now also be top line of sign'
+- 'Better help'
+- 'Fixed multi-task quests'
+- 'Colored signs now supported'
+- 'Added metrics'
+- 'Added quest fragments'
+- 'Fixed capital letters'
