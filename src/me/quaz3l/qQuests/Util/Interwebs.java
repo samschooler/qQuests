@@ -23,7 +23,7 @@ public class Interwebs {
 	}
 	public static void talk() {
 		// Ping My Server
-    	pingStatus();
+    	//pingStatus();
 		
 		// Check For Update
 		checkForUpdates();

@@ -182,14 +182,14 @@ public class Commands implements CommandExecutor
 				{
 					if(qQuests.plugin.qAPI.checkPerms((Player) s, "list"))
 					{
+						HashMap<Integer, Quest> q = qQuests.plugin.qAPI.getAvailableQuests((Player) s);
 						if(qQuests.plugin.qAPI.hasActiveQuest((Player) s))
 							Texts.INFO(qQuests.plugin.qAPI.getActiveQuest((Player) s), (Player) s);
-						if(Storage.cannotGetQuests.contains((Player) s))
+						else if(Storage.cannotGetQuests.contains((Player) s))
 							Chat.error((Player) s, Texts.DELAY_NOT_FINISHED);
-						if(qQuests.plugin.qAPI.getVisibleQuests().size() == 0)
+						else if(qQuests.plugin.qAPI.getVisibleQuests().size() == 0)
 							Chat.error((Player) s, Texts.NO_QUESTS_AVAILABLE);
-						HashMap<Integer, Quest> q = qQuests.plugin.qAPI.getAvailableQuests((Player) s);
-						if(!q.isEmpty())
+						else if(!q.isEmpty())
 						{
 							Chat.noPrefixMessage((Player) s, ChatColor.AQUA + ":" + ChatColor.BLUE + "========" + ChatColor.GOLD + " Available Quests " + ChatColor.BLUE + "========" + ChatColor.AQUA + ":");
 							Integer i=1;

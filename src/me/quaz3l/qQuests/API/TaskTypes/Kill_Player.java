@@ -72,7 +72,7 @@ public class Kill_Player implements Listener {
 			if(!task.type().equalsIgnoreCase("kill_player"))
 				continue;
 			// Check For The Correct Player
-			if(!task.idString().equalsIgnoreCase(((Player)e.getEntity()).getName()) || !task.idString().equalsIgnoreCase("`player"))
+			if(!task.idString().equalsIgnoreCase(((Player)e.getEntity()).getName()) || !task.idString().equalsIgnoreCase("`any"))
 				continue;
 			
 			// Check If The Player Is Done With The Task

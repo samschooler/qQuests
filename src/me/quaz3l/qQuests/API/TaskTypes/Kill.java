@@ -70,7 +70,7 @@ public class Kill implements Listener {
 			if(task.type().equalsIgnoreCase("kill"))
 				continue;
 			// Check For The Correct Mob
-			if(task.idString().equalsIgnoreCase(entityType))
+			if(task.idString().equalsIgnoreCase(entityType) || !task.idString().equalsIgnoreCase("`any"))
 				continue;
 			
 			// Check If The Player Is Done With The Task
