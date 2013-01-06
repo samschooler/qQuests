@@ -1,5 +1,5 @@
 name: qQuests
-version: 2007
+version: 2005
 source: "https://github.com/quaz3l/qQuests/blob/master/builds/qQuests2007.jar?raw=true"
 changelog:
 - 'Added `any for any mob or player for the kill and kill_player task types'
