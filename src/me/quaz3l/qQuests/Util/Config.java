@@ -106,7 +106,7 @@ public class Config {
 
 
 		// Set access
-		if(this.getConfig().getConfigurationSection("access").getKeys(false).size() <= 0) {
+		if(this.getConfig().getConfigurationSection("access") == null) {
 			ArrayList<String> subsidaryList=new ArrayList<String>();
 			subsidaryList.add("info");
 			subsidaryList.add("tasks");
