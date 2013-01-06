@@ -35,7 +35,7 @@ public class Signs implements Listener {
 				e.getBlock().getType() == Material.SIGN))
 		{
 			Sign sign = (Sign) e.getBlock().getState();
-			if(!getLine(sign, 0).equalsIgnoreCase("[qQuests]"))
+			if(!getLine(sign, 0).equalsIgnoreCase("[qQuests]") && !getLine(sign, 0).equalsIgnoreCase("[Quest]") && !getLine(sign, 0).equalsIgnoreCase(Chat.removeColors(qQuests.plugin.chatPrefix)))
 				return;
 			else
 				if(!qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "destroy.sign"))
@@ -46,7 +46,7 @@ public class Signs implements Listener {
 					blockAbove.getType() == Material.SIGN)) 
 		{
 			Sign sign = (Sign) blockAbove.getState();
-			if(!getLine(sign, 0).equalsIgnoreCase("[qQuests]"))
+			if(!getLine(sign, 0).equalsIgnoreCase("[qQuests]") && !getLine(sign, 0).equalsIgnoreCase("[Quest]") && !getLine(sign, 0).equalsIgnoreCase(Chat.removeColors(qQuests.plugin.chatPrefix)))
 				return;
 			else
 				if(!qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "destroy.sign"))
@@ -57,7 +57,7 @@ public class Signs implements Listener {
 	@EventHandler
 	public void onSignChange(SignChangeEvent e)
 	{
-		if(!e.getLines()[0].equalsIgnoreCase("[qQuests]"))
+		if(!getLine(e.getLines(), 0).equalsIgnoreCase("[qQuests]") && !getLine(e.getLines(), 0).equalsIgnoreCase("[Quest]") && !getLine(e.getLines(), 0).equalsIgnoreCase(Chat.removeColors(qQuests.plugin.chatPrefix)))
 			return;
 		if(!qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "create.sign"))
 		{
@@ -79,12 +79,12 @@ public class Signs implements Listener {
 			return;
 		else e.setCancelled(true);
 		Sign sign = (Sign) e.getClickedBlock().getState();
-		if(!getLine(sign, 0).equalsIgnoreCase("[qQuests]"))
+		if(!getLine(sign, 0).equalsIgnoreCase("[qQuests]") && !getLine(sign, 0).equalsIgnoreCase("[Quest]") && !getLine(sign, 0).equalsIgnoreCase(Chat.removeColors(qQuests.plugin.chatPrefix)))
 			return;
 		if(Storage.wayCurrentQuestsWereGiven.get(e.getPlayer()) != null)
-			if(!Storage.wayCurrentQuestsWereGiven.get(e.getPlayer()).equalsIgnoreCase("Signs"))
+			if(!Storage.access("signs", Storage.wayCurrentQuestsWereGiven.get(e.getPlayer()), getLine(sign, 2)))
 			{
-				Chat.error((e.getPlayer()), Texts.NOT_CONTROLLED_BY(e.getPlayer()));
+				Chat.error((e.getPlayer()), Texts.CANNOT_USE_CURRENTLY);
 				return;
 			}
 		if((getLine(sign, 2).equalsIgnoreCase("give") || getLine(sign, 2).equalsIgnoreCase("start")) && !getLine(sign, 1).isEmpty())
@@ -155,52 +155,7 @@ public class Signs implements Listener {
 			{
 				if(qQuests.plugin.qAPI.hasActiveQuest(e.getPlayer()))
 				{
-					Quest q = qQuests.plugin.qAPI.getActiveQuest(e.getPlayer());
-					Chat.noPrefixMessage(e.getPlayer(), ChatColor.AQUA + ":" + ChatColor.BLUE + "========" + ChatColor.GOLD + " Quest Info " + ChatColor.BLUE + "========" + ChatColor.AQUA + ":");
-					Chat.noPrefixMessage(e.getPlayer(), "Name: " + ChatColor.GREEN + q.name());
-					if(q.onComplete().nextQuest() != null && !q.onComplete().nextQuest().isEmpty())
-						Chat.noPrefixMessage(e.getPlayer(), "Next Quest: " + ChatColor.GREEN + q.onComplete().nextQuest());
-					if(q.repeated() == -1)
-						Chat.noPrefixMessage(e.getPlayer(), "Repeatable: " + ChatColor.GREEN + "Infinite");
-					else if((q.repeated() - qQuests.plugin.qAPI.getProfiles().getQuestsTimesCompleted(e.getPlayer(), q)) == 0)
-						Chat.noPrefixMessage(e.getPlayer(), "Repeatable: " + ChatColor.GREEN + "None");
-					else
-						Chat.noPrefixMessage(e.getPlayer(), "Repeatable: " + ChatColor.GREEN + (q.repeated() - qQuests.plugin.qAPI.getProfiles().getQuestsTimesCompleted(e.getPlayer(), q)) + " More Times");
-					Chat.noPrefixMessage(e.getPlayer(), "Tasks: " + ChatColor.GREEN + "For The Tasks, Find A Tasks Sign");
-					Chat.noPrefixMessage(e.getPlayer(), "Rewards:");
-					if(Storage.info.showMoney)
-						if(qQuests.plugin.economy != null && q.onComplete().money() != 0)
-							Chat.noPrefixMessage(e.getPlayer(), "     " + Texts.MONEY + ": " + ChatColor.GREEN + q.onComplete().money());
-					if(Storage.info.showHealth)
-						if(q.onComplete().health() != 0)
-							Chat.noPrefixMessage(e.getPlayer(), "     " + Texts.HEALTH + ": " + ChatColor.GREEN + q.onComplete().health());
-					if(Storage.info.showFood)
-						if(q.onComplete().hunger() != 0)
-							Chat.noPrefixMessage(e.getPlayer(), "     " + Texts.FOOD + ": " + ChatColor.GREEN + q.onComplete().hunger());
-					if(Storage.info.showLevelsAdded)
-						if(q.onComplete().levelAdd() != 0)
-							Chat.noPrefixMessage(e.getPlayer(), "     " + Texts.LEVELADD + ": " + ChatColor.GREEN + q.onComplete().levelAdd());
-					if(Storage.info.showSetLevel)
-						if(q.onComplete().levelSet() != -1)
-							Chat.noPrefixMessage(e.getPlayer(), "     " + Texts.LEVELSET + ": " + ChatColor.GREEN + q.onComplete().levelSet());
-					if(Storage.info.showCommands)
-						if(q.onComplete().items().size() > 0)
-						{
-							Chat.noPrefixMessage(e.getPlayer(), "     " + Texts.COMMANDS + ":");
-							for(int i=0;i<(q.onComplete().commands().size()); i++)
-							{
-								Chat.noPrefixMessage(e.getPlayer(), "     " + ChatColor.GREEN + q.onComplete().commands().get(i));
-							}
-						}
-					if(Storage.info.showCommands)
-						if(q.onComplete().items().size() > 0)
-						{
-							Chat.noPrefixMessage(e.getPlayer(), "     " + Texts.COMMANDS + ":");
-							for(int i=0;i<(q.onComplete().commands().size()); i++)
-							{
-								Chat.noPrefixMessage(e.getPlayer(), "     " + ChatColor.GREEN + "- /" + ChatColor.GOLD + q.onComplete().commands().get(i).replace("`player", e.getPlayer().getName()));
-							}
-						}
+					Texts.INFO(qQuests.plugin.qAPI.getActiveQuest(e.getPlayer()), e.getPlayer());
 				}
 				else Chat.error(e.getPlayer(), Texts.NO_ACTIVE_QUEST);
 			}
@@ -316,7 +271,12 @@ public class Signs implements Listener {
 		}
 	}
 	private static String getLine(Sign sign, int line) {
+		Chat.logger("debug", Chat.removeColors(sign.getLine(line)));
 		return Chat.removeColors(sign.getLine(line));
+	}
+	private static String getLine(String[] lines, int line) {
+		Chat.logger("debug", Chat.removeColors(lines[line]));
+		return Chat.removeColors(lines[line]);
 	}
 	private static void dropSign(SignChangeEvent event)
 	  {

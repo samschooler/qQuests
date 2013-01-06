@@ -11,7 +11,6 @@ import me.quaz3l.qQuests.Util.Texts;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -32,9 +31,9 @@ public class Commands implements CommandExecutor
 			else
 			{
 				if(Storage.wayCurrentQuestsWereGiven.get((Player) s) != null)
-					if(!Storage.wayCurrentQuestsWereGiven.get((Player) s).equalsIgnoreCase("Commands"))
+					if(!Storage.access("commands", Storage.wayCurrentQuestsWereGiven.get((Player) s), args[0]))
 					{
-						Chat.error(((Player) s), Texts.NOT_CONTROLLED_BY((Player) s));
+						Chat.error(((Player) s), Texts.CANNOT_USE_CURRENTLY);
 						return false;
 					}
 				if(args[0].equalsIgnoreCase("give") || args[0].equalsIgnoreCase("start"))
@@ -43,10 +42,10 @@ public class Commands implements CommandExecutor
 					{
 						if(qQuests.plugin.qAPI.checkPerms((Player) s, "give"))
 						{
-							Integer result = qQuests.plugin.qAPI.giveQuest((Player) s, "Commands");
+							Integer result = qQuests.plugin.qAPI.giveQuest((Player) s, "commands");
 							if(result == 0)
 							{
-								Storage.wayCurrentQuestsWereGiven.put(((Player) s), "Commands");
+								Storage.wayCurrentQuestsWereGiven.put(((Player) s), "commands");
 								Chat.message(((Player) s), qQuests.plugin.qAPI.getActiveQuest((Player) s).onJoin().message());
 							}
 							else if(result == 1)
@@ -68,10 +67,10 @@ public class Commands implements CommandExecutor
 									fullName += args[i];
 								}
 							}
-							Integer result = qQuests.plugin.qAPI.giveQuest((Player) s, fullName, true, "Commands");
+							Integer result = qQuests.plugin.qAPI.giveQuest((Player) s, fullName, true, "commands");
 							if(result == 0)
 							{
-								Storage.wayCurrentQuestsWereGiven.put(((Player) s), "Commands");
+								Storage.wayCurrentQuestsWereGiven.put(((Player) s), "commands");
 								Chat.message(((Player) s), qQuests.plugin.qAPI.getActiveQuest((Player) s).onJoin().message());
 							}
 							else if(result == 1)
@@ -91,51 +90,7 @@ public class Commands implements CommandExecutor
 						if(qQuests.plugin.qAPI.hasActiveQuest((Player) s))
 						{
 							Quest q = qQuests.plugin.qAPI.getActiveQuest((Player) s);
-							Chat.noPrefixMessage((Player) s, ChatColor.AQUA + ":" + ChatColor.BLUE + "========" + ChatColor.GOLD + " Quest Info " + ChatColor.BLUE + "========" + ChatColor.AQUA + ":");
-							Chat.noPrefixMessage((Player) s, "Name: " + ChatColor.GREEN + q.name());
-							if(q.onComplete().nextQuest() != null && !q.onComplete().nextQuest().isEmpty())
-								Chat.noPrefixMessage((Player) s, "Next Quest: " + ChatColor.GREEN + q.onComplete().nextQuest());
-							if(q.repeated() == -1)
-								Chat.noPrefixMessage((Player) s, "Repeatable: " + ChatColor.GREEN + "Infinite");
-							else if((q.repeated() - qQuests.plugin.qAPI.getProfiles().getQuestsTimesCompleted((Player) s, q)) == 0)
-								Chat.noPrefixMessage((Player) s, "Repeatable: " + ChatColor.GREEN + "None");
-							else
-								Chat.noPrefixMessage((Player) s, "Repeatable: " + ChatColor.GREEN + (q.repeated() - qQuests.plugin.qAPI.getProfiles().getQuestsTimesCompleted((Player) s, q)) + " More Times");
-							Chat.noPrefixMessage((Player) s, "Tasks: " + ChatColor.YELLOW + Texts.PRIMARY_COMMAND + " " + Texts.TASKS_COMMAND + ChatColor.GREEN + " For The Tasks.");
-							Chat.noPrefixMessage((Player) s, "Rewards:");
-							if(Storage.info.showMoney)
-								if(qQuests.plugin.economy != null && q.onComplete().money() != 0)
-									Chat.noPrefixMessage((Player) s, "     " + Texts.MONEY + ": " + ChatColor.GREEN + q.onComplete().money());
-							if(Storage.info.showHealth)
-								if(q.onComplete().health() != 0)
-									Chat.noPrefixMessage((Player) s, "     " + Texts.HEALTH + ": " + ChatColor.GREEN + q.onComplete().health());
-							if(Storage.info.showFood)
-								if(q.onComplete().hunger() != 0)
-									Chat.noPrefixMessage((Player) s, "     " + Texts.FOOD + ": " + ChatColor.GREEN + q.onComplete().hunger());
-							if(Storage.info.showLevelsAdded)
-								if(q.onComplete().levelAdd() != 0)
-									Chat.noPrefixMessage((Player) s, "     " + Texts.LEVELADD + ": " + ChatColor.GREEN + q.onComplete().levelAdd());
-							if(Storage.info.showSetLevel)
-								if(q.onComplete().levelSet() != -1)
-									Chat.noPrefixMessage((Player) s, "     " + Texts.LEVELSET + ": " + ChatColor.GREEN + q.onComplete().levelSet());
-							if(Storage.info.showCommands)
-								if(q.onComplete().items().size() > 0)
-								{
-									Chat.noPrefixMessage((Player) s, "     " + Texts.COMMANDS + ":");
-									for(int i=0;i<(q.onComplete().commands().size()); i++)
-									{
-										Chat.noPrefixMessage((Player) s, "     " + ChatColor.GREEN + "- /" + ChatColor.GOLD + q.onComplete().commands().get(i).replace("`player", ((Player) s).getName()));
-									}
-								}
-							if(Storage.info.showItems)
-								if(q.onComplete().items().size() > 0)
-								{
-									Chat.noPrefixMessage((Player) s, "     " + Texts.ITEMS + ":");
-									for(int i=0;i<(q.onComplete().items().size()); i++)
-									{
-										Chat.noPrefixMessage((Player) s, "     " + ChatColor.GREEN + q.onComplete().items().get(i).get(1).toString() + " " + ChatColor.GOLD + Material.getMaterial(q.onComplete().items().get(i).get(0)).toString());
-									}
-								}
+							Texts.INFO(q, (Player) s);
 						}
 						else Chat.error((Player) s, Texts.NO_ACTIVE_QUEST);
 					}
@@ -228,7 +183,7 @@ public class Commands implements CommandExecutor
 					if(qQuests.plugin.qAPI.checkPerms((Player) s, "list"))
 					{
 						if(qQuests.plugin.qAPI.hasActiveQuest((Player) s))
-							Chat.error((Player) s, Texts.HAS_ACTIVE_QUEST);
+							Texts.INFO(qQuests.plugin.qAPI.getActiveQuest((Player) s), (Player) s);
 						if(Storage.cannotGetQuests.contains((Player) s))
 							Chat.error((Player) s, Texts.DELAY_NOT_FINISHED);
 						if(qQuests.plugin.qAPI.getVisibleQuests().size() == 0)

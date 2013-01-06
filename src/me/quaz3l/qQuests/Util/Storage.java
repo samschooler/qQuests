@@ -10,6 +10,10 @@ import org.bukkit.entity.Player;
 public class Storage {
 	// Config Values
 	public static String primaryCommand = "quest";
+	public static String prefix = "qQuests";
+	
+	// Access            <Plugin,         Plugin,           Command>
+	public static HashMap<String, HashMap<String, ArrayList<String>>> access = null;
 	
 	public static class give {
 		public static boolean commands = true;
@@ -60,6 +64,37 @@ public class Storage {
 	
 	// Players That Can't Get Quests
 	public static ArrayList<Player> cannotGetQuests = new ArrayList<Player>();
+	
+	public static boolean access(String trying, String has, String cmd) {
+		if(has == null || trying == null || cmd == null)
+			return false;
+		has=has.toLowerCase();
+		trying=trying.toLowerCase();
+		cmd=cmd.toLowerCase();
+		if(cmd.equalsIgnoreCase("start"))
+			cmd="give";
+		if(cmd.equalsIgnoreCase("list"))
+			cmd="info";
+		else if(cmd.equalsIgnoreCase("progress"))
+			cmd="tasks";
+		else if(cmd.equalsIgnoreCase("finish")||cmd.equalsIgnoreCase("end"))
+			cmd="done";
+		Chat.logger("debug", cmd);
+		
+		Chat.logger("debug", access.toString());
+		Chat.logger("debug", access.containsKey(has)+"");
+		Chat.logger("debug", access.get(has).get(trying).contains(cmd)+"");
+		
+		
+		if(!access.containsKey(has))
+			return false;
+		if(!access.get(has).containsKey(trying))
+			return false;
+		if(!access.get(has).get(trying).contains(cmd))
+			return false;
+		
+		return true;
+	}
 	
 	public static void persist()
 	{

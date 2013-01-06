@@ -19,6 +19,7 @@ import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Config;
 import me.quaz3l.qQuests.Util.Interwebs;
 import me.quaz3l.qQuests.Util.Metrics;
+import me.quaz3l.qQuests.Util.Storage;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
@@ -43,8 +44,8 @@ public class qQuests extends JavaPlugin
 	public Permission permission = null;
 	
 	// Prefixes
-	public final String chatPrefix = ChatColor.AQUA + "[" + ChatColor.LIGHT_PURPLE + "qQuests" + ChatColor.AQUA + "] " + ChatColor.LIGHT_PURPLE + " ";
-	public final String prefix = "[qQuests] ";	
+	public String chatPrefix = ChatColor.AQUA + "[" + ChatColor.LIGHT_PURPLE + Storage.prefix + ChatColor.AQUA + "] " + ChatColor.LIGHT_PURPLE + " ";
+	public String prefix = "[qQuests] ";	
 	
 	// Super Variable
 	public qQuests() {
@@ -55,6 +56,8 @@ public class qQuests extends JavaPlugin
 	@Override
 	public void onDisable() 
 	{
+		this.qAPI=null;
+		this.Config=null;
 		Chat.logger("info", "v" + this.getDescription().getVersion() + " by Quaz3l: Disabled");
 	}
 

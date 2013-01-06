@@ -1,8 +1,10 @@
 package me.quaz3l.qQuests.Util;
 
 import me.quaz3l.qQuests.qQuests;
+import me.quaz3l.qQuests.API.QuestModels.Quest;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class Texts {
@@ -24,6 +26,55 @@ public class Texts {
 	
 	public static final String SIGNS_TASKS_HELP = "Find A Tasks Sign To See Your Other Tasks";
 	public static final String SIGNS_DONE_HELP = "Find A Done Sign To Complete Your Quest!";
+	public static final String YOUR_CURRENT_QUEST_IS = "Is You";
+	
+	// Info
+	public static final void INFO(Quest q, Player player) {
+		Chat.noPrefixMessage(player, ChatColor.AQUA + ":" + ChatColor.BLUE + "========" + ChatColor.GOLD + q.name() + ChatColor.BLUE + "========" + ChatColor.AQUA + ":");
+		if(q.onComplete().nextQuest() != null && !q.onComplete().nextQuest().isEmpty())
+			Chat.noPrefixMessage(player, "Next Quest: " + ChatColor.GREEN + q.onComplete().nextQuest());
+		if(q.repeated() == -1)
+			Chat.noPrefixMessage(player, "Repeatable: " + ChatColor.GREEN + "Infinite");
+		else if((q.repeated() - qQuests.plugin.qAPI.getProfiles().getQuestsTimesCompleted(player, q)) == 0)
+			Chat.noPrefixMessage(player, "Repeatable: " + ChatColor.GREEN + "None");
+		else
+			Chat.noPrefixMessage(player, "Repeatable: " + ChatColor.GREEN + (q.repeated() - qQuests.plugin.qAPI.getProfiles().getQuestsTimesCompleted(player, q)) + " More Times");
+		Chat.noPrefixMessage(player, "Tasks: " + ChatColor.YELLOW + Texts.PRIMARY_COMMAND + " " + Texts.TASKS_COMMAND + ChatColor.GREEN + " For The Tasks.");
+		Chat.noPrefixMessage(player, "Rewards:");
+		if(Storage.info.showMoney)
+			if(qQuests.plugin.economy != null && q.onComplete().money() != 0)
+				Chat.noPrefixMessage(player, "     " + Texts.MONEY + ": " + ChatColor.GREEN + q.onComplete().money());
+		if(Storage.info.showHealth)
+			if(q.onComplete().health() != 0)
+				Chat.noPrefixMessage(player, "     " + Texts.HEALTH + ": " + ChatColor.GREEN + q.onComplete().health());
+		if(Storage.info.showFood)
+			if(q.onComplete().hunger() != 0)
+				Chat.noPrefixMessage(player, "     " + Texts.FOOD + ": " + ChatColor.GREEN + q.onComplete().hunger());
+		if(Storage.info.showLevelsAdded)
+			if(q.onComplete().levelAdd() != 0)
+				Chat.noPrefixMessage(player, "     " + Texts.LEVELADD + ": " + ChatColor.GREEN + q.onComplete().levelAdd());
+		if(Storage.info.showSetLevel)
+			if(q.onComplete().levelSet() != -1)
+				Chat.noPrefixMessage(player, "     " + Texts.LEVELSET + ": " + ChatColor.GREEN + q.onComplete().levelSet());
+		if(Storage.info.showCommands)
+			if(q.onComplete().items().size() > 0)
+			{
+				Chat.noPrefixMessage(player, "     " + Texts.COMMANDS + ":");
+				for(int i=0;i<(q.onComplete().commands().size()); i++)
+				{
+					Chat.noPrefixMessage(player, "     " + ChatColor.GREEN + "- /" + ChatColor.GOLD + q.onComplete().commands().get(i).replace("`player", (player).getName()));
+				}
+			}
+		if(Storage.info.showItems)
+			if(q.onComplete().items().size() > 0)
+			{
+				Chat.noPrefixMessage(player, "     " + Texts.ITEMS + ":");
+				for(int i=0;i<(q.onComplete().items().size()); i++)
+				{
+					Chat.noPrefixMessage(player, "     " + ChatColor.GREEN + q.onComplete().items().get(i).get(1).toString() + " " + ChatColor.GOLD + Material.getMaterial(q.onComplete().items().get(i).get(0)).toString());
+				}
+			}
+	}
 	
 	// No
 	public static final String NO_PERMISSION = "You don't have permissions to do this!";
@@ -62,6 +113,7 @@ public class Texts {
 	
 	// Quest Plugin Control
 	public static final String NOT_CONTROLLED_BY(Player p) {return "Your Quest Is Controlled By " + Storage.wayCurrentQuestsWereGiven.get(p);}	
+	public static final String CANNOT_USE_CURRENTLY = "You Can't Use This When You Have This Quest!";
 	
 	// Config Words
 	public static final String QUEST = "Quest";
