@@ -20,6 +20,15 @@ public class Texts {
 	public static final String RELOAD_COMMAND = "reload";
 	
 	// Help Text
+	public static final void HELP(Player player, String plugin) {
+		Chat.noPrefixMessage(player, ChatColor.AQUA + ":" + ChatColor.BLUE + "========" + ChatColor.GOLD + "qQuests #" + qQuests.plugin.getDescription().getVersion() + " Help" + ChatColor.BLUE + "========" + ChatColor.AQUA + ":");
+		Chat.noPrefixMessage(player, ChatColor.YELLOW + PRIMARY_COMMAND + " " + ChatColor.GREEN + GIVE_COMMAND + ChatColor.LIGHT_PURPLE + "  - Get a new quest");
+		Chat.noPrefixMessage(player, ChatColor.YELLOW + PRIMARY_COMMAND + " " + ChatColor.GREEN + INFO_COMMAND + ChatColor.LIGHT_PURPLE + "  - Get info on your quest");
+		Chat.noPrefixMessage(player, ChatColor.YELLOW + PRIMARY_COMMAND + " " + ChatColor.GREEN + TASKS_COMMAND + ChatColor.LIGHT_PURPLE + " - See your quest's tasks and progess");
+		Chat.noPrefixMessage(player, ChatColor.YELLOW + PRIMARY_COMMAND + " " + ChatColor.GREEN + DONE_COMMAND + ChatColor.LIGHT_PURPLE + "  - Finsh a quest");
+		Chat.noPrefixMessage(player, ChatColor.YELLOW + PRIMARY_COMMAND + " " + ChatColor.GREEN + LIST_COMMAND + ChatColor.LIGHT_PURPLE + "  - List quests available to you");
+		Chat.noPrefixMessage(player, ChatColor.YELLOW + PRIMARY_COMMAND + " " + ChatColor.GREEN + STATS_COMMAND + ChatColor.LIGHT_PURPLE + " - List your quest stats");
+	}
 	public static final String COMMANDS_HELP_TEXT = PRIMARY_COMMAND + " " + ChatColor.RED + "[" + ChatColor.YELLOW + GIVE_COMMAND + ", " + INFO_COMMAND + ", " + TASKS_COMMAND + ", " + DONE_COMMAND + ", " + LIST_COMMAND + ", " + STATS_COMMAND + ", " + RELOAD_COMMAND + ", " + HELP_COMMAND + ChatColor.RED + "]";
 	public static final String COMMANDS_TASKS_HELP = "Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + TASKS_COMMAND + ChatColor.GREEN + " For Your Other Tasks";
 	public static final String COMMANDS_DONE_HELP = "Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + DONE_COMMAND + ChatColor.GREEN + " To Complete Your Quest!";

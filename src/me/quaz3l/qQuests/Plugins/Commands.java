@@ -26,7 +26,7 @@ public class Commands implements CommandExecutor
 		{
 			if(args.length < 1)
 			{
-				Chat.noPrefixMessage((Player) s, Texts.COMMANDS_HELP_TEXT);
+				Texts.HELP((Player) s, "commands");
 			}
 			else
 			{
@@ -81,7 +81,7 @@ public class Commands implements CommandExecutor
 						else Chat.noPerms((Player) s);
 					}
 					else
-						Chat.noPrefixMessage((Player) s, Texts.COMMANDS_HELP_TEXT);
+						Texts.HELP((Player) s, "commands");
 				}
 				else if(args[0].equalsIgnoreCase("info")) 
 				{
@@ -223,7 +223,7 @@ public class Commands implements CommandExecutor
 				}
 				else
 				{
-					Chat.noPrefixMessage((Player) s, Texts.COMMANDS_HELP_TEXT);
+					Texts.HELP((Player) s, "commands");
 				}
 			}
 		}
