@@ -25,7 +25,7 @@ public class Texts {
 		Chat.noPrefixMessage(player, ChatColor.YELLOW + PRIMARY_COMMAND + " " + ChatColor.GREEN + GIVE_COMMAND + ChatColor.LIGHT_PURPLE + "  - Get a new quest");
 		Chat.noPrefixMessage(player, ChatColor.YELLOW + PRIMARY_COMMAND + " " + ChatColor.GREEN + INFO_COMMAND + ChatColor.LIGHT_PURPLE + "  - Get info on your quest");
 		Chat.noPrefixMessage(player, ChatColor.YELLOW + PRIMARY_COMMAND + " " + ChatColor.GREEN + TASKS_COMMAND + ChatColor.LIGHT_PURPLE + " - See your quest's tasks and progess");
-		Chat.noPrefixMessage(player, ChatColor.YELLOW + PRIMARY_COMMAND + " " + ChatColor.GREEN + DONE_COMMAND + ChatColor.LIGHT_PURPLE + "  - Finsh a quest");
+		Chat.noPrefixMessage(player, ChatColor.YELLOW + PRIMARY_COMMAND + " " + ChatColor.GREEN + DONE_COMMAND + ChatColor.LIGHT_PURPLE + "  - Finish a quest");
 		Chat.noPrefixMessage(player, ChatColor.YELLOW + PRIMARY_COMMAND + " " + ChatColor.GREEN + LIST_COMMAND + ChatColor.LIGHT_PURPLE + "  - List quests available to you");
 		Chat.noPrefixMessage(player, ChatColor.YELLOW + PRIMARY_COMMAND + " " + ChatColor.GREEN + STATS_COMMAND + ChatColor.LIGHT_PURPLE + " - List your quest stats");
 	}
@@ -35,19 +35,20 @@ public class Texts {
 	
 	public static final String SIGNS_TASKS_HELP = "Find A Tasks Sign To See Your Other Tasks";
 	public static final String SIGNS_DONE_HELP = "Find A Done Sign To Complete Your Quest!";
-	public static final String YOUR_CURRENT_QUEST_IS = "Is You";
 	
 	// Info
 	public static final void INFO(Quest q, Player player) {
 		Chat.noPrefixMessage(player, ChatColor.AQUA + ":" + ChatColor.BLUE + "========" + ChatColor.GOLD + q.name() + ChatColor.BLUE + "========" + ChatColor.AQUA + ":");
 		if(q.onComplete().nextQuest() != null && !q.onComplete().nextQuest().isEmpty())
 			Chat.noPrefixMessage(player, "Next Quest: " + ChatColor.GREEN + q.onComplete().nextQuest());
-		if(q.repeated() == -1)
+		if(q.repeated() == 0)
 			Chat.noPrefixMessage(player, "Repeatable: " + ChatColor.GREEN + "Infinite");
-		else if((q.repeated() - qQuests.plugin.qAPI.getProfiles().getQuestsTimesCompleted(player, q)) == 0)
-			Chat.noPrefixMessage(player, "Repeatable: " + ChatColor.GREEN + "None");
+		else if((q.repeated() - qQuests.plugin.qAPI.getProfiles().getQuestsTimesCompleted(player, q)) == 1)
+		{}
+		else if((q.repeated() - qQuests.plugin.qAPI.getProfiles().getQuestsTimesCompleted(player, q)) == 2)
+			Chat.noPrefixMessage(player, "Repeatable: " + ChatColor.GREEN + ((q.repeated()-1) - qQuests.plugin.qAPI.getProfiles().getQuestsTimesCompleted(player, q)) + " More Time");
 		else
-			Chat.noPrefixMessage(player, "Repeatable: " + ChatColor.GREEN + (q.repeated() - qQuests.plugin.qAPI.getProfiles().getQuestsTimesCompleted(player, q)) + " More Times");
+			Chat.noPrefixMessage(player, "Repeatable: " + ChatColor.GREEN + ((q.repeated()-1) - qQuests.plugin.qAPI.getProfiles().getQuestsTimesCompleted(player, q)) + " More Times");
 		Chat.noPrefixMessage(player, "Tasks: " + ChatColor.YELLOW + Texts.PRIMARY_COMMAND + " " + Texts.TASKS_COMMAND + ChatColor.GREEN + " For The Tasks.");
 		Chat.noPrefixMessage(player, "Rewards:");
 		if(Storage.info.showMoney)
@@ -102,6 +103,9 @@ public class Texts {
 	
 	public static final String NOT_ENOUGH_FOR_QUEST = "You Don't Have Enough To Get This Quest!";
 	public static final String NOT_VALID_QUEST = "This Isn't A Valid Quest!";
+	public static final String COMMANDS_YOU_HAVE_THIS_QUEST = "You Already Have This Quest! Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + INFO_COMMAND + ChatColor.RED + " To Get More Info On Your Quest.";
+	public static final String YOU_HAVE_THIS_QUEST = "You Already Have This Quest!";
+
 	
 	// Non-Fatal Task Errors
 	public static final String COMMANDS_TASKS_NOT_COMPLETED = "You Haven't Completed All The Tasks! Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + TASKS_COMMAND + ChatColor.RED + " To See Them.";

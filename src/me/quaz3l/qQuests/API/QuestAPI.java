@@ -109,7 +109,10 @@ public class QuestAPI {
 		quest = QuestFrag.get(quest.toLowerCase()).toLowerCase();
 		// Check If The Player Already Has A Quest
 		if(qQuests.plugin.qAPI.hasActiveQuest(player))
-			return 3;
+			if(qQuests.plugin.qAPI.getActiveQuest(player).name().equalsIgnoreCase(quest))
+				return 15;
+			else
+				return 3;
 		
 		// Check If The Player Can Get Quests
 		if(Storage.cannotGetQuests.contains(player))

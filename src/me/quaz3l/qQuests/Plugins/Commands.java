@@ -31,7 +31,7 @@ public class Commands implements CommandExecutor
 			else
 			{
 				if(Storage.wayCurrentQuestsWereGiven.get((Player) s) != null)
-					if(!Storage.access("commands", Storage.wayCurrentQuestsWereGiven.get((Player) s), args[0]) || args[0].equalsIgnoreCase("help"))
+					if(!Storage.access("commands", Storage.wayCurrentQuestsWereGiven.get((Player) s), args[0]) && !args[0].equalsIgnoreCase("help") && !args[0].equalsIgnoreCase("give"))
 					{
 						Chat.error(((Player) s), Texts.CANNOT_USE_CURRENTLY);
 						return false;

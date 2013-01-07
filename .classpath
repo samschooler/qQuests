@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="/Users/quaz3l/Documents/Coding/Desktop/Projects/eclipse/API/Vault.jar"/>
-	<classpathentry kind="lib" path="/Users/quaz3l/Documents/Coding/Desktop/Projects/eclipse/API/citizensapi-2.0.6-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="/Users/quaz3l/Documents/Coding/Desktop/Projects/eclipse/API/bukkit-1.4.6-R0.3.jar"/>
+	<classpathentry kind="lib" path="/Users/quaz3l/Documents/Coding/Desktop/Projects/eclipse/API/citizensapi-2.0.6-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

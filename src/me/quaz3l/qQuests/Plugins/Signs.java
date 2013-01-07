@@ -114,7 +114,7 @@ public class Signs implements Listener {
 		{
 			if(!qQuests.plugin.qAPI.getQuests().containsKey(QuestFrag.get(getLine(sign, 1).toLowerCase()).toLowerCase()))
 			{
-				Chat.error(e.getPlayer(), "The quest is not a vaild quest on line 2 of the sign!");
+				Chat.error(e.getPlayer(), "The quest on line 2 of the sign is not vaild!");
 				return;
 			}
 		}

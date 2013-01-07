@@ -109,6 +109,8 @@ public class Chat {
 				return Texts.LEVEL_TOO_HIGH;
 			case 14:
 				return Texts.QUEST_IS_FORCED;
+			case 15:
+				return Texts.COMMANDS_YOU_HAVE_THIS_QUEST;
 			default:
 				return "Unknown";
 			}
@@ -147,6 +149,8 @@ public class Chat {
 				return Texts.LEVEL_TOO_LOW;
 			case 14:
 				return Texts.QUEST_IS_FORCED;
+			case 15:
+				return Texts.YOU_HAVE_THIS_QUEST;
 			default:
 				return "Unknown";
 			}
