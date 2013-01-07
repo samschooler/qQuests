@@ -193,6 +193,8 @@ public class QuestAPI {
 		Quest q = this.getActiveQuests().get(player);
 		if(!qQuests.plugin.qAPI.hasActiveQuest(player))
 			return 9;
+		if(q.forced())
+			return 14;
 		Integer u = q.onDrop().feeReward(player);
 		if(u == 0)
 		{

@@ -267,6 +267,12 @@ public class Config {
 			Chat.logger("severe", "The 'setup.invisible' node of quest '" + quest + "' is not a boolean statement [true/false]!");
 			rturn = false;
 		}
+		if(this.getQuestConfig().getString(quest + ".setup.forced") != null && this.getQuestConfig().getString(quest + ".setup.forced") != "true" && this.getQuestConfig().getString(quest + ".setup.forced") != "false")
+		{
+			Chat.attention(2);
+			Chat.logger("severe", "The 'setup.forced' node of quest '" + quest + "' is not a boolean statement [true/false]!");
+			rturn = false;
+		}
 		if(this.getQuestConfig().getString(quest + ".setup.delay") != null)
 		{
 			Chat.attention(0);
@@ -521,7 +527,7 @@ public class Config {
 		}
 
 		// onDrop
-		if(this.getQuestConfig().getString(quest + ".onDrop.message") == null)
+		if(this.getQuestConfig().getString(quest + ".onDrop.message") == null && !this.getQuestConfig().getBoolean(quest + ".setup.forced"))
 		{
 			Chat.attention(2);
 			Chat.logger("severe", "The 'onDrop.message' node of quest '" + quest + "' is not defined!");

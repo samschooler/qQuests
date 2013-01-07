@@ -98,6 +98,7 @@ public class Texts {
 	public static final String NO_ACTIVE_QUEST = "You Don't Have An Active Quest!";
 	public static final String LEVEL_TOO_HIGH = "Your Level Is To High!";
 	public static final String LEVEL_TOO_LOW = "Your Level Is To Low!";
+	public static final String QUEST_IS_FORCED = "You Must Complete This Quest, It Is Required!";
 	
 	public static final String NOT_ENOUGH_FOR_QUEST = "You Don't Have Enough To Get This Quest!";
 	public static final String NOT_VALID_QUEST = "This Isn't A Valid Quest!";

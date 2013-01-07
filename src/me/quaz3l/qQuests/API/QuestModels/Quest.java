@@ -8,7 +8,8 @@ public class Quest {
 	// Setup
 	private String name;
 	private int repeated;
-	private Boolean invisible;
+	private boolean invisible;
+	private boolean forced;
 	
 	// Requirements
 	private int levelMin;
@@ -27,6 +28,7 @@ public class Quest {
 		name = build.name();
 		repeated = build.repeated();
 		invisible = build.invisible();
+		forced = build.forced();
 		
 		levelMin = build.levelMin();
 		levelMax = build.levelMax();
@@ -44,8 +46,11 @@ public class Quest {
 		// This is a fix for a miscommunication on my part. repeated: 0 now means you can do a quest once, 1 = twice
 		return this.repeated+1;
 	}
-	public final Boolean invisible() {
+	public final boolean invisible() {
 		return this.invisible;
+	}
+	public final boolean forced() {
+		return this.forced;
 	}
 	
 	public final int levelMin() {

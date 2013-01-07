@@ -46,6 +46,7 @@ public class QuestWorker
 			else
 				quest.repeated(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".setup.repeated"));
 			quest.invisible(qQuests.plugin.Config.getQuestConfig().getBoolean(questName + ".setup.invisible"));
+			quest.forced(qQuests.plugin.Config.getQuestConfig().getBoolean(questName + ".setup.forced"));
 			
 			// Set Requirements Variables
 			quest.levelMin(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".requirements.levelMin"));

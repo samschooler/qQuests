@@ -10,7 +10,8 @@ public class BuildQuest {
 	// Setup
 	private String name = "Quest";
 	private int repeated = -1;
-	private Boolean invisible = false;
+	private boolean invisible = false;
+	private boolean forced = false;
 	
 	// Requirements
 	private int levelMin = 0;
@@ -38,8 +39,12 @@ public class BuildQuest {
 		this.repeated = i;
 		return this;
 	}
-	public BuildQuest invisible(Boolean b) {
+	public BuildQuest invisible(boolean b) {
 		this.invisible = b;
+		return this;
+	}
+	public BuildQuest forced(boolean b) {
+		this.forced = b;
 		return this;
 	}
 	
@@ -82,8 +87,11 @@ public class BuildQuest {
 	public final int repeated() {
 		return this.repeated;
 	}
-	public final Boolean invisible() {
+	public final boolean invisible() {
 		return this.invisible;
+	}
+	public final boolean forced() {
+		return this.forced;
 	}
 	
 	// Requirements
