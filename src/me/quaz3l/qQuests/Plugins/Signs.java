@@ -35,7 +35,7 @@ public class Signs implements Listener {
 				e.getBlock().getType() == Material.SIGN))
 		{
 			Sign sign = (Sign) e.getBlock().getState();
-			if(!getLine(sign, 0).equalsIgnoreCase("[qQuests]") && !getLine(sign, 0).equalsIgnoreCase("[Quest]") && !getLine(sign, 0).equalsIgnoreCase(Chat.removeColors(qQuests.plugin.chatPrefix)))
+			if(!getLine(sign, 0).equalsIgnoreCase("[qQuests]") && !getLine(sign, 0).equalsIgnoreCase("[Quest]") && !getLine(sign, 0).equalsIgnoreCase(Chat.removeColors(qQuests.plugin.chatPrefix).trim()))
 				return;
 			else
 				if(!qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "destroy.sign"))
@@ -46,7 +46,7 @@ public class Signs implements Listener {
 					blockAbove.getType() == Material.SIGN)) 
 		{
 			Sign sign = (Sign) blockAbove.getState();
-			if(!getLine(sign, 0).equalsIgnoreCase("[qQuests]") && !getLine(sign, 0).equalsIgnoreCase("[Quest]") && !getLine(sign, 0).equalsIgnoreCase(Chat.removeColors(qQuests.plugin.chatPrefix)))
+			if(!getLine(sign, 0).equalsIgnoreCase("[qQuests]") && !getLine(sign, 0).equalsIgnoreCase("[Quest]") && !getLine(sign, 0).equalsIgnoreCase(Chat.removeColors(qQuests.plugin.chatPrefix).trim()))
 				return;
 			else
 				if(!qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "destroy.sign"))
@@ -57,14 +57,37 @@ public class Signs implements Listener {
 	@EventHandler
 	public void onSignChange(SignChangeEvent e)
 	{
-		if(!getLine(e.getLines(), 0).equalsIgnoreCase("[qQuests]") && !getLine(e.getLines(), 0).equalsIgnoreCase("[Quest]") && !getLine(e.getLines(), 0).equalsIgnoreCase(Chat.removeColors(qQuests.plugin.chatPrefix)))
+		Chat.logger("debug", getLine(e.getLines(), 0).equalsIgnoreCase(Chat.removeColors(qQuests.plugin.chatPrefix).trim())+"");
+		Chat.logger("debug", "Prefix: "+Chat.removeColors(qQuests.plugin.chatPrefix).trim());
+		Chat.logger("debug", "Line 1: "+e.getLine(0));
+		if(!getLine(e.getLines(), 0).equalsIgnoreCase("[qQuests]") && !getLine(e.getLines(), 0).equalsIgnoreCase("[Quest]") && !getLine(e.getLines(), 0).equalsIgnoreCase(Chat.removeColors(qQuests.plugin.chatPrefix).trim()))
 			return;
 		if(!qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "create.sign"))
 		{
 			Chat.noPerms(e.getPlayer());
 			dropSign(e);
 		}
-		else Chat.green(e.getPlayer(), "Quest sign created!");
+		else {
+			// Default Format
+			
+			// Line 0
+			e.setLine(0, ChatColor.WHITE + e.getLine(0));
+			
+			// Line 2
+			if(getLine(e.getLines(), 2).equalsIgnoreCase("give") || getLine(e.getLines(), 2).equalsIgnoreCase("start")) {
+				e.setLine(2, ChatColor.DARK_BLUE + e.getLine(2));
+			}
+			if(getLine(e.getLines(), 2).equalsIgnoreCase("tasks") || getLine(e.getLines(), 2).equalsIgnoreCase("progress") || getLine(e.getLines(), 2).equalsIgnoreCase("info") || getLine(e.getLines(), 2).equalsIgnoreCase("list")) {
+				e.setLine(2, ChatColor.GOLD + e.getLine(2));
+			}
+			if(getLine(e.getLines(), 2).equalsIgnoreCase("drop")) {
+				e.setLine(2, ChatColor.DARK_RED + e.getLine(2));
+			}
+			if(getLine(e.getLines(), 2).equalsIgnoreCase("done") || getLine(e.getLines(), 2).equalsIgnoreCase("finish") || getLine(e.getLines(), 2).equalsIgnoreCase("end")) {
+				e.setLine(2, ChatColor.GREEN + e.getLine(2));
+			}
+			Chat.green(e.getPlayer(), "Quest sign created!");
+		}
 		
 	}
 	@EventHandler
@@ -79,7 +102,7 @@ public class Signs implements Listener {
 			return;
 		else e.setCancelled(true);
 		Sign sign = (Sign) e.getClickedBlock().getState();
-		if(!getLine(sign, 0).equalsIgnoreCase("[qQuests]") && !getLine(sign, 0).equalsIgnoreCase("[Quest]") && !getLine(sign, 0).equalsIgnoreCase(Chat.removeColors(qQuests.plugin.chatPrefix)))
+		if(!getLine(sign, 0).equalsIgnoreCase("[qQuests]") && !getLine(sign, 0).equalsIgnoreCase("[Quest]") && !getLine(sign, 0).equalsIgnoreCase(Chat.removeColors(qQuests.plugin.chatPrefix).trim()))
 			return;
 		if(Storage.wayCurrentQuestsWereGiven.get(e.getPlayer()) != null)
 			if(!Storage.access("signs", Storage.wayCurrentQuestsWereGiven.get(e.getPlayer()), getLine(sign, 2)))
