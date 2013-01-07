@@ -10,14 +10,16 @@ public class LegacyConverter {
 			.getKeys(false)) 
 		{
 			String root = questName.toString();
-			
+
 			switch(fixNo) {
+			// Delay moved to onSomethings
 			case 0:
 				qQuests.plugin.Config.getQuestConfig().set(root + ".onComplete.delay", 
 						qQuests.plugin.Config.getQuestConfig().getInt(root + ".setup.delay")*60);
 				qQuests.plugin.Config.getQuestConfig().set(root + ".setup.delay", null);
 				qQuests.plugin.Config.saveQuestConfig();
 				break;
+			// nextQuest move to onSomethings
 			case 1:
 				qQuests.plugin.Config.getQuestConfig().set(root + ".onComplete.nextQuest", 
 						qQuests.plugin.Config.getQuestConfig().getString(root + ".setup.nextQuest"));
@@ -25,7 +27,6 @@ public class LegacyConverter {
 				qQuests.plugin.Config.saveQuestConfig();
 				break;
 			}
-			
 		}
 	}
 }

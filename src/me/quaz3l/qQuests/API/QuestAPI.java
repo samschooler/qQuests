@@ -129,7 +129,7 @@ public class QuestAPI {
 			return 1;
 		
 		// Check If The Quest Is Repeatable For The Player
-		if(q.repeated() > -1 && (q.repeated() - qQuests.plugin.qAPI.getProfiles().getInt(player, "FinishCount." + q.name()) <= 0))
+		if(q.repeated() > 0 && (q.repeated() - qQuests.plugin.qAPI.getProfiles().getInt(player, "FinishCount." + q.name()) <= 0))
 			return 11;
 		
 		// Check Level
@@ -174,7 +174,7 @@ public class QuestAPI {
 				continue;
 			
 			// Check If The Quest Is Repeatable For The Player
-			if(q.repeated() > -1 && (q.repeated() - qQuests.plugin.qAPI.getProfiles().getInt(player, "FinishCount." + q.name()) <= 0))
+			if(q.repeated() > 0 && (q.repeated() - qQuests.plugin.qAPI.getProfiles().getInt(player, "FinishCount." + q.name()) <= 0))
 				continue;
 			
 			// Check Level

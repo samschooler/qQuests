@@ -41,7 +41,8 @@ public class Quest {
 		return this.name;
 	}
 	public final int repeated() {
-		return this.repeated;
+		// This is a fix for a miscommunication on my part. repeated: 0 now means you can do a quest once, 1 = twice
+		return this.repeated+1;
 	}
 	public final Boolean invisible() {
 		return this.invisible;
