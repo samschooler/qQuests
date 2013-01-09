@@ -14,7 +14,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class Interwebs {
 	private static boolean updateNotified = false;
-	
+
 	public static void start()
 	{
 		qQuests.plugin.getServer().getScheduler().runTaskTimerAsynchronously(qQuests.plugin, new Runnable() {
@@ -23,8 +23,8 @@ public class Interwebs {
 	}
 	public static void talk() {
 		// Ping My Server
-    	//pingStatus();
-		
+		//pingStatus();
+
 		// Check For Update
 		checkForUpdates();
 	}
@@ -34,7 +34,7 @@ public class Interwebs {
 		if(latestFile != null)
 		{
 			FileConfiguration latestConfig = YamlConfiguration.loadConfiguration(latestFile);
-			 
+
 			long currentVersion = Long.valueOf(qQuests.plugin.getDescription().getVersion());
 			long latestVersion = latestConfig.getLong("version");
 			Chat.logger("debug", "Current Version: " + currentVersion);
@@ -49,9 +49,25 @@ public class Interwebs {
 					Chat.logger("warning", "########################### CHANGELOG ##########################");
 					for(Object o : latestConfig.getStringList("changelog"))
 						Chat.logger("warning", "> " + o);
-					Chat.logger("warning", "################################################################");
-					Chat.logger("warning", "############### Type 'qQuests update' to update. ###############");
-					Chat.logger("warning", "################################################################");
+					if(qQuests.plugin.getConfig().getBoolean("autoDownloadCriticalUpdates") && latestConfig.getBoolean("critical")) {
+						Chat.logger("warning", "################################################################");
+						Chat.logger("warning", "################## This is a critical update! ##################");
+						Chat.logger("warning", "######################## Auto updating! ########################");
+						Chat.logger("warning", "################################################################");
+					}
+					else if(latestConfig.getBoolean("critical")) {
+						Chat.logger("warning", "################################################################");
+						Chat.logger("warning", "################## This is a critical update! ##################");
+						Chat.logger("warning", "############### Type 'qQuests update' to update. ###############");
+						Chat.logger("warning", "################################################################");
+						tryUpdate(qQuests.plugin.getServer().getConsoleSender());
+					}
+					else
+					{
+						Chat.logger("warning", "################################################################");
+						Chat.logger("warning", "############### Type 'qQuests update' to update. ###############");
+						Chat.logger("warning", "################################################################");
+					}
 				}
 				else
 					Chat.logger("warning", "There is an update avalible, type 'qQuests update' to update.");
@@ -79,100 +95,102 @@ public class Interwebs {
 	}
 	private static File newTempFile(String site)
 	{
-	        try {
-	                File file = File.createTempFile("latest", "");
-	                file.deleteOnExit();
-	 
-	                BufferedInputStream in = new BufferedInputStream(new URL(site).openStream());
-	                FileOutputStream fout = new FileOutputStream(file);
-	 
-	                byte data[] = new byte[1024]; //Download 1 KB at a time
-	                int count;
-	                while((count = in.read(data, 0, 1024)) != -1)
-	                {
-	                        fout.write(data, 0, count);
-	                }
-	 
-	                in.close();
-	                fout.close();
-	 
-	                return file;
-	        } catch (Exception e) {}
-	 
-	        return null;
+		try {
+			File file = File.createTempFile("latest", "");
+			file.deleteOnExit();
+
+			BufferedInputStream in = new BufferedInputStream(new URL(site).openStream());
+			FileOutputStream fout = new FileOutputStream(file);
+
+			byte data[] = new byte[1024]; //Download 1 KB at a time
+			int count;
+			while((count = in.read(data, 0, 1024)) != -1)
+			{
+				fout.write(data, 0, count);
+			}
+
+			in.close();
+			fout.close();
+
+			return file;
+		} catch (Exception e) {}
+
+		return null;
 	}
 	public static boolean tryUpdate(CommandSender s) {
 		File latestFile = newTempFile("https://raw.github.com/quaz3l/qQuests/master/latest.yml");
 		if(latestFile != null)
 		{
 			FileConfiguration latestConfig = YamlConfiguration.loadConfiguration(latestFile);
-			 
+
 			long currentVersion = Long.valueOf(qQuests.plugin.getDescription().getVersion());
 			long latestVersion = latestConfig.getLong("version");
 			if(latestVersion > currentVersion)
 			{
 				if(updatePlugin(latestConfig.getString("source"), qQuests.plugin.getDataFolder().getPath())) {
-					Chat.message(s, "qQuest Updated!");
-					Chat.message(s, "Reload server for update to take effect!");
+					if(s != null) {
+						Chat.message(s, "qQuest Updated!");
+						Chat.message(s, "Reload server for update to take effect!");
+					}
 					return true;
-				} else Chat.message(s, "qQuests didn't download! Now the JAR is most likely corrupt! Go download the update from: " + latestConfig.getString("source"));
+				} else if(s != null) Chat.message(s, "qQuests didn't download! Now the JAR is most likely corrupt! Go download the update from: " + latestConfig.getString("source"));
 			}
 		}
 		return false;
 	}
 	private static boolean updatePlugin(String site, String destination)
 	{
-	        try {
-	        		Chat.logger("info", "Downloading...");
-	                BufferedInputStream in = new BufferedInputStream(new URL(site).openStream());
-	                FileOutputStream fout = new FileOutputStream(destination + ".temp");
-	 
-	                byte data[] = new byte[1024]; //Download 1 KB at a time
-	                int count;
-	                while((count = in.read(data, 0, 1024)) != -1)
-	                {
-	                        fout.write(data, 0, count);
-	                }
-	 
-	                in.close();
-	                fout.close();
-	                Chat.logger("info", "Downloaded.");
-	                Chat.logger("info", "Installing...");
-	                BufferedInputStream lin = new BufferedInputStream(new URL(site).openStream());
-	                FileOutputStream lfout = new FileOutputStream(destination + ".jar");
-	 
-	                byte ldata[] = new byte[1024]; //Download 1 KB at a time
-	                int lcount;
-	                while((lcount = lin.read(ldata, 0, 1024)) != -1)
-	                {
-	                        lfout.write(ldata, 0, lcount);
-	                }
-	 
-	                lin.close();
-	                lfout.close();
-	                
-	                try{
-	                	 
-	            		File file = new File(destination + ".temp");
-	         
-	            		if(file.delete()){
-	            			Chat.logger("debug", "Temp file deleted.");
-	            		}else{
-	            			Chat.logger("debug", "Temp file failed to delete.");
-	            		}
-	         
-	            	}catch(Exception e){
-	         
-	            		e.printStackTrace();
-	         
-	            	}
-	                
-	                Chat.logger("info", "Installed.");
-	                
-	        } catch(Exception e) {
-	        	Chat.logger("info", "Failed to Download.");
-	        	return false;
-	        }
-	        return true;
+		try {
+			Chat.logger("info", "Downloading...");
+			BufferedInputStream in = new BufferedInputStream(new URL(site).openStream());
+			FileOutputStream fout = new FileOutputStream(destination + ".temp");
+
+			byte data[] = new byte[1024]; //Download 1 KB at a time
+			int count;
+			while((count = in.read(data, 0, 1024)) != -1)
+			{
+				fout.write(data, 0, count);
+			}
+
+			in.close();
+			fout.close();
+			Chat.logger("info", "Downloaded.");
+			Chat.logger("info", "Installing...");
+			BufferedInputStream lin = new BufferedInputStream(new URL(site).openStream());
+			FileOutputStream lfout = new FileOutputStream(destination + ".jar");
+
+			byte ldata[] = new byte[1024]; //Download 1 KB at a time
+			int lcount;
+			while((lcount = lin.read(ldata, 0, 1024)) != -1)
+			{
+				lfout.write(ldata, 0, lcount);
+			}
+
+			lin.close();
+			lfout.close();
+
+			try{
+
+				File file = new File(destination + ".temp");
+
+				if(file.delete()){
+					Chat.logger("debug", "Temp file deleted.");
+				}else{
+					Chat.logger("debug", "Temp file failed to delete.");
+				}
+
+			}catch(Exception e){
+
+				e.printStackTrace();
+
+			}
+
+			Chat.logger("info", "Installed.");
+
+		} catch(Exception e) {
+			Chat.logger("info", "Failed to Download.");
+			return false;
+		}
+		return true;
 	}
 }

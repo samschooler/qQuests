@@ -80,6 +80,9 @@ public class Config {
 			this.getConfig().set("autoUpdate", null);
 		if(this.getConfig().getString("tellMeYourUsingMyPlugin") != null)
 			this.getConfig().set("tellMeYourUsingMyPlugin", null);
+		
+		if(this.getConfig().getString("autoDownloadCriticalUpdates") != "true" && this.getConfig().getString("autoDownloadCriticalUpdates") != "false")
+			this.getConfig().set("autoDownloadCriticalUpdates", true);
 
 		// Prefix
 		if(this.getConfig().getString("chatPrefix") == null)
