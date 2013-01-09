@@ -76,17 +76,32 @@ public class Signs implements Listener {
 			// Line 2
 			if(getLine(e.getLines(), 2).equalsIgnoreCase("give") || getLine(e.getLines(), 2).equalsIgnoreCase("start")) {
 				e.setLine(2, ChatColor.DARK_BLUE + e.getLine(2));
+				if(getLine(e.getLines(), 1).isEmpty())
+					Chat.green(e.getPlayer(), "Quest sign created! This will give a random visible quest.");
+				else
+					Chat.green(e.getPlayer(), "Quest sign created! This will give the " + getLine(e.getLines(), 1) + " quest.");
 			}
 			if(getLine(e.getLines(), 2).equalsIgnoreCase("tasks") || getLine(e.getLines(), 2).equalsIgnoreCase("progress") || getLine(e.getLines(), 2).equalsIgnoreCase("info") || getLine(e.getLines(), 2).equalsIgnoreCase("list")) {
 				e.setLine(2, ChatColor.GOLD + e.getLine(2));
+				if(getLine(e.getLines(), 1).isEmpty())
+					Chat.green(e.getPlayer(), "Quest sign created! This will show for tasks any quest.");
+				else
+					Chat.green(e.getPlayer(), "Quest sign created! This will show tasks for the " + getLine(e.getLines(), 1) + " quest.");
 			}
 			if(getLine(e.getLines(), 2).equalsIgnoreCase("drop")) {
 				e.setLine(2, ChatColor.DARK_RED + e.getLine(2));
+				if(getLine(e.getLines(), 1).isEmpty())
+					Chat.green(e.getPlayer(), "Quest sign created! This will drop any quest.");
+				else
+					Chat.green(e.getPlayer(), "Quest sign created! This will drop the " + getLine(e.getLines(), 1) + " quest.");
 			}
 			if(getLine(e.getLines(), 2).equalsIgnoreCase("done") || getLine(e.getLines(), 2).equalsIgnoreCase("finish") || getLine(e.getLines(), 2).equalsIgnoreCase("end")) {
 				e.setLine(2, ChatColor.GREEN + e.getLine(2));
+				if(getLine(e.getLines(), 1).isEmpty())
+					Chat.green(e.getPlayer(), "Quest sign created! This will complete any quest.");
+				else
+					Chat.green(e.getPlayer(), "Quest sign created! This will complete the " + getLine(e.getLines(), 1) + " quest.");
 			}
-			Chat.green(e.getPlayer(), "Quest sign created!");
 		}
 		
 	}
@@ -100,12 +115,12 @@ public class Signs implements Listener {
 				e.getClickedBlock().getType() != Material.SIGN_POST && 
 				e.getClickedBlock().getType() != Material.SIGN)
 			return;
-		else e.setCancelled(true);
 		Sign sign = (Sign) e.getClickedBlock().getState();
 		if(!getLine(sign, 0).equalsIgnoreCase("[qQuests]") && !getLine(sign, 0).equalsIgnoreCase("[Quest]") && !getLine(sign, 0).equalsIgnoreCase(Chat.removeColors(qQuests.plugin.chatPrefix).trim()))
 			return;
+		e.setCancelled(true);
 		if(Storage.wayCurrentQuestsWereGiven.get(e.getPlayer()) != null)
-			if(!Storage.access("signs", Storage.wayCurrentQuestsWereGiven.get(e.getPlayer()), getLine(sign, 2)))
+			if(!Storage.access("signs", Storage.wayCurrentQuestsWereGiven.get(e.getPlayer()), getLine(sign, 2)) && !getLine(sign, 2).equalsIgnoreCase("give"))
 			{
 				Chat.error((e.getPlayer()), Texts.CANNOT_USE_CURRENTLY);
 				return;
@@ -114,29 +129,9 @@ public class Signs implements Listener {
 		{
 			if(!qQuests.plugin.qAPI.getQuests().containsKey(QuestFrag.get(getLine(sign, 1).toLowerCase()).toLowerCase()))
 			{
-				Chat.error(e.getPlayer(), "The quest on line 2 of the sign is not vaild!");
+				Chat.error(e.getPlayer(), "The quest on line 2 of the sign is not valid!");
 				return;
 			}
-		}
-		if((getLine(sign, 2).equalsIgnoreCase("give") || getLine(sign, 2).equalsIgnoreCase("start")) && getLine(sign, 1).isEmpty())
-		{
-			if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "give.specific.sign"))
-			{
-				Integer result = qQuests.plugin.qAPI.giveQuest(e.getPlayer(), "Signs");
-				if(result == 0)
-				{
-					Storage.wayCurrentQuestsWereGiven.put((e.getPlayer()), "Signs");
-					Chat.message((e.getPlayer()), qQuests.plugin.qAPI.getActiveQuest(e.getPlayer()).onJoin().message());
-					return;
-				}
-				else if(result == 1)
-				{
-					Chat.error((e.getPlayer()), Texts.NO_QUESTS_AVAILABLE);
-				}
-				else
-					Chat.error(e.getPlayer(), Chat.errorCode(result, "Signs"));
-			}
-			else Chat.noPerms(e.getPlayer());
 		}
 		if(!getLine(sign, 1).isEmpty() && (!getLine(sign, 2).equalsIgnoreCase("give") || !getLine(sign, 2).equalsIgnoreCase("start")))
 		{
@@ -155,7 +150,27 @@ public class Signs implements Listener {
 			return;
 			
 		}
-		if(getLine(sign, 2).equalsIgnoreCase("give") || getLine(sign, 2).equalsIgnoreCase("start"))
+		if((getLine(sign, 2).equalsIgnoreCase("give") || getLine(sign, 2).equalsIgnoreCase("start")) && getLine(sign, 1).isEmpty())
+		{
+			if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "give.specific.sign"))
+			{
+				Integer result = qQuests.plugin.qAPI.giveQuest(e.getPlayer(), "Signs");
+				if(result == 0)
+				{
+					Storage.wayCurrentQuestsWereGiven.put((e.getPlayer()), "Signs");
+					Chat.message((e.getPlayer()), qQuests.plugin.qAPI.getActiveQuest(e.getPlayer()).onJoin().message());
+					return;
+				}
+				else if(result == 1)
+				{
+					Chat.error((e.getPlayer()), Texts.NO_QUESTS_AVAILABLE);
+				}
+				else
+					Chat.error(e.getPlayer(), Chat.errorCode(result, "Signs", e.getPlayer()));
+			}
+			else Chat.noPerms(e.getPlayer());
+		}
+		else if(getLine(sign, 2).equalsIgnoreCase("give") || getLine(sign, 2).equalsIgnoreCase("start") && !getLine(sign, 1).isEmpty())
 		{
 			if(qQuests.plugin.qAPI.checkPerms(e.getPlayer(), "give.sign"))
 			{
@@ -167,7 +182,7 @@ public class Signs implements Listener {
 				else if(result == 1)
 					Chat.error(e.getPlayer(), Texts.NOT_VALID_QUEST);
 				else
-					Chat.error(e.getPlayer(), Chat.errorCode(result, "Signs"));
+					Chat.error(e.getPlayer(), Chat.errorCode(result, "Signs", e.getPlayer()));
 			}
 			else Chat.noPerms(e.getPlayer());
 			
@@ -241,7 +256,7 @@ public class Signs implements Listener {
 				if(result == 0)
 					Chat.message((e.getPlayer()), q.onDrop().message());
 				else
-					Chat.error(e.getPlayer(), Chat.errorCode(result, "Signs"));
+					Chat.error(e.getPlayer(), Chat.errorCode(result, "Signs", e.getPlayer()));
 			}
 			else Chat.noPerms(e.getPlayer());
 		}
@@ -251,7 +266,7 @@ public class Signs implements Listener {
 			{
 				Integer result = qQuests.plugin.qAPI.completeQuest(e.getPlayer());
 				if(result != 0)
-					Chat.error(e.getPlayer(), Chat.errorCode(result, "Signs"));
+					Chat.error(e.getPlayer(), Chat.errorCode(result, "Signs", e.getPlayer()));
 			}
 			else Chat.noPerms(e.getPlayer());
 		}

@@ -93,7 +93,7 @@ public class Texts {
 	public static final String DELAY_NOT_FINISHED = "You Cannot Get Quests Right Now! Wait A Bit And Try Again.";
 	
 	// Non-Fatal Quest Errors
-	public static final String COMMANDS_HAS_ACTIVE_QUEST = "You Already Have An Active Quest! Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + INFO_COMMAND + ChatColor.RED + " To Get More Info On Your Quest.";
+	public static String COMMANDS_HAS_ACTIVE_QUEST(Player p) { return "You Are Currenly on the Quest " + ChatColor.YELLOW + qQuests.plugin.qAPI.getActiveQuest(p).name() + ChatColor.RED + ", Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + INFO_COMMAND + ChatColor.RED + " To Get More Info On Your Quest."; }
 	public static final String COMMANDS_NO_ACTIVE_QUEST = "You Don't Have An Active Quest! Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + GIVE_COMMAND + ChatColor.RED + " To Get One.";
 	public static final String HAS_ACTIVE_QUEST = "You Already Have An Active Quest!";
 	public static final String NO_ACTIVE_QUEST = "You Don't Have An Active Quest!";

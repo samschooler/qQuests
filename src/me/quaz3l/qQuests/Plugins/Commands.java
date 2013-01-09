@@ -53,7 +53,7 @@ public class Commands implements CommandExecutor
 								Chat.error(((Player) s), Texts.NO_QUESTS_AVAILABLE);
 							}
 							else
-								Chat.error((Player) s, Chat.errorCode(result, "Commands"));
+								Chat.error((Player) s, Chat.errorCode(result, "Commands", (Player)s));
 						}
 						else Chat.noPerms((Player) s);
 					}
@@ -76,7 +76,7 @@ public class Commands implements CommandExecutor
 							else if(result == 1)
 								Chat.error((Player) s, Texts.NOT_VALID_QUEST);
 							else
-								Chat.error((Player) s, Chat.errorCode(result, "Commands"));
+								Chat.error((Player) s, Chat.errorCode(result, "Commands", (Player)s));
 						}
 						else Chat.noPerms((Player) s);
 					}
@@ -133,9 +133,9 @@ public class Commands implements CommandExecutor
 									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Kill The Player '" + q.tasks().get(i).idString() + "' " + q.tasks().get(i).amount() + " Times");
 								else if(q.tasks().get(i).type().equalsIgnoreCase("enchant"))
 									if(Storage.info.showItemIds)
-									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Enchant " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
-								else
-									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Enchant " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
+										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Enchant " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
+									else
+										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Enchant " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								else if(q.tasks().get(i).type().equalsIgnoreCase("tame"))
 									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Tame " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								i++;
@@ -153,7 +153,7 @@ public class Commands implements CommandExecutor
 						if(result == 0)
 							Chat.message(((Player) s), q.onDrop().message());
 						else
-							Chat.error((Player) s, Chat.errorCode(result, "Commands"));
+							Chat.error((Player) s, Chat.errorCode(result, "Commands", (Player)s));
 					}
 					else Chat.noPerms((Player) s);
 				}
@@ -163,7 +163,7 @@ public class Commands implements CommandExecutor
 					{
 						Integer result = qQuests.plugin.qAPI.completeQuest((Player) s);
 						if(result != 0)
-							Chat.error((Player) s, Chat.errorCode(result, "Commands"));
+							Chat.error((Player) s, Chat.errorCode(result, "Commands", (Player)s));
 					}
 					else Chat.noPerms((Player) s);
 				}

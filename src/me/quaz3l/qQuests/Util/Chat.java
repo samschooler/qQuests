@@ -73,7 +73,7 @@ public class Chat {
 	}
 	
 	// Parses Error Codes To Phrases
-	public static String errorCode(Integer code, String type)
+	public static String errorCode(Integer code, String type, Player player)
 	{
 		if(type.equalsIgnoreCase("Commands"))
 		{
@@ -86,7 +86,7 @@ public class Chat {
 			case 2:
 				return Texts.NOT_ENOUGH_FOR_QUEST;
 			case 3:
-				return Texts.COMMANDS_HAS_ACTIVE_QUEST;
+				return Texts.COMMANDS_HAS_ACTIVE_QUEST(player);
 			case 4:
 				return Texts.COMMANDS_TASKS_NOT_COMPLETED;
 			case 5:
