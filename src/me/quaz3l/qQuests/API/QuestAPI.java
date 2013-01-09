@@ -36,6 +36,10 @@ public class QuestAPI {
 	{
 		return Storage.quests;
 	}
+	public Quest getQuest(String name)
+	{
+		return Storage.quests.get(name.toLowerCase());
+	}
 	public HashMap<String, Quest> getVisibleQuests()
 	{
 		return Storage.visibleQuests;
@@ -222,7 +226,7 @@ public class QuestAPI {
 							Chat.message(player, getActiveQuest(player).onJoin().message());
 						}
 						else
-							Chat.errorCode(result, Storage.wayPreviousQuestWereGiven.get(player));
+							Chat.errorCode(result, Storage.wayPreviousQuestWereGiven.get(player), player);
 					}
 					Storage.previousQuest.remove(player);
 					Storage.wayPreviousQuestWereGiven.remove(player);
@@ -297,7 +301,7 @@ public class QuestAPI {
 						Chat.message(player, getActiveQuest(player).onJoin().message());
 					}
 					else
-						Chat.errorCode(result, Storage.wayPreviousQuestWereGiven.get(player));
+						Chat.errorCode(result, Storage.wayPreviousQuestWereGiven.get(player), player);
 				}
 				Storage.previousQuest.remove(player);
 				Storage.wayPreviousQuestWereGiven.remove(player);

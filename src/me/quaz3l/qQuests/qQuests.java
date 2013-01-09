@@ -37,7 +37,7 @@ public class qQuests extends JavaPlugin
 	public QuestAPI qAPI;
 	
 	// SHOULD BE FALSE
-	public boolean debug = false;
+	public boolean debug = true;
 	
 	// Services
 	public Economy economy = null;
@@ -56,8 +56,12 @@ public class qQuests extends JavaPlugin
 	@Override
 	public void onDisable() 
 	{
-		this.qAPI=null;
-		this.Config=null;
+		// Persist data
+		Storage.persist();
+		
+		// To fix delays
+		getServer().getScheduler().cancelAllTasks();
+		
 		Chat.logger("info", "v" + this.getDescription().getVersion() + " by Quaz3l: Disabled");
 	}
 
@@ -98,7 +102,11 @@ public class qQuests extends JavaPlugin
 		} catch (IOException e) {
 		    // Failed to submit the stats :-(
 		}
-				
+		
+		Storage.loadPersisted();
+		// Persist data
+		Storage.rePersist();
+		
 		// Notify Logger
 		Chat.logger("info", "by Quaz3l: Enabled");
 	}
@@ -115,16 +123,12 @@ public class qQuests extends JavaPlugin
 			}
 			else
 			{
-				Chat.logger("warning", "################################################################");
-				Chat.logger("warning", "[Economy] Disabled - Economy Plugin Not Found! Go Dowmnload An Economy Plugin From: http://dev.bukkit.org/server-mods/iconomy");
-				Chat.logger("warning", "################################################################");
+				Chat.logger("warning", "[Economy] Disabled - Economy Plugin Not Found! Go Dowmnload An Economy Plugin From: http://plugins.bukkit.org/curseforge");
 			}
 		}
 		else
 		{
-			Chat.logger("warning", "################################################################");
 			Chat.logger("warning", "[Economy] Disabled - Vault Not Found! Go Download Vault From: http://dev.bukkit.org/server-mods/vault");
-			Chat.logger("warning", "################################################################");
 		}
 	}
 	// Hook Into The Permissions Plugin
@@ -135,20 +139,20 @@ public class qQuests extends JavaPlugin
 					getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
 			if (permissionProvider != null) {
 				this.permission = permissionProvider.getProvider();
-				Chat.logger("info", "[Permissions] Enabled - Vault And Permissions Plugin Found.");
+				if(permission.getName().equalsIgnoreCase("SuperPerms")) {
+					Chat.logger("info", "[Permissions] Enabled - Vault Found, But No Perms Plugin Found, Using Op/Non-Op.");
+				} else {
+					Chat.logger("info", "[Permissions] Enabled - Vault And Permissions Plugin Found.");
+				}
 			}
 			else
 			{
-				Chat.logger("warning", "################################################################");
-				Chat.logger("warning", "[Permissions] Disabled - Permissions Plugin Not Found! Go Dowmnload An Permissions Plugin From: http://dev.bukkit.org/server-mods/bpermissions");
-				Chat.logger("warning", "################################################################");
+				Chat.logger("warning", "[Permissions] Disabled - Permissions Plugin Not Found! Go Dowmnload A Permissions Plugin From: http://dev.bukkit.org/server-mods/bpermissions");
 			}
 		}
 		else
 		{
-			Chat.logger("warning", "################################################################");
 			Chat.logger("warning", "[Permissions] Disabled - Vault Not Found! Go Download Vault From: http://dev.bukkit.org/server-mods/vault");
-			Chat.logger("warning", "################################################################");
 		}
     }
 	// Setup Task Types
