@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitTask;
 
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.QuestModels.Builders.BuildonSomething;
@@ -86,6 +87,8 @@ public class onSomething {
 	public Integer feeReward(final Player p)
 	{
 		// Fee Requirements
+		
+		Chat.logger("debug", p.getName());
 		if(qQuests.plugin.economy != null) 
 			if(qQuests.plugin.economy.getBalance(p.getName()) < (this.money() * -1)) 
 				return 5;
@@ -119,7 +122,7 @@ public class onSomething {
 		// Items
 		Chat.logger("debug", "Items To Remove: " + this.items().size());
 		// Find removable items
-		ItemStack[] itemz = null;
+		ArrayList<ItemStack> itemz = new ArrayList<ItemStack>();
 		for(int i=0; i < this.items().size(); i++) {
 			Chat.logger("debug", "Removable: " + this.items().get(i));
 			if(this.items().get(i).get(1) < 0) {
@@ -129,16 +132,13 @@ public class onSomething {
 			    } else {
 					item = new ItemStack(this.items().get(i).get(0), this.items().get(i).get(1)*-1, this.items().get(i).get(2).shortValue());
 			    }
-				if(itemz == null)
-					itemz = new ItemStack[] { item };
-				else
-					itemz[i] = item;
+				itemz.add(item);
 			}
 		}
 		// Remove the items
-		if(itemz!=null) {
-			Chat.logger("debug", "Itemz: " + itemz[0]);
-			if(!InventoryUtil.removeItems(itemz, p.getInventory()))
+		if(itemz.size()>0) {
+			Chat.logger("debug", itemz.toString());
+			if(!InventoryUtil.removeItems(itemz.toArray(new ItemStack[] {}), p.getInventory()))
 				return 8;
 		}
 		// Add items
@@ -189,13 +189,22 @@ public class onSomething {
 			p.setFoodLevel(hungerAmount);
 		
 		// Delay
+		Storage.delayLeft.put(p, this.delay());
+		final BukkitTask timer = qQuests.plugin.getServer().getScheduler().runTaskTimer(qQuests.plugin, new Runnable() {
+			public void run() {
+				if(Storage.delayLeft.get(p) != null)
+					Storage.delayLeft.put(p, Storage.delayLeft.get(p)-3);
+			}
+		}, 0, 60); // Update every 3 seconds
 		Storage.cannotGetQuests.add(p);
 		qQuests.plugin.getServer().getScheduler().scheduleSyncDelayedTask(qQuests.plugin, new Runnable() {
 			public void run() {
 				Storage.cannotGetQuests.remove(p);
+				timer.cancel();
+				Storage.delayLeft.remove(p);
 			}
 		}, (this.delay() * 20));
-		
+				
 		// Successful
 		return 0;
 	}
