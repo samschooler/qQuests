@@ -59,20 +59,20 @@ public class Kill implements Listener {
     		return;
     	String entityType =  e.getEntityType().getName();
     	
-    	
+    	Chat.logger("debug", "1");
     	
 		int i=-1;
 		// Go Through All The Tasks Of The Players Quest
 		for(Task task : qQuests.plugin.qAPI.getActiveQuest(player).tasks().values()) 
 		{
 			i++;
-			// Check For Destroy Quests
-			if(task.type().equalsIgnoreCase("kill"))
+			Chat.logger("debug", i+" " + task.type());
+			// Check For Kill Quests
+			if(!task.type().equalsIgnoreCase("kill"))
 				continue;
 			// Check For The Correct Mob
-			if(task.idString().equalsIgnoreCase(entityType) || !task.idString().equalsIgnoreCase("`any"))
+			if(!task.idString().equalsIgnoreCase(entityType) && !task.idString().equalsIgnoreCase("`any"))
 				continue;
-			
 			// Check If The Player Is Done With The Task
 			if(Storage.currentTaskProgress.get(player).get(i) < (task.amount() - 1))
 			{
