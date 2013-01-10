@@ -1,13 +1,13 @@
 name: qQuests
-version: 2007
-critical: false
-source: "https://github.com/quaz3l/qQuests/blob/master/builds/qQuests2007.jar?raw=true"
+version: 2010
+critical: true
+source: "https://github.com/quaz3l/qQuests/blob/master/builds/qQuests2010.jar?raw=true"
 changelog:
-- 'Added `any for any mob or player for the kill and kill_player task types'
-- 'Customize prefix; prefix can now also be top line of sign'
-- 'Better help'
-- 'Fixed multi-task quests'
-- 'Colored signs now supported'
-- 'Added metrics'
-- 'Added quest fragments'
-- 'Fixed capital letters'
+- Refactored code
+- MANY bug fixes
+- REAL quest persistance without crashes
+- Clear saving player classes, use names now.
+- More helpful errors
+- `player works anywhere you can write a message
+- `any implemented to kill any mob or player
+- Removed rage debugging profanity
