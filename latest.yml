@@ -1,7 +1,7 @@
 name: qQuests
-version: 2007
+version: 2010
 critical: true
-source: "http://dev.bukkit.org/media/files/663/794/qQuests.jar"
+source: "http://dev.bukkit.org/media/files/663/796/qQuests.jar"
 changelog:
 - Refactored code
 - MANY bug fixes
