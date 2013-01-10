@@ -7,7 +7,6 @@ import me.quaz3l.qQuests.Util.Storage;
 import me.quaz3l.qQuests.Util.Texts;
 
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDamageEvent;
@@ -16,14 +15,11 @@ public class Damage implements Listener {
 	@EventHandler
 	public void onBlockDamage(BlockDamageEvent e) 
 	{
-		Chat.logger("debug", "Damage! Fuck YEAH!");
 		if(e.isCancelled())
 			return;
-		Chat.logger("debug", "1");
-		if(!qQuests.plugin.qAPI.hasActiveQuest(e.getPlayer()))
+		if(!qQuests.plugin.qAPI.hasActiveQuest(e.getPlayer().getName()))
 			return;
-		Chat.logger("debug", "2");
-		Player player = e.getPlayer();		
+		String player = e.getPlayer().getName();		
 		Block block = e.getBlock();
 		Integer blockId = block.getTypeId();
 		byte blockDam = block.getData();
@@ -32,7 +28,6 @@ public class Damage implements Listener {
 		for(Task task : qQuests.plugin.qAPI.getActiveQuest(player).tasks().values()) 
 		{
 			i++;
-			Chat.logger("debug", i + "");
 			// Check For Damage Quests
 			if(!task.type().equalsIgnoreCase("damage"))
 				continue;

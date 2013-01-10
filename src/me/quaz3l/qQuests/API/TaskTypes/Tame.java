@@ -17,7 +17,7 @@ public class Tame implements Listener {
 	{
 		if(e.isCancelled())
 			return;
-		Player player = (Player)e.getOwner();		
+		String player = ((Player)e.getOwner()).getName();		
 		if(!qQuests.plugin.qAPI.hasActiveQuest(player))
 			return;
 		String type = e.getEntityType().getName();

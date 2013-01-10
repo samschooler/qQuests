@@ -28,7 +28,7 @@ public class SLAPI
 		T result = (T)ois.readObject();
 		ois.close();
 		
-		Chat.logger("debug", "Saving Object: " + result.toString());
+		Chat.logger("debug", "Loading Object: " + result.toString());
 		return result;
 	}
 }

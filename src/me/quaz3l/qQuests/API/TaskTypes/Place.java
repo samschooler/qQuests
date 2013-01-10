@@ -7,7 +7,6 @@ import me.quaz3l.qQuests.Util.Storage;
 import me.quaz3l.qQuests.Util.Texts;
 
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -18,9 +17,9 @@ public class Place implements Listener {
 	{
 		if(e.isCancelled())
 			return;
-		if(!qQuests.plugin.qAPI.hasActiveQuest(e.getPlayer()))
+		if(!qQuests.plugin.qAPI.hasActiveQuest(e.getPlayer().getName()))
 			return;
-		Player player = e.getPlayer();		
+		String player = e.getPlayer().getName();		
 		Block block = e.getBlock();
 		Integer blockId = block.getTypeId();
 		byte blockDam = block.getData();

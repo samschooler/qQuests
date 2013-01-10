@@ -7,7 +7,6 @@ import me.quaz3l.qQuests.Util.Storage;
 import me.quaz3l.qQuests.Util.Texts;
 
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -16,12 +15,11 @@ public class Destroy implements Listener {
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) 
 	{
-		Chat.logger("debug", "Destroy! Fuck YEAH!");
 		if(e.isCancelled())
 			return;
-		if(!qQuests.plugin.qAPI.hasActiveQuest(e.getPlayer()))
+		if(!qQuests.plugin.qAPI.hasActiveQuest(e.getPlayer().getName()))
 			return;
-		Player player = e.getPlayer();		
+		String player = e.getPlayer().getName();		
 		Block block = e.getBlock();
 		Integer blockId = block.getTypeId();
 		byte blockDam = block.getData();
@@ -31,26 +29,18 @@ public class Destroy implements Listener {
 		for(Task task : qQuests.plugin.qAPI.getActiveQuest(player).tasks().values()) 
 		{
 			i++;
-			Chat.logger("debug", "Task: " + task.durability());
-			Chat.logger("debug", "Block: " + blockDam);
-			Chat.logger("debug", "Type: " + task.type());
 			
 			// Check For Destroy Quests
 			if(!task.type().equalsIgnoreCase("destroy"))
 				continue;
 			
-			Chat.logger("debug", "0");
 			// Check For The Correct Block Id
 			if(task.idInt() != blockId)
 				continue;
-			Chat.logger("debug", "1");
 			// Check For The Correct Block Id
 			if(task.durability() > 0)
 				if(task.durability() != blockDam)
 					continue;
-			
-			Chat.logger("debug", "2");
-			Chat.logger("debug", "I1: " + i);
 			
 			// Check If The Player Is Done With The Task
 			if(Storage.currentTaskProgress.get(player).get(i) < (task.amount() - 1))
@@ -90,8 +80,6 @@ public class Destroy implements Listener {
 					}
 				}
 			}
-			Chat.logger("debug", "I: " + i);
 		}
-		Chat.logger("debug", "Run Through. Fuck..");
 	}
 }

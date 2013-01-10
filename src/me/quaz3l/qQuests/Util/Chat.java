@@ -8,57 +8,75 @@ import org.bukkit.entity.Player;
 
 public class Chat {
 	// General Message
-	public static void message(Player p, String msg)
+	public static void message(String player, String msg)
 	{
+		Player p = qQuests.plugin.getServer().getPlayer(player);
+		if(p == null)
+			return;
 		p.sendMessage(parseColors(qQuests.plugin.chatPrefix + msg));
 	}
 	public static void message(CommandSender s, String msg)
 	{
 		s.sendMessage(parseColors(qQuests.plugin.prefix + msg));
 	}
-	
+
 	// Message With No Former Formatting
-	public static void noPrefixMessage(Player p, String msg)
+	public static void noPrefixMessage(String player, String msg)
 	{
+		Player p = qQuests.plugin.getServer().getPlayer(player);
+		if(p == null)
+			return;
 		p.sendMessage(parseColors(ChatColor.LIGHT_PURPLE + msg));
 	}
 	public static void noPrefixMessage(CommandSender s, String msg)
 	{
 		s.sendMessage(parseColors(ChatColor.LIGHT_PURPLE + msg));
 	}
-	
+
 	// A Good Message For Successes
-	public static void quotaMessage(Player p, String msg, Integer currentAmount, Integer totalAmount, String unit)
+	public static void quotaMessage(String player, String msg, Integer currentAmount, Integer totalAmount, String unit)
 	{
-			p.sendMessage(parseColors(qQuests.plugin.chatPrefix + ChatColor.LIGHT_PURPLE + msg + " " + ChatColor.GREEN + currentAmount + "/" + totalAmount + " " + unit));
+		Player p = qQuests.plugin.getServer().getPlayer(player);
+		if(p == null)
+			return;
+		p.sendMessage(parseColors(qQuests.plugin.chatPrefix + ChatColor.LIGHT_PURPLE + msg + " " + ChatColor.GREEN + currentAmount + "/" + totalAmount + " " + unit));
 	}
-		
+
 	// Red Error With Prefix
-	public static void error(Player p, String msg)
+	public static void error(String player, String msg)
 	{
+		Player p = qQuests.plugin.getServer().getPlayer(player);
+		if(p == null)
+			return;
 		p.sendMessage(parseColors(qQuests.plugin.chatPrefix + ChatColor.RED + msg));
 	}
 	public static void error(CommandSender p, String msg)
 	{
 		p.sendMessage(parseColors(qQuests.plugin.chatPrefix + ChatColor.RED + msg));
 	}
-	
+
 	// A Good Message For Successes
-	public static void green(Player p, String msg)
+	public static void green(String player, String msg)
 	{
+		Player p = qQuests.plugin.getServer().getPlayer(player);
+		if(p == null)
+			return;
 		p.sendMessage(parseColors(qQuests.plugin.chatPrefix + ChatColor.GREEN + msg));
 	}
-	
+
 	// No Permissions Message
-	public static void noPerms(Player p)
+	public static void noPerms(String player)
 	{
+		Player p = qQuests.plugin.getServer().getPlayer(player);
+		if(p == null)
+			return;
 		p.sendMessage(parseColors(ChatColor.RED + Texts.NO_PERMISSION));
 	}
 	public static void noPerms(CommandSender s)
 	{
 		s.sendMessage(parseColors(ChatColor.RED + Texts.NO_PERMISSION));
 	}
-	
+
 	// Logger
 	public static void logger(String lvl, String s)
 	{
@@ -71,9 +89,9 @@ public class Chat {
 		else if(lvl.equalsIgnoreCase("severe"))
 			qQuests.plugin.logger.severe(parseColors(qQuests.plugin.prefix + s));
 	}
-	
+
 	// Parses Error Codes To Phrases
-	public static String errorCode(Integer code, String type, Player player)
+	public static String errorCode(Integer code, String type, String player)
 	{
 		if(type.equalsIgnoreCase("Commands"))
 		{
@@ -126,7 +144,7 @@ public class Chat {
 			case 2:
 				return Texts.NOT_ENOUGH_FOR_QUEST;
 			case 3:
-				return Texts.HAS_ACTIVE_QUEST;
+				return Texts.HAS_ACTIVE_QUEST(player);
 			case 4:
 				return Texts.TASKS_NOT_COMPLETED;
 			case 5:
@@ -156,8 +174,8 @@ public class Chat {
 			}
 		}
 	}
-	
-	
+
+
 	// Corrects Color Codes
 	public static String parseColors(String s)
 	{

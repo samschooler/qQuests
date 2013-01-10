@@ -35,33 +35,33 @@ public class qQuests extends JavaPlugin
 	public final Logger logger = Logger.getLogger(("Minecraft"));
 	public Config Config;
 	public QuestAPI qAPI;
-	
+
 	// SHOULD BE FALSE
 	public boolean debug = true;
-	
+
 	// Services
 	public Economy economy = null;
 	public Permission permission = null;
-	
+
 	// Prefixes
 	public String chatPrefix = ChatColor.AQUA + "[" + ChatColor.LIGHT_PURPLE + Storage.prefix + ChatColor.AQUA + "] " + ChatColor.LIGHT_PURPLE + " ";
 	public String prefix = "[qQuests] ";	
-	
+
 	// Super Variable
 	public qQuests() {
 		super();
 		qQuests.plugin = this;
 	}
-	
+
 	@Override
 	public void onDisable() 
 	{
+		// To fix delays
+		getServer().getScheduler().cancelTasks(plugin);
+
 		// Persist data
 		Storage.persist();
-		
-		// To fix delays
-		getServer().getScheduler().cancelAllTasks();
-		
+
 		Chat.logger("info", "v" + this.getDescription().getVersion() + " by Quaz3l: Disabled");
 	}
 
@@ -70,47 +70,49 @@ public class qQuests extends JavaPlugin
 	{
 		// Setup Configuration
 		this.Config = new Config();
-		
+
 		// Setup Economy
 		this.setupEconomy();
-		
+
 		// Setup Permissions
 		this.setupPermissions();
-		
+
 		// Setup Quest Types
 		this.setupTaskTypes();
-		
+
 		// Get The API
 		this.qAPI = new QuestAPI();
-		
+
 		// Setup Player Profiles
 		this.qAPI.getProfiles().initializePlayerProfiles();
-		
+
 		// Build Quests
 		this.qAPI.getQuestWorker().buildQuests();
-		
+
 		//Setup Stock qPlugins
 		this.setupStockPlugins();
-		
+
 		// Check for upates
 		Interwebs.start();
-		
+
 		// http://mcstats.org/qQuests
 		try {
-		    Metrics metrics = new Metrics(this);
-		    metrics.start();
+			Metrics metrics = new Metrics(this);
+			metrics.start();
 		} catch (IOException e) {
-		    // Failed to submit the stats :-(
+			// Failed to submit the stats :-(
 		}
-		
+
+		// Load the current quest data
 		Storage.loadPersisted();
-		// Persist data
-		Storage.rePersist();
-		
+
+		// Start persister of data
+		//Storage.rePersist();
+
 		// Notify Logger
 		Chat.logger("info", "by Quaz3l: Enabled");
 	}
-	
+
 	// Hooks Into The Economy Plugin
 	private void setupEconomy()
 	{
@@ -133,7 +135,7 @@ public class qQuests extends JavaPlugin
 	}
 	// Hook Into The Permissions Plugin
 	private void setupPermissions()
-    {
+	{
 		if(getServer().getPluginManager().isPluginEnabled("Vault")) {
 			RegisteredServiceProvider<Permission> permissionProvider =
 					getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
@@ -154,7 +156,7 @@ public class qQuests extends JavaPlugin
 		{
 			Chat.logger("warning", "[Permissions] Disabled - Vault Not Found! Go Download Vault From: http://dev.bukkit.org/server-mods/vault");
 		}
-    }
+	}
 	// Setup Task Types
 	private void setupTaskTypes()
 	{
@@ -162,19 +164,19 @@ public class qQuests extends JavaPlugin
 		getServer().getPluginManager().registerEvents(new Damage(), this);
 		getServer().getPluginManager().registerEvents(new Destroy(), this);
 		getServer().getPluginManager().registerEvents(new Place(), this);
-		
+
 		getServer().getPluginManager().registerEvents(new Distance(), this);
 		getServer().getPluginManager().registerEvents(new GoTo(), this);
-		
+
 		getServer().getPluginManager().registerEvents(new Kill_Player(), this);
 		getServer().getPluginManager().registerEvents(new Kill(), this);
 		getServer().getPluginManager().registerEvents(new Tame(), this);
-		
+
 		getServer().getPluginManager().registerEvents(new Enchant(), this);
-		
+
 		Chat.logger("debug", "Listeners Registered.");
 	}
-	
+
 	// Starts The Stock Plugins
 	private void setupStockPlugins()
 	{
@@ -187,20 +189,20 @@ public class qQuests extends JavaPlugin
 	{
 		// Setup Command Executors
 		CommandExecutor cmd = new Commands();
-			getCommand("qQUESTS").setExecutor(cmd);
+		getCommand("qQUESTS").setExecutor(cmd);
 	}
 	private void qPluginSigns()
 	{
 		// Setup Signs
 		getServer().getPluginManager().registerEvents(new Signs(), this);
 	}
-	
+
 	// To connect to qQuests put this function in your plugin;
 	// And "depend: [qQuests]" in your plugin.yml
 	/*
 	public qQuests qQuests = null;
 	public QuestAPI qAPI = null;
-	
+
 	public void setupQQuests()
 	  {
 	    this.qQuests = (qQuests) getServer().getPluginManager().getPlugin("qQuests");
@@ -214,5 +216,5 @@ public class qQuests extends JavaPlugin
 	        getServer().getPluginManager().disablePlugin(this);
 	      }
 	  }
-	  */
+	 */
 }

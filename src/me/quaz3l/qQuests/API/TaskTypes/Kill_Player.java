@@ -18,7 +18,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 
 public class Kill_Player implements Listener {
-	private HashMap<Player, Player> damageList = new HashMap<Player, Player>();
+	private HashMap<String, String> damageList = new HashMap<String, String>();
 	@EventHandler
 	public void onEntityDamage(EntityDamageEvent e) 
 	{
@@ -50,7 +50,7 @@ public class Kill_Player implements Listener {
 		{
 			if (damageList.get(((Player) e.getEntity())) != null)
                 damageList.remove(((Player) e.getEntity()));
-            damageList.put(((Player) e.getEntity()), attacker);
+            damageList.put(((Player) e.getEntity()).getName(), attacker.getName());
 		}
 	}
 	@EventHandler
@@ -59,7 +59,7 @@ public class Kill_Player implements Listener {
     	if(!(e.getEntity() instanceof Player))
     		return;
     	
-    	Player player = damageList.get((Player)e.getEntity());
+    	String player = damageList.get(((Player)e.getEntity()).getName());
 		if(!qQuests.plugin.qAPI.hasActiveQuest(player))
     		return;
     		

@@ -6,7 +6,6 @@ import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Storage;
 import me.quaz3l.qQuests.Util.Texts;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
@@ -18,9 +17,9 @@ public class Enchant implements Listener {
 	{
 		if(e.isCancelled())
 			return;
-		if(!qQuests.plugin.qAPI.hasActiveQuest(e.getEnchanter()))
+		if(!qQuests.plugin.qAPI.hasActiveQuest(e.getEnchanter().getName()))
 			return;
-		Player player = e.getEnchanter();		
+		String player = e.getEnchanter().getName();		
 		ItemStack item = e.getItem();
 		Integer itemId = item.getTypeId();
 		short itemDam = item.getDurability();

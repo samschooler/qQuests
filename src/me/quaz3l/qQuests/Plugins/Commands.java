@@ -26,196 +26,196 @@ public class Commands implements CommandExecutor
 		{
 			if(args.length < 1)
 			{
-				Texts.HELP((Player) s, "commands");
+				Texts.HELP(((Player) s).getName(), "commands");
 			}
 			else
 			{
-				if(Storage.wayCurrentQuestsWereGiven.get((Player) s) != null)
-					if(!Storage.access("commands", Storage.wayCurrentQuestsWereGiven.get((Player) s), args[0]) && !args[0].equalsIgnoreCase("help") && !args[0].equalsIgnoreCase("give"))
+				if(Storage.wayCurrentQuestsWereGiven.get(((Player) s).getName()) != null)
+					if(!Storage.access("commands", Storage.wayCurrentQuestsWereGiven.get(((Player) s).getName()), args[0]))
 					{
-						Chat.error(((Player) s), Texts.CANNOT_USE_CURRENTLY);
+						Chat.error((((Player) s).getName()), Texts.CANNOT_USE_CURRENTLY);
 						return false;
 					}
 				if(args[0].equalsIgnoreCase("give") || args[0].equalsIgnoreCase("start"))
 				{
 					if (args.length == 1)
 					{
-						if(qQuests.plugin.qAPI.checkPerms((Player) s, "give"))
+						if(qQuests.plugin.qAPI.checkPerms(((Player) s).getName(), "give"))
 						{
-							Integer result = qQuests.plugin.qAPI.giveQuest((Player) s, "commands");
+							Integer result = qQuests.plugin.qAPI.giveQuest((((Player) s).getName()), "commands");
 							if(result == 0)
 							{
-								Storage.wayCurrentQuestsWereGiven.put(((Player) s), "commands");
-								Chat.message(((Player) s), qQuests.plugin.qAPI.getActiveQuest((Player) s).onJoin().message());
+								Storage.wayCurrentQuestsWereGiven.put((((Player) s).getName()), "commands");
+								Chat.message((((Player) s).getName()), qQuests.plugin.qAPI.getActiveQuest((((Player) s).getName())).onJoin().message(((Player) s).getName()));
 							}
 							else if(result == 1)
 							{
-								Chat.error(((Player) s), Texts.NO_QUESTS_AVAILABLE);
+								Chat.error((((Player) s).getName()), Texts.NO_QUESTS_AVAILABLE);
 							}
 							else
-								Chat.error((Player) s, Chat.errorCode(result, "Commands", (Player)s));
+								Chat.error(((Player) s).getName(), Chat.errorCode(result, "Commands", ((Player)s).getName()));
 						}
-						else Chat.noPerms((Player) s);
+						else Chat.noPerms(((Player) s).getName());
 					}
 					else if(args.length >= 2)
 					{
-						if(qQuests.plugin.qAPI.checkPerms((Player) s, "give.specific"))
+						if(qQuests.plugin.qAPI.checkPerms(((Player) s).getName(), "give.specific"))
 						{
 							String fullName = args[1];
 							if(args.length > 2) {
 								for(int i=2; i < args.length; i++) {
-									fullName += args[i];
+									fullName +=  " " + args[i];
 								}
 							}
-							Integer result = qQuests.plugin.qAPI.giveQuest((Player) s, fullName, true, "commands");
+							Integer result = qQuests.plugin.qAPI.giveQuest(((Player) s).getName(), fullName, true, "commands");
 							if(result == 0)
 							{
-								Storage.wayCurrentQuestsWereGiven.put(((Player) s), "commands");
-								Chat.message(((Player) s), qQuests.plugin.qAPI.getActiveQuest((Player) s).onJoin().message());
+								Storage.wayCurrentQuestsWereGiven.put((((Player) s).getName()), "commands");
+								Chat.message((((Player) s).getName()), qQuests.plugin.qAPI.getActiveQuest(((Player) s).getName()).onJoin().message(((Player) s).getName()));
 							}
 							else if(result == 1)
-								Chat.error((Player) s, Texts.NOT_VALID_QUEST);
+								Chat.error(((Player) s).getName(), Texts.NOT_VALID_QUEST);
 							else
-								Chat.error((Player) s, Chat.errorCode(result, "Commands", (Player)s));
+								Chat.error(((Player) s).getName(), Chat.errorCode(result, "Commands", ((Player)s).getName()));
 						}
-						else Chat.noPerms((Player) s);
+						else Chat.noPerms(((Player) s).getName());
 					}
 					else
-						Texts.HELP((Player) s, "commands");
+						Texts.HELP(((Player) s).getName(), "commands");
 				}
 				else if(args[0].equalsIgnoreCase("info")) 
 				{
-					if(qQuests.plugin.qAPI.checkPerms((Player) s, "info"))
+					if(qQuests.plugin.qAPI.checkPerms(((Player) s).getName(), "info"))
 					{
-						if(qQuests.plugin.qAPI.hasActiveQuest((Player) s))
+						if(qQuests.plugin.qAPI.hasActiveQuest(((Player) s).getName()))
 						{
-							Quest q = qQuests.plugin.qAPI.getActiveQuest((Player) s);
-							Texts.INFO(q, (Player) s);
+							Quest q = qQuests.plugin.qAPI.getActiveQuest(((Player) s).getName());
+							Texts.INFO(q, ((Player) s).getName());
 						}
-						else Chat.error((Player) s, Texts.NO_ACTIVE_QUEST);
+						else Chat.error(((Player) s).getName(), Texts.NO_ACTIVE_QUEST);
 					}
-					else Chat.noPerms((Player) s);
+					else Chat.noPerms(((Player) s).getName());
 				}
 				else if(args[0].equalsIgnoreCase("tasks") || args[0].equalsIgnoreCase("progress")) 
 				{
-					if(qQuests.plugin.qAPI.checkPerms((Player) s, "tasks"))
+					if(qQuests.plugin.qAPI.checkPerms(((Player) s).getName(), "tasks"))
 					{
-						if(qQuests.plugin.qAPI.hasActiveQuest((Player) s))
+						if(qQuests.plugin.qAPI.hasActiveQuest(((Player) s).getName()))
 						{
-							Quest q = qQuests.plugin.qAPI.getActiveQuest((Player) s);
-							Chat.noPrefixMessage((Player) s, ChatColor.AQUA + ":" + ChatColor.BLUE + "========" + ChatColor.GOLD + " Quest Tasks " + ChatColor.BLUE + "========" + ChatColor.AQUA + ":");
+							Quest q = qQuests.plugin.qAPI.getActiveQuest(((Player) s).getName());
+							Chat.noPrefixMessage(((Player) s).getName(), ChatColor.AQUA + ":" + ChatColor.BLUE + "========" + ChatColor.GOLD + " Quest Tasks " + ChatColor.BLUE + "========" + ChatColor.AQUA + ":");
 							int i=0;
 							while(q.tasks().size() > i) 
 							{
 								if(q.tasks().get(i).type().equalsIgnoreCase("collect"))
 									if(Storage.info.showItemIds)
-										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Collect " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
+										Chat.noPrefixMessage(((Player) s).getName(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Collect " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
 									else
-										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Collect " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
+										Chat.noPrefixMessage(((Player) s).getName(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Collect " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								else if(q.tasks().get(i).type().equalsIgnoreCase("damage"))
 									if(Storage.info.showItemIds)
-										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Damage " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
+										Chat.noPrefixMessage(((Player) s).getName(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Damage " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
 									else
-										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Damage " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
+										Chat.noPrefixMessage(((Player) s).getName(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Damage " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								else if(q.tasks().get(i).type().equalsIgnoreCase("destroy"))
 									if(Storage.info.showItemIds)
-										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Destroy " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
+										Chat.noPrefixMessage(((Player) s).getName(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Destroy " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
 									else
-										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Destroy " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
+										Chat.noPrefixMessage(((Player) s).getName(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Destroy " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								else if(q.tasks().get(i).type().equalsIgnoreCase("place"))
 									if(Storage.info.showItemIds)
-										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Place " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
+										Chat.noPrefixMessage(((Player) s).getName(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Place " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
 									else
-										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Place " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
+										Chat.noPrefixMessage(((Player) s).getName(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Place " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								else if(q.tasks().get(i).type().equalsIgnoreCase("kill"))
-									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Kill " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
+									Chat.noPrefixMessage(((Player) s).getName(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Kill " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								else if(q.tasks().get(i).type().equalsIgnoreCase("kill_player"))
-									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Kill The Player '" + q.tasks().get(i).idString() + "' " + q.tasks().get(i).amount() + " Times");
+									Chat.noPrefixMessage(((Player) s).getName(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Kill The Player '" + q.tasks().get(i).idString() + "' " + q.tasks().get(i).amount() + " Times");
 								else if(q.tasks().get(i).type().equalsIgnoreCase("enchant"))
 									if(Storage.info.showItemIds)
-										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Enchant " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
+										Chat.noPrefixMessage(((Player) s).getName(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Enchant " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display() + ChatColor.GOLD + "(" + ChatColor.RED + "ID:" + q.tasks().get(i).idInt() + ChatColor.GOLD + ")");
 									else
-										Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Enchant " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
+										Chat.noPrefixMessage(((Player) s).getName(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Enchant " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								else if(q.tasks().get(i).type().equalsIgnoreCase("tame"))
-									Chat.noPrefixMessage((Player) s, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Tame " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
+									Chat.noPrefixMessage(((Player) s).getName(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Tame " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								i++;
 							}
-						} else Chat.error((Player) s, Texts.NO_ACTIVE_QUEST);
+						} else Chat.error(((Player) s).getName(), Texts.NO_ACTIVE_QUEST);
 					}
-					else Chat.noPerms((Player) s);
+					else Chat.noPerms(((Player) s).getName());
 				}
 				else if(args[0].equalsIgnoreCase("drop")) 
 				{
-					if(qQuests.plugin.qAPI.checkPerms((Player) s, "drop"))
+					if(qQuests.plugin.qAPI.checkPerms(((Player) s).getName(), "drop"))
 					{
-						Quest q = qQuests.plugin.qAPI.getActiveQuest((Player) s);
-						Integer result = qQuests.plugin.qAPI.dropQuest((Player) s);
+						Quest q = qQuests.plugin.qAPI.getActiveQuest(((Player) s).getName());
+						Integer result = qQuests.plugin.qAPI.dropQuest(((Player) s).getName());
 						if(result == 0)
-							Chat.message(((Player) s), q.onDrop().message());
+							Chat.message((((Player) s).getName()), q.onDrop().message(((Player) s).getName()));
 						else
-							Chat.error((Player) s, Chat.errorCode(result, "Commands", (Player)s));
+							Chat.error(((Player) s).getName(), Chat.errorCode(result, "Commands", ((Player)s).getName()));
 					}
-					else Chat.noPerms((Player) s);
+					else Chat.noPerms(((Player) s).getName());
 				}
 				else if(args[0].equalsIgnoreCase("done")) 
 				{
-					if(qQuests.plugin.qAPI.checkPerms((Player) s, "done"))
+					if(qQuests.plugin.qAPI.checkPerms(((Player) s).getName(), "done"))
 					{
-						Integer result = qQuests.plugin.qAPI.completeQuest((Player) s);
+						Integer result = qQuests.plugin.qAPI.completeQuest(((Player) s).getName());
 						if(result != 0)
-							Chat.error((Player) s, Chat.errorCode(result, "Commands", (Player)s));
+							Chat.error(((Player) s).getName(), Chat.errorCode(result, "Commands", ((Player)s).getName()));
 					}
-					else Chat.noPerms((Player) s);
+					else Chat.noPerms(((Player) s).getName());
 				}
 				else if(args[0].equalsIgnoreCase("reload")) 
 				{
-					if(qQuests.plugin.qAPI.checkPerms((Player) s, "reload"))
+					if(qQuests.plugin.qAPI.checkPerms(((Player) s).getName(), "reload"))
 					{
 						Bukkit.getPluginManager().disablePlugin(qQuests.plugin);
 						Bukkit.getPluginManager().enablePlugin(qQuests.plugin);
 						Chat.logger("info", "Reloaded.");
-						Chat.green((Player) s, "Reloaded.");
+						Chat.green(((Player) s).getName(), "Reloaded.");
 					}
-					else Chat.noPerms((Player) s);
+					else Chat.noPerms(((Player) s).getName());
 				}
 				else if(args[0].equalsIgnoreCase("list")) 
 				{
-					if(qQuests.plugin.qAPI.checkPerms((Player) s, "list"))
+					if(qQuests.plugin.qAPI.checkPerms(((Player) s).getName(), "list"))
 					{
-						HashMap<Integer, Quest> q = qQuests.plugin.qAPI.getAvailableQuests((Player) s);
-						if(qQuests.plugin.qAPI.hasActiveQuest((Player) s))
-							Texts.INFO(qQuests.plugin.qAPI.getActiveQuest((Player) s), (Player) s);
-						else if(Storage.cannotGetQuests.contains((Player) s))
-							Chat.error((Player) s, Texts.DELAY_NOT_FINISHED);
+						HashMap<Integer, Quest> q = qQuests.plugin.qAPI.getAvailableQuests(((Player) s).getName());
+						if(qQuests.plugin.qAPI.hasActiveQuest(((Player) s).getName()))
+							Texts.INFO(qQuests.plugin.qAPI.getActiveQuest(((Player) s).getName()), ((Player) s).getName());
+						else if(Storage.cannotGetQuests.contains(((Player) s).getName()))
+							Chat.error(((Player) s).getName(), Texts.DELAY_NOT_FINISHED);
 						else if(qQuests.plugin.qAPI.getVisibleQuests().size() == 0)
-							Chat.error((Player) s, Texts.NO_QUESTS_AVAILABLE);
+							Chat.error(((Player) s).getName(), Texts.NO_QUESTS_AVAILABLE);
 						else if(!q.isEmpty())
 						{
-							Chat.noPrefixMessage((Player) s, ChatColor.AQUA + ":" + ChatColor.BLUE + "========" + ChatColor.GOLD + " Available Quests " + ChatColor.BLUE + "========" + ChatColor.AQUA + ":");
+							Chat.noPrefixMessage(((Player) s).getName(), ChatColor.AQUA + ":" + ChatColor.BLUE + "========" + ChatColor.GOLD + " Available Quests " + ChatColor.BLUE + "========" + ChatColor.AQUA + ":");
 							Integer i=1;
 							for(Quest a : q.values()) {
-								Chat.noPrefixMessage((Player) s, ChatColor.GREEN + i.toString() + ". " + ChatColor.LIGHT_PURPLE + a.name());
+								Chat.noPrefixMessage(((Player) s).getName(), ChatColor.GREEN + i.toString() + ". " + ChatColor.LIGHT_PURPLE + a.name());
 								i++;
 							}
 						}
-						else Chat.error((Player) s, Texts.NO_QUESTS_AVAILABLE);
+						else Chat.error(((Player) s).getName(), Texts.NO_QUESTS_AVAILABLE);
 					}
-					else Chat.noPerms((Player) s);
+					else Chat.noPerms(((Player) s).getName());
 				}
 				else if(args[0].equalsIgnoreCase("stats")) 
 				{
-					if(qQuests.plugin.qAPI.checkPerms((Player) s, "stats"))
+					if(qQuests.plugin.qAPI.checkPerms(((Player) s).getName(), "stats"))
 					{
-						Chat.noPrefixMessage((Player) s, "Level: " + ChatColor.GREEN + qQuests.plugin.qAPI.getProfiles().getInt((Player) s, "Level"));
-						Chat.noPrefixMessage((Player) s, "Quests Given: " + ChatColor.GREEN + qQuests.plugin.qAPI.getProfiles().getInt((Player) s, "Given"));
-						Chat.noPrefixMessage((Player) s, "Quests Dropped: " + ChatColor.GREEN + qQuests.plugin.qAPI.getProfiles().getInt((Player) s, "Dropped"));
-						Chat.noPrefixMessage((Player) s, "Quests Completed: " + ChatColor.GREEN + qQuests.plugin.qAPI.getProfiles().getInt((Player) s, "Completed"));
+						Chat.noPrefixMessage(((Player) s).getName(), "Level: " + ChatColor.GREEN + qQuests.plugin.qAPI.getProfiles().getInt(((Player) s).getName(), "Level"));
+						Chat.noPrefixMessage(((Player) s).getName(), "Quests Given: " + ChatColor.GREEN + qQuests.plugin.qAPI.getProfiles().getInt(((Player) s).getName(), "Given"));
+						Chat.noPrefixMessage(((Player) s).getName(), "Quests Dropped: " + ChatColor.GREEN + qQuests.plugin.qAPI.getProfiles().getInt(((Player) s).getName(), "Dropped"));
+						Chat.noPrefixMessage(((Player) s).getName(), "Quests Completed: " + ChatColor.GREEN + qQuests.plugin.qAPI.getProfiles().getInt(((Player) s).getName(), "Completed"));
 					}
-					else Chat.noPerms((Player) s);
+					else Chat.noPerms(((Player) s).getName());
 				}
 				else if(args[0].equalsIgnoreCase("update"))
 				{
-					if(qQuests.plugin.qAPI.checkPerms((Player) s, "update"))
+					if(qQuests.plugin.qAPI.checkPerms(((Player) s).getName(), "update"))
 					{
 						if(!Interwebs.tryUpdate(s))
 							Chat.message(s, "qQuests is up to date.");
@@ -223,7 +223,7 @@ public class Commands implements CommandExecutor
 				}
 				else
 				{
-					Texts.HELP((Player) s, "commands");
+					Texts.HELP(((Player) s).getName(), "commands");
 				}
 			}
 		}
@@ -235,8 +235,10 @@ public class Commands implements CommandExecutor
 			} 
 			else if(args[0].equalsIgnoreCase("reload")) 
 			{
-				Bukkit.getPluginManager().disablePlugin(qQuests.plugin);
-				Bukkit.getPluginManager().enablePlugin(qQuests.plugin);
+				//Bukkit.getPluginManager().disablePlugin(qQuests.plugin);
+				//Bukkit.getPluginManager().enablePlugin(qQuests.plugin);
+				qQuests.plugin.Config.loadConfigs();
+				qQuests.plugin.qAPI.getQuestWorker().buildQuests();
 				Chat.logger("info", "Reloaded.");
 			}
 			else 

@@ -5,7 +5,6 @@ import me.quaz3l.qQuests.API.QuestModels.Quest;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 
 public class Texts {
 	// Commands
@@ -20,7 +19,7 @@ public class Texts {
 	public static final String RELOAD_COMMAND = "reload";
 	
 	// Help Text
-	public static final void HELP(Player player, String plugin) {
+	public static final void HELP(String player, String plugin) {
 		Chat.noPrefixMessage(player, ChatColor.AQUA + ":" + ChatColor.BLUE + "========" + ChatColor.GOLD + "qQuests #" + qQuests.plugin.getDescription().getVersion() + " Help" + ChatColor.BLUE + "========" + ChatColor.AQUA + ":");
 		Chat.noPrefixMessage(player, ChatColor.YELLOW + PRIMARY_COMMAND + " " + ChatColor.GREEN + GIVE_COMMAND + ChatColor.LIGHT_PURPLE + "  - Get a new quest");
 		Chat.noPrefixMessage(player, ChatColor.YELLOW + PRIMARY_COMMAND + " " + ChatColor.GREEN + INFO_COMMAND + ChatColor.LIGHT_PURPLE + "  - Get info on your quest");
@@ -37,7 +36,7 @@ public class Texts {
 	public static final String SIGNS_DONE_HELP = "Find A Done Sign To Complete Your Quest!";
 	
 	// Info
-	public static final void INFO(Quest q, Player player) {
+	public static final void INFO(Quest q, String player) {
 		Chat.noPrefixMessage(player, ChatColor.AQUA + ":" + ChatColor.BLUE + "========" + ChatColor.GOLD + q.name() + ChatColor.BLUE + "========" + ChatColor.AQUA + ":");
 		if(q.onComplete().nextQuest() != null && !q.onComplete().nextQuest().isEmpty())
 			Chat.noPrefixMessage(player, "Next Quest: " + ChatColor.GREEN + q.onComplete().nextQuest());
@@ -72,7 +71,7 @@ public class Texts {
 				Chat.noPrefixMessage(player, "     " + Texts.COMMANDS + ":");
 				for(int i=0;i<(q.onComplete().commands().size()); i++)
 				{
-					Chat.noPrefixMessage(player, "     " + ChatColor.GREEN + "- /" + ChatColor.GOLD + q.onComplete().commands().get(i).replace("`player", (player).getName()));
+					Chat.noPrefixMessage(player, "     " + ChatColor.GREEN + "- /" + ChatColor.GOLD + q.onComplete().commands().get(i).replace("`player", player));
 				}
 			}
 		if(Storage.info.showItems)
@@ -93,9 +92,9 @@ public class Texts {
 	public static final String DELAY_NOT_FINISHED = "You Cannot Get Quests Right Now! Wait A Bit And Try Again.";
 	
 	// Non-Fatal Quest Errors
-	public static String COMMANDS_HAS_ACTIVE_QUEST(Player p) { return "You Are Currenly on the Quest " + ChatColor.YELLOW + qQuests.plugin.qAPI.getActiveQuest(p).name() + ChatColor.RED + ", Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + INFO_COMMAND + ChatColor.RED + " To Get More Info On Your Quest."; }
+	public static String COMMANDS_HAS_ACTIVE_QUEST(String p) { return "You Are Currenly on the Quest " + ChatColor.YELLOW + qQuests.plugin.qAPI.getActiveQuest(p).name() + ChatColor.RED + ", Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + INFO_COMMAND + ChatColor.RED + " To Get More Info On Your Quest."; }
 	public static final String COMMANDS_NO_ACTIVE_QUEST = "You Don't Have An Active Quest! Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + GIVE_COMMAND + ChatColor.RED + " To Get One.";
-	public static final String HAS_ACTIVE_QUEST = "You Already Have An Active Quest!";
+	public static String HAS_ACTIVE_QUEST(String p) { return "You Are Currenly on the Quest " + ChatColor.YELLOW + qQuests.plugin.qAPI.getActiveQuest(p).name() + ChatColor.RED + "."; }
 	public static final String NO_ACTIVE_QUEST = "You Don't Have An Active Quest!";
 	public static final String LEVEL_TOO_HIGH = "Your Level Is To High!";
 	public static final String LEVEL_TOO_LOW = "Your Level Is To Low!";
@@ -126,7 +125,7 @@ public class Texts {
 	public static final String ENCHANT_COMPLETED_QUOTA = "You Have Enchanted";
 	
 	// Quest Plugin Control
-	public static final String NOT_CONTROLLED_BY(Player p) {return "Your Quest Is Controlled By " + Storage.wayCurrentQuestsWereGiven.get(p);}	
+	public static final String NOT_CONTROLLED_BY(String p) {return "Your Quest Is Controlled By " + Storage.wayCurrentQuestsWereGiven.get(p);}	
 	public static final String CANNOT_USE_CURRENTLY = "You Can't Use This When You Have This Quest!";
 	
 	// Config Words

@@ -10,7 +10,6 @@ import me.quaz3l.qQuests.API.QuestModels.Quest;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 
 public class PlayerProfiles {
 	private FileConfiguration pConfig = null;
@@ -52,58 +51,58 @@ public class PlayerProfiles {
 	}
 	
 	// Functions
-	public Integer getQuestsTimesCompleted(Player p, Quest q) {
-		return getInt(p, "FinishCount." + q.name());
+	public Integer getQuestsTimesCompleted(String player, Quest quest) {
+		return getInt(player, "FinishCount." + quest.name());
 	}
 	
 	// Set Values
-	public void set(Player player, String path, String value)
+	public void set(String player, String path, String value)
 	{
-		this.getPlayerProfiles().set(player.getName() + "." + path, value);
+		this.getPlayerProfiles().set(player + "." + path, value);
 		this.savePlayerProfiles();
 	}
-	public void set(Player player, String path, Integer value)
+	public void set(String player, String path, Integer value)
 	{
-		this.getPlayerProfiles().set(player.getName() + "." + path, value);
+		this.getPlayerProfiles().set(player + "." + path, value);
 		this.savePlayerProfiles();
 	}
-	public void set(Player player, String path, boolean value)
+	public void set(String player, String path, boolean value)
 	{
-		this.getPlayerProfiles().set(player.getName() + "." + path, value);
+		this.getPlayerProfiles().set(player + "." + path, value);
 		this.savePlayerProfiles();
 	}
-	public void set(Player player, String path, @SuppressWarnings("rawtypes") List value)
+	public void set(String player, String path, @SuppressWarnings("rawtypes") List value)
 	{
-		this.getPlayerProfiles().set(player.getName() + "." + path, value);
+		this.getPlayerProfiles().set(player + "." + path, value);
 		this.savePlayerProfiles();
 	}
 	
 	
 	// Get Values
-	public String getString(Player player, String path)
+	public String getString(String player, String path)
 	{
-		return this.getPlayerProfiles().getString(player.getName() + "." + path);
+		return this.getPlayerProfiles().getString(player + "." + path);
 	}
-	public Integer getInt(Player player, String path)
+	public Integer getInt(String player, String path)
 	{
-		return this.getPlayerProfiles().getInt(player.getName() + "." + path);
+		return this.getPlayerProfiles().getInt(player + "." + path);
 	}
-	public boolean getBoolean(Player player, String path)
+	public boolean getBoolean(String player, String path)
 	{
-		return this.getPlayerProfiles().getBoolean(player.getName() + "." + path);
+		return this.getPlayerProfiles().getBoolean(player + "." + path);
 	}
 	@SuppressWarnings("rawtypes")
-	public List getList(Player player, String path)
+	public List getList(String player, String path)
 	{
-		return this.getPlayerProfiles().getList(player.getName() + "." + path);
+		return this.getPlayerProfiles().getList(player + "." + path);
 	}
-	public List<String> getStringList(Player player, String path)
+	public List<String> getStringList(String player, String path)
 	{
-		return this.getPlayerProfiles().getStringList(player.getName() + "." + path);
+		return this.getPlayerProfiles().getStringList(player + "." + path);
 	}
-	public List<Integer> getIntegerList(Player player, String path)
+	public List<Integer> getIntegerList(String player, String path)
 	{
-		return this.getPlayerProfiles().getIntegerList(player.getName() + "." + path);
+		return this.getPlayerProfiles().getIntegerList(player + "." + path);
 	}
 }
 

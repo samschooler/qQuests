@@ -8,9 +8,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class Collect {
-	public static boolean check(Player p)
+	public static boolean check(String player)
 	{
-		for(Task task : qQuests.plugin.qAPI.getActiveQuest(p).tasks().values()) 
+		Player p = qQuests.plugin.getServer().getPlayer(player);
+		if(p == null)
+			return false;
+		
+		for(Task task : qQuests.plugin.qAPI.getActiveQuest(player).tasks().values()) 
 		{
 			if(task.type().equalsIgnoreCase("collect")) {
 				if(!InventoryUtil.hasSimilarItems(new ItemStack[] { new ItemStack(task.idInt(), task.amount(), task.durability()) }, p.getInventory())) {
@@ -20,9 +24,13 @@ public class Collect {
 		}
 		return true;
 	}
-	public static boolean take(Player p)
+	public static boolean take(String player)
 	{
-		for(Task task : qQuests.plugin.qAPI.getActiveQuest(p).tasks().values()) 
+		Player p = qQuests.plugin.getServer().getPlayer(player);
+		if(p == null)
+			return false;
+		
+		for(Task task : qQuests.plugin.qAPI.getActiveQuest(player).tasks().values()) 
 		{
 			if(task.type().equalsIgnoreCase("collect")) {
 				if(!InventoryUtil.removeItems(new ItemStack[] { new ItemStack(task.idInt(), task.amount(), task.durability()) }, p.getInventory())) {

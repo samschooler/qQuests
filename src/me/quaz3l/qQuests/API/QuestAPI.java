@@ -44,26 +44,26 @@ public class QuestAPI {
 	{
 		return Storage.visibleQuests;
 	}
-	public HashMap<Player, Quest> getActiveQuests()
+	public HashMap<String, Quest> getActiveQuests()
 	{
 		return Storage.currentQuests;
 	}
     
-    public Quest getActiveQuest(Player player)
+    public Quest getActiveQuest(String player)
     {
     	return Storage.currentQuests.get(player);
     }
     
-    public boolean hasActiveQuest(Player p)
+    public boolean hasActiveQuest(String player)
     {
-    	if(Storage.currentQuests.get(p) == null) 
+    	if(Storage.currentQuests.get(player) == null) 
     		return false;
     	else 
     		return true;
     }
     
 	// Quest Functions
-	public Integer giveQuest(Player player, String via)
+	public Integer giveQuest(String player, String via)
     {
 		// Check For Active Quest
 		if(qQuests.plugin.qAPI.hasActiveQuest(player))
@@ -107,7 +107,7 @@ public class QuestAPI {
 		return u;
     }
 	
-	public Integer giveQuest(Player player, String quest, boolean onlyVisible, String via)
+	public Integer giveQuest(String player, String quest, boolean onlyVisible, String via)
     {
 		Chat.logger("debug", quest);
 		quest = QuestFrag.get(quest.toLowerCase()).toLowerCase();
@@ -157,7 +157,7 @@ public class QuestAPI {
 		return 0;
     }
 	
-	public HashMap<Integer, Quest> getAvailableQuests(Player player)
+	public HashMap<Integer, Quest> getAvailableQuests(String player)
     {
 		// Generate Random Starting Point
 		HashMap<Integer, Quest> u = new HashMap<Integer, Quest>();
@@ -196,7 +196,7 @@ public class QuestAPI {
 		return u;
     }
 	
-	public Integer dropQuest(final Player player){
+	public Integer dropQuest(final String player){
 		Quest q = this.getActiveQuests().get(player);
 		if(!qQuests.plugin.qAPI.hasActiveQuest(player))
 			return 9;
@@ -223,7 +223,7 @@ public class QuestAPI {
 						int result = giveQuest(player, Storage.previousQuest.get(player).onDrop().nextQuest(), false, Storage.wayPreviousQuestWereGiven.get(player));
 						if(result == 0)
 						{
-							Chat.message(player, getActiveQuest(player).onJoin().message());
+							Chat.message(player, getActiveQuest(player).onJoin().message(player));
 						}
 						else
 							Chat.errorCode(result, Storage.wayPreviousQuestWereGiven.get(player), player);
@@ -238,7 +238,7 @@ public class QuestAPI {
 		else return u;
 	}
 	
-	public Integer completeQuest(final Player player){
+	public Integer completeQuest(final String player){
 		// Check if the player even has a quest
 		if(!hasActiveQuest(player))
 			return 9;
@@ -280,7 +280,7 @@ public class QuestAPI {
 		Profiles.set(player, "Completed", (Profiles.getInt(player, "Completed") + 1));
 		Profiles.set(player, "FinishCount." + getActiveQuest(player).name(), (Profiles.getInt(player, "FinishCount." + getActiveQuest(player).name()) + 1));
 		
-		Chat.green(player, getActiveQuest(player).onComplete().message());
+		Chat.green(player, getActiveQuest(player).onComplete().message(player));
 		
 		// Store previous quest
 		Storage.previousQuest.put(player, getActiveQuest(player));
@@ -298,7 +298,7 @@ public class QuestAPI {
 					int result = giveQuest(player, Storage.previousQuest.get(player).onComplete().nextQuest(), false, Storage.wayPreviousQuestWereGiven.get(player));
 					if(result == 0)
 					{
-						Chat.message(player, getActiveQuest(player).onJoin().message());
+						Chat.message(player, getActiveQuest(player).onJoin().message(player));
 					}
 					else
 						Chat.errorCode(result, Storage.wayPreviousQuestWereGiven.get(player), player);
@@ -311,12 +311,12 @@ public class QuestAPI {
 		return 0;
 	}
 	
-	public void cancelQuest(Player player)
+	public void cancelQuest(String player)
 	{
 		this.resetPlayer(player);
 	}
 	
-	private void startQuest(Player player, Quest q)
+	private void startQuest(String player, Quest q)
 	{
 		// Give The Quest
 		this.getActiveQuests().put(player, q);
@@ -334,7 +334,7 @@ public class QuestAPI {
 		Profiles.set(player, "Given", (Profiles.getInt(player, "Given") + 1));
 	}
 	
-	private void resetPlayer(Player player)
+	private void resetPlayer(String player)
 	{
 		this.getActiveQuests().remove(player);
 		Storage.currentTaskProgress.remove(player);
@@ -343,8 +343,11 @@ public class QuestAPI {
 	}
 	
 	// Streamline The Permissions
-	public boolean checkPerms(Player p, String perm)
+	public boolean checkPerms(String player, String perm)
 	{
+		Player p = qQuests.plugin.getServer().getPlayer(player);
+		if(p == null)
+			return false;
 		if(qQuests.plugin.permission != null)
 			if(qQuests.plugin.permission.has(p, "qquests." + perm))
 				return true;

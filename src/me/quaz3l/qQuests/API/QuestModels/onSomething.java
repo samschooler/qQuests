@@ -44,8 +44,8 @@ public class onSomething {
 		this.items = build.items();
 		this.commands = build.commands();
 	}
-	public String message() {
-		return this.message;
+	public String message(String player) {
+		return this.message.replaceAll("`player", player);
 	}
 	public int delay() {
 		return this.delay;
@@ -84,13 +84,16 @@ public class onSomething {
 		return this.permissionsTake;
 	}
 	
-	public Integer feeReward(final Player p)
+	public Integer feeReward(final String player)
 	{
-		// Fee Requirements
+		Player p = qQuests.plugin.getServer().getPlayer(player);
+		if(p == null)
+			return 1;
 		
-		Chat.logger("debug", p.getName());
+		// Fee Requirements
+		Chat.logger("debug", player);
 		if(qQuests.plugin.economy != null) 
-			if(qQuests.plugin.economy.getBalance(p.getName()) < (this.money() * -1)) 
+			if(qQuests.plugin.economy.getBalance(player) < (this.money() * -1)) 
 				return 5;
 		if((p.getHealth() + this.health()) < 0)
 			return 6;
@@ -100,12 +103,12 @@ public class onSomething {
 		// Money
 		if(qQuests.plugin.economy != null) 
 		{
-			if (qQuests.plugin.economy.bankBalance(p.getName()) != null) 
-				qQuests.plugin.economy.createPlayerAccount(p.getName());
+			if (qQuests.plugin.economy.bankBalance(player) != null) 
+				qQuests.plugin.economy.createPlayerAccount(player);
 			if(this.money() < 0) 
-				qQuests.plugin.economy.withdrawPlayer(p.getName(), this.money() * -1);
+				qQuests.plugin.economy.withdrawPlayer(player, this.money() * -1);
 			else
-				qQuests.plugin.economy.depositPlayer(p.getName(), this.money());
+				qQuests.plugin.economy.depositPlayer(player, this.money());
 		}
 		
 		/*
@@ -159,19 +162,19 @@ public class onSomething {
 		// Commands
 		for(int i=0; i < this.commands().size(); i++)
 		{
-			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.commands().get(i).replace("`player", p.getName()));
+			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), this.commands().get(i).replace("`player", player));
 			i++;
 		}
 		
 		// Level
 		if(this.levelSet > -1)
-			qQuests.plugin.qAPI.getProfiles().set(p, "Level", this.levelSet);
+			qQuests.plugin.qAPI.getProfiles().set(player, "Level", this.levelSet);
 
 		if(this.levelAdd != 0)
-			qQuests.plugin.qAPI.getProfiles().set(p, "Level", qQuests.plugin.qAPI.getProfiles().getInt(p, "Level") + this.levelAdd);
+			qQuests.plugin.qAPI.getProfiles().set(player, "Level", qQuests.plugin.qAPI.getProfiles().getInt(player, "Level") + this.levelAdd);
 		
-		if(qQuests.plugin.qAPI.getProfiles().getInt(p, "Level") < 0)
-			qQuests.plugin.qAPI.getProfiles().set(p, "Level", 0);
+		if(qQuests.plugin.qAPI.getProfiles().getInt(player, "Level") < 0)
+			qQuests.plugin.qAPI.getProfiles().set(player, "Level", 0);
 		
 		
 		// Health
@@ -189,19 +192,19 @@ public class onSomething {
 			p.setFoodLevel(hungerAmount);
 		
 		// Delay
-		Storage.delayLeft.put(p, this.delay());
+		Storage.delayLeft.put(player, this.delay());
 		final BukkitTask timer = qQuests.plugin.getServer().getScheduler().runTaskTimer(qQuests.plugin, new Runnable() {
 			public void run() {
-				if(Storage.delayLeft.get(p) != null)
-					Storage.delayLeft.put(p, Storage.delayLeft.get(p)-3);
+				if(Storage.delayLeft.get(player) != null)
+					Storage.delayLeft.put(player, Storage.delayLeft.get(player)-3);
 			}
 		}, 0, 60); // Update every 3 seconds
-		Storage.cannotGetQuests.add(p);
+		Storage.cannotGetQuests.add(player);
 		qQuests.plugin.getServer().getScheduler().scheduleSyncDelayedTask(qQuests.plugin, new Runnable() {
 			public void run() {
-				Storage.cannotGetQuests.remove(p);
+				Storage.cannotGetQuests.remove(player);
 				timer.cancel();
-				Storage.delayLeft.remove(p);
+				Storage.delayLeft.remove(player);
 			}
 		}, (this.delay() * 20));
 				
