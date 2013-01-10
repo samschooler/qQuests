@@ -235,10 +235,8 @@ public class Commands implements CommandExecutor
 			} 
 			else if(args[0].equalsIgnoreCase("reload")) 
 			{
-				//Bukkit.getPluginManager().disablePlugin(qQuests.plugin);
-				//Bukkit.getPluginManager().enablePlugin(qQuests.plugin);
-				qQuests.plugin.Config.loadConfigs();
-				qQuests.plugin.qAPI.getQuestWorker().buildQuests();
+				Bukkit.getPluginManager().disablePlugin(qQuests.plugin);
+				Bukkit.getPluginManager().enablePlugin(qQuests.plugin);
 				Chat.logger("info", "Reloaded.");
 			}
 			else 
