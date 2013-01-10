@@ -135,6 +135,7 @@ public class Interwebs {
 	}
 	private static boolean updatePlugin(String site, String destination)
 	{
+		site = "http://dev.bukkit.org" + site;
 		try {
 			Chat.logger("info", "Downloading...");
 			BufferedInputStream in = new BufferedInputStream(new URL(site).openStream());

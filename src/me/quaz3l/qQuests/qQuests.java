@@ -17,9 +17,9 @@ import me.quaz3l.qQuests.Plugins.Commands;
 import me.quaz3l.qQuests.Plugins.Signs;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Config;
-import me.quaz3l.qQuests.Util.Interwebs;
 import me.quaz3l.qQuests.Util.Metrics;
 import me.quaz3l.qQuests.Util.Storage;
+import me.quaz3l.qQuests.Util.Updater;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
@@ -92,8 +92,8 @@ public class qQuests extends JavaPlugin
 		//Setup Stock qPlugins
 		this.setupStockPlugins();
 
-		// Check for upates
-		Interwebs.start();
+		// Check for updates
+		Updater.start(this, "qquests", this.getFile());
 
 		// http://mcstats.org/qQuests
 		try {

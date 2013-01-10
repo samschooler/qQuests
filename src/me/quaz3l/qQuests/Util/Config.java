@@ -84,9 +84,8 @@ public class Config {
 		if(this.getConfig().getString("notifyMeOfUpdates") != "true" && this.getConfig().getString("notifyMeOfUpdates") != "false")
 			this.getConfig().set("notifyMeOfUpdates", true);
 		
-		if(this.getConfig().getString("autoDownloadCriticalUpdates") != "true" && this.getConfig().getString("autoDownloadCriticalUpdates") != "false")
-			this.getConfig().set("autoDownloadCriticalUpdates", true);
-
+		if(this.getConfig().getString("autoUpdate") != "true" && this.getConfig().getString("autoUpdate") != "false")
+			this.getConfig().set("autoUpdate", true);
 		// Prefix
 		if(this.getConfig().getString("chatPrefix") == null)
 			this.getConfig().set("chatPrefix", "`b[`dqQuests`b] `d");

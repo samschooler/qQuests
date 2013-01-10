@@ -5,7 +5,6 @@ import java.util.HashMap;
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.QuestModels.Quest;
 import me.quaz3l.qQuests.Util.Chat;
-import me.quaz3l.qQuests.Util.Interwebs;
 import me.quaz3l.qQuests.Util.Storage;
 import me.quaz3l.qQuests.Util.Texts;
 
@@ -213,14 +212,6 @@ public class Commands implements CommandExecutor
 					}
 					else Chat.noPerms(((Player) s).getName());
 				}
-				else if(args[0].equalsIgnoreCase("update"))
-				{
-					if(qQuests.plugin.qAPI.checkPerms(((Player) s).getName(), "update"))
-					{
-						if(!Interwebs.tryUpdate(s))
-							Chat.message(s, "qQuests is up to date.");
-					}
-				}
 				else
 				{
 					Texts.HELP(((Player) s).getName(), "commands");
@@ -228,19 +219,21 @@ public class Commands implements CommandExecutor
 			}
 		}
 		else if(s instanceof ConsoleCommandSender) {
-			if(args[0].equalsIgnoreCase("update"))
+			if(args.length < 1)
 			{
-				if(!Interwebs.tryUpdate(s))
-					Chat.message(s, "qQuests is up to date.");
-			} 
-			else if(args[0].equalsIgnoreCase("reload")) 
-			{
-				Bukkit.getPluginManager().disablePlugin(qQuests.plugin);
-				Bukkit.getPluginManager().enablePlugin(qQuests.plugin);
-				Chat.logger("info", "Reloaded.");
+				Chat.message(s, "qquests reload - Reloads the quests.yml, and config.yml");
 			}
-			else 
-				Chat.message(s, Texts.ONLY_PLAYERS);
+			else
+			{ 
+				if(args[0].equalsIgnoreCase("reload")) 
+				{
+					Bukkit.getPluginManager().disablePlugin(qQuests.plugin);
+					Bukkit.getPluginManager().enablePlugin(qQuests.plugin);
+					Chat.logger("info", "Reloaded.");
+				}
+				else 
+					Chat.message(s, "qquests reload - Reloads the quests.yml, and config.yml");
+			}
 		} else
 			Chat.message(s, Texts.ONLY_PLAYERS);
 		return false;
