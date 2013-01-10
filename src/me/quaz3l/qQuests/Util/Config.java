@@ -81,6 +81,9 @@ public class Config {
 		if(this.getConfig().getString("tellMeYourUsingMyPlugin") != null)
 			this.getConfig().set("tellMeYourUsingMyPlugin", null);
 		
+		if(this.getConfig().getString("notifyMeOfUpdates") != "true" && this.getConfig().getString("notifyMeOfUpdates") != "false")
+			this.getConfig().set("notifyMeOfUpdates", true);
+		
 		if(this.getConfig().getString("autoDownloadCriticalUpdates") != "true" && this.getConfig().getString("autoDownloadCriticalUpdates") != "false")
 			this.getConfig().set("autoDownloadCriticalUpdates", true);
 

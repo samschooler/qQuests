@@ -17,16 +17,11 @@ public class Interwebs {
 
 	public static void start()
 	{
-		qQuests.plugin.getServer().getScheduler().runTaskTimerAsynchronously(qQuests.plugin, new Runnable() {
-			public void run() {talk();}
-		}, 1L, (12 * 60 * 1200));
-	}
-	public static void talk() {
-		// Ping My Server
-		//pingStatus();
-
-		// Check For Update
-		checkForUpdates();
+		if(qQuests.plugin.getConfig().getBoolean("notifyMeOfUpdates")) {
+			qQuests.plugin.getServer().getScheduler().runTaskTimerAsynchronously(qQuests.plugin, new Runnable() {
+				public void run() {checkForUpdates();}
+			}, 1L, (12 * 60 * 1200));
+		}
 	}
 	public static void checkForUpdates()
 	{
