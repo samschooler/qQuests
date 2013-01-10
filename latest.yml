@@ -1,6 +1,6 @@
 name: qQuests
-version: 2007
-source: "http://dev.bukkit.org/media/files/663/828/qQuests.jar"
+version: 2010
+source: "http://dev.bukkit.org/media/files/663/887/qQuests.jar"
 changelog:
 - Refactored code
 - MANY bug fixes
