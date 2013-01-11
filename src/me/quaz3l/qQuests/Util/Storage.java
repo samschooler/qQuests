@@ -35,6 +35,7 @@ public class Storage {
 	// Config Values
 	public static String primaryCommand = "quest";
 	public static String prefix = "qQuests";
+	public static int persistDelay = 5;
 
 	// Access            <Plugin,         Plugin,           Command>
 	public static HashMap<String, HashMap<String, ArrayList<String>>> access = null;
@@ -159,7 +160,7 @@ public class Storage {
 					e.printStackTrace();
 				}
 			}
-		}, 1 *60 * 20, 1 *60 * 20); // Persist data every minute
+		}, persistDelay *60 * 20, persistDelay *60 * 20); // Persist data every minute
 	}
 	public static void persist()
 	{

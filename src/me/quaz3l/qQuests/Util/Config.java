@@ -107,6 +107,9 @@ public class Config {
 		}
 		else
 			this.getConfig().set("primaryCommand", "quest");
+		
+		if(this.getConfig().getInt("persistDelay") <= 0)
+			this.getConfig().set("persistDelay", 5);
 
 
 
@@ -189,6 +192,7 @@ public class Config {
 
 		Storage.primaryCommand = this.getConfig().getString("primaryCommand");
 		Storage.prefix = this.getConfig().getString("chatPrefix");
+		Storage.persistDelay = this.getConfig().getInt("persistDelay");
 		qQuests.plugin.chatPrefix = Chat.parseColors(Storage.prefix);
 		Storage.info.showItemIds = this.getConfig().getBoolean("showItemIds");
 		Storage.info.showMoney = this.getConfig().getBoolean("showMoney");
