@@ -11,7 +11,7 @@ import me.quaz3l.qQuests.API.TaskTypes.Collect;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.PlayerProfiles;
 import me.quaz3l.qQuests.Util.QuestFrag;
-import me.quaz3l.qQuests.Util.Store.Storage;
+import me.quaz3l.qQuests.Util.Storage;
 
 public class QuestAPI {
 	private QuestWorker QuestWorker;

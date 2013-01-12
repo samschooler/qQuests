@@ -1,4 +1,4 @@
-package me.quaz3l.qQuests.Util.Store;
+package me.quaz3l.qQuests.Util;
 
 import me.quaz3l.qQuests.qQuests;
 

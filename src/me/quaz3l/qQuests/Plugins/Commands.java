@@ -5,8 +5,8 @@ import java.util.HashMap;
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.QuestModels.Quest;
 import me.quaz3l.qQuests.Util.Chat;
-import me.quaz3l.qQuests.Util.Store.Storage;
-import me.quaz3l.qQuests.Util.Store.Texts;
+import me.quaz3l.qQuests.Util.Storage;
+import me.quaz3l.qQuests.Util.Texts;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

@@ -3,8 +3,8 @@ package me.quaz3l.qQuests.API.TaskTypes;
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.QuestModels.Task;
 import me.quaz3l.qQuests.Util.Chat;
-import me.quaz3l.qQuests.Util.Store.Storage;
-import me.quaz3l.qQuests.Util.Store.Texts;
+import me.quaz3l.qQuests.Util.Storage;
+import me.quaz3l.qQuests.Util.Texts;
 
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
