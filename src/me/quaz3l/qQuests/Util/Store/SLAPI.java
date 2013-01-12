@@ -1,9 +1,11 @@
-package me.quaz3l.qQuests.Util;
+package me.quaz3l.qQuests.Util.Store;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
+import me.quaz3l.qQuests.Util.Chat;
 
 /** SLAPI = Saving/Loading API
  * API for Saving and Loading Objects.

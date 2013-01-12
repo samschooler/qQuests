@@ -3,6 +3,7 @@ main: me.quaz3l.qQuests.qQuests
 version: 2010
 description: A overly customizable quests plugin.
 softdepend: [Vault, Citizens]
+database: true
 commands:
   QQUESTS:
     description: Main Command To Use qQuests

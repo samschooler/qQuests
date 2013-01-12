@@ -1,6 +1,7 @@
 package me.quaz3l.qQuests.Util;
 
 import me.quaz3l.qQuests.qQuests;
+import me.quaz3l.qQuests.Util.Store.Texts;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

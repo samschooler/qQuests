@@ -12,7 +12,7 @@ import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.QuestModels.Builders.BuildonSomething;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.InventoryUtil;
-import me.quaz3l.qQuests.Util.Storage;
+import me.quaz3l.qQuests.Util.Store.Storage;
 
 public class onSomething {
 	private String message;
