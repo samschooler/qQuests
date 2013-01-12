@@ -1,6 +1,5 @@
 package me.quaz3l.qQuests.Util;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -105,201 +104,168 @@ public class Storage {
 		qQuests.plugin.getServer().getScheduler().runTaskTimerAsynchronously(qQuests.plugin, new Runnable() {
 
 			public void run() {
-				File dir = new File(qQuests.plugin.getDataFolder().getPath() + "/savedState/");
-				try {
-					// Create /storage/ if it doesn't exist
-					if(!dir.exists()) dir.mkdir();
+				// currentQuests
+				HashMap<String, String> cQuests = new HashMap<String, String>();
+				for(Entry<String, Quest> entry : Storage.currentQuests.entrySet())
+					cQuests.put(entry.getKey(), entry.getValue().name());
+				qQuests.plugin.persist.set("currentQuests", cQuests);
 
-					// currentQuests
-					HashMap<String, String> cQuests = new HashMap<String, String>();
-					for(Entry<String, Quest> entry : Storage.currentQuests.entrySet())
-						cQuests.put(entry.getKey(), entry.getValue().name());
-					SLAPI.save(cQuests, qQuests.plugin.getDataFolder().getPath() + "/savedState/currentQuests.dat");
+				// currentTaskProgress
+				HashMap<String, HashMap<Integer, Integer>> cTaskProgress = new HashMap<String, HashMap<Integer, Integer>>();
+				for(Entry<String, HashMap<Integer, Integer>> entry : Storage.currentTaskProgress.entrySet())
+					cTaskProgress.put(entry.getKey(), entry.getValue());
+				qQuests.plugin.persist.set("currentTaskProgress", cTaskProgress);
 
-					// currentTaskProgress
-					HashMap<String, HashMap<Integer, Integer>> cTaskProgress = new HashMap<String, HashMap<Integer, Integer>>();
-					for(Entry<String, HashMap<Integer, Integer>> entry : Storage.currentTaskProgress.entrySet())
-						cTaskProgress.put(entry.getKey(), entry.getValue());
-					SLAPI.save(cTaskProgress, qQuests.plugin.getDataFolder().getPath() + "/savedState/currentTaskProgress.dat");
+				// tasksLeftInQuest
+				HashMap<String, Integer> tLeftInQuest = new HashMap<String, Integer>();
+				for(Entry<String, Integer> entry : Storage.tasksLeftInQuest.entrySet())
+					tLeftInQuest.put(entry.getKey(), entry.getValue());
+				qQuests.plugin.persist.set("tasksLeftInQuest", tLeftInQuest);
 
-					// tasksLeftInQuest
-					HashMap<String, Integer> tLeftInQuest = new HashMap<String, Integer>();
-					for(Entry<String, Integer> entry : Storage.tasksLeftInQuest.entrySet())
-						tLeftInQuest.put(entry.getKey(), entry.getValue());
-					SLAPI.save(tLeftInQuest, qQuests.plugin.getDataFolder().getPath() + "/savedState/tasksLeftInQuest.dat");
+				// previousQuests
+				HashMap<String, String> pQuest = new HashMap<String, String>();
+				for(Entry<String, Quest> entry : Storage.previousQuest.entrySet())
+					pQuest.put(entry.getKey(), entry.getValue().name());
+				qQuests.plugin.persist.set("previousQuests", pQuest);
 
-					// previousQuests
-					HashMap<String, String> pQuest = new HashMap<String, String>();
-					for(Entry<String, Quest> entry : Storage.previousQuest.entrySet())
-						pQuest.put(entry.getKey(), entry.getValue().name());
-					SLAPI.save(pQuest, qQuests.plugin.getDataFolder().getPath() + "/savedState/previousQuest.dat");
+				Chat.logger("debug", pQuest.toString());
 
-					Chat.logger("debug", pQuest.toString());
+				// wayCurrentQuestsWereGiven
+				HashMap<String, String> wcQuestsWereGiven = new HashMap<String, String>();
+				for(Entry<String, String> entry : Storage.wayCurrentQuestsWereGiven.entrySet())
+					wcQuestsWereGiven.put(entry.getKey(), entry.getValue());
+				qQuests.plugin.persist.set("wayCurrentQuestsWereGiven", wcQuestsWereGiven);
 
-					// wayCurrentQuestsWereGiven
-					HashMap<String, String> wcQuestsWereGiven = new HashMap<String, String>();
-					for(Entry<String, String> entry : Storage.wayCurrentQuestsWereGiven.entrySet())
-						wcQuestsWereGiven.put(entry.getKey(), entry.getValue());
-					SLAPI.save(wcQuestsWereGiven, qQuests.plugin.getDataFolder().getPath() + "/savedState/wayCurrentQuestsWereGiven.dat");
+				// wayPreviousQuestWereGiven
+				HashMap<String, String> wpQuestWereGiven = new HashMap<String, String>();
+				for(Entry<String, String> entry : Storage.wayPreviousQuestWereGiven.entrySet())
+					wpQuestWereGiven.put(entry.getKey(), entry.getValue());
+				qQuests.plugin.persist.set("wayPreviousQuestWereGiven", wpQuestWereGiven);
 
-					// wayPreviousQuestWereGiven
-					HashMap<String, String> wpQuestWereGiven = new HashMap<String, String>();
-					for(Entry<String, String> entry : Storage.wayPreviousQuestWereGiven.entrySet())
-						wpQuestWereGiven.put(entry.getKey(), entry.getValue());
-					SLAPI.save(wpQuestWereGiven, qQuests.plugin.getDataFolder().getPath() + "/savedState/wayPreviousQuestWereGiven.dat");
+				// delayLeft
+				HashMap<String, Integer> dLeft = new HashMap<String, Integer>();
+				for(Entry<String, Integer> entry : Storage.delayLeft.entrySet())
+					dLeft.put(entry.getKey(), entry.getValue());
+				qQuests.plugin.persist.set("delayLeft", dLeft);
 
-					// delayLeft
-					HashMap<String, Integer> dLeft = new HashMap<String, Integer>();
-					for(Entry<String, Integer> entry : Storage.delayLeft.entrySet())
-						dLeft.put(entry.getKey(), entry.getValue());
-					SLAPI.save(dLeft, qQuests.plugin.getDataFolder().getPath() + "/savedState/delayLeft.dat");
-
-					Chat.logger("debug", "Quests persisted.");
-				} catch (Exception e) {
-					Chat.logger("severe", "Quests are not able to save to file! The quests will not persist!");
-					e.printStackTrace();
-				}
+				Chat.logger("debug", "Quests persisted to memory.");
 			}
 		}, persistDelay *60 * 20, persistDelay *60 * 20); // Persist data every minute
 	}
 	public static void persist()
 	{
-		File dir = new File(qQuests.plugin.getDataFolder().getPath() + "/savedState/");
-		try {
-			// Create /storage/ if it doesn't exist
-			if(!dir.exists()) dir.mkdir();
+		// currentQuests
+		HashMap<String, String> cQuests = new HashMap<String, String>();
+		for(Entry<String, Quest> entry : Storage.currentQuests.entrySet())
+			cQuests.put(entry.getKey(), entry.getValue().name());
+		qQuests.plugin.persist.set("currentQuests", cQuests);
 
-			// currentQuests
-			HashMap<String, String> cQuests = new HashMap<String, String>();
-			for(Entry<String, Quest> entry : Storage.currentQuests.entrySet())
-				cQuests.put(entry.getKey(), entry.getValue().name());
-			SLAPI.save(cQuests, qQuests.plugin.getDataFolder().getPath() + "/savedState/currentQuests.dat");
+		// currentTaskProgress
+		HashMap<String, HashMap<Integer, Integer>> cTaskProgress = new HashMap<String, HashMap<Integer, Integer>>();
+		for(Entry<String, HashMap<Integer, Integer>> entry : Storage.currentTaskProgress.entrySet())
+			cTaskProgress.put(entry.getKey(), entry.getValue());
+		qQuests.plugin.persist.set("currentTaskProgress", cTaskProgress);
 
-			// currentTaskProgress
-			HashMap<String, HashMap<Integer, Integer>> cTaskProgress = new HashMap<String, HashMap<Integer, Integer>>();
-			for(Entry<String, HashMap<Integer, Integer>> entry : Storage.currentTaskProgress.entrySet())
-				cTaskProgress.put(entry.getKey(), entry.getValue());
-			SLAPI.save(cTaskProgress, qQuests.plugin.getDataFolder().getPath() + "/savedState/currentTaskProgress.dat");
+		// tasksLeftInQuest
+		HashMap<String, Integer> tLeftInQuest = new HashMap<String, Integer>();
+		for(Entry<String, Integer> entry : Storage.tasksLeftInQuest.entrySet())
+			tLeftInQuest.put(entry.getKey(), entry.getValue());
+		qQuests.plugin.persist.set("tasksLeftInQuest", tLeftInQuest);
 
-			// tasksLeftInQuest
-			HashMap<String, Integer> tLeftInQuest = new HashMap<String, Integer>();
-			for(Entry<String, Integer> entry : Storage.tasksLeftInQuest.entrySet())
-				tLeftInQuest.put(entry.getKey(), entry.getValue());
-			SLAPI.save(tLeftInQuest, qQuests.plugin.getDataFolder().getPath() + "/savedState/tasksLeftInQuest.dat");
+		// previousQuests
+		HashMap<String, String> pQuest = new HashMap<String, String>();
+		for(Entry<String, Quest> entry : Storage.previousQuest.entrySet())
+			pQuest.put(entry.getKey(), entry.getValue().name());
+		qQuests.plugin.persist.set("previousQuests", pQuest);
 
-			// previousQuests
-			HashMap<String, String> pQuest = new HashMap<String, String>();
-			for(Entry<String, Quest> entry : Storage.previousQuest.entrySet())
-				pQuest.put(entry.getKey(), entry.getValue().name());
-			SLAPI.save(pQuest, qQuests.plugin.getDataFolder().getPath() + "/savedState/previousQuest.dat");
+		Chat.logger("debug", pQuest.toString());
 
-			Chat.logger("debug", pQuest.toString());
+		// wayCurrentQuestsWereGiven
+		HashMap<String, String> wcQuestsWereGiven = new HashMap<String, String>();
+		for(Entry<String, String> entry : Storage.wayCurrentQuestsWereGiven.entrySet())
+			wcQuestsWereGiven.put(entry.getKey(), entry.getValue());
+		qQuests.plugin.persist.set("wayCurrentQuestsWereGiven", wcQuestsWereGiven);
 
-			// wayCurrentQuestsWereGiven
-			HashMap<String, String> wcQuestsWereGiven = new HashMap<String, String>();
-			for(Entry<String, String> entry : Storage.wayCurrentQuestsWereGiven.entrySet())
-				wcQuestsWereGiven.put(entry.getKey(), entry.getValue());
-			SLAPI.save(wcQuestsWereGiven, qQuests.plugin.getDataFolder().getPath() + "/savedState/wayCurrentQuestsWereGiven.dat");
+		// wayPreviousQuestWereGiven
+		HashMap<String, String> wpQuestWereGiven = new HashMap<String, String>();
+		for(Entry<String, String> entry : Storage.wayPreviousQuestWereGiven.entrySet())
+			wpQuestWereGiven.put(entry.getKey(), entry.getValue());
+		qQuests.plugin.persist.set("wayPreviousQuestWereGiven", wpQuestWereGiven);
 
-			// wayPreviousQuestWereGiven
-			HashMap<String, String> wpQuestWereGiven = new HashMap<String, String>();
-			for(Entry<String, String> entry : Storage.wayPreviousQuestWereGiven.entrySet())
-				wpQuestWereGiven.put(entry.getKey(), entry.getValue());
-			SLAPI.save(wpQuestWereGiven, qQuests.plugin.getDataFolder().getPath() + "/savedState/wayPreviousQuestWereGiven.dat");
+		// delayLeft
+		HashMap<String, Integer> dLeft = new HashMap<String, Integer>();
+		for(Entry<String, Integer> entry : Storage.delayLeft.entrySet())
+			dLeft.put(entry.getKey(), entry.getValue());
+		qQuests.plugin.persist.set("delayLeft", dLeft);
 
-			// delayLeft
-			HashMap<String, Integer> dLeft = new HashMap<String, Integer>();
-			for(Entry<String, Integer> entry : Storage.delayLeft.entrySet())
-				dLeft.put(entry.getKey(), entry.getValue());
-			SLAPI.save(dLeft, qQuests.plugin.getDataFolder().getPath() + "/savedState/delayLeft.dat");
-
-			Chat.logger("debug", "Quests persisted.");
-		} catch (Exception e) {
-			Chat.logger("severe", "Quests are not able to save to file! The quests will not persist!");
-			e.printStackTrace();
-		}
+		Chat.logger("debug", "Quests persisted to memory.");
 	}
 	public static void loadPersisted()
 	{
 		qQuests.plugin.getServer().getScheduler().runTaskAsynchronously(qQuests.plugin, new Runnable() {
 			@SuppressWarnings("unchecked")
 			public void run() {
-				File dir = new File(qQuests.plugin.getDataFolder().getPath() + "/savedState/");
-				try {
-					if(!dir.exists()) return;
+				// currentQuests
+				for(Entry<String, String> entry : 
+					((HashMap<String, String>) qQuests.plugin.persist.get("currentQuests")).entrySet())
+					Storage.currentQuests.put(entry.getKey(), qQuests.plugin.qAPI.getQuest(entry.getValue()));
 
-					// currentQuests
-					for(Entry<String, String> entry : 
-						((HashMap<String, String>) SLAPI.load(qQuests.plugin.getDataFolder().getPath() + 
-								"/savedState/currentQuests.dat")).entrySet())
-						Storage.currentQuests.put(entry.getKey(), qQuests.plugin.qAPI.getQuest(entry.getValue()));
+				// currentTaskProgress
+				for(Entry<String, HashMap<Integer, Integer>> entry : 
+					((HashMap<String, HashMap<Integer, Integer>>) qQuests.plugin.persist.get("currentTaskProgress")).entrySet())
+					Storage.currentTaskProgress.put(entry.getKey(), entry.getValue());
 
-					// currentTaskProgress
-					for(Entry<String, HashMap<Integer, Integer>> entry : 
-						((HashMap<String, HashMap<Integer, Integer>>) SLAPI.load(qQuests.plugin.getDataFolder().getPath() + 
-								"/savedState/currentTaskProgress.dat")).entrySet())
-						Storage.currentTaskProgress.put(entry.getKey(), entry.getValue());
+				// tasksLeftInQuest
+				for(Entry<String, Integer> entry : 
+					((HashMap<String, Integer>) qQuests.plugin.persist.get("tasksLeftInQuest")).entrySet())
+					Storage.tasksLeftInQuest.put(entry.getKey(), entry.getValue());
 
-					// tasksLeftInQuest
-					for(Entry<String, Integer> entry : 
-						((HashMap<String, Integer>) SLAPI.load(qQuests.plugin.getDataFolder().getPath() + 
-								"/savedState/tasksLeftInQuest.dat")).entrySet())
-						Storage.tasksLeftInQuest.put(entry.getKey(), entry.getValue());
+				// previousQuests
+				for(Entry<String, String> entry : 
+					((HashMap<String, String>) qQuests.plugin.persist.get("previousQuests")).entrySet())
+					Storage.previousQuest.put(entry.getKey(), qQuests.plugin.qAPI.getQuest(entry.getValue()));
 
-					// previousQuests <
-					for(Entry<String, String> entry : 
-						((HashMap<String, String>) SLAPI.load(qQuests.plugin.getDataFolder().getPath() + 
-								"/savedState/previousQuest.dat")).entrySet())
-						Storage.previousQuest.put(entry.getKey(), qQuests.plugin.qAPI.getQuest(entry.getValue()));
+				// wayCurrentQuestsWereGiven
+				for(Entry<String, String> entry : 
+					((HashMap<String, String>) qQuests.plugin.persist.get("wayCurrentQuestsWereGiven")).entrySet())
+					Storage.wayCurrentQuestsWereGiven.put(entry.getKey(), entry.getValue());
 
-					// wayCurrentQuestsWereGiven
-					for(Entry<String, String> entry : 
-						((HashMap<String, String>) SLAPI.load(qQuests.plugin.getDataFolder().getPath() + 
-								"/savedState/wayCurrentQuestsWereGiven.dat")).entrySet())
-						Storage.wayCurrentQuestsWereGiven.put(entry.getKey(), entry.getValue());
+				// wayPreviousQuestWereGiven
+				for(Entry<String, String> entry : 
+					((HashMap<String, String>) qQuests.plugin.persist.get("wayPreviousQuestWereGiven")).entrySet())
+					Storage.wayPreviousQuestWereGiven.put(entry.getKey(), entry.getValue());
 
-					// wayPreviousQuestWereGiven <
-					for(Entry<String, String> entry : 
-						((HashMap<String, String>) SLAPI.load(qQuests.plugin.getDataFolder().getPath() + 
-								"/savedState/wayPreviousQuestWereGiven.dat")).entrySet())
-						Storage.wayPreviousQuestWereGiven.put(entry.getKey(), entry.getValue());
+				// delayLeft
+				for(Entry<String, Integer> entry : 
+					((HashMap<String, Integer>) qQuests.plugin.persist.get("delayLeft")).entrySet()) {
+					Storage.delayLeft.put(entry.getKey(), entry.getValue());
 
-					// delayLeft <
-					for(Entry<String, Integer> entry : 
-						((HashMap<String, Integer>) SLAPI.load(qQuests.plugin.getDataFolder().getPath() + 
-								"/savedState/delayLeft.dat")).entrySet()) {
-						Storage.delayLeft.put(entry.getKey(), entry.getValue());
-						
-						final String player = entry.getKey();
-						
-						Storage.cannotGetQuests.add(player);
-						qQuests.plugin.getServer().getScheduler().runTaskLaterAsynchronously(qQuests.plugin, new Runnable() {
+					final String player = entry.getKey();
 
-							public void run() {
-								Storage.cannotGetQuests.remove(player);
-								if(Storage.previousQuest.get(player).onComplete().nextQuest() != null)
+					Storage.cannotGetQuests.add(player);
+					qQuests.plugin.getServer().getScheduler().runTaskLaterAsynchronously(qQuests.plugin, new Runnable() {
+
+						public void run() {
+							Storage.cannotGetQuests.remove(player);
+							if(Storage.previousQuest.get(player).onComplete().nextQuest() != null)
+							{
+								int result = qQuests.plugin.qAPI.giveQuest(player, Storage.previousQuest.get(player).onComplete().nextQuest(), false, Storage.wayPreviousQuestWereGiven.get(player));
+								if(result == 0)
 								{
-									int result = qQuests.plugin.qAPI.giveQuest(player, Storage.previousQuest.get(player).onComplete().nextQuest(), false, Storage.wayPreviousQuestWereGiven.get(player));
-									if(result == 0)
-									{
-										Chat.message(player, qQuests.plugin.qAPI.getActiveQuest(player).onJoin().message(player));
-									}
-									else
-										Chat.errorCode(result, Storage.wayPreviousQuestWereGiven.get(player), player);
+									Chat.message(player, qQuests.plugin.qAPI.getActiveQuest(player).onJoin().message(player));
 								}
-								Storage.previousQuest.remove(player);
-								Storage.wayPreviousQuestWereGiven.remove(player);
-								Storage.delayLeft.remove(player);
+								else
+									Chat.errorCode(result, Storage.wayPreviousQuestWereGiven.get(player), player);
 							}
-						}, (entry.getValue() * 20)+10);
-					}
-					Storage.rePersist();
-					Chat.logger("debug", "Persisted: " + Storage.currentQuests.toString());
-					return;
-				} catch (Exception e) {
-					Chat.logger("severe", "Quests are not able to be loaded from file! The quests will not persist!");
-					return;
+							Storage.previousQuest.remove(player);
+							Storage.wayPreviousQuestWereGiven.remove(player);
+							Storage.delayLeft.remove(player);
+						}
+					}, (entry.getValue() * 20)+10);
 				}
+				Storage.rePersist();
+				Chat.logger("debug", "Persisted: " + Storage.currentQuests.toString());
+				return;
 			}
 		});
 	}

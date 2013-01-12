@@ -18,6 +18,7 @@ import me.quaz3l.qQuests.Plugins.Signs;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Config;
 import me.quaz3l.qQuests.Util.Metrics;
+import me.quaz3l.qQuests.Util.Persist;
 import me.quaz3l.qQuests.Util.Storage;
 import me.quaz3l.qQuests.Util.Updater;
 import net.milkbowl.vault.economy.Economy;
@@ -35,9 +36,10 @@ public class qQuests extends JavaPlugin
 	public final Logger logger = Logger.getLogger(("Minecraft"));
 	public Config Config;
 	public QuestAPI qAPI;
+	public Persist persist;
 
 	// SHOULD BE FALSE
-	public boolean debug = false;
+	public boolean debug = true;
 
 	// Services
 	public Economy economy = null;
@@ -61,6 +63,7 @@ public class qQuests extends JavaPlugin
 
 		// Persist data
 		Storage.persist();
+		this.persist.save();
 
 		Chat.logger("info", "v" + this.getDescription().getVersion() + " by Quaz3l: Disabled");
 	}
@@ -70,6 +73,9 @@ public class qQuests extends JavaPlugin
 	{
 		// Setup Configuration
 		this.Config = new Config();
+		
+		// Setup Persistence
+		this.persist = new Persist();
 
 		// Setup Economy
 		this.setupEconomy();
@@ -102,12 +108,15 @@ public class qQuests extends JavaPlugin
 		} catch (IOException e) {
 			// Failed to submit the stats :-(
 		}
-
+		
+		this.persist.set("hello", "world");
+		Chat.logger("debug", (String) this.persist.get("hello"));
+		
 		// Load the current quest data
 		Storage.loadPersisted();
 
 		// Start persister of data
-		//Storage.rePersist();
+		Storage.rePersist();
 
 		// Notify Logger
 		Chat.logger("info", "by Quaz3l: Enabled");
