@@ -1,6 +1,8 @@
 package me.quaz3l.qQuests;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import me.quaz3l.qQuests.API.QuestAPI;
@@ -16,10 +18,12 @@ import me.quaz3l.qQuests.API.TaskTypes.Tame;
 import me.quaz3l.qQuests.Plugins.Commands;
 import me.quaz3l.qQuests.Plugins.Signs;
 import me.quaz3l.qQuests.Util.Chat;
-import me.quaz3l.qQuests.Util.Config;
 import me.quaz3l.qQuests.Util.Metrics;
-import me.quaz3l.qQuests.Util.Storage;
 import me.quaz3l.qQuests.Util.Updater;
+import me.quaz3l.qQuests.Util.Store.Config;
+import me.quaz3l.qQuests.Util.Store.PersistenceBean;
+import me.quaz3l.qQuests.Util.Store.PersistenceDatabase;
+import me.quaz3l.qQuests.Util.Store.Storage;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
@@ -35,9 +39,10 @@ public class qQuests extends JavaPlugin
 	public final Logger logger = Logger.getLogger(("Minecraft"));
 	public Config Config;
 	public QuestAPI qAPI;
+	public PersistenceDatabase persistence;
 
 	// SHOULD BE FALSE
-	public boolean debug = false;
+	public boolean debug = true;
 
 	// Services
 	public Economy economy = null;
@@ -56,11 +61,17 @@ public class qQuests extends JavaPlugin
 	@Override
 	public void onDisable() 
 	{
+		Chat.logger("debug", this.persistence.get("test"));
 		// To fix delays
 		getServer().getScheduler().cancelTasks(plugin);
-
-		// Persist data
-		Storage.persist();
+		
+		// Save data, and shutdown the database
+		this.persistence.shutdown();
+		
+		// Free the memory
+		this.qAPI = null;
+		this.Config = null;
+		this.persistence = null;
 
 		Chat.logger("info", "v" + this.getDescription().getVersion() + " by Quaz3l: Disabled");
 	}
@@ -70,6 +81,9 @@ public class qQuests extends JavaPlugin
 	{
 		// Setup Configuration
 		this.Config = new Config();
+		
+		// Setup persistence database
+		this.persistence = new PersistenceDatabase();
 
 		// Setup Economy
 		this.setupEconomy();
@@ -104,7 +118,10 @@ public class qQuests extends JavaPlugin
 		}
 
 		// Load the current quest data
-		Storage.loadPersisted();
+		//Storage.loadPersisted();
+		
+		this.persistence.set("test", "hello world");
+		
 
 		// Start persister of data
 		//Storage.rePersist();
@@ -196,7 +213,18 @@ public class qQuests extends JavaPlugin
 		// Setup Signs
 		getServer().getPluginManager().registerEvents(new Signs(), this);
 	}
-
+	
+	@Override
+	public List<Class<?>> getDatabaseClasses() {
+		// register bean
+		List<Class<?>> classes = new LinkedList<Class<?>>();
+		
+		// add beans
+		classes.add(PersistenceBean.class);
+		
+		return classes;
+	}
+	
 	// To connect to qQuests put this function in your plugin;
 	// And "depend: [qQuests]" in your plugin.yml
 	/*

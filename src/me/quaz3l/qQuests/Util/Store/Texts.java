@@ -1,7 +1,8 @@
-package me.quaz3l.qQuests.Util;
+package me.quaz3l.qQuests.Util.Store;
 
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.QuestModels.Quest;
+import me.quaz3l.qQuests.Util.Chat;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

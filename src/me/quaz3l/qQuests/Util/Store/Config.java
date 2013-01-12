@@ -1,4 +1,4 @@
-package me.quaz3l.qQuests.Util;
+package me.quaz3l.qQuests.Util.Store;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 import me.quaz3l.qQuests.qQuests;
+import me.quaz3l.qQuests.Util.Chat;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
