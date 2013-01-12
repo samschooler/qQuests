@@ -6,8 +6,8 @@ import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.QuestModels.Quest;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.QuestFrag;
-import me.quaz3l.qQuests.Util.Store.Storage;
-import me.quaz3l.qQuests.Util.Store.Texts;
+import me.quaz3l.qQuests.Util.Storage;
+import me.quaz3l.qQuests.Util.Texts;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

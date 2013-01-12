@@ -1,4 +1,4 @@
-package me.quaz3l.qQuests.Util.Store;
+package me.quaz3l.qQuests.Util;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.QuestModels.Quest;
-import me.quaz3l.qQuests.Util.Chat;
 
 public class Storage {
 	// Quests
@@ -31,9 +30,6 @@ public class Storage {
 
 	// Strings That Can't Get Quests
 	public static ArrayList<String> cannotGetQuests = new ArrayList<String>();
-	
-	// Changed storage variables
-	public static ArrayList<String> changed = new ArrayList<String>();
 
 
 	// Config Values

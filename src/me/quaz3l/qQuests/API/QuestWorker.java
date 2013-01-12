@@ -9,7 +9,7 @@ import me.quaz3l.qQuests.API.QuestModels.Builders.BuildQuest;
 import me.quaz3l.qQuests.API.QuestModels.Builders.BuildTask;
 import me.quaz3l.qQuests.API.QuestModels.Builders.BuildonSomething;
 import me.quaz3l.qQuests.Util.Chat;
-import me.quaz3l.qQuests.Util.Store.Storage;
+import me.quaz3l.qQuests.Util.Storage;
 
 import org.bukkit.Material;
 
