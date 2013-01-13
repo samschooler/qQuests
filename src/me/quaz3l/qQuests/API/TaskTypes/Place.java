@@ -26,7 +26,7 @@ public class Place implements Listener {
 
 		int i=-1;
 		// Go Through All The Tasks Of The Players Quest
-		for(Task task : qQuests.plugin.qAPI.getActiveQuest(player).tasks().values()) 
+		for(Task task : qQuests.plugin.qAPI.getActiveQuest(player).tasks()) 
 		{
 			i++;
 			// Check For Place Quests
@@ -43,7 +43,7 @@ public class Place implements Listener {
 			if(Storage.currentTaskProgress.get(player).get(i) < (task.amount() - 1))
 			{
 				// Add To The Players Task Progress
-				Storage.currentTaskProgress.get(player).put(i, (Storage.currentTaskProgress.get(player).get(i) + 1));
+				Storage.currentTaskProgress.get(player).set(i, (Storage.currentTaskProgress.get(player).get(i) + 1));
 
 				// Tell The Player They're Current Status
 				Chat.quotaMessage(player, Texts.PLACE_COMPLETED_QUOTA, Storage.currentTaskProgress.get(player).get(i), task.amount(), task.display());
@@ -52,8 +52,7 @@ public class Place implements Listener {
 			else if(Storage.currentTaskProgress.get(player).get(i) == (task.amount() - 1))
 			{
 				// Add To The Players Task Progress
-				Storage.currentTaskProgress.get(player).put(i, (Storage.currentTaskProgress.get(player).get(i) + 1));
-				Storage.tasksLeftInQuest.put(player, Storage.tasksLeftInQuest.get(player) - 1);
+				Storage.currentTaskProgress.get(player).set(i, (Storage.currentTaskProgress.get(player).get(i) + 1));
 
 				// Check For The Source Of The Players Quest
 				if(Storage.wayCurrentQuestsWereGiven.get(player) != null) {
@@ -61,7 +60,7 @@ public class Place implements Listener {
 					{
 						// If The Source Is Commands, Tell The Player They're Done With The Task
 						Chat.green(player, Texts.PLACE_COMPLETED_QUOTA + " Enough " + task.display() + ",");
-						if(Storage.tasksLeftInQuest.get(player) != 0)
+						if(qQuests.plugin.qAPI.getActiveQuest(player).isDone(player))
 							Chat.green(player, Texts.COMMANDS_TASKS_HELP);
 						else
 							Chat.green(player, Texts.COMMANDS_DONE_HELP);
@@ -70,7 +69,7 @@ public class Place implements Listener {
 					{
 						// If The Source Is Commands, Tell The Player They're Done With The Task
 						Chat.green(player, Texts.PLACE_COMPLETED_QUOTA + " Enough " + task.display() + ",");
-						if(Storage.tasksLeftInQuest.get(player) != 0)
+						if(qQuests.plugin.qAPI.getActiveQuest(player).isDone(player))
 							Chat.green(player, Texts.SIGNS_TASKS_HELP);
 						else
 							Chat.green(player, Texts.SIGNS_DONE_HELP);

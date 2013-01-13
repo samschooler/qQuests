@@ -1,5 +1,6 @@
 package me.quaz3l.qQuests.API;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -322,15 +323,14 @@ public class QuestAPI {
 		this.getActiveQuests().put(player, q);
 		
 		// Setup Tasks
-		HashMap<Integer, Integer> ctp = new HashMap<Integer, Integer>();
+		ArrayList<Integer> ctp = new ArrayList<Integer>();
 		int i=0;
 		while((q.tasks().size() - 1) >= i)
 		{
-			ctp.put(i, 0);
+			ctp.add(i, 0);
 			i++;
 		}
 		Storage.currentTaskProgress.put(player, ctp);
-		Storage.tasksLeftInQuest.put(player, q.tasks().size());
 		Profiles.set(player, "Given", (Profiles.getInt(player, "Given") + 1));
 	}
 	
@@ -338,7 +338,6 @@ public class QuestAPI {
 	{
 		this.getActiveQuests().remove(player);
 		Storage.currentTaskProgress.remove(player);
-		Storage.tasksLeftInQuest.remove(player);
 		Storage.wayCurrentQuestsWereGiven.remove(player);
 	}
 	

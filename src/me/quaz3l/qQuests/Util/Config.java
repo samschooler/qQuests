@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 
 import me.quaz3l.qQuests.qQuests;
 
@@ -211,6 +210,7 @@ public class Config {
 		{
 			this.qConfigIsNew = false;
 			this.getQuestConfig().options().copyDefaults(true);
+			/*
 			// Set Setup Nodes
 			this.getQuestConfig().set("Diamonds!.setup.repeated", -1);
 			this.getQuestConfig().set("Diamonds!.setup.invisible", false);
@@ -244,7 +244,7 @@ public class Config {
 			this.getQuestConfig().set("Diamonds!.onComplete.market.health", 0);
 			this.getQuestConfig().set("Diamonds!.onComplete.market.hunger", 0);
 			this.getQuestConfig().set("Diamonds!.onComplete.market.items", Arrays.asList("3 1", "4 5"));
-
+*/
 			// Save changes
 			this.saveQuestConfig();
 		}

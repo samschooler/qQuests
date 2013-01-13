@@ -3,14 +3,13 @@ package me.quaz3l.qQuests.Util;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import me.quaz3l.qQuests.qQuests;
 
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
-
-// TODO Add class specific set and get methods, or push functions of the getConfig straight to public
-
-
 
 public class Persist {
 	private YamlConfiguration Config = null;
@@ -21,22 +20,82 @@ public class Persist {
 		this.Config = this.loadConfig(this.File);
 		
 		this.getConfig();
-		qQuests.plugin.getServer().getScheduler().runTaskTimer(qQuests.plugin, new Runnable() {
+		/*qQuests.plugin.getServer().getScheduler().runTaskTimer(qQuests.plugin, new Runnable() {
 
 			public void run() {
 				qQuests.plugin.persist.save();
 			}
-		},  (Storage.persistDelay *60 * 20) + 100, Storage.persistDelay *60 * 20);
+		},  (Storage.persistDelay *60 * 20) + 100, Storage.persistDelay *60 * 20);*/
 	}
 
 	// Set a persistent data point in memory
-	public void set(String key, Object value) {
+	public void set(String key, String value) {
 		this.getConfig().set(key, value);
+	}
+	public void set(String key, HashMap<String,String> value) {
+		getConfig().set(key, null);
+		for(Object s : value.keySet()) {
+			getConfig().set(key+"."+s, value.get(s));
+		}
+	}
+	public void setArrayHashMap(String key, HashMap<String, Object[]> value) {
+		getConfig().set(key, null);
+		for(Object s : value.keySet()) {
+			getConfig().set(key+"."+s, value.get(s));
+		}
 	}
 	
 	// Get a persisted data point from memory
 	public Object get(String key) {
 		return this.getConfig().get(key);
+	}
+	public HashMap<String, String> getStringHashMap(String key) {
+		HashMap<String, String> map = new HashMap<String, String>();
+		
+		ConfigurationSection sect = getConfig().getConfigurationSection(key);
+		if(sect == null)
+			return map;
+		
+		for(String s : sect.getKeys(false)) {
+			map.put(s, sect.getString(s));
+		}
+		return map;
+	}
+	public HashMap<String, Integer> getIntegerHashMap(String key) {
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		
+		ConfigurationSection sect = getConfig().getConfigurationSection(key);
+		if(sect == null)
+			return map;
+		
+		for(String s : sect.getKeys(false)) {
+			map.put(s, sect.getInt(s));
+		}
+		return map;
+	}
+	public HashMap<String, Object[]> getArrayHashMap(String key) {
+		HashMap<String, Object[]> map = new HashMap<String, Object[]>();
+		
+		ConfigurationSection sect = getConfig().getConfigurationSection(key);
+		if(sect == null)
+			return map;
+		
+		for(String s : sect.getKeys(false)) {
+			map.put(s, sect.getList(s).toArray());
+		}
+		return map;
+	}
+	public HashMap<String, ArrayList<Integer>> getIntegerArrayHashMap(String key) {
+		HashMap<String, ArrayList<Integer>> map = new HashMap<String, ArrayList<Integer>>();
+		
+		ConfigurationSection sect = getConfig().getConfigurationSection(key);
+		if(sect == null)
+			return map;
+		
+		for(String s : sect.getKeys(false)) {
+			map.put(s, (ArrayList<Integer>) sect.getIntegerList(s));
+		}
+		return map;
 	}
 	
 	// Saves persistent data from memory to saveState.yml

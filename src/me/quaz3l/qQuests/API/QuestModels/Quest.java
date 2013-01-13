@@ -1,6 +1,6 @@
 package me.quaz3l.qQuests.API.QuestModels;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import me.quaz3l.qQuests.API.QuestModels.Builders.BuildQuest;
 
@@ -10,31 +10,31 @@ public class Quest {
 	private int repeated;
 	private boolean invisible;
 	private boolean forced;
-	
+
 	// Requirements
 	private int levelMin;
 	private int levelMax;
-	
+
 	// Tasks
-	private HashMap<Integer, Task> tasks = new HashMap<Integer, Task>();
-	
+	private ArrayList<Task> tasks = new ArrayList<Task>();
+
 	// onWhatever
 	private onSomething onJoin;
 	private onSomething onDrop;
 	private onSomething onComplete;
-	
+
 	public Quest(BuildQuest build) 
 	{
 		name = build.name();
 		repeated = build.repeated();
 		invisible = build.invisible();
 		forced = build.forced();
-		
+
 		levelMin = build.levelMin();
 		levelMax = build.levelMax();
-		
+
 		tasks = build.tasks();
-		
+
 		onJoin = build.onJoin();
 		onDrop = build.onDrop();
 		onComplete = build.onComplete();
@@ -52,18 +52,18 @@ public class Quest {
 	public final boolean forced() {
 		return this.forced;
 	}
-	
+
 	public final int levelMin() {
 		return this.levelMin;
 	}
 	public final int levelMax() {
 		return this.levelMax;
 	}
-	
-	public final HashMap<Integer, Task> tasks() {
+
+	public final ArrayList<Task> tasks() {
 		return this.tasks;
 	}
-	
+
 	public final onSomething onJoin() {
 		return this.onJoin;
 	}
@@ -72,5 +72,14 @@ public class Quest {
 	}
 	public final onSomething onComplete() {
 		return this.onComplete;
+	}
+
+	// Utility functions
+	public boolean isDone(String player) {
+		for(Task t : this.tasks()) {
+			if(!t.isDone(player))
+				return false;
+		}
+		return false;
 	}
 }

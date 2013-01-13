@@ -72,6 +72,8 @@ public class InventoryUtil {
 			HashMap<Integer, ? extends ItemStack> inv = inventory.all(items[i].getType());
 			Chat.logger("debug", "Type: " + items[i].getType());
 			Chat.logger("debug", "Matches: " + inv.values().size());
+			if(inv.values().size() <= 0)
+				return false;
 			for (ItemStack stack : inv.values()) {
 				if(amounts.get(i) <= 0)
 					break; // Got requested amount

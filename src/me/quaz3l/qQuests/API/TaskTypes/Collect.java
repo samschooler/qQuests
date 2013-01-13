@@ -14,7 +14,7 @@ public class Collect {
 		if(p == null)
 			return false;
 		
-		for(Task task : qQuests.plugin.qAPI.getActiveQuest(player).tasks().values()) 
+		for(Task task : qQuests.plugin.qAPI.getActiveQuest(player).tasks()) 
 		{
 			if(task.type().equalsIgnoreCase("collect")) {
 				if(!InventoryUtil.hasSimilarItems(new ItemStack[] { new ItemStack(task.idInt(), task.amount(), task.durability()) }, p.getInventory())) {
@@ -30,7 +30,7 @@ public class Collect {
 		if(p == null)
 			return false;
 		
-		for(Task task : qQuests.plugin.qAPI.getActiveQuest(player).tasks().values()) 
+		for(Task task : qQuests.plugin.qAPI.getActiveQuest(player).tasks()) 
 		{
 			if(task.type().equalsIgnoreCase("collect")) {
 				if(!InventoryUtil.removeItems(new ItemStack[] { new ItemStack(task.idInt(), task.amount(), task.durability()) }, p.getInventory())) {

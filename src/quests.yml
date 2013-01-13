@@ -11,3 +11,197 @@
 #              string in single or double quotes.            #
 #                                                            #
 # ########################################################## #
+# A standalone quest
+Diamonds!:
+  setup:
+    repeated: -1
+    invisible: false
+  tasks:
+    '0':
+      type: collect
+      id: 264
+      display: Diamond
+      amount: 5
+  onJoin:
+    message: Hey! Can you go get my 5 diamonds! I'll pay you $500, here is a iron pickaxe to mine the diamonds!
+    market:
+      items:
+      - 257 1
+  onDrop:
+    message: Aww fine I'll go find someone else :( I will take back my pick though
+    market:
+      items:
+      - 257 -1
+  onComplete:
+    message: Thanks! Now I can feed my lava dragon! ;)
+    delay: 10
+    market:
+      money: 500
+
+# A chain of quests
+DirtAdventure:
+  setup:
+    repeated: -1
+    invisible: false
+  tasks:
+    '0':
+      type: collect
+      id: 3
+      display: Dirt
+      amount: 64
+    '1':
+      type: destroy
+      id: 3
+      display: Dirt
+      amount: 1
+  onJoin:
+    message: I need a lot of dirt for my house! want to go and collect a stack of dirt?
+  onDrop:
+    message: It's fine I can find someone else
+  onComplete:
+    message: Thanks! This will help me so much!
+    delay: 15
+    nextQuest: SpiderAdventure
+    market:
+      money: 10
+SpiderAdventure:
+  setup:
+    repeated: -1
+    invisible: true
+  tasks:
+    '0':
+      type: kill
+      id: spider
+      display: Spider
+      amount: 5
+  onJoin:
+    message: There are spiders running amuck at night around here! Would you please kill a bunch? Maybe 5?
+  onDrop:
+    message: Oh okay... can't find any spiders? How about killing some creepers?
+    nextQuest: CreeperKiller
+  onComplete:
+    message: Thanks! They were bugging me! Haha!
+    health: 20
+    hunger: 20
+CreeperKiller:
+  setup:
+    repeated: -1
+    invisible: true
+  tasks:
+    '0':
+      type: kill
+      id: creeper
+      display: Creeper
+      amount: 2
+  onJoin:
+    message: Creeper are the worst! You need to kill something for me? Maybe kill 2 creepers?
+  onDrop:
+    message: Oh okay... You really did let me down... I need to take some of that money I just gave you...
+    money: -7.5
+  onComplete:
+    message: Thanks! They were bugging me! Haha!
+    health: 20
+    hunger: 20
+
+# A level based quest chain
+TheBasics:
+  setup:
+    invisible: false
+    repeated: 1
+  tasks:
+    '0':
+      type: destroy
+      id: 17
+      display: Logs
+      amount: 12
+  onJoin:
+    message: Welcome to my server! To start off, you should go collect 12 logs!
+  onDrop:
+    message: You need to do this quest!
+    nextQuest: TheBasics
+  onComplete:
+    message: Nice Job! Now we can continue on our journey, Type `d/q give `ato get a new quest
+    market:
+      levelSet: 1
+GetCoal:
+  setup:
+    invisible: false
+    repeated: 1
+  requirements:
+    levelMin: 1
+    levelMax: 3
+  tasks:
+    '0':
+      type: destroy
+      id: 16
+      display: Coal
+      amount: 5
+  onJoin:
+    message: We need to get some torches! Go collect 5 coal!
+  onDrop:
+    message: Can't find any coal? Stick with your darkness...
+  onComplete:
+    message: Nice! Let us light this world up!
+    levelAdd: 1
+GetMePlanks:
+  setup:
+    invisible: false
+    repeated: 1
+  requirements:
+    levelMin: 1
+    levelMax: 3
+  tasks:
+    '0':
+      type: collect
+      id: 5
+      display: Planks
+      amount: 10
+  onJoin:
+    message: Can you lend me 10 planks? I really need them for my house!
+  onDrop:
+    message: Kk I'll find someone else...
+  onComplete:
+    message: Thanks Man!
+    levelAdd: 1
+GetCobble:
+  setup:
+    invisible: false
+    repeated: 1
+  requirements:
+    levelMin: 1
+    levelMax: 3
+  tasks:
+    '0':
+      type: collect
+      id: 4
+      display: Cobble
+      amount: 12
+  onJoin:
+    message: I need some cobble for my bridge! Give me 12 please?
+  onDrop:
+    message: Fine.
+  onComplete:
+    message: Cool!
+    levelAdd: 1
+EnchantMe:
+  setup:
+    invisible: false
+    repeated: 1
+  requirements:
+    levelMin: 4
+    levelMax: 4
+  tasks:
+    '0':
+      type: enchant
+      id: 268
+      display: Wooden Sword
+      amount: 5
+  onJoin:
+    message: Go forth and enchant your wooden sword with any enchantment
+  onDrop:
+    message: Goodbye my friend.
+    market:
+      health: -20
+  onComplete:
+    message: You have completed the basics!
+    levelSet: 5

@@ -23,6 +23,17 @@ public class Commands implements CommandExecutor
 	{
 		if (s instanceof Player) 
 		{
+			/*
+			if (args.length < 2) {
+				s.sendMessage(ChatColor.RED + "You did not specify a name for this NPC!");
+				s.sendMessage(ChatColor.GRAY + "/dwdnpc create [name]");
+				return true;
+			}
+			final Location loc = ((Player) s).getLocation();
+			final String name = (args[1].length() > 16) ? args[1].substring(0, 16) : args[1];
+			qQuests.plugin.npcManager.spawnHumanNPC(name, loc);
+	*/
+
 			if(args.length < 1)
 			{
 				Texts.HELP(((Player) s).getName(), "commands");

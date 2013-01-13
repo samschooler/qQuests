@@ -15,6 +15,7 @@ import me.quaz3l.qQuests.API.TaskTypes.Place;
 import me.quaz3l.qQuests.API.TaskTypes.Tame;
 import me.quaz3l.qQuests.Plugins.Commands;
 import me.quaz3l.qQuests.Plugins.Signs;
+import me.quaz3l.qQuests.Plugins.NPCs.NPCManager;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Config;
 import me.quaz3l.qQuests.Util.Metrics;
@@ -37,9 +38,10 @@ public class qQuests extends JavaPlugin
 	public Config Config;
 	public QuestAPI qAPI;
 	public Persist persist;
+	public NPCManager npcManager;
 
 	// SHOULD BE FALSE
-	public boolean debug = true;
+	public boolean debug = false;
 
 	// Services
 	public Economy economy = null;
@@ -63,7 +65,6 @@ public class qQuests extends JavaPlugin
 
 		// Persist data
 		Storage.persist();
-		this.persist.save();
 
 		Chat.logger("info", "v" + this.getDescription().getVersion() + " by Quaz3l: Disabled");
 	}
@@ -76,6 +77,9 @@ public class qQuests extends JavaPlugin
 		
 		// Setup Persistence
 		this.persist = new Persist();
+		
+		// Setup NPCs
+		this.npcManager = new NPCManager(plugin);
 
 		// Setup Economy
 		this.setupEconomy();
@@ -114,9 +118,6 @@ public class qQuests extends JavaPlugin
 		
 		// Load the current quest data
 		Storage.loadPersisted();
-
-		// Start persister of data
-		Storage.rePersist();
 
 		// Notify Logger
 		Chat.logger("info", "by Quaz3l: Enabled");

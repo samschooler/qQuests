@@ -1,6 +1,6 @@
 package me.quaz3l.qQuests.API.QuestModels.Builders;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import me.quaz3l.qQuests.API.QuestModels.Quest;
 import me.quaz3l.qQuests.API.QuestModels.Task;
@@ -18,7 +18,7 @@ public class BuildQuest {
 	private int levelMax = -1;
 	
 	// Tasks
-	private HashMap<Integer, Task> tasks = new HashMap<Integer, Task>();
+	private ArrayList<Task> tasks = new ArrayList<Task>();
 	
 	// onWhatever
 	private onSomething onJoin;
@@ -60,7 +60,7 @@ public class BuildQuest {
 	
 	// Tasks
 	public BuildQuest tasks(int i, Task t) {
-		this.tasks.put(i, t);
+		this.tasks.add(i, t);
 		return this;
 	}
 	
@@ -103,7 +103,7 @@ public class BuildQuest {
 	}
 	
 	// Tasks
-	public final HashMap<Integer, Task> tasks() {
+	public final ArrayList<Task> tasks() {
 		return this.tasks;
 	}
 	

@@ -1,6 +1,7 @@
 package me.quaz3l.qQuests.API.QuestModels;
 
 import me.quaz3l.qQuests.API.QuestModels.Builders.BuildTask;
+import me.quaz3l.qQuests.Util.Storage;
 
 public class Task {	
 	private Integer no;
@@ -43,5 +44,10 @@ public class Task {
 	}
 	public final Integer amount() {
 		return this.amount;
+	}
+	
+	// Utility functions
+	public boolean isDone(String player) {
+		return Storage.currentTaskProgress.get(player).get(no) >= this.amount();
 	}
 }
