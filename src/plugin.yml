@@ -1,8 +1,8 @@
 name: qQuests
 main: me.quaz3l.qQuests.qQuests
-version: 2010
+version: 2011
 description: A overly customizable quests plugin.
-softdepend: [Vault, Citizens]
+softdepend: [Vault]
 commands:
   QQUESTS:
     description: Main Command To Use qQuests
