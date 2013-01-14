@@ -23,7 +23,7 @@ public class Commands implements CommandExecutor
 	{
 		if (s instanceof Player) 
 		{
-			/*
+			/* For NPCs
 			if (args.length < 2) {
 				s.sendMessage(ChatColor.RED + "You did not specify a name for this NPC!");
 				s.sendMessage(ChatColor.GRAY + "/dwdnpc create [name]");
