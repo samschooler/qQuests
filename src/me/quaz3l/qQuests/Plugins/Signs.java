@@ -22,7 +22,19 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class Signs implements Listener {
+public class Signs extends qPlugin implements Listener {
+	@Override
+	public String getName() {
+		return "Signs";
+	}
+	@Override
+	public void onEnable() {
+		qQuests.plugin.getServer().getPluginManager().registerEvents(new Signs(), qQuests.plugin);
+	}
+	@Override
+	public void onDisable() {
+		
+	}
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) 
 	{

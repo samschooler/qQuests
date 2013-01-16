@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import me.quaz3l.qQuests.API.QuestAPI;
+import me.quaz3l.qQuests.API.Requirements.LevelMaxRequirement;
+import me.quaz3l.qQuests.API.Requirements.LevelMinRequirement;
+import me.quaz3l.qQuests.API.Requirements.LevelRequirement;
 import me.quaz3l.qQuests.API.TaskTypes.Damage;
 import me.quaz3l.qQuests.API.TaskTypes.Destroy;
 import me.quaz3l.qQuests.API.TaskTypes.Distance;
@@ -15,7 +18,6 @@ import me.quaz3l.qQuests.API.TaskTypes.Place;
 import me.quaz3l.qQuests.API.TaskTypes.Tame;
 import me.quaz3l.qQuests.Plugins.Commands;
 import me.quaz3l.qQuests.Plugins.Signs;
-import me.quaz3l.qQuests.Plugins.NPCs.NPCManager;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Config;
 import me.quaz3l.qQuests.Util.Metrics;
@@ -26,7 +28,6 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -38,10 +39,10 @@ public class qQuests extends JavaPlugin
 	public Config Config;
 	public QuestAPI qAPI;
 	public Persist persist;
-	public NPCManager npcManager;
+	//public NPCManager npcManager;
 
 	// SHOULD BE FALSE
-	public boolean debug = false;
+	public boolean debug = true;
 
 	// Services
 	public Economy economy = null;
@@ -60,6 +61,9 @@ public class qQuests extends JavaPlugin
 	@Override
 	public void onDisable() 
 	{
+		// Disable qPlugins
+		this.qAPI.getPluginHandler().callDisable();
+		
 		// To fix delays
 		getServer().getScheduler().cancelTasks(plugin);
 
@@ -79,7 +83,7 @@ public class qQuests extends JavaPlugin
 		this.persist = new Persist();
 		
 		// Setup NPCs
-		this.npcManager = new NPCManager(plugin);
+		//this.npcManager = new NPCManager(plugin);
 
 		// Setup Economy
 		this.setupEconomy();
@@ -92,13 +96,16 @@ public class qQuests extends JavaPlugin
 
 		// Get The API
 		this.qAPI = new QuestAPI();
-
+		
 		// Setup Player Profiles
 		this.qAPI.getProfiles().initializePlayerProfiles();
-
+		
+		// Add Requirements
+		this.setupStockRequirements();
+		
 		// Build Quests
 		this.qAPI.getQuestWorker().buildQuests();
-
+		
 		//Setup Stock qPlugins
 		this.setupStockPlugins();
 
@@ -121,6 +128,8 @@ public class qQuests extends JavaPlugin
 
 		// Notify Logger
 		Chat.logger("info", "by Quaz3l: Enabled");
+		
+		//Config.dumpQuestConfig();
 	}
 
 	// Hooks Into The Economy Plugin
@@ -186,25 +195,21 @@ public class qQuests extends JavaPlugin
 
 		Chat.logger("debug", "Listeners Registered.");
 	}
-
+	
+	// Start The Stock Requirements
+	private void setupStockRequirements()
+	{
+		this.qAPI.getRequirementHandler().addRequirement(new LevelMinRequirement());
+		this.qAPI.getRequirementHandler().addRequirement(new LevelMaxRequirement());
+		this.qAPI.getRequirementHandler().addRequirement(new LevelRequirement());
+	}
+	
 	// Starts The Stock Plugins
 	private void setupStockPlugins()
 	{
-		qPluginCommands();
-		qPluginSigns();
-		//qPluginNPCs();
-	}
-	// Stock Plugins
-	private void qPluginCommands()
-	{
-		// Setup Command Executors
-		CommandExecutor cmd = new Commands();
-		getCommand("qQUESTS").setExecutor(cmd);
-	}
-	private void qPluginSigns()
-	{
-		// Setup Signs
-		getServer().getPluginManager().registerEvents(new Signs(), this);
+		this.qAPI.getPluginHandler().addPlugin(new Commands());
+		this.qAPI.getPluginHandler().addPlugin(new Signs());
+		//this.qAPI.getPluginHandler().addPlugin(new NPCs());
 	}
 
 	// To connect to qQuests put this function in your plugin;

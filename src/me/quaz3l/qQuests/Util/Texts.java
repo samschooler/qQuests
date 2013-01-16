@@ -8,7 +8,7 @@ import org.bukkit.Material;
 
 public class Texts {
 	// Commands
-	public static String PRIMARY_COMMAND = "/" + qQuests.plugin.Config.getConfig().getString("primaryCommand");;
+	public static String PRIMARY_COMMAND = "/" + qQuests.plugin.Config.getConfig().getString("primaryCommand");
 	public static final String GIVE_COMMAND = "give";
 	public static final String INFO_COMMAND = "info";
 	public static final String TASKS_COMMAND = "tasks";
@@ -98,6 +98,7 @@ public class Texts {
 	public static final String NO_ACTIVE_QUEST = "You Don't Have An Active Quest!";
 	public static final String LEVEL_TOO_HIGH = "Your Level Is To High!";
 	public static final String LEVEL_TOO_LOW = "Your Level Is To Low!";
+	public static final String REQUIREMENT_NOT_MET = "The Requirements Were Not Met For This Quest!";
 	public static final String QUEST_IS_FORCED = "You Must Complete This Quest, It Is Required!";
 	
 	public static final String NOT_ENOUGH_FOR_QUEST = "You Don't Have Enough To Get This Quest!";

@@ -8,7 +8,9 @@ import org.bukkit.entity.Player;
 
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.QuestModels.Quest;
+import me.quaz3l.qQuests.API.Requirements.RequirementHandler;
 import me.quaz3l.qQuests.API.TaskTypes.Collect;
+import me.quaz3l.qQuests.Plugins.PluginHandler;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.PlayerProfiles;
 import me.quaz3l.qQuests.Util.QuestFrag;
@@ -17,10 +19,14 @@ import me.quaz3l.qQuests.Util.Storage;
 public class QuestAPI {
 	private QuestWorker QuestWorker;
 	private PlayerProfiles Profiles;
+	private PluginHandler pluginHandler;
+	private RequirementHandler requirementHandler;
 	
 	public QuestAPI() {
 		this.QuestWorker = new QuestWorker();
 		this.Profiles = new PlayerProfiles();
+		this.pluginHandler = new PluginHandler();
+		this.requirementHandler = new RequirementHandler();
 	}
 	
 	public QuestWorker getQuestWorker() 
@@ -31,6 +37,12 @@ public class QuestAPI {
 	public PlayerProfiles getProfiles() 
 	{
 		return Profiles;
+	}
+	public PluginHandler getPluginHandler() {
+		return this.pluginHandler;
+	}
+	public RequirementHandler getRequirementHandler() {
+		return this.requirementHandler;
 	}
 	
 	public HashMap<String, Quest> getQuests()
@@ -140,12 +152,9 @@ public class QuestAPI {
 		if(q.repeated() > 0 && (q.repeated() - qQuests.plugin.qAPI.getProfiles().getInt(player, "FinishCount." + q.name()) <= 0))
 			return 11;
 		
-		// Check Level
-		if(q.levelMin() > qQuests.plugin.qAPI.getProfiles().getInt(player, "Level"))
-			return 12;
-		if(q.levelMax() != -1)
-			if(q.levelMax() < qQuests.plugin.qAPI.getProfiles().getInt(player, "Level"))
-				return 13;
+		// Check Requirements
+		if(!this.requirementHandler.checkRequirements(player, quest))
+			return 16;
 		
 		// Give/Take Rewards/Fees
 		int u = q.onJoin().feeReward(player);
@@ -185,12 +194,9 @@ public class QuestAPI {
 			if(q.repeated() > 0 && (q.repeated() - qQuests.plugin.qAPI.getProfiles().getInt(player, "FinishCount." + q.name()) <= 0))
 				continue;
 			
-			// Check Level
-			if(q.levelMin() > qQuests.plugin.qAPI.getProfiles().getInt(player, "Level"))
+			// Check Requirements
+			if(!this.requirementHandler.checkRequirements(player, q.name()))
 				continue;
-			if(q.levelMax() != -1)
-				if(q.levelMax() < qQuests.plugin.qAPI.getProfiles().getInt(player, "Level"))
-					continue;
 			
 			u.put(i, q);
 		}

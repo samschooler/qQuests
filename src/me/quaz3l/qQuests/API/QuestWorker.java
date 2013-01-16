@@ -12,6 +12,7 @@ import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Storage;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 
 
 /**
@@ -19,27 +20,27 @@ import org.bukkit.Material;
  */
 public class QuestWorker
 {    
-    /**
-     * This function reloads the quests and is not to be used unless you need to have the quests.yml re-indexed.
-     */
-    public void buildQuests()
+	/**
+	 * This function reloads the quests and is not to be used unless you need to have the quests.yml re-indexed.
+	 */
+	public void buildQuests()
 	{
-    	Storage.quests.clear();
-    	Storage.currentQuests.clear();
-    	qQuests.plugin.Config.loadConfigs();
-    	
+		Storage.quests.clear();
+		Storage.currentQuests.clear();
+		qQuests.plugin.Config.loadConfigs();
+
 		for (Object questName :
 			qQuests.plugin.Config.getQuestConfig()
 			.getKeys(false)) 
 		{
 			String root = questName.toString();
-			
+
 			// Validate The Quest
 			//if(!qQuests.plugin.Config.validate(root)) 
-				//continue;
-			
+			//continue;
+
 			BuildQuest quest = new BuildQuest(root);
-			
+
 			// Set Setup Variables
 			if(qQuests.plugin.Config.getQuestConfig().getString(questName + ".setup.repeated") == null)
 				quest.repeated(-1);
@@ -47,20 +48,30 @@ public class QuestWorker
 				quest.repeated(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".setup.repeated"));
 			quest.invisible(qQuests.plugin.Config.getQuestConfig().getBoolean(questName + ".setup.invisible"));
 			quest.forced(qQuests.plugin.Config.getQuestConfig().getBoolean(questName + ".setup.forced"));
-			
+
 			// Set Requirements Variables
-			quest.levelMin(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".requirements.levelMin"));
-			if(qQuests.plugin.Config.getQuestConfig().getString(questName + ".requirements.levelMax") == null)
-				quest.levelMax(-1);
-			else
-				quest.levelMax(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".requirements.levelMax"));
-			
+			ConfigurationSection requireNode = qQuests.plugin.Config.getQuestConfig().getConfigurationSection(questName + ".requirements");
+			Chat.logger("debug", "HIIRTRHD: " + questName + ".requirements");
+			if(requireNode != null) {
+				for(String key : requireNode.getKeys(false)) {
+					Chat.logger("debug", root + ".requirements." + key);
+					Object value = qQuests.plugin.Config.getQuestConfig().get(root + ".requirements." + key);
+					if(qQuests.plugin.qAPI.getRequirementHandler().isRequirement(key)) {
+						if(qQuests.plugin.qAPI.getRequirementHandler().validate(key, value))
+							quest.requirements(key, value);
+						else {
+							Chat.logger("severe", "The requirement " + key + " of quest " + root + ", is NOT valid!");
+							continue;
+						}
+					} else quest.requirements(key, value);
+				}
+			}
 			// Set Tasks Variables
 			int i=0;
 			for (Object taskNo : qQuests.plugin.Config.getQuestConfig().getConfigurationSection(questName + ".tasks").getKeys(false)) 
 			{
 				try
-			    {
+				{
 					Integer tRoot = Integer.parseInt(taskNo.toString().trim());
 					if(qQuests.plugin.Config.getQuestConfig().getConfigurationSection(questName + ".tasks." + i).getKeys(false).size() <= 0)
 						throw new NullPointerException();
@@ -98,12 +109,12 @@ public class QuestWorker
 								task.type().equalsIgnoreCase("kill_player") ||
 								task.type().equalsIgnoreCase("tame"))
 							task.id(qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".id"));
-						
+
 						task.display(qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".display"));
 						task.amount(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".tasks." + tRoot + ".amount"));
 						this.rememberTask(tRoot, task.create(), quest);
 					}
-			    }
+				}
 				catch (NullPointerException e)
 				{
 					Chat.logger("severe", "The task nodes of quest '" + root + "' do not start with 0 and go in order up! Disabling this quest...");
@@ -116,7 +127,7 @@ public class QuestWorker
 				}
 				i++;
 			}
-			
+
 			String[] strs = {""};
 			String[] qtrs = {""};
 			// Set onJoin Variables
@@ -135,7 +146,7 @@ public class QuestWorker
 				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onJoin.market.items")) {
 					strs = s.split(" ");
 					qtrs = strs[0].split(":");
-					
+
 					if(Material.matchMaterial(qtrs[0]) != null)
 					{
 						try
@@ -170,7 +181,7 @@ public class QuestWorker
 				}
 			}
 			quest.onJoin(BuildonJoin);
-			
+
 			// Set onDrop Variables
 			BuildonSomething BuildonDrop = new BuildonSomething();
 			BuildonDrop.message(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onDrop.message"));
@@ -188,7 +199,7 @@ public class QuestWorker
 				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onDrop.market.items")) {
 					strs = s.split(" ");
 					qtrs = strs[0].split(":");
-					
+
 					if(Material.matchMaterial(qtrs[0]) != null)
 					{
 						try
@@ -223,7 +234,7 @@ public class QuestWorker
 				}
 			}
 			quest.onDrop(BuildonDrop);
-			
+
 			// Set onComplete Variables
 			BuildonSomething BuildonComplete = new BuildonSomething();
 			BuildonComplete.message(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onComplete.message"));
@@ -241,7 +252,7 @@ public class QuestWorker
 				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onComplete.market.items")) {
 					strs = s.split(" ");
 					qtrs = strs[0].split(":");
-					
+
 					if(Material.matchMaterial(qtrs[0]) != null)
 					{
 						try
@@ -276,13 +287,13 @@ public class QuestWorker
 				}
 			}
 			quest.onComplete(BuildonComplete);
-			
+
 			// Only if the quest is valid, save the quest.
 			this.rememberQuest(quest.create());
 		}
 		Chat.logger("info", Storage.quests.size() + " Quests Successfully Loaded Into Memory.");
 	}
-	
+
 	private void rememberTask(Integer taskNo, Task task, BuildQuest quest) 
 	{
 		quest.tasks(taskNo, task);

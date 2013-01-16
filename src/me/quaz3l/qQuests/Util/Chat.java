@@ -129,6 +129,8 @@ public class Chat {
 				return Texts.QUEST_IS_FORCED;
 			case 15:
 				return Texts.COMMANDS_YOU_HAVE_THIS_QUEST;
+			case 16:
+				return Texts.REQUIREMENT_NOT_MET;
 			default:
 				return "Unknown";
 			}
@@ -169,6 +171,8 @@ public class Chat {
 				return Texts.QUEST_IS_FORCED;
 			case 15:
 				return Texts.YOU_HAVE_THIS_QUEST;
+			case 16:
+				return Texts.REQUIREMENT_NOT_MET;
 			default:
 				return "Unknown";
 			}

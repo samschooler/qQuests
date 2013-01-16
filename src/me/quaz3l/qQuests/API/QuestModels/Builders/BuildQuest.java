@@ -1,10 +1,12 @@
 package me.quaz3l.qQuests.API.QuestModels.Builders;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import me.quaz3l.qQuests.API.QuestModels.Quest;
 import me.quaz3l.qQuests.API.QuestModels.Task;
 import me.quaz3l.qQuests.API.QuestModels.onSomething;
+import me.quaz3l.qQuests.Util.Chat;
 
 public class BuildQuest {
 	// Setup
@@ -12,28 +14,27 @@ public class BuildQuest {
 	private int repeated = -1;
 	private boolean invisible = false;
 	private boolean forced = false;
-	
-	// Requirements
-	private int levelMin = 0;
-	private int levelMax = -1;
-	
+
+	// Better Requirements
+	private HashMap<String, Object> requirements = new HashMap<String, Object>();
+
 	// Tasks
 	private ArrayList<Task> tasks = new ArrayList<Task>();
-	
+
 	// onWhatever
 	private onSomething onJoin;
 	private onSomething onDrop;
 	private onSomething onComplete;
-	
+
 	public BuildQuest(String quest) {
 		this.name = quest;
 	}
 	public Quest create() {
 		return new Quest(this);
 	}
-	
+
 	// Setting Variables
-	
+
 	// Setup
 	public BuildQuest repeated(int i) {
 		this.repeated = i;
@@ -49,21 +50,19 @@ public class BuildQuest {
 	}
 	
 	// Requirements
-	public BuildQuest levelMin(int i) {
-		this.levelMin = i;
+	public final BuildQuest requirements(String key, Object value) {
+		this.requirements.put(key, value);
+		Chat.logger("debug", key+" "+value);
 		return this;
 	}
-	public BuildQuest levelMax(int i) {
-		this.levelMax = i;
-		return this;
-	}
-	
+
+
 	// Tasks
 	public BuildQuest tasks(int i, Task t) {
 		this.tasks.add(i, t);
 		return this;
 	}
-	
+
 	// onWhatever
 	public BuildQuest onJoin(BuildonSomething b) {
 		this.onJoin = b.create();
@@ -77,9 +76,9 @@ public class BuildQuest {
 		this.onComplete = b.create();
 		return this;
 	}
-	
+
 	// Getting Variables
-	
+
 	// Setup
 	public final String name() {
 		return this.name;
@@ -93,20 +92,18 @@ public class BuildQuest {
 	public final boolean forced() {
 		return this.forced;
 	}
-	
+
 	// Requirements
-	public final int levelMin() {
-		return this.levelMin;
+	public final HashMap<String, Object> requirements() {
+		return this.requirements;
 	}
-	public final int levelMax() {
-		return this.levelMax;
-	}
-	
+
+
 	// Tasks
 	public final ArrayList<Task> tasks() {
 		return this.tasks;
 	}
-	
+
 	// onWhatever
 	public final onSomething onJoin() {
 		return this.onJoin;

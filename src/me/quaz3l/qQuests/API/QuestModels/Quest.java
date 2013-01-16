@@ -1,6 +1,7 @@
 package me.quaz3l.qQuests.API.QuestModels;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import me.quaz3l.qQuests.API.QuestModels.Builders.BuildQuest;
 
@@ -10,10 +11,9 @@ public class Quest {
 	private int repeated;
 	private boolean invisible;
 	private boolean forced;
-
-	// Requirements
-	private int levelMin;
-	private int levelMax;
+	
+	// Better Requirements
+	private HashMap<String, Object> requirements = new HashMap<String, Object>();
 
 	// Tasks
 	private ArrayList<Task> tasks = new ArrayList<Task>();
@@ -30,9 +30,8 @@ public class Quest {
 		invisible = build.invisible();
 		forced = build.forced();
 
-		levelMin = build.levelMin();
-		levelMax = build.levelMax();
-
+		requirements = build.requirements();
+		
 		tasks = build.tasks();
 
 		onJoin = build.onJoin();
@@ -53,11 +52,8 @@ public class Quest {
 		return this.forced;
 	}
 
-	public final int levelMin() {
-		return this.levelMin;
-	}
-	public final int levelMax() {
-		return this.levelMax;
+	public final HashMap<String, Object> requirements() {
+		return this.requirements;
 	}
 
 	public final ArrayList<Task> tasks() {

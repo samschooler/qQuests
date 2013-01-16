@@ -16,8 +16,23 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-public class Commands implements CommandExecutor 
-{    
+public class Commands extends qPlugin implements CommandExecutor
+{   
+	@Override
+	public String getName() {
+		return "Commands";
+	}
+	@Override
+	public void onEnable() {
+		// Setup Command Executor
+		qQuests.plugin.getCommand("qQUESTS").setExecutor(this);
+	}
+
+	@Override
+	public void onDisable() {
+		
+	}
+
 	@Override
 	public boolean onCommand(final CommandSender s, Command c, String l, String[] args) 
 	{
@@ -32,7 +47,7 @@ public class Commands implements CommandExecutor
 			final Location loc = ((Player) s).getLocation();
 			final String name = (args[1].length() > 16) ? args[1].substring(0, 16) : args[1];
 			qQuests.plugin.npcManager.spawnHumanNPC(name, loc);
-	*/
+			 */
 
 			if(args.length < 1)
 			{
