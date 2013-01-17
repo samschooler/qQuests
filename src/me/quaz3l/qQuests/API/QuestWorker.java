@@ -63,7 +63,10 @@ public class QuestWorker
 							Chat.logger("severe", "The requirement " + key + " of quest " + root + ", is NOT valid!");
 							continue;
 						}
-					} else quest.requirements(key, value);
+					} else {
+						Chat.logger("warning", "The requirement " + key + " of quest " + root + ", is not supported by standalone qQuests, if you are using a plugin that supports qQuests, this is fine, otherwise, it will not do anything.");
+						quest.requirements(key, value);
+					}
 				}
 			}
 			// Set Tasks Variables
