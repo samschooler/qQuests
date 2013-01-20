@@ -7,6 +7,7 @@ import java.util.Random;
 import org.bukkit.entity.Player;
 
 import me.quaz3l.qQuests.qQuests;
+import me.quaz3l.qQuests.API.Effects.EffectHandler;
 import me.quaz3l.qQuests.API.QuestModels.Quest;
 import me.quaz3l.qQuests.API.Requirements.RequirementHandler;
 import me.quaz3l.qQuests.API.TaskTypes.Collect;
@@ -21,12 +22,14 @@ public class QuestAPI {
 	private PlayerProfiles Profiles;
 	private PluginHandler pluginHandler;
 	private RequirementHandler requirementHandler;
+	private EffectHandler effectHandler;
 	
 	public QuestAPI() {
 		this.QuestWorker = new QuestWorker();
 		this.Profiles = new PlayerProfiles();
 		this.pluginHandler = new PluginHandler();
 		this.requirementHandler = new RequirementHandler();
+		this.effectHandler = new EffectHandler();
 	}
 	
 	public QuestWorker getQuestWorker() 
@@ -38,11 +41,16 @@ public class QuestAPI {
 	{
 		return Profiles;
 	}
+	
+	// API Handlers
 	public PluginHandler getPluginHandler() {
 		return this.pluginHandler;
 	}
 	public RequirementHandler getRequirementHandler() {
 		return this.requirementHandler;
+	}
+	public EffectHandler getEffectHandler() {
+		return this.effectHandler;
 	}
 	
 	public HashMap<String, Quest> getQuests()

@@ -11,5 +11,8 @@ public abstract class qPlugin {
 	 * Called when a qPlugin is added to qQuests
 	 */
 	public abstract void onEnable();
+	/**
+	 * Called when a qPlugin is disabled in qQuests
+	 */
 	public abstract void onDisable();
 }

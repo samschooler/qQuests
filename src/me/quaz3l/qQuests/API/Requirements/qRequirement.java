@@ -5,10 +5,10 @@ import me.quaz3l.qQuests.Plugins.qPlugin;
 public abstract class qRequirement extends qPlugin {
 	/**
 	 * @param player - The player to check
-	 * @param player - The quest to check against
+	 * @param value - The value of the requirement
 	 * @return If the player passes the requirement
 	 */
-	public abstract boolean passedRequirement(String player, String quest);
+	public abstract boolean passedRequirement(String player, Object value);
 	
 	/**
 	 * 

@@ -3,6 +3,7 @@ package me.quaz3l.qQuests.API.Requirements;
 import java.util.HashMap;
 
 import me.quaz3l.qQuests.qQuests;
+import me.quaz3l.qQuests.API.QuestModels.Quest;
 import me.quaz3l.qQuests.Util.Chat;
 
 public class RequirementHandler {
@@ -19,7 +20,7 @@ public class RequirementHandler {
 		}
 		this.requirements.put(requirement.getName(), requirement);
 		requirement.onEnable();
-		
+
 		Chat.logger("debug", "Added requirement: " + requirement.getName());
 		Chat.logger("debug", "Requirement count: " + requirements.size());
 	}
@@ -38,15 +39,19 @@ public class RequirementHandler {
 	 */
 	public boolean checkRequirements(String player, String quest) {		
 		Chat.logger("debug", "Req: "+ qQuests.plugin.qAPI.getQuest(quest).requirements().keySet().toString()+"");
-		for(String name : qQuests.plugin.qAPI.getQuest(quest).requirements().keySet()) {
+		Quest q = qQuests.plugin.qAPI.getQuest(quest);
+		for(String name : q.requirements().keySet()) {
 			Chat.logger("debug", quest);
 			Chat.logger("debug", name);
-			if(!this.requirements.get(name).passedRequirement(player, quest))
-				return false;
+			if(this.isRequirement(name)) {
+				if(!this.requirements.get(name).passedRequirement(player, q.requirements().get(name))) {
+					return false;
+				}
+			}
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Calls the enable function in all qRequirements
 	 */

@@ -203,7 +203,12 @@ public class Updater
 		if(url != null)
 		{
 			// Obtain the results of the project's file feed
-			readFeed();
+			try {
+				readFeed();
+			}
+			catch(Exception e) {
+				return;
+			}
 			if(versionCheck(versionTitle))
 			{
 				String fileLink = getFile(versionLink);
