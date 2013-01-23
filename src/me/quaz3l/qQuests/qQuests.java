@@ -119,10 +119,7 @@ public class qQuests extends JavaPlugin
 		} catch (IOException e) {
 			// Failed to submit the stats :-(
 		}
-		
-		this.persist.set("hello", "world");
-		Chat.logger("debug", (String) this.persist.get("hello"));
-		
+				
 		// Load the current quest data
 		Storage.loadPersisted();
 

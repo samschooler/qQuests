@@ -1,18 +1,18 @@
 package me.quaz3l.qQuests.Plugins;
 
-public abstract class qPlugin {
+public class qPlugin {
 	
 	/**
 	 * @return The unique name of the qPlugin
 	 */
-	public abstract String getName();
+	public String getName() {return null;}
 	
 	/**
 	 * Called when a qPlugin is added to qQuests
 	 */
-	public abstract void onEnable();
+	public void onEnable() {}
 	/**
 	 * Called when a qPlugin is disabled in qQuests
 	 */
-	public abstract void onDisable();
+	public void onDisable() {}
 }
