@@ -108,8 +108,8 @@ public class Texts {
 
 	
 	// Non-Fatal Task Errors
-	public static final String COMMANDS_TASKS_NOT_COMPLETED = "You Haven't Completed All The Tasks! Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + TASKS_COMMAND + ChatColor.RED + " To See Them.";
-	public static final String TASKS_NOT_COMPLETED = "You Haven't Completed All The Tasks!";
+	public static final String COMMANDS_TASKS_NOT_COMPLETED = "You Need To Complete All The Tasks First! Type " + ChatColor.YELLOW + PRIMARY_COMMAND + " " + TASKS_COMMAND + ChatColor.RED + " To See Them.";
+	public static final String TASKS_NOT_COMPLETED = "You Need To Complete All The Tasks First!";
 	
 	// Listener Texts
 	public static final String DESTROY_COMPLETED_QUOTA = "You Have Broken";

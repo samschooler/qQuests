@@ -21,21 +21,19 @@ public class Tame implements Listener {
 		if(!qQuests.plugin.qAPI.hasActiveQuest(player))
 			return;
 		String type = e.getEntityType().getName();
-		
-		
-		
+				
 		int i=-1;
 		// Go Through All The Tasks Of The Players Quest
 		for(Task task : qQuests.plugin.qAPI.getActiveQuest(player).tasks()) 
 		{
 			i++;
 			// Check For Tame Quests
-			if(task.type().equalsIgnoreCase("tame"))
+			if(!task.type().equalsIgnoreCase("tame"))
 				continue;
 			// Check For The Correct Block Id
-			if(task.idString().equalsIgnoreCase(type))
+			if(!task.idString().equalsIgnoreCase(type))
 				continue;
-			
+						
 			// Check If The Player Is Done With The Task
 			if(Storage.currentTaskProgress.get(player).get(i) < (task.amount() - 1))
 			{

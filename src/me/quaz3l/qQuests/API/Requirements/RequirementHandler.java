@@ -13,7 +13,9 @@ public class RequirementHandler {
 	 * Used to connect a qRequirement with qQuests properly
 	 * @param requirement - The qRequirement to be added
 	 */
-	public void addRequirement(qRequirement requirement) {
+	public void addRequirement(Object req) {
+		Chat.logger("debug", "Adding requirement!!");
+		qRequirement requirement = (qRequirement) req;
 		if(requirement.getName() == null) {
 			Chat.logger("debug", "A requirement that was added does not have a name! Requirements need to be named with the name function!");
 			return;
@@ -43,6 +45,7 @@ public class RequirementHandler {
 		for(String name : q.requirements().keySet()) {
 			Chat.logger("debug", quest);
 			Chat.logger("debug", name);
+			Chat.logger("debug", player);
 			if(this.isRequirement(name)) {
 				if(!this.requirements.get(name).passedRequirement(player, q.requirements().get(name))) {
 					return false;
