@@ -1,14 +1,19 @@
 package me.quaz3l.qQuests.API.QuestModels;
 
+import org.bukkit.Location;
+
 import me.quaz3l.qQuests.API.QuestModels.Builders.BuildTask;
 import me.quaz3l.qQuests.Util.Storage;
 
 public class Task {	
 	private Integer no;
 	private String type;
-	private Integer id;
+	private Integer idInteger;
 	private short durability;
-	private String ids;
+	private String idString;
+	private Location idLocation1;
+	private Location idLocation2;
+	private double radius;
 	private String display;
 	private Integer amount;
 
@@ -16,9 +21,12 @@ public class Task {
 	{
 		no = build.no();
 		type = build.type();
-		id = build.id();
+		idInteger = build.idInteger();
 		durability = build.durability();
-		ids = build.ids();
+		idString = build.idString();
+		idLocation1 = build.idLocation1();
+		idLocation2 = build.idLocation2();
+		radius = build.radius();
 		display = build.display();
 		amount = build.amount();
 	}
@@ -31,13 +39,22 @@ public class Task {
 		return this.type;
 	}
 	public final Integer idInt() {
-		return this.id;
+		return this.idInteger;
 	}
 	public final short durability() {
 		return this.durability;
 	}
 	public final String idString() {
-		return this.ids;
+		return this.idString;
+	}
+	public final Location idLocation1() {
+		return this.idLocation1;
+	}
+	public final Location idLocation2() {
+		return this.idLocation2;
+	}
+	public final double radius() {
+		return this.radius;
 	}
 	public final String display() {
 		return this.display;

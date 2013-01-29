@@ -59,7 +59,7 @@ public class BuildQuest {
 
 	// Tasks
 	public BuildQuest tasks(int i, Task t) {
-		this.tasks.add(i, t);
+		this.tasks.add(t);
 		return this;
 	}
 

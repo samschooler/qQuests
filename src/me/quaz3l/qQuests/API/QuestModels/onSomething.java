@@ -200,7 +200,7 @@ public class onSomething {
 			}
 		}, 0, 60); // Update every 3 seconds
 		Storage.cannotGetQuests.add(player);
-		qQuests.plugin.getServer().getScheduler().scheduleSyncDelayedTask(qQuests.plugin, new Runnable() {
+		qQuests.plugin.getServer().getScheduler().runTaskLater(qQuests.plugin, new Runnable() {
 			public void run() {
 				Storage.cannotGetQuests.remove(player);
 				timer.cancel();

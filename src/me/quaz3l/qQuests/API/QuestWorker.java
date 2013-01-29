@@ -11,7 +11,9 @@ import me.quaz3l.qQuests.API.QuestModels.Builders.BuildonSomething;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Storage;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 
 
@@ -111,8 +113,33 @@ public class QuestWorker
 						else if(task.type().equalsIgnoreCase("kill") ||
 								task.type().equalsIgnoreCase("kill_player") ||
 								task.type().equalsIgnoreCase("tame"))
+						{
 							task.id(qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".id"));
-
+						}
+						else if(task.type().equalsIgnoreCase("goto")) {
+							World world1 = qQuests.plugin.getServer().getWorld(qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".id.1.world"));
+							double x1 = qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".tasks." + tRoot + ".id.1.x");
+							double y1 = qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".tasks." + tRoot + ".id.1.y");
+							double z1 = qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".tasks." + tRoot + ".id.1.z");
+							double radius = qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".tasks." + tRoot + ".id.radius");
+							
+							World world2 = qQuests.plugin.getServer().getWorld(qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".id.1.world"));
+							double x2 = qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".tasks." + tRoot + ".id.2.x");
+							double y2 = qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".tasks." + tRoot + ".id.2.y");
+							double z2 = qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".tasks." + tRoot + ".id.2.z");
+							
+							if(world1 != null) {
+								if(world2 != null) {
+									// Cuboid
+									task.id(new Location(world1, x1, y1, z1), new Location(world2, x2, y2, z2), 0);
+								} else {
+									// Radius
+									task.id(new Location(world1, x1, y1, z1), null, radius);
+								}
+							} else {
+								Chat.logger("severe", "The task nodes of quest '" + root + "' do not define a valid world name! Disabling this quest...");
+							}
+						}
 						task.display(qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".display"));
 						task.amount(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".tasks." + tRoot + ".amount"));
 						this.rememberTask(tRoot, task.create(), quest);

@@ -11,7 +11,6 @@ import me.quaz3l.qQuests.API.TaskTypes.Damage;
 import me.quaz3l.qQuests.API.TaskTypes.Destroy;
 import me.quaz3l.qQuests.API.TaskTypes.Distance;
 import me.quaz3l.qQuests.API.TaskTypes.Enchant;
-import me.quaz3l.qQuests.API.TaskTypes.GoTo;
 import me.quaz3l.qQuests.API.TaskTypes.Kill;
 import me.quaz3l.qQuests.API.TaskTypes.Kill_Player;
 import me.quaz3l.qQuests.API.TaskTypes.Place;
@@ -182,8 +181,8 @@ public class qQuests extends JavaPlugin
 		getServer().getPluginManager().registerEvents(new Place(), this);
 
 		getServer().getPluginManager().registerEvents(new Distance(), this);
-		getServer().getPluginManager().registerEvents(new GoTo(), this);
-
+		// GoTo is handled by tasks
+		
 		getServer().getPluginManager().registerEvents(new Kill_Player(), this);
 		getServer().getPluginManager().registerEvents(new Kill(), this);
 		getServer().getPluginManager().registerEvents(new Tame(), this);

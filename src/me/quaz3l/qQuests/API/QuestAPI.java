@@ -11,6 +11,7 @@ import me.quaz3l.qQuests.API.Effects.EffectHandler;
 import me.quaz3l.qQuests.API.QuestModels.Quest;
 import me.quaz3l.qQuests.API.Requirements.RequirementHandler;
 import me.quaz3l.qQuests.API.TaskTypes.Collect;
+import me.quaz3l.qQuests.API.TaskTypes.GoTo;
 import me.quaz3l.qQuests.Plugins.PluginHandler;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.PlayerProfiles;
@@ -169,6 +170,7 @@ public class QuestAPI {
 		if(u != 0)
 			return u;
 		
+		
 		// Start Quest
 		startQuest(player, q);
 		Storage.wayCurrentQuestsWereGiven.put(player, via);
@@ -274,8 +276,8 @@ public class QuestAPI {
 					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("kill") ||
 					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("kill_player") ||
 					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("enchant") ||
-					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("tame")
-					//type.equalsIgnoreCase("goto") ||
+					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("tame") ||
+					getActiveQuest(player).tasks().get(i).type().equalsIgnoreCase("goto")
 					//type.equalsIgnoreCase("distance")
 					)
 				if(Storage.currentTaskProgress.get(player).get(i) < getActiveQuest(player).tasks().get(i).amount())
@@ -342,8 +344,21 @@ public class QuestAPI {
 		while((q.tasks().size() - 1) >= i)
 		{
 			ctp.add(i, 0);
+			
+			// Check For GoTo tasks TODO TEMP fix
+			if(q.tasks().get(i).type().equalsIgnoreCase("goto")) {
+				if(q.tasks().get(i).idLocation1() != null) {
+					if(q.tasks().get(i).idLocation2() != null) {
+						GoTo.launchAgent(player, q.tasks().get(i).idLocation1(), q.tasks().get(i).idLocation2());
+					} else {
+						GoTo.launchAgent(player, q.tasks().get(i).idLocation1(), q.tasks().get(i).radius());
+					}
+				}
+			}
+			
 			i++;
 		}
+				
 		Storage.currentTaskProgress.put(player, ctp);
 		Profiles.set(player, "Given", (Profiles.getInt(player, "Given") + 1));
 	}
