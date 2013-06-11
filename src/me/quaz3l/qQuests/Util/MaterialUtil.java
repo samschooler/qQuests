@@ -325,10 +325,10 @@ public class MaterialUtil {
                 }
 
                 if (material == Material.INK_SACK) {
-                    color = DyeColor.getByData((byte) (15 - color.getData()));
+                	color = DyeColor.getByDyeData((byte) (15 - color.getDyeData()));
                 }
 
-                return color.getData();
+                return color.getDyeData();
             } else if (materialData instanceof Tree) {
                 try {
                     return TreeSpecies.valueOf(type).getData();

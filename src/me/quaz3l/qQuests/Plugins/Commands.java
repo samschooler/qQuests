@@ -30,7 +30,7 @@ public class Commands extends qPlugin implements CommandExecutor
 
 	@Override
 	public void onDisable() {
-		
+
 	}
 
 	@Override
@@ -163,6 +163,8 @@ public class Commands extends qPlugin implements CommandExecutor
 										Chat.noPrefixMessage(((Player) s).getName(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Enchant " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 								else if(q.tasks().get(i).type().equalsIgnoreCase("tame"))
 									Chat.noPrefixMessage(((Player) s).getName(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Tame " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
+								else if(q.tasks().get(i).type().equalsIgnoreCase("goto"))
+									Chat.noPrefixMessage(((Player) s).getName(), ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Go To " + q.tasks().get(i).display());
 								i++;
 							}
 						} else Chat.error(((Player) s).getName(), Texts.NO_ACTIVE_QUEST);
@@ -189,17 +191,6 @@ public class Commands extends qPlugin implements CommandExecutor
 						Integer result = qQuests.plugin.qAPI.completeQuest(((Player) s).getName());
 						if(result != 0)
 							Chat.error(((Player) s).getName(), Chat.errorCode(result, "Commands", ((Player)s).getName()));
-					}
-					else Chat.noPerms(((Player) s).getName());
-				}
-				else if(args[0].equalsIgnoreCase("reload")) 
-				{
-					if(qQuests.plugin.qAPI.checkPerms(((Player) s).getName(), "reload"))
-					{
-						Bukkit.getPluginManager().disablePlugin(qQuests.plugin);
-						Bukkit.getPluginManager().enablePlugin(qQuests.plugin);
-						Chat.logger("info", "Reloaded.");
-						Chat.green(((Player) s).getName(), "Reloaded.");
 					}
 					else Chat.noPerms(((Player) s).getName());
 				}
@@ -238,6 +229,20 @@ public class Commands extends qPlugin implements CommandExecutor
 					}
 					else Chat.noPerms(((Player) s).getName());
 				}
+				else if((args[0].equalsIgnoreCase("admin"))) {
+					// TODO
+					if(args[1].equalsIgnoreCase("reload")) 
+					{
+						if(qQuests.plugin.qAPI.checkPerms(((Player) s).getName(), "admin.reload"))
+						{
+							Bukkit.getPluginManager().disablePlugin(qQuests.plugin);
+							Bukkit.getPluginManager().enablePlugin(qQuests.plugin);
+							Chat.logger("info", "Reloaded.");
+							Chat.green(((Player) s).getName(), "Reloaded.");
+						}
+						else Chat.noPerms(((Player) s).getName());
+					}
+				}
 				else
 				{
 					Texts.HELP(((Player) s).getName(), "commands");
@@ -251,8 +256,8 @@ public class Commands extends qPlugin implements CommandExecutor
 			}
 			else
 			{ 
-				if(args[0].equalsIgnoreCase("reload")) 
-				{
+				if((args[0].equalsIgnoreCase("admin"))) {
+					// TODO
 					Bukkit.getPluginManager().disablePlugin(qQuests.plugin);
 					Bukkit.getPluginManager().enablePlugin(qQuests.plugin);
 					Chat.logger("info", "Reloaded.");

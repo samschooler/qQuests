@@ -1,37 +1,39 @@
 package me.quaz3l.qQuests.API.Requirements;
 
+import org.bukkit.ChatColor;
+
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.Util.Chat;
 
 public class LevelMinRequirement extends qRequirement {
 
 	@Override
-	public boolean passedRequirement(String player, Object value) {
+	public int passedRequirement(String player, Object value) {
 		try {
 			if(Integer.parseInt(value.toString()) > qQuests.plugin.qAPI.getProfiles().getInt(player, "Level"))
-				return false;
+				return 1;
 		} catch(NumberFormatException e) {
-			Chat.logger("severe", "The requirement " + this.getName() + ", is NOT a number, it MUST be a number!");
+			Chat.logger("severe", this.parseError(player, value, -1));
 		}
-		return true;
+		return 0;
 	}
 
 	@Override
-	public boolean validate(Object value) {
+	public int validate(Object value) {
 		if(value == null) {
-			return false;
+			return -1;
 		}
 		try {
 			Integer.parseInt(value.toString());
 		} catch(NumberFormatException e) {
-			return false;
+			return -1;
 		}
-		return true;
+		return 0;
 	}
 
 	@Override
 	public String getName() {
-		return "levelMin";
+		return "level";
 	}
 
 	@Override
@@ -42,5 +44,15 @@ public class LevelMinRequirement extends qRequirement {
 	@Override
 	public void onDisable() {
 
+	}
+
+	@Override
+	public String parseError(String player, Object value, int errorCode) {
+		switch(errorCode) {
+		case -1: return "The requirement " + this.getName() + ", is NOT a number, it MUST be a number!";
+		case  1: return "You need to be on a level above " + ChatColor.GOLD + value + ChatColor.RED + " to get this quest, you are on level " + ChatColor.GOLD + qQuests.plugin.qAPI.getProfiles().getInt(player, "Level") + ChatColor.RED + ".";
+		case  2: return "You level is not high enough to get this quest!";
+		default: return "Unknown Error! LULZ! :p";
+		}
 	}
 }

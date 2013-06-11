@@ -20,16 +20,13 @@ public class Persist {
 		this.Config = this.loadConfig(this.File);
 		
 		this.getConfig();
-		/*qQuests.plugin.getServer().getScheduler().runTaskTimer(qQuests.plugin, new Runnable() {
-
-			public void run() {
-				qQuests.plugin.persist.save();
-			}
-		},  (Storage.persistDelay *60 * 20) + 100, Storage.persistDelay *60 * 20);*/
 	}
 
 	// Set a persistent data point in memory
 	public void set(String key, String value) {
+		this.getConfig().set(key, value);
+	}
+	public void set(String key, Boolean value) {
 		this.getConfig().set(key, value);
 	}
 	public void set(String key, HashMap<String,String> value) {
@@ -46,9 +43,6 @@ public class Persist {
 	}
 	
 	// Get a persisted data point from memory
-	public Object get(String key) {
-		return this.getConfig().get(key);
-	}
 	public HashMap<String, String> getStringHashMap(String key) {
 		HashMap<String, String> map = new HashMap<String, String>();
 		
@@ -103,7 +97,7 @@ public class Persist {
 		this.saveConfig(this.File, this.Config);
 	}
 	
-	private YamlConfiguration getConfig()
+	public YamlConfiguration getConfig()
 	{
 		if (Config == null) {
 			return loadConfig(this.File);

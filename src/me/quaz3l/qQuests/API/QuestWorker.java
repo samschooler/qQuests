@@ -117,24 +117,23 @@ public class QuestWorker
 							task.id(qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".id"));
 						}
 						else if(task.type().equalsIgnoreCase("goto")) {
-							World world1 = qQuests.plugin.getServer().getWorld(qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".id.1.world"));
+							World world = qQuests.plugin.getServer().getWorld(qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".id.world"));
 							double x1 = qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".tasks." + tRoot + ".id.1.x");
 							double y1 = qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".tasks." + tRoot + ".id.1.y");
 							double z1 = qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".tasks." + tRoot + ".id.1.z");
-							double radius = qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".tasks." + tRoot + ".id.radius");
-							
-							World world2 = qQuests.plugin.getServer().getWorld(qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".id.1.world"));
+							double radius = qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".tasks." + tRoot + ".id.1.radius");
+
 							double x2 = qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".tasks." + tRoot + ".id.2.x");
 							double y2 = qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".tasks." + tRoot + ".id.2.y");
 							double z2 = qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".tasks." + tRoot + ".id.2.z");
-							
-							if(world1 != null) {
-								if(world2 != null) {
+
+							if(world != null) {
+								if(qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".id.2.x") != null) {
 									// Cuboid
-									task.id(new Location(world1, x1, y1, z1), new Location(world2, x2, y2, z2), 0);
+									task.id(new Location(world, x1, y1, z1), new Location(world, x2, y2, z2), 0);
 								} else {
 									// Radius
-									task.id(new Location(world1, x1, y1, z1), null, radius);
+									task.id(new Location(world, x1, y1, z1), null, radius);
 								}
 							} else {
 								Chat.logger("severe", "The task nodes of quest '" + root + "' do not define a valid world name! Disabling this quest...");
@@ -147,6 +146,7 @@ public class QuestWorker
 				}
 				catch (NullPointerException e)
 				{
+					e.printStackTrace();
 					Chat.logger("severe", "The task nodes of quest '" + root + "' do not start with 0 and go in order up! Disabling this quest...");
 					continue;
 				}
@@ -162,6 +162,28 @@ public class QuestWorker
 			String[] qtrs = {""};
 			// Set onJoin Variables
 			BuildonSomething BuildonJoin = new BuildonSomething();
+
+			// Set Effects Variables
+			ConfigurationSection onJoinEffectNode = qQuests.plugin.Config.getQuestConfig().getConfigurationSection(questName + ".onJoin");
+			Chat.logger("debug", "QuestWorker.onJoin: Node in config: " + questName + ".onJoin");
+			if(onJoinEffectNode != null) {
+				for(String key : onJoinEffectNode.getKeys(false)) {
+					Chat.logger("debug", root + ".onJoin." + key);
+					Object value = qQuests.plugin.Config.getQuestConfig().get(root + ".onJoin." + key);
+					if(qQuests.plugin.qAPI.getEffectHandler().isEffect(key)) {
+						if(qQuests.plugin.qAPI.getEffectHandler().validate(key, value))
+							BuildonJoin.addEffect(key, value);
+						else {
+							Chat.logger("severe", "The effect " + key + " of quest " + root + ", is NOT valid!");
+							continue;
+						}
+					} else {
+						Chat.logger("warning", "The effect " + key + " of quest " + root + ", is not supported by standalone qQuests, if you are using a plugin that supports qQuests, this is fine, otherwise, it will not do anything.");
+						BuildonJoin.addEffect(key, value);
+					}
+				}
+			}
+
 			BuildonJoin.message(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onJoin.message"));
 			BuildonJoin.delay(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.delay"));
 			BuildonJoin.money(qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".onJoin.market.money"));
@@ -214,6 +236,29 @@ public class QuestWorker
 
 			// Set onDrop Variables
 			BuildonSomething BuildonDrop = new BuildonSomething();
+
+			// Set Effects Variables
+			ConfigurationSection onDropEffectNode = qQuests.plugin.Config.getQuestConfig().getConfigurationSection(questName + ".onDrop");
+			Chat.logger("debug", "QuestWorker.onDrop: Node in config: " + questName + ".onDrop");
+			if(onJoinEffectNode != null) {
+				for(String key : onDropEffectNode.getKeys(false)) {
+					Chat.logger("debug", root + ".onDrop." + key);
+					Object value = qQuests.plugin.Config.getQuestConfig().get(root + ".onDrop." + key);
+					if(qQuests.plugin.qAPI.getEffectHandler().isEffect(key)) {
+						if(qQuests.plugin.qAPI.getEffectHandler().validate(key, value))
+							BuildonDrop.addEffect(key, value);
+						else {
+							Chat.logger("severe", "The effect " + key + " of quest " + root + ", is NOT valid!");
+							continue;
+						}
+					} else {
+						Chat.logger("warning", "The effect " + key + " of quest " + root + ", is not supported by standalone qQuests, if you are using a plugin that supports qQuests, this is fine, otherwise, it will not do anything.");
+						BuildonDrop.addEffect(key, value);
+					}
+				}
+			}
+
+
 			BuildonDrop.message(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onDrop.message"));
 			BuildonDrop.delay(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.delay"));
 			BuildonDrop.nextQuest(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onDrop.nextQuest"));
@@ -267,6 +312,28 @@ public class QuestWorker
 
 			// Set onComplete Variables
 			BuildonSomething BuildonComplete = new BuildonSomething();
+
+			// Set Effects Variables
+			ConfigurationSection onCompleteEffectNode = qQuests.plugin.Config.getQuestConfig().getConfigurationSection(questName + ".onComplete");
+			Chat.logger("debug", "QuestWorker.onJoin: Node in config: " + questName + ".onComplete");
+			if(onJoinEffectNode != null) {
+				for(String key : onCompleteEffectNode.getKeys(false)) {
+					Chat.logger("debug", root + ".onComplete." + key);
+					Object value = qQuests.plugin.Config.getQuestConfig().get(root + ".onComplete." + key);
+					if(qQuests.plugin.qAPI.getEffectHandler().isEffect(key)) {
+						if(qQuests.plugin.qAPI.getEffectHandler().validate(key, value))
+							BuildonComplete.addEffect(key, value);
+						else {
+							Chat.logger("severe", "The effect " + key + " of quest " + root + ", is NOT valid!");
+							continue;
+						}
+					} else {
+						Chat.logger("warning", "The effect " + key + " of quest " + root + ", is not supported by standalone qQuests, if you are using a plugin that supports qQuests, this is fine, otherwise, it will not do anything.");
+						BuildonComplete.addEffect(key, value);
+					}
+				}
+			}
+
 			BuildonComplete.message(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onComplete.message"));
 			BuildonComplete.delay(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.delay"));
 			BuildonComplete.nextQuest(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onComplete.nextQuest"));

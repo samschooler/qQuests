@@ -381,6 +381,8 @@ public class Signs extends qPlugin implements Listener {
 								Chat.noPrefixMessage(player, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Enchant " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
 						else if(q.tasks().get(i).type().equalsIgnoreCase("tame"))
 							Chat.noPrefixMessage(player, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Tame " + q.tasks().get(i).amount() + " " + q.tasks().get(i).display());
+						else if(q.tasks().get(i).type().equalsIgnoreCase("goto"))
+							Chat.noPrefixMessage(player, ChatColor.GREEN + "" + (i + 1) + ". " + ChatColor.LIGHT_PURPLE + "Go To " + q.tasks().get(i).display());
 						i++;
 					}
 					return true;

@@ -2,8 +2,6 @@ package me.quaz3l.qQuests.API.Requirements;
 
 import java.util.HashMap;
 
-import me.quaz3l.qQuests.qQuests;
-import me.quaz3l.qQuests.API.QuestModels.Quest;
 import me.quaz3l.qQuests.Util.Chat;
 
 public class RequirementHandler {
@@ -39,15 +37,17 @@ public class RequirementHandler {
 	 * @param quest - The quest to check
 	 * @return If the player meets the requirements
 	 */
-	public boolean checkRequirements(String player, String quest) {		
-		Chat.logger("debug", "Req: "+ qQuests.plugin.qAPI.getQuest(quest).requirements().keySet().toString()+"");
-		Quest q = qQuests.plugin.qAPI.getQuest(quest);
-		for(String name : q.requirements().keySet()) {
-			Chat.logger("debug", quest);
+	public boolean checkRequirements(String player, HashMap<String, Object> requirements, boolean silent) {		
+		Chat.logger("debug", "Req: "+ requirements.keySet().toString()+"");
+		for(String name : requirements.keySet()) {
 			Chat.logger("debug", name);
 			Chat.logger("debug", player);
 			if(this.isRequirement(name)) {
-				if(!this.requirements.get(name).passedRequirement(player, q.requirements().get(name))) {
+				int result = this.requirements.get(name).passedRequirement(player, requirements.get(name));
+				if(result != 0) {
+					// TODO Send the message to the qPlugin to handle
+					if(!silent)
+						Chat.error(player, this.requirements.get(name).parseError(player, requirements.get(name), result));
 					return false;
 				}
 			}
@@ -73,6 +73,10 @@ public class RequirementHandler {
 		}
 	}
 	public boolean validate(String key, Object value) {
-		return this.requirements.get(key).validate(value);
+		int result = this.requirements.get(key).validate(value);
+		if(result != 0) {
+			Chat.logger("severe", this.requirements.get(key).parseError(null, value, result));
+			return false;
+		} else return true;
 	}
 }

@@ -31,6 +31,9 @@ public class onSomething {
 	private HashMap<Integer, String> permissionsAdd = new HashMap<Integer, String>();
 	private HashMap<Integer, String> permissionsTake = new HashMap<Integer, String>();
 
+	// Better Effects
+	private HashMap<String, Object> effects = new HashMap<String, Object>();
+
 	public onSomething(BuildonSomething build) 
 	{
 		this.message = build.message();
@@ -43,6 +46,8 @@ public class onSomething {
 		this.levelSet = build.levelSet();
 		this.items = build.items();
 		this.commands = build.commands();
+		
+		this.effects = build.effects();
 	}
 	public String message(String player) {
 		return this.message.replaceAll("`player", player);
@@ -82,6 +87,10 @@ public class onSomething {
 	}
 	public HashMap<Integer, String> permissionsTake() {
 		return this.permissionsTake;
+	}
+	// Effects
+	public final HashMap<String, Object> effects() {
+		return this.effects;
 	}
 	
 	public Integer feeReward(final String player)

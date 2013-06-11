@@ -24,7 +24,6 @@ permissions:
             qquests.tasks: true
             qquests.drop: true
             qquests.done: true
-            qquests.reload: true
             qquests.admin: true
     qquests.give:
         description: Lets players randomly get a visible quest
@@ -59,7 +58,7 @@ permissions:
         default: true
         children:
             qquests.list.sign: true
-        qquests.stats:
+    qquests.stats:
         description: Shows Quest Stats Of The Player
         default: true
         children:
@@ -78,6 +77,7 @@ permissions:
         default: op
         children:
             qquests.update: true
+            qquests.admin.reload: true
             qquests.admin.sign: true
             qquests.create.sign: true
             qquests.destroy.sign: true

@@ -11,7 +11,7 @@ public class Chat {
 	public static void message(String player, String msg)
 	{
 		Player p = qQuests.plugin.getServer().getPlayer(player);
-		if(p == null)
+		if(p == null || msg == null)
 			return;
 		p.sendMessage(parseColors(qQuests.plugin.chatPrefix + msg));
 	}
@@ -46,7 +46,7 @@ public class Chat {
 	public static void error(String player, String msg)
 	{
 		Player p = qQuests.plugin.getServer().getPlayer(player);
-		if(p == null)
+		if(p == null || msg == null)
 			return;
 		p.sendMessage(parseColors(qQuests.plugin.chatPrefix + ChatColor.RED + msg));
 	}
@@ -59,7 +59,7 @@ public class Chat {
 	public static void green(String player, String msg)
 	{
 		Player p = qQuests.plugin.getServer().getPlayer(player);
-		if(p == null)
+		if(p == null || msg == null)
 			return;
 		p.sendMessage(parseColors(qQuests.plugin.chatPrefix + ChatColor.GREEN + msg));
 	}
@@ -97,6 +97,8 @@ public class Chat {
 		{
 			switch(code)
 			{
+			case -1:
+				return null;
 			case 0:
 				return "Success";
 			case 1:
@@ -139,6 +141,8 @@ public class Chat {
 		{
 			switch(code)
 			{
+			case -1:
+				return null;
 			case 0:
 				return "Success";
 			case 1:

@@ -4,6 +4,14 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import me.quaz3l.qQuests.API.QuestAPI;
+import me.quaz3l.qQuests.API.Effects.CommandEffect;
+import me.quaz3l.qQuests.API.Effects.DelayEffect;
+import me.quaz3l.qQuests.API.Effects.HealthEffect;
+import me.quaz3l.qQuests.API.Effects.HungerEffect;
+import me.quaz3l.qQuests.API.Effects.LevelAddEffect;
+import me.quaz3l.qQuests.API.Effects.LevelSetEffect;
+import me.quaz3l.qQuests.API.Effects.MessageEffect;
+import me.quaz3l.qQuests.API.Effects.MoneyEffect;
 import me.quaz3l.qQuests.API.Requirements.LevelMaxRequirement;
 import me.quaz3l.qQuests.API.Requirements.LevelMinRequirement;
 import me.quaz3l.qQuests.API.Requirements.LevelRequirement;
@@ -20,7 +28,6 @@ import me.quaz3l.qQuests.Plugins.Signs;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Config;
 import me.quaz3l.qQuests.Util.Metrics;
-import me.quaz3l.qQuests.Util.Persist;
 import me.quaz3l.qQuests.Util.Storage;
 import me.quaz3l.qQuests.Util.Updater;
 import net.milkbowl.vault.economy.Economy;
@@ -37,11 +44,10 @@ public class qQuests extends JavaPlugin
 	public final Logger logger = Logger.getLogger(("Minecraft"));
 	public Config Config;
 	public QuestAPI qAPI;
-	public Persist persist;
 	//public NPCManager npcManager;
 
 	// SHOULD BE FALSE
-	public boolean debug = false;
+	public boolean debug = true;
 
 	// Services
 	public Economy economy = null;
@@ -62,7 +68,7 @@ public class qQuests extends JavaPlugin
 	{
 		// Disable qPlugins
 		this.qAPI.getPluginHandler().callDisable();
-		
+
 		// To fix delays
 		getServer().getScheduler().cancelTasks(plugin);
 
@@ -76,11 +82,8 @@ public class qQuests extends JavaPlugin
 	public void onEnable() 
 	{
 		// Setup Configuration
-		this.Config = new Config();
-		
-		// Setup Persistence
-		this.persist = new Persist();
-		
+		this.Config = new Config();		
+
 		// Setup NPCs
 		//this.npcManager = new NPCManager(plugin);
 
@@ -95,16 +98,19 @@ public class qQuests extends JavaPlugin
 
 		// Get The API
 		this.qAPI = new QuestAPI();
-		
+
 		// Setup Player Profiles
 		this.qAPI.getProfiles().initializePlayerProfiles();
-		
+
 		// Add Requirements
 		this.setupStockRequirements();
-		
+
+		// Add Effects
+		this.setupStockEffects();
+
 		// Build Quests
 		this.qAPI.getQuestWorker().buildQuests();
-		
+
 		//Setup Stock qPlugins
 		this.setupStockPlugins();
 
@@ -118,13 +124,13 @@ public class qQuests extends JavaPlugin
 		} catch (IOException e) {
 			// Failed to submit the stats :-(
 		}
-				
+
 		// Load the current quest data
 		Storage.loadPersisted();
 
 		// Notify Logger
 		Chat.logger("info", "by Quaz3l: Enabled");
-		
+
 		//Config.dumpQuestConfig();
 	}
 
@@ -182,7 +188,7 @@ public class qQuests extends JavaPlugin
 
 		getServer().getPluginManager().registerEvents(new Distance(), this);
 		// GoTo is handled by tasks
-		
+
 		getServer().getPluginManager().registerEvents(new Kill_Player(), this);
 		getServer().getPluginManager().registerEvents(new Kill(), this);
 		getServer().getPluginManager().registerEvents(new Tame(), this);
@@ -191,7 +197,7 @@ public class qQuests extends JavaPlugin
 
 		Chat.logger("debug", "Listeners Registered.");
 	}
-	
+
 	// Start The Stock Requirements
 	private void setupStockRequirements()
 	{
@@ -199,7 +205,23 @@ public class qQuests extends JavaPlugin
 		this.qAPI.getRequirementHandler().addRequirement(new LevelMaxRequirement());
 		this.qAPI.getRequirementHandler().addRequirement(new LevelRequirement());
 	}
-	
+	// Start The Stock Effects
+	private void setupStockEffects()
+	{
+		this.qAPI.getEffectHandler().addEffect(new MessageEffect());
+		this.qAPI.getEffectHandler().addEffect(new HealthEffect());
+		this.qAPI.getEffectHandler().addEffect(new HungerEffect());
+		
+		this.qAPI.getEffectHandler().addEffect(new LevelAddEffect());
+		this.qAPI.getEffectHandler().addEffect(new LevelSetEffect());
+		
+		this.qAPI.getEffectHandler().addEffect(new CommandEffect());
+		
+		this.qAPI.getEffectHandler().addEffect(new MoneyEffect());
+		
+		this.qAPI.getEffectHandler().addEffect(new DelayEffect());
+	}
+
 	// Starts The Stock Plugins
 	private void setupStockPlugins()
 	{

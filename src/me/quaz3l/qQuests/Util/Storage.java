@@ -107,42 +107,42 @@ public class Storage {
 				HashMap<String, String> cQuests = new HashMap<String, String>();
 				for(Entry<String, Quest> entry : Storage.currentQuests.entrySet())
 					cQuests.put(entry.getKey(), entry.getValue().name());
-				qQuests.plugin.persist.set("currentQuests", cQuests);
+				qQuests.plugin.qAPI.persist().set("currentQuests", cQuests);
 
 				// currentTaskProgress
 				HashMap<String, Object[]> cTaskProgress = new HashMap<String, Object[]>();
 				for(Entry<String, ArrayList<Integer>> entry : Storage.currentTaskProgress.entrySet())
 					cTaskProgress.put(entry.getKey(), entry.getValue().toArray());
-				qQuests.plugin.persist.setArrayHashMap("currentTaskProgress", cTaskProgress);
+				qQuests.plugin.qAPI.persist().setArrayHashMap("currentTaskProgress", cTaskProgress);
 
 				// previousQuests
 				HashMap<String, String> pQuest = new HashMap<String, String>();
 				for(Entry<String, Quest> entry : Storage.previousQuest.entrySet())
 					pQuest.put(entry.getKey(), entry.getValue().name());
-				qQuests.plugin.persist.set("previousQuests", pQuest);
+				qQuests.plugin.qAPI.persist().set("previousQuests", pQuest);
 
 				Chat.logger("debug", cQuests.toString());
-				Chat.logger("debug", qQuests.plugin.persist.getStringHashMap("currentQuests").toString());
+				Chat.logger("debug", qQuests.plugin.qAPI.persist().getStringHashMap("currentQuests").toString());
 
 				// wayCurrentQuestsWereGiven
 				HashMap<String, String> wcQuestsWereGiven = new HashMap<String, String>();
 				for(Entry<String, String> entry : Storage.wayCurrentQuestsWereGiven.entrySet())
 					wcQuestsWereGiven.put(entry.getKey(), entry.getValue());
-				qQuests.plugin.persist.set("wayCurrentQuestsWereGiven", wcQuestsWereGiven);
+				qQuests.plugin.qAPI.persist().set("wayCurrentQuestsWereGiven", wcQuestsWereGiven);
 
 				// wayPreviousQuestWereGiven
 				HashMap<String, String> wpQuestWereGiven = new HashMap<String, String>();
 				for(Entry<String, String> entry : Storage.wayPreviousQuestWereGiven.entrySet())
 					wpQuestWereGiven.put(entry.getKey(), entry.getValue());
-				qQuests.plugin.persist.set("wayPreviousQuestWereGiven", wpQuestWereGiven);
+				qQuests.plugin.qAPI.persist().set("wayPreviousQuestWereGiven", wpQuestWereGiven);
 
 				// delayLeft
 				HashMap<String, String> dLeft = new HashMap<String, String>();
 				for(Entry<String, Integer> entry : Storage.delayLeft.entrySet())
 					dLeft.put(entry.getKey(), entry.getValue().toString());
-				qQuests.plugin.persist.set("delayLeft", dLeft);
+				qQuests.plugin.qAPI.persist().set("delayLeft", dLeft);
 				
-				qQuests.plugin.persist.save();
+				qQuests.plugin.qAPI.persist().save();
 				
 				Chat.logger("info", "Quests persisted to disk.");
 			}
@@ -154,42 +154,42 @@ public class Storage {
 		HashMap<String, String> cQuests = new HashMap<String, String>();
 		for(Entry<String, Quest> entry : Storage.currentQuests.entrySet())
 			cQuests.put(entry.getKey(), entry.getValue().name());
-		qQuests.plugin.persist.set("currentQuests", cQuests);
+		qQuests.plugin.qAPI.persist().set("currentQuests", cQuests);
 
 		// currentTaskProgress
 		HashMap<String, Object[]> cTaskProgress = new HashMap<String, Object[]>();
 		for(Entry<String, ArrayList<Integer>> entry : Storage.currentTaskProgress.entrySet())
 			cTaskProgress.put(entry.getKey(), entry.getValue().toArray());
-		qQuests.plugin.persist.setArrayHashMap("currentTaskProgress", cTaskProgress);
+		qQuests.plugin.qAPI.persist().setArrayHashMap("currentTaskProgress", cTaskProgress);
 
 		// previousQuests
 		HashMap<String, String> pQuest = new HashMap<String, String>();
 		for(Entry<String, Quest> entry : Storage.previousQuest.entrySet())
 			pQuest.put(entry.getKey(), entry.getValue().name());
-		qQuests.plugin.persist.set("previousQuests", pQuest);
+		qQuests.plugin.qAPI.persist().set("previousQuests", pQuest);
 
 		Chat.logger("debug", cQuests.toString());
-		Chat.logger("debug", qQuests.plugin.persist.getStringHashMap("currentQuests").toString());
+		Chat.logger("debug", qQuests.plugin.qAPI.persist().getStringHashMap("currentQuests").toString());
 
 		// wayCurrentQuestsWereGiven
 		HashMap<String, String> wcQuestsWereGiven = new HashMap<String, String>();
 		for(Entry<String, String> entry : Storage.wayCurrentQuestsWereGiven.entrySet())
 			wcQuestsWereGiven.put(entry.getKey(), entry.getValue());
-		qQuests.plugin.persist.set("wayCurrentQuestsWereGiven", wcQuestsWereGiven);
+		qQuests.plugin.qAPI.persist().set("wayCurrentQuestsWereGiven", wcQuestsWereGiven);
 
 		// wayPreviousQuestWereGiven
 		HashMap<String, String> wpQuestWereGiven = new HashMap<String, String>();
 		for(Entry<String, String> entry : Storage.wayPreviousQuestWereGiven.entrySet())
 			wpQuestWereGiven.put(entry.getKey(), entry.getValue());
-		qQuests.plugin.persist.set("wayPreviousQuestWereGiven", wpQuestWereGiven);
+		qQuests.plugin.qAPI.persist().set("wayPreviousQuestWereGiven", wpQuestWereGiven);
 
 		// delayLeft
 		HashMap<String, String> dLeft = new HashMap<String, String>();
 		for(Entry<String, Integer> entry : Storage.delayLeft.entrySet())
 			dLeft.put(entry.getKey(), entry.getValue().toString());
-		qQuests.plugin.persist.set("delayLeft", dLeft);
+		qQuests.plugin.qAPI.persist().set("delayLeft", dLeft);
 		
-		qQuests.plugin.persist.save();
+		qQuests.plugin.qAPI.persist().save();
 
 		Chat.logger("info", "Quests persisted to disk.");
 	}
@@ -199,32 +199,32 @@ public class Storage {
 			public void run() {
 				// currentQuests
 				for(Entry<String, String> entry : 
-					((HashMap<String, String>) qQuests.plugin.persist.getStringHashMap("currentQuests")).entrySet())
+					((HashMap<String, String>) qQuests.plugin.qAPI.persist().getStringHashMap("currentQuests")).entrySet())
 					Storage.currentQuests.put(entry.getKey(), qQuests.plugin.qAPI.getQuest(entry.getValue()));
 
 				// currentTaskProgress
 				for(Entry<String, ArrayList<Integer>> entry : 
-					((HashMap<String, ArrayList<Integer>>) qQuests.plugin.persist.getIntegerArrayHashMap("currentTaskProgress")).entrySet())
+					((HashMap<String, ArrayList<Integer>>) qQuests.plugin.qAPI.persist().getIntegerArrayHashMap("currentTaskProgress")).entrySet())
 					Storage.currentTaskProgress.put(entry.getKey(), entry.getValue());
 
 				// previousQuests
 				for(Entry<String, String> entry : 
-					((HashMap<String, String>) qQuests.plugin.persist.getStringHashMap("previousQuests")).entrySet())
+					((HashMap<String, String>) qQuests.plugin.qAPI.persist().getStringHashMap("previousQuests")).entrySet())
 					Storage.previousQuest.put(entry.getKey(), qQuests.plugin.qAPI.getQuest(entry.getValue()));
 
 				// wayCurrentQuestsWereGiven
 				for(Entry<String, String> entry : 
-					((HashMap<String, String>) qQuests.plugin.persist.getStringHashMap("wayCurrentQuestsWereGiven")).entrySet())
+					((HashMap<String, String>) qQuests.plugin.qAPI.persist().getStringHashMap("wayCurrentQuestsWereGiven")).entrySet())
 					Storage.wayCurrentQuestsWereGiven.put(entry.getKey(), entry.getValue());
 
 				// wayPreviousQuestWereGiven
 				for(Entry<String, String> entry : 
-					((HashMap<String, String>) qQuests.plugin.persist.getStringHashMap("wayPreviousQuestWereGiven")).entrySet())
+					((HashMap<String, String>) qQuests.plugin.qAPI.persist().getStringHashMap("wayPreviousQuestWereGiven")).entrySet())
 					Storage.wayPreviousQuestWereGiven.put(entry.getKey(), entry.getValue());
 
 				// delayLeft
 				for(Entry<String, Integer> entry : 
-					((HashMap<String, Integer>) qQuests.plugin.persist.getIntegerHashMap("delayLeft")).entrySet()) {
+					((HashMap<String, Integer>) qQuests.plugin.qAPI.persist().getIntegerHashMap("delayLeft")).entrySet()) {
 					Storage.delayLeft.put(entry.getKey(), entry.getValue());
 
 					final String player = entry.getKey();
