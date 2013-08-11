@@ -73,6 +73,7 @@ public class Config {
 	public void initializeConfig() {
 		this.getConfig();
 		this.getConfig().options().copyDefaults(true);
+		this.saveConfig();
 
 		// Remove Legacy
 		if(this.getConfig().getString("autoUpdate") != null)
@@ -187,7 +188,7 @@ public class Config {
 			aessList.put(node, subList);
 		}
 		Storage.access=aessList;
-		Chat.logger("debug", aessList.toString());
+		Chat.logger("debug", "Access List: " + aessList.toString());
 
 		Storage.primaryCommand = this.getConfig().getString("primaryCommand");
 		Storage.prefix = this.getConfig().getString("chatPrefix");
@@ -232,7 +233,7 @@ public class Config {
 			this.getQuestConfig().set("Diamonds!.onJoin.market.hunger", 0);
 
 			// Set onDrop Nodes
-			this.getQuestConfig().set("Diamonds!.onDrop.message", "AwwÉ fineÉ I'll go find someone else :(");
+			this.getQuestConfig().set("Diamonds!.onDrop.message", "Awwï¿½ fineï¿½ I'll go find someone else :(");
 			this.getQuestConfig().set("Diamonds!.onDrop.market.money", -50);
 			this.getQuestConfig().set("Diamonds!.onDrop.market.health", 0);
 			this.getQuestConfig().set("Diamonds!.onDrop.market.hunger", 0);
