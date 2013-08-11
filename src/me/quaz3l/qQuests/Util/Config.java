@@ -13,7 +13,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 
 public class Config {	
-	// Configuration Files Variables
+	// Configuration Files Variables 
 	private YamlConfiguration qConfig = null;
 	private File qFile = null;
 	private boolean qConfigIsNew = false;
@@ -233,7 +233,7 @@ public class Config {
 			this.getQuestConfig().set("Diamonds!.onJoin.market.hunger", 0);
 
 			// Set onDrop Nodes
-			this.getQuestConfig().set("Diamonds!.onDrop.message", "Aww� fine� I'll go find someone else :(");
+			this.getQuestConfig().set("Diamonds!.onDrop.message", "Aww... fine... I'll go find someone else :(");
 			this.getQuestConfig().set("Diamonds!.onDrop.market.money", -50);
 			this.getQuestConfig().set("Diamonds!.onDrop.market.health", 0);
 			this.getQuestConfig().set("Diamonds!.onDrop.market.hunger", 0);
