@@ -48,7 +48,7 @@ public class qQuests extends JavaPlugin
 	//public NPCManager npcManager;
 
 	// SHOULD BE FALSE
-	public boolean debug = true;
+	public boolean debug = false;
 
 	// Services
 	public Economy economy = null;

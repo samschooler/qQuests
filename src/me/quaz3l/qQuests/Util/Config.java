@@ -74,6 +74,8 @@ public class Config {
 		this.getConfig();
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
+		
+		qQuests.plugin.debug = this.getConfig().getBoolean("debug");
 
 		// Remove Legacy
 		if(this.getConfig().getString("autoUpdate") != null)
