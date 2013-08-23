@@ -1,12 +1,13 @@
-package me.quaz3l.qQuests.Plugins;
+package me.quaz3l.qQuests.API.PluginHandlers;
 
 import java.util.HashMap;
 
+import me.quaz3l.qQuests.API.PluginModels.qPlugin;
 import me.quaz3l.qQuests.Util.Chat;
 
 public class PluginHandler {
 	private HashMap<String, qPlugin> plugins = new HashMap<String, qPlugin>();
-	
+
 	/**
 	 * Used to connect a qPlugin with qQuests properly
 	 * @param plugin - The qPlugin to be added
@@ -27,7 +28,7 @@ public class PluginHandler {
 			pl.onEnable();
 		}
 	}
-	
+
 	/**
 	 * Calls the disable function in all qPlugins
 	 */

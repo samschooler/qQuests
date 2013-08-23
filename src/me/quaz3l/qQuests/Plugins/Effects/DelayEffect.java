@@ -1,6 +1,7 @@
-package me.quaz3l.qQuests.API.Effects;
+package me.quaz3l.qQuests.Plugins.Effects;
 
 import me.quaz3l.qQuests.qQuests;
+import me.quaz3l.qQuests.API.PluginModels.qEffect;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Storage;
 

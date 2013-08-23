@@ -1,29 +1,30 @@
-package me.quaz3l.qQuests.API.Effects;
+package me.quaz3l.qQuests.Plugins.Effects;
 
 import org.bukkit.entity.Player;
 
 import me.quaz3l.qQuests.qQuests;
+import me.quaz3l.qQuests.API.PluginModels.qEffect;
 import me.quaz3l.qQuests.Util.Chat;
 
-public class HungerEffect extends qEffect {
+public class HealthEffect extends qEffect {
 
 	@Override
 	public void executeEffect(String player, Object value) {
-		Chat.logger("debug", "HungerEffect.executeEffect(): start");
+		Chat.logger("debug", "HealthEffect.executeEffect(): start");
 		Player p = qQuests.plugin.getServer().getPlayer(player);
 		if(p == null) {
 			return;
 		}
 
 		int given = Integer.parseInt(value.toString());
-		int has = qQuests.plugin.getServer().getPlayer(player).getFoodLevel();
+		int has = qQuests.plugin.getServer().getPlayer(player).getHealth();
 
 		int healAmount = has + given;
 		if(healAmount >= 20)
 			p.setHealth(20);
 		else
 			p.setHealth(healAmount);
-		Chat.logger("debug", "HungerEffect.executeEffect(): end");
+		Chat.logger("debug", "HealthEffect.executeEffect(): end");
 	}
 
 	@Override
@@ -35,7 +36,7 @@ public class HungerEffect extends qEffect {
 			}
 
 			int needed = Integer.parseInt(value.toString());
-			int has = qQuests.plugin.getServer().getPlayer(player).getFoodLevel();
+			int has = qQuests.plugin.getServer().getPlayer(player).getHealth();
 
 			if(needed*-1 > has) {
 				return 1;
@@ -61,7 +62,7 @@ public class HungerEffect extends qEffect {
 
 	@Override
 	public String getName() {
-		return "hunger";
+		return "health";
 	}
 
 	@Override
@@ -75,7 +76,7 @@ public class HungerEffect extends qEffect {
 		switch(errorCode) {
 		case -2: return "The value is NOT a number, it MUST be a number!";
 		case -1: return "The player is not online.";
-		case  1: return "You don't have enough hunger to complete this quest!";
+		case  1: return "You don't have enough health to complete this quest!";
 		default: return "Unknown Error! LULZ! :p";
 		}
 	}

@@ -1,6 +1,5 @@
-package me.quaz3l.qQuests.API.Requirements;
+package me.quaz3l.qQuests.API.PluginModels;
 
-import me.quaz3l.qQuests.Plugins.qPlugin;
 
 public abstract class qRequirement extends qPlugin {
 	/**

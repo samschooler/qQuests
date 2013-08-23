@@ -1,8 +1,10 @@
-package me.quaz3l.qQuests.API.Effects;
+package me.quaz3l.qQuests.Plugins.Effects;
 
 import java.util.ArrayList;
 
 import org.bukkit.Bukkit;
+
+import me.quaz3l.qQuests.API.PluginModels.qEffect;
 import me.quaz3l.qQuests.Util.Chat;
 
 public class CommandEffect extends qEffect {

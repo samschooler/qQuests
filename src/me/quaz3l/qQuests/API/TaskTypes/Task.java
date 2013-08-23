@@ -1,7 +1,7 @@
 package me.quaz3l.qQuests.API.TaskTypes;
 
+import me.quaz3l.qQuests.API.PluginModels.qPlugin;
 import me.quaz3l.qQuests.API.QuestModels.Quest;
-import me.quaz3l.qQuests.Plugins.qPlugin;
 
 public class Task extends qPlugin {
 	private Quest quest;

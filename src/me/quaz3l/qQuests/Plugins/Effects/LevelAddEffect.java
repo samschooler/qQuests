@@ -1,13 +1,14 @@
-package me.quaz3l.qQuests.API.Effects;
+package me.quaz3l.qQuests.Plugins.Effects;
 
 import me.quaz3l.qQuests.qQuests;
+import me.quaz3l.qQuests.API.PluginModels.qEffect;
 
-public class LevelSetEffect extends qEffect {
+public class LevelAddEffect extends qEffect {
 
 	@Override
 	public void executeEffect(String player, Object value) {
-		if(Integer.parseInt(value.toString()) > -1)
-			qQuests.plugin.qAPI.getProfiles().set(player, "Level", Integer.parseInt(value.toString()));
+		if(Integer.parseInt(value.toString()) != 0)
+			qQuests.plugin.qAPI.getProfiles().set(player, "Level", qQuests.plugin.qAPI.getProfiles().getInt(player, "Level") + Integer.parseInt(value.toString()));
 	}
 
 	@Override
@@ -30,7 +31,7 @@ public class LevelSetEffect extends qEffect {
 
 	@Override
 	public String getName() {
-		return "levelSet";
+		return "levelAdd";
 	}
 
 	@Override

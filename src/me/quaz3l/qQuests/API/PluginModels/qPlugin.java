@@ -1,4 +1,4 @@
-package me.quaz3l.qQuests.Plugins;
+package me.quaz3l.qQuests.API.PluginModels;
 
 public abstract class qPlugin {
 	

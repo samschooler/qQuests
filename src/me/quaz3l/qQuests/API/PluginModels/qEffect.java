@@ -1,6 +1,5 @@
-package me.quaz3l.qQuests.API.Effects;
+package me.quaz3l.qQuests.API.PluginModels;
 
-import me.quaz3l.qQuests.API.Requirements.qRequirement;
 
 public abstract class qEffect extends qRequirement {
 	/**

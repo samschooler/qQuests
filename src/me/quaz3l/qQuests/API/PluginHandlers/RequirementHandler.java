@@ -1,7 +1,8 @@
-package me.quaz3l.qQuests.API.Requirements;
+package me.quaz3l.qQuests.API.PluginHandlers;
 
 import java.util.HashMap;
 
+import me.quaz3l.qQuests.API.PluginModels.qRequirement;
 import me.quaz3l.qQuests.Util.Chat;
 
 public class RequirementHandler {

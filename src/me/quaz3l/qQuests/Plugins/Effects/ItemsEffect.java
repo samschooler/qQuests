@@ -1,9 +1,10 @@
-package me.quaz3l.qQuests.API.Effects;
+package me.quaz3l.qQuests.Plugins.Effects;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import me.quaz3l.qQuests.qQuests;
+import me.quaz3l.qQuests.API.PluginModels.qEffect;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.InventoryUtil;
 import me.quaz3l.qQuests.Util.MaterialUtil;

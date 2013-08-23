@@ -211,4 +211,7 @@ public class Texts {
 	public static final String NOT_ENOUGH_HEALTH = "You Don't Have Enough Health!";
 	public static final String NOT_ENOUGH_FOOD = "You Don't Have Enough Food!";
 	public static final String NOT_ENOUGH_ITEMS = "You Don't Have Enough Items!";
+
+	// Updater
+	public static final String UPDATE_AVAILABLE = "There is a update available! Download it:"; // {qQuests URL}
 }

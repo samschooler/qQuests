@@ -1,7 +1,8 @@
-package me.quaz3l.qQuests.API.Effects;
+package me.quaz3l.qQuests.Plugins.Effects;
 
 import org.bukkit.ChatColor;
 import me.quaz3l.qQuests.qQuests;
+import me.quaz3l.qQuests.API.PluginModels.qEffect;
 
 public class MoneyEffect extends qEffect {
 

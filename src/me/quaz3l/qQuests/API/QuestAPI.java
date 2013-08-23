@@ -8,12 +8,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import me.quaz3l.qQuests.qQuests;
-import me.quaz3l.qQuests.API.Effects.EffectHandler;
+import me.quaz3l.qQuests.API.PluginHandlers.EffectHandler;
+import me.quaz3l.qQuests.API.PluginHandlers.PluginHandler;
+import me.quaz3l.qQuests.API.PluginHandlers.RequirementHandler;
 import me.quaz3l.qQuests.API.QuestModels.Quest;
-import me.quaz3l.qQuests.API.Requirements.RequirementHandler;
 import me.quaz3l.qQuests.API.TaskTypes.Collect;
 import me.quaz3l.qQuests.API.TaskTypes.GoTo;
-import me.quaz3l.qQuests.Plugins.PluginHandler;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Persist;
 import me.quaz3l.qQuests.Util.PlayerProfiles;

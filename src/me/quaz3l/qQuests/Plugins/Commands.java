@@ -3,6 +3,7 @@ package me.quaz3l.qQuests.Plugins;
 import java.util.HashMap;
 
 import me.quaz3l.qQuests.qQuests;
+import me.quaz3l.qQuests.API.PluginModels.qPlugin;
 import me.quaz3l.qQuests.API.QuestModels.Quest;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Storage;

@@ -4,18 +4,6 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import me.quaz3l.qQuests.API.QuestAPI;
-import me.quaz3l.qQuests.API.Effects.CommandEffect;
-import me.quaz3l.qQuests.API.Effects.DelayEffect;
-import me.quaz3l.qQuests.API.Effects.HealthEffect;
-import me.quaz3l.qQuests.API.Effects.HungerEffect;
-import me.quaz3l.qQuests.API.Effects.ItemsEffect;
-import me.quaz3l.qQuests.API.Effects.LevelAddEffect;
-import me.quaz3l.qQuests.API.Effects.LevelSetEffect;
-import me.quaz3l.qQuests.API.Effects.MessageEffect;
-import me.quaz3l.qQuests.API.Effects.MoneyEffect;
-import me.quaz3l.qQuests.API.Requirements.LevelMaxRequirement;
-import me.quaz3l.qQuests.API.Requirements.LevelMinRequirement;
-import me.quaz3l.qQuests.API.Requirements.LevelRequirement;
 import me.quaz3l.qQuests.API.TaskTypes.Damage;
 import me.quaz3l.qQuests.API.TaskTypes.Destroy;
 import me.quaz3l.qQuests.API.TaskTypes.Distance;
@@ -26,6 +14,18 @@ import me.quaz3l.qQuests.API.TaskTypes.Place;
 import me.quaz3l.qQuests.API.TaskTypes.Tame;
 import me.quaz3l.qQuests.Plugins.Commands;
 import me.quaz3l.qQuests.Plugins.Signs;
+import me.quaz3l.qQuests.Plugins.Effects.CommandEffect;
+import me.quaz3l.qQuests.Plugins.Effects.DelayEffect;
+import me.quaz3l.qQuests.Plugins.Effects.HealthEffect;
+import me.quaz3l.qQuests.Plugins.Effects.HungerEffect;
+import me.quaz3l.qQuests.Plugins.Effects.ItemsEffect;
+import me.quaz3l.qQuests.Plugins.Effects.LevelAddEffect;
+import me.quaz3l.qQuests.Plugins.Effects.LevelSetEffect;
+import me.quaz3l.qQuests.Plugins.Effects.MessageEffect;
+import me.quaz3l.qQuests.Plugins.Effects.MoneyEffect;
+import me.quaz3l.qQuests.Plugins.Requirements.LevelMaxRequirement;
+import me.quaz3l.qQuests.Plugins.Requirements.LevelMinRequirement;
+import me.quaz3l.qQuests.Plugins.Requirements.LevelRequirement;
 import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Config;
 import me.quaz3l.qQuests.Util.Metrics;
@@ -205,6 +205,7 @@ public class qQuests extends JavaPlugin
 		this.qAPI.getRequirementHandler().addRequirement(new LevelMinRequirement());
 		this.qAPI.getRequirementHandler().addRequirement(new LevelMaxRequirement());
 		this.qAPI.getRequirementHandler().addRequirement(new LevelRequirement());
+		this.qAPI.getRequirementHandler().addRequirement(new MoneyEffect());
 	}
 	// Start The Stock Effects
 	private void setupStockEffects()

@@ -235,11 +235,15 @@ public class Updater
 		final boolean notify = qQuests.plugin.getConfig().getBoolean("notifyMeOfUpdates");
 		if(qQuests.plugin.getConfig().getBoolean("autoUpdate")) {
 			qQuests.plugin.getServer().getScheduler().runTaskTimerAsynchronously(qQuests.plugin, new Runnable() {
-				public void run() {new Updater(plugin, slug, file, UpdateType.DEFAULT, notify);}
+				public void run() {new Updater(plugin, slug, file, UpdateType.DEFAULT, true);}
 			}, 1L, (12 * 60 * 1200));
 		} else if(notify) {
 			qQuests.plugin.getServer().getScheduler().runTaskTimerAsynchronously(qQuests.plugin, new Runnable() {
-				public void run() {new Updater(plugin, slug, file, UpdateType.NO_DOWNLOAD, notify);}
+				public void run() {
+					if(new Updater(plugin, slug, file, UpdateType.NO_DOWNLOAD, true).getResult() == UpdateResult.UPDATE_AVAILABLE) {
+						Chat.logger("warning", Texts.UPDATE_AVAILABLE + " http://dev.bukkit.org/bukkit-plugins/qquests");
+					}
+				}
 			}, 1L, (12 * 60 * 1200));
 		}
 	}
