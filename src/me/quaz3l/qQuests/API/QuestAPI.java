@@ -316,10 +316,6 @@ public class QuestAPI {
 			i++;
 		}
 		Chat.logger("debug", "101");
-		// Charge/Give Fee/Reward
-		//Integer u = getActiveQuest(player).onComplete().feeReward(player);
-		//if(u != 0)
-		//	return u;
 
 		Chat.logger("debug", q.onComplete().effects().toString());
 		// TODO Send the message to the qPlugin to handle

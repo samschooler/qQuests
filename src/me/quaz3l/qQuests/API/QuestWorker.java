@@ -1,7 +1,5 @@
 package me.quaz3l.qQuests.API;
 
-import java.util.ArrayList;
-
 import me.quaz3l.qQuests.qQuests;
 import me.quaz3l.qQuests.API.QuestModels.Quest;
 import me.quaz3l.qQuests.API.QuestModels.Task;
@@ -12,7 +10,6 @@ import me.quaz3l.qQuests.Util.Chat;
 import me.quaz3l.qQuests.Util.Storage;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -38,8 +35,8 @@ public class QuestWorker
 			String root = questName.toString();
 
 			// Validate The Quest
-			//if(!qQuests.plugin.Config.validate(root)) 
-			//continue;
+			if(!this.validate(root)) 
+				continue;
 
 			BuildQuest quest = new BuildQuest(root);
 
@@ -58,17 +55,7 @@ public class QuestWorker
 				for(String key : requireNode.getKeys(false)) {
 					Chat.logger("debug", root + ".requirements." + key);
 					Object value = qQuests.plugin.Config.getQuestConfig().get(root + ".requirements." + key);
-					if(qQuests.plugin.qAPI.getRequirementHandler().isRequirement(key)) {
-						if(qQuests.plugin.qAPI.getRequirementHandler().validate(root + ".requirments", key, value))
-							quest.requirements(key, value);
-						else {
-							Chat.logger("severe", "The requirement " + key + " of quest " + root + ", is NOT valid!");
-							continue;
-						}
-					} else {
-						Chat.logger("warning", "The requirement " + key + " of quest " + root + ", is not supported by standalone qQuests, if you are using a plugin that supports qQuests, this is fine, otherwise, it will not do anything.");
-						quest.requirements(key, value);
-					}
+					quest.requirements(key, value);
 				}
 			}
 			// Set Tasks Variables
@@ -101,12 +88,14 @@ public class QuestWorker
 									task.durability(((Integer)Integer.parseInt(info[1])).shortValue());
 								} catch(Exception e) {
 									Chat.logger("severe", "The #" + tRoot +" task of '" + root + "' does not have valid material ids! Disabling this quest...");
+									continue;
 								}
 							} else {
 								try {
 									task.id(Integer.parseInt(info[0]));
 								} catch(Exception e) {
 									Chat.logger("severe", "The #" + tRoot +" task of '" + root + "' does not have valid material ids! Disabling this quest...");
+									continue;
 								}
 							}
 						}
@@ -137,6 +126,7 @@ public class QuestWorker
 								}
 							} else {
 								Chat.logger("severe", "The task nodes of quest '" + root + "' do not define a valid world name! Disabling this quest...");
+								continue;
 							}
 						}
 						task.display(qQuests.plugin.Config.getQuestConfig().getString(questName + ".tasks." + tRoot + ".display"));
@@ -158,8 +148,6 @@ public class QuestWorker
 				i++;
 			}
 
-			String[] strs = {""};
-			String[] qtrs = {""};
 			// Set onJoin Variables
 			BuildonSomething BuildonJoin = new BuildonSomething();
 
@@ -170,68 +158,13 @@ public class QuestWorker
 				for(String key : onJoinEffectNode.getKeys(false)) {
 					Chat.logger("debug", root + ".onJoin." + key);
 					Object value = qQuests.plugin.Config.getQuestConfig().get(root + ".onJoin." + key);
-					if(qQuests.plugin.qAPI.getEffectHandler().isEffect(key)) {
-						if(qQuests.plugin.qAPI.getEffectHandler().validate(root+".onJoin",key, value))
-							BuildonJoin.addEffect(key, value);
-						else {
-							Chat.logger("severe", "The effect " + key + " of quest " + root + ", is NOT valid!");
-							continue;
-						}
-					} else {
-						Chat.logger("warning", "The effect " + key + " of quest " + root + ", is not supported by standalone qQuests, if you are using a plugin that supports qQuests, this is fine, otherwise, it will not do anything.");
-						BuildonJoin.addEffect(key, value);
-					}
+					BuildonJoin.addEffect(key, value);
 				}
 			}
 
 			BuildonJoin.message(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onJoin.message"));
 			BuildonJoin.delay(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.delay"));
-			BuildonJoin.money(qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".onJoin.market.money"));
-			BuildonJoin.health(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.health"));
-			BuildonJoin.hunger(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.hunger"));
-			BuildonJoin.levelAdd(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.levelAdd"));
-			if(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onJoin.market.levelSet") != null)
-				BuildonJoin.levelSet(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onJoin.market.levelSet"));
-			i=0;
-			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onJoin.market.items") != null)
-			{
-				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onJoin.market.items")) {
-					strs = s.split(" ");
-					qtrs = strs[0].split(":");
 
-					if(Material.matchMaterial(qtrs[0]) != null)
-					{
-						try
-						{
-							ArrayList<Integer> itms = new ArrayList<Integer>();
-							itms.add(Integer.parseInt(qtrs[0])); // Item Id
-							itms.add(Integer.parseInt(strs[1])); // Amount
-							if(qtrs.length == 2)
-								itms.add(Integer.parseInt(qtrs[1])); // Item Damage
-							BuildonJoin.items(i, itms);
-						}
-						catch(Exception e)
-						{
-							Chat.logger("severe", "The 'onJoin' rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest...");
-							continue;
-						}
-					}
-					else
-					{
-						Chat.logger("severe", "The 'onJoin' rewards/fees of '" + root + "' does not have valid material ids! Disabling this quest...");
-						continue;
-					}
-					i++;
-				}
-			}
-			i=0;
-			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onJoin.market.commands") != null)
-			{
-				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onJoin.market.commands")) {
-					BuildonJoin.commands(i, s);
-					i++;
-				}
-			}
 			quest.onJoin(BuildonJoin);
 
 			// Set onDrop Variables
@@ -244,70 +177,13 @@ public class QuestWorker
 				for(String key : onDropEffectNode.getKeys(false)) {
 					Chat.logger("debug", root + ".onDrop." + key);
 					Object value = qQuests.plugin.Config.getQuestConfig().get(root + ".onDrop." + key);
-					if(qQuests.plugin.qAPI.getEffectHandler().isEffect(key)) {
-						if(qQuests.plugin.qAPI.getEffectHandler().validate(root+".onDrop", key, value))
-							BuildonDrop.addEffect(key, value);
-						else {
-							Chat.logger("severe", "The effect " + key + " of quest " + root + ", is NOT valid!");
-							continue;
-						}
-					} else {
-						Chat.logger("warning", "The effect " + key + " of quest " + root + ", is not supported by standalone qQuests, if you are using a plugin that supports qQuests, this is fine, otherwise, it will not do anything.");
-						BuildonDrop.addEffect(key, value);
-					}
+					BuildonDrop.addEffect(key, value);
 				}
 			}
-
 
 			BuildonDrop.message(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onDrop.message"));
 			BuildonDrop.delay(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.delay"));
 			BuildonDrop.nextQuest(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onDrop.nextQuest"));
-			BuildonDrop.money(qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".onDrop.market.money"));
-			BuildonDrop.health(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.health"));
-			BuildonDrop.hunger(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.hunger"));
-			BuildonDrop.levelAdd(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.levelAdd"));
-			if(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onDrop.market.levelSet") != null)
-				BuildonDrop.levelSet(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onDrop.market.levelSet"));
-			i=0;
-			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onDrop.market.items") != null)
-			{
-				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onDrop.market.items")) {
-					strs = s.split(" ");
-					qtrs = strs[0].split(":");
-
-					if(Material.matchMaterial(qtrs[0]) != null)
-					{
-						try
-						{
-							ArrayList<Integer> itms = new ArrayList<Integer>();
-							itms.add(Integer.parseInt(qtrs[0])); // Item Id
-							itms.add(Integer.parseInt(strs[1])); // Amount
-							if(qtrs.length == 2)
-								itms.add(Integer.parseInt(qtrs[1])); // Item Damage
-							BuildonDrop.items().put(i, itms);
-						}
-						catch(Exception e)
-						{
-							Chat.logger("severe", "The 'onDrop' rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest...");
-							continue;
-						}
-					}
-					else
-					{
-						Chat.logger("severe", "The 'onDrop' rewards/fees of '" + root + "' does not have valid material ids! Disabling this quest...");
-						continue;
-					}
-					i++;
-				}
-			}
-			i=0;
-			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onDrop.market.commands") != null)
-			{
-				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onDrop.market.commands")) {
-					BuildonDrop.commands(i, s);
-					i++;
-				}
-			}
 			quest.onDrop(BuildonDrop);
 
 			// Set onComplete Variables
@@ -320,69 +196,14 @@ public class QuestWorker
 				for(String key : onCompleteEffectNode.getKeys(false)) {
 					Chat.logger("debug", root + ".onComplete." + key);
 					Object value = qQuests.plugin.Config.getQuestConfig().get(root + ".onComplete." + key);
-					if(qQuests.plugin.qAPI.getEffectHandler().isEffect(key)) {
-						if(qQuests.plugin.qAPI.getEffectHandler().validate(root+".onComplete", key, value))
-							BuildonComplete.addEffect(key, value);
-						else {
-							Chat.logger("severe", "The effect " + key + " of quest " + root + ", is NOT valid!");
-							continue;
-						}
-					} else {
-						Chat.logger("warning", "The effect " + key + " of quest " + root + ", is not supported by standalone qQuests, if you are using a plugin that supports qQuests, this is fine, otherwise, it will not do anything.");
-						BuildonComplete.addEffect(key, value);
-					}
+					BuildonComplete.addEffect(key, value);
 				}
 			}
 
 			BuildonComplete.message(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onComplete.message"));
 			BuildonComplete.delay(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.delay"));
 			BuildonComplete.nextQuest(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onComplete.nextQuest"));
-			BuildonComplete.money(qQuests.plugin.Config.getQuestConfig().getDouble(questName + ".onComplete.market.money"));
-			BuildonComplete.health(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.health"));
-			BuildonComplete.hunger(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.hunger"));
-			BuildonComplete.levelAdd(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.levelAdd"));
-			if(qQuests.plugin.Config.getQuestConfig().getString(questName + ".onComplete.market.levelSet") != null)
-				BuildonComplete.levelSet(qQuests.plugin.Config.getQuestConfig().getInt(questName + ".onComplete.market.levelSet"));
-			i=0;
-			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onComplete.market.items") != null)
-			{
-				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onComplete.market.items")) {
-					strs = s.split(" ");
-					qtrs = strs[0].split(":");
 
-					if(Material.matchMaterial(qtrs[0]) != null)
-					{
-						try
-						{
-							ArrayList<Integer> itms = new ArrayList<Integer>();
-							itms.add(Integer.parseInt(qtrs[0])); // Item Id
-							itms.add(Integer.parseInt(strs[1])); // Amount
-							if(qtrs.length == 2)
-								itms.add(Integer.parseInt(qtrs[1])); // Item Damage
-							BuildonComplete.items().put(i, itms);
-						}
-						catch(Exception e)
-						{
-							Chat.logger("severe", "The 'onComplete' rewards/fees of '" + root + "' are not correctly formatted! Disabling this quest...");
-							continue;
-						}
-					}
-					else
-					{
-						Chat.logger("severe", "The 'onComplete' rewards/fees of '" + root + "' does not have valid material ids! Disabling this quest...");
-						continue;
-					}
-					i++;
-				}
-			}
-			i=0;
-			if(qQuests.plugin.Config.getQuestConfig().getList(questName + ".onComplete.market.commands") != null)
-			{
-				for (String s : qQuests.plugin.Config.getQuestConfig().getStringList(questName + ".onComplete.market.commands")) {
-					BuildonComplete.commands(i, s);
-					i++;
-				}
-			}
 			quest.onComplete(BuildonComplete);
 
 			// Only if the quest is valid, save the quest.
@@ -391,6 +212,44 @@ public class QuestWorker
 		Chat.logger("info", Storage.quests.size() + " Quests Successfully Loaded Into Memory.");
 	}
 
+	private boolean validate(String root) {
+		if(!this.validateRequirements(root, "requirements") ||
+		   !this.validateEffects(root, "onJoin") ||
+		   !this.validateEffects(root, "onDrop") ||
+		   !this.validateEffects(root, "onComplete"))
+		   return false;
+		return true;
+	}
+	private boolean validateRequirements(String root, String section) {
+		ConfigurationSection reqNode = qQuests.plugin.Config.getQuestConfig().getConfigurationSection(root + "." +  section);
+		if(reqNode == null) {
+			return true;
+		}
+		for(String key : reqNode.getKeys(false)) {
+			if(qQuests.plugin.qAPI.getRequirementHandler().isRequirement(key)) {
+				Object value = qQuests.plugin.Config.getQuestConfig().get(root + "." + section + "." + key);
+				if(!qQuests.plugin.qAPI.getRequirementHandler().validate(root + "." + section, key, value)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	private boolean validateEffects(String root, String section) {
+		ConfigurationSection effectNode = qQuests.plugin.Config.getQuestConfig().getConfigurationSection(root + "." + section);
+		if(effectNode == null) {
+			return true;
+		}
+		for(String key : effectNode.getKeys(false)) {
+			if(qQuests.plugin.qAPI.getEffectHandler().isEffect(key)) {
+				Object value = qQuests.plugin.Config.getQuestConfig().get(root + "." + section + "." + key);
+				if(!qQuests.plugin.qAPI.getEffectHandler().validate(root + "." + section, key, value)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 	private void rememberTask(Integer taskNo, Task task, BuildQuest quest) 
 	{
 		quest.tasks(taskNo, task);
