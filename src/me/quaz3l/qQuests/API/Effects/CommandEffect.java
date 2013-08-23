@@ -54,7 +54,6 @@ public class CommandEffect extends qEffect {
 				return -1;
 			}
 		} catch(ClassCastException e) {
-			e.printStackTrace();
 			return -1;
 		}
 		return 0;
@@ -74,7 +73,7 @@ public class CommandEffect extends qEffect {
 	@Override
 	public String parseError(String player, Object value, int errorCode) {
 		switch(errorCode) {
-		case -1: return "The effect " + this.getName() + ",  is invalid!";
+		case -1: return "Some commands may not be formatted correctly!";
 		default: return "Unknown Error! LULZ! :p";
 		}
 	}

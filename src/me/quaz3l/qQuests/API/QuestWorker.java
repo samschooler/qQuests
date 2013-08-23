@@ -59,7 +59,7 @@ public class QuestWorker
 					Chat.logger("debug", root + ".requirements." + key);
 					Object value = qQuests.plugin.Config.getQuestConfig().get(root + ".requirements." + key);
 					if(qQuests.plugin.qAPI.getRequirementHandler().isRequirement(key)) {
-						if(qQuests.plugin.qAPI.getRequirementHandler().validate(key, value))
+						if(qQuests.plugin.qAPI.getRequirementHandler().validate(root + ".requirments", key, value))
 							quest.requirements(key, value);
 						else {
 							Chat.logger("severe", "The requirement " + key + " of quest " + root + ", is NOT valid!");
@@ -171,7 +171,7 @@ public class QuestWorker
 					Chat.logger("debug", root + ".onJoin." + key);
 					Object value = qQuests.plugin.Config.getQuestConfig().get(root + ".onJoin." + key);
 					if(qQuests.plugin.qAPI.getEffectHandler().isEffect(key)) {
-						if(qQuests.plugin.qAPI.getEffectHandler().validate(key, value))
+						if(qQuests.plugin.qAPI.getEffectHandler().validate(root+".onJoin",key, value))
 							BuildonJoin.addEffect(key, value);
 						else {
 							Chat.logger("severe", "The effect " + key + " of quest " + root + ", is NOT valid!");
@@ -240,12 +240,12 @@ public class QuestWorker
 			// Set Effects Variables
 			ConfigurationSection onDropEffectNode = qQuests.plugin.Config.getQuestConfig().getConfigurationSection(questName + ".onDrop");
 			Chat.logger("debug", "QuestWorker.onDrop: Node in config: " + questName + ".onDrop");
-			if(onJoinEffectNode != null) {
+			if(onDropEffectNode != null) {
 				for(String key : onDropEffectNode.getKeys(false)) {
 					Chat.logger("debug", root + ".onDrop." + key);
 					Object value = qQuests.plugin.Config.getQuestConfig().get(root + ".onDrop." + key);
 					if(qQuests.plugin.qAPI.getEffectHandler().isEffect(key)) {
-						if(qQuests.plugin.qAPI.getEffectHandler().validate(key, value))
+						if(qQuests.plugin.qAPI.getEffectHandler().validate(root+".onDrop", key, value))
 							BuildonDrop.addEffect(key, value);
 						else {
 							Chat.logger("severe", "The effect " + key + " of quest " + root + ", is NOT valid!");
@@ -316,12 +316,12 @@ public class QuestWorker
 			// Set Effects Variables
 			ConfigurationSection onCompleteEffectNode = qQuests.plugin.Config.getQuestConfig().getConfigurationSection(questName + ".onComplete");
 			Chat.logger("debug", "QuestWorker.onJoin: Node in config: " + questName + ".onComplete");
-			if(onJoinEffectNode != null) {
+			if(onCompleteEffectNode != null) {
 				for(String key : onCompleteEffectNode.getKeys(false)) {
 					Chat.logger("debug", root + ".onComplete." + key);
 					Object value = qQuests.plugin.Config.getQuestConfig().get(root + ".onComplete." + key);
 					if(qQuests.plugin.qAPI.getEffectHandler().isEffect(key)) {
-						if(qQuests.plugin.qAPI.getEffectHandler().validate(key, value))
+						if(qQuests.plugin.qAPI.getEffectHandler().validate(root+".onComplete", key, value))
 							BuildonComplete.addEffect(key, value);
 						else {
 							Chat.logger("severe", "The effect " + key + " of quest " + root + ", is NOT valid!");

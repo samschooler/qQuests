@@ -61,7 +61,7 @@ public class MoneyEffect extends qEffect {
 	@Override
 	public String parseError(String player, Object value, int errorCode) {
 		switch(errorCode) {
-		case -1: return "The requirement " + this.getName() + ", is NOT a number, it MUST be a number!";
+		case -1: return "The value is NOT a number, it MUST be a number!";
 		case  1: return "You need " + ChatColor.GOLD + (Double.parseDouble(value.toString())*-1) + ChatColor.RED + " money to complete this quest! You have " + ChatColor.GOLD + qQuests.plugin.economy.getBalance(player) + ChatColor.RED + ".";
 		default: return "Unknown Error! LULZ! :p";
 		}

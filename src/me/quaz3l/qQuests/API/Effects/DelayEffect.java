@@ -70,7 +70,7 @@ public class DelayEffect extends qEffect {
 	@Override
 	public String parseError(String player, Object value, int errorCode) {
 		switch(errorCode) {
-		case -1: return "The effect " + this.getName() + ", is NOT a number, it MUST be a number!";
+		case -1: return "The value is NOT a number, it MUST be a number!";
 		case  1: return "You need to wait " + ChatColor.GOLD + (Storage.delayLeft.get(player)) + " seconds" + ChatColor.RED + " before you can get a quest.";
 		default: return "Unknown Error! LULZ! :p";
 		}

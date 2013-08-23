@@ -73,7 +73,7 @@ public class HealthEffect extends qEffect {
 	@Override
 	public String parseError(String player, Object value, int errorCode) {
 		switch(errorCode) {
-		case -2: return "The requirement " + this.getName() + ", is NOT a number, it MUST be a number!";
+		case -2: return "The value is NOT a number, it MUST be a number!";
 		case -1: return "The player is not online.";
 		case  1: return "You don't have enough health to complete this quest!";
 		default: return "Unknown Error! LULZ! :p";

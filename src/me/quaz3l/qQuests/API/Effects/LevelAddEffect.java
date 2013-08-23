@@ -42,7 +42,7 @@ public class LevelAddEffect extends qEffect {
 	@Override
 	public String parseError(String player, Object value, int errorCode) {
 		switch(errorCode) {
-		case -1: return "The requirement " + this.getName() + ", is NOT a number, it MUST be a number!";
+		case -1: return "The value is NOT a number, it MUST be a number!";
 		default: return "Unknown Error! LULZ! :p";
 		}
 	}

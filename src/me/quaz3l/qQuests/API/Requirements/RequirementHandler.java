@@ -72,10 +72,10 @@ public class RequirementHandler {
 			req.onDisable();
 		}
 	}
-	public boolean validate(String key, Object value) {
+	public boolean validate(String origin, String key, Object value) {
 		int result = this.requirements.get(key).validate(value);
 		if(result != 0) {
-			Chat.logger("severe", this.requirements.get(key).parseError(null, value, result));
+			Chat.logger("severe", "[" + origin + "."+ key + "](Requirement): " + this.requirements.get(key).parseError(null, value, result));
 			return false;
 		} else return true;
 	}

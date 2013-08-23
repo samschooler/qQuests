@@ -16,7 +16,7 @@ public class EffectHandler {
 		Chat.logger("debug", "Adding effect!!");
 		qEffect effect = (qEffect) req;
 		if(effect.getName() == null) {
-			Chat.logger("debug", "A effect that was added does not have a name! Effects need to be named with the name function!");
+			Chat.logger("debug", "A effect that was added does not have a name! Effects need to be named with the name method!");
 			return;
 		}
 		this.effects.put(effect.getName(), effect);
@@ -97,10 +97,10 @@ public class EffectHandler {
 			req.onDisable();
 		}
 	}
-	public boolean validate(String key, Object value) {
+	public boolean validate(String origin, String key, Object value) {
 		int result = this.effects.get(key).validate(value);
 		if(result != 0) {
-			Chat.logger("severe", this.effects.get(key).parseError(null, value, result));
+			Chat.logger("severe", "[" + origin + "."+ key + "](Effect): " + this.effects.get(key).parseError(null, value, result));
 			return false;
 		} else return true;
 	}

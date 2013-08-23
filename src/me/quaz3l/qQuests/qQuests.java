@@ -8,6 +8,7 @@ import me.quaz3l.qQuests.API.Effects.CommandEffect;
 import me.quaz3l.qQuests.API.Effects.DelayEffect;
 import me.quaz3l.qQuests.API.Effects.HealthEffect;
 import me.quaz3l.qQuests.API.Effects.HungerEffect;
+import me.quaz3l.qQuests.API.Effects.ItemsEffect;
 import me.quaz3l.qQuests.API.Effects.LevelAddEffect;
 import me.quaz3l.qQuests.API.Effects.LevelSetEffect;
 import me.quaz3l.qQuests.API.Effects.MessageEffect;
@@ -216,6 +217,7 @@ public class qQuests extends JavaPlugin
 		this.qAPI.getEffectHandler().addEffect(new LevelSetEffect());
 		
 		this.qAPI.getEffectHandler().addEffect(new CommandEffect());
+		this.qAPI.getEffectHandler().addEffect(new ItemsEffect());
 		
 		this.qAPI.getEffectHandler().addEffect(new MoneyEffect());
 		
