@@ -76,6 +76,11 @@ public class PlayerProfiles {
 		this.getPlayerProfiles().set(player + "." + path, value);
 		this.savePlayerProfiles();
 	}
+	public void clear(String player)
+	{
+		this.getPlayerProfiles().set(player, null);
+		this.savePlayerProfiles();
+	}
 	
 	
 	// Get Values

@@ -93,7 +93,7 @@ public class Commands extends qPlugin implements CommandExecutor
 									fullName +=  " " + args[i];
 								}
 							}
-							Integer result = qQuests.plugin.qAPI.giveQuest(((Player) s).getName(), fullName, true, "commands");
+							Integer result = qQuests.plugin.qAPI.giveQuest(((Player) s).getName(), fullName, true, false, "commands");
 							if(result == 0)
 							{
 								Storage.wayCurrentQuestsWereGiven.put((((Player) s).getName()), "commands");
@@ -251,21 +251,26 @@ public class Commands extends qPlugin implements CommandExecutor
 			}
 		}
 		else if(s instanceof ConsoleCommandSender) {
-			if(args.length < 1)
+			if(args.length >= 1)
 			{
-				Chat.message(s, "qquests reload - Reloads the quests.yml, and config.yml");
-			}
-			else
-			{ 
 				if((args[0].equalsIgnoreCase("admin"))) {
-					// TODO
-					Bukkit.getPluginManager().disablePlugin(qQuests.plugin);
-					Bukkit.getPluginManager().enablePlugin(qQuests.plugin);
-					Chat.logger("info", "Reloaded.");
+					if((args[1].equalsIgnoreCase("profile"))) {
+						if((args[2].equalsIgnoreCase("clear"))) {
+							qQuests.plugin.qAPI.getProfiles().clear(args[3]);
+							Chat.logger("info", args[3] + "'s profile cleared.");
+							return false;
+						}
+					}
+					if((args[1].equalsIgnoreCase("reload"))) {
+						// TODO
+						Bukkit.getPluginManager().disablePlugin(qQuests.plugin);
+						Bukkit.getPluginManager().enablePlugin(qQuests.plugin);
+						Chat.logger("info", "Reloaded.");
+						return false;
+					}
 				}
-				else 
-					Chat.message(s, "qquests reload - Reloads the quests.yml, and config.yml");
 			}
+			Chat.message(s, "qquests admin reload - Reloads the qQuests configurations");
 		} else
 			Chat.message(s, Texts.ONLY_PLAYERS);
 		return false;

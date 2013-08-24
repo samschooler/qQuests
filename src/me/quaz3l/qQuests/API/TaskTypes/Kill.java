@@ -40,6 +40,21 @@ public class Kill implements Listener {
 					attacker = (Player) ((Arrow) nEvent.getDamager()).getShooter();
 			}
 			break;
+		case PROJECTILE:
+			EntityDamageByEntityEvent gEvent = (EntityDamageByEntityEvent) e;
+			if(gEvent.getDamager() instanceof Player) 
+				attacker = (Player) gEvent.getDamager();
+			else if(gEvent.getDamager() instanceof Fireball)
+			{
+				if(((Fireball) gEvent.getDamager()).getShooter() instanceof Player)
+					attacker = (Player) ((Fireball) gEvent.getDamager()).getShooter();
+			}
+			else if(gEvent.getDamager() instanceof Arrow)
+			{
+				if(((Arrow) gEvent.getDamager()).getShooter() instanceof Player)
+					attacker = (Player) ((Arrow) gEvent.getDamager()).getShooter();
+			}
+			break;
 		default:
 			break;
 		}
@@ -58,9 +73,7 @@ public class Kill implements Listener {
 		if(!qQuests.plugin.qAPI.hasActiveQuest(player))
     		return;
     	String entityType =  e.getEntityType().getName();
-    	
-    	Chat.logger("debug", "1");
-    	
+    	    	
 		int i=-1;
 		// Go Through All The Tasks Of The Players Quest
 		for(Task task : qQuests.plugin.qAPI.getActiveQuest(player).tasks()) 

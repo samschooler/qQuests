@@ -1,4 +1,4 @@
-# Twitter: @Quaz3l
+# Twitter: @SamSchooler
 # To create your own quests either follow the steps on:
 # http://dev.bukkit.org/server-mods/qquests/pages/quests-yml/
 # or just copy a current quest and use the vars and common sense to
@@ -18,19 +18,16 @@ Diamonds!:
       amount: 5
   onJoin:
     message: Hey! Can you go get my 5 diamonds! I'll pay you $500, here is a iron pickaxe to mine the diamonds!
-    market:
-      items:
+    items:
       - 257 1
   onDrop:
     message: Aww fine I'll go find someone else :( I will take back my pick though
-    market:
-      items:
+    items:
       - 257 -1
   onComplete:
     message: Thanks! Now I can feed my lava dragon! ;)
     delay: 10
-    market:
-      money: 500
+    money: 500
 
 # A chain of quests
 DirtAdventure:
@@ -56,8 +53,7 @@ DirtAdventure:
     message: Thanks! This will help me so much!
     delay: 15
     nextQuest: SpiderAdventure
-    market:
-      money: 10
+    money: 10
 SpiderAdventure:
   setup:
     repeated: -1
@@ -115,8 +111,7 @@ TheBasics:
     nextQuest: TheBasics
   onComplete:
     message: Nice Job! Now we can continue on our journey, Type `d/q give `ato get a new quest
-    market:
-      levelSet: 1
+    levelSet: 1
 GetCoal:
   setup:
     invisible: false
@@ -194,8 +189,7 @@ EnchantMe:
     message: Go forth and enchant your wooden sword with any enchantment
   onDrop:
     message: Goodbye my friend.
-    market:
-      health: -20
+    health: -20
   onComplete:
     message: You have completed the basics!
     levelSet: 5

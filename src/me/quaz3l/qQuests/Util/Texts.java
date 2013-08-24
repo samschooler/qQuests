@@ -62,28 +62,28 @@ public class Texts {
 		Chat.logger("debug", q.onComplete().effects().get("health")+"");
 		if(Storage.info.showHealth) {
 			if(q.onComplete().effects().get("health") != null) {
-				int health = Integer.parseInt((String) q.onComplete().effects().get("health"));
+				int health = Integer.parseInt(""+q.onComplete().effects().get("health"));
 				if(health != 0)
 					Chat.noPrefixMessage(player, "     " + Texts.HEALTH + ": " + ChatColor.GREEN + health);
 			}
 		}
 		if(Storage.info.showFood) {
 			if(q.onComplete().effects().get("hunger") != null) {
-				int hunger = Integer.parseInt((String) q.onComplete().effects().get("hunger"));
+				int hunger = Integer.parseInt(""+q.onComplete().effects().get("hunger"));
 				if(hunger != 0)
 					Chat.noPrefixMessage(player, "     " + Texts.FOOD + ": " + ChatColor.GREEN + hunger);
 			}
 		}
 		if(Storage.info.showLevelsAdded) {
 			if(q.onComplete().effects().get("levelAdd") != null) {
-				int levelAdd = Integer.parseInt((String) q.onComplete().effects().get("levelAdd"));
+				int levelAdd = Integer.parseInt(""+q.onComplete().effects().get("levelAdd"));
 				if(levelAdd != 0)
 					Chat.noPrefixMessage(player, "     " + Texts.LEVELADD + ": " + ChatColor.GREEN + levelAdd);
 			}
 		}
 		if(Storage.info.showSetLevel) {
 			if(q.onComplete().effects().get("levelSet") != null) {
-				int levelSet = Integer.parseInt((String) q.onComplete().effects().get("levelSet"));
+				int levelSet = Integer.parseInt(""+q.onComplete().effects().get("levelSet"));
 				if(levelSet != 0)
 					Chat.noPrefixMessage(player, "     " + Texts.LEVELSET + ": " + ChatColor.GREEN + levelSet);
 			}

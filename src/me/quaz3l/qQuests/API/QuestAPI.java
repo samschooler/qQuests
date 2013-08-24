@@ -129,7 +129,7 @@ public class QuestAPI {
 			Quest q = (Quest) values[num];
 
 			// Try To Give The Quest
-			u = this.giveQuest(player, q.name(), true, via);
+			u = this.giveQuest(player, q.name(), true, true, via);
 			Chat.logger("debug", "giveQuest(random) result_loop: " + u);
 			if(u == 0)
 				return u;
@@ -139,7 +139,7 @@ public class QuestAPI {
 		return u;
 	}
 	
-	public Integer giveQuest(String player, String quest, boolean onlyVisible, String via)
+	public Integer giveQuest(String player, String quest, boolean onlyVisible, boolean silent, String via)
 	{
 		Chat.logger("debug", quest);
 		quest = QuestFrag.get(quest.toLowerCase()).toLowerCase();
@@ -155,7 +155,7 @@ public class QuestAPI {
 		if(this.getDisabled(player, quest)) {
 			int result = this.getEffectHandler().getEffect(this.getDisabledBy(player, quest)).passedRequirement(player, null);
 			if(result != 0) {
-				Chat.error(player, this.getEffectHandler().getEffect(this.getDisabledBy(player, quest)).parseError(player, null, result));
+				if(!silent) Chat.error(player, this.getEffectHandler().getEffect(this.getDisabledBy(player, quest)).parseError(player, null, result));
 				return -1;
 			} else return 10;
 		}
@@ -178,13 +178,9 @@ public class QuestAPI {
 			return 11;
 
 		// Check Requirements
-		if(!this.requirementHandler.checkRequirements(player, q.requirements(), false))
+		if(!this.requirementHandler.checkRequirements(player, q.requirements(), silent))
 			return -1;
 
-		// Give/Take Rewards/Fees
-		//int u = q.onJoin().feeReward(player);
-		//if(u != 0)
-		//return u;
 		Chat.logger("debug", q.onJoin().effects().toString());
 		// TODO Send the message to the qPlugin to handle
 		if(this.effectHandler.checkEffects(player, q.onJoin().effects())) {
@@ -265,7 +261,7 @@ public class QuestAPI {
 			public void run() {
 				if(Storage.previousQuest.get(player).onDrop().nextQuest() != null)
 				{
-					int result = giveQuest(player, Storage.previousQuest.get(player).onDrop().nextQuest(), false, Storage.wayPreviousQuestWereGiven.get(player));
+					int result = giveQuest(player, Storage.previousQuest.get(player).onDrop().nextQuest(), false, false, Storage.wayPreviousQuestWereGiven.get(player));
 					if(result == 0)
 					{
 						Chat.message(player, getActiveQuest(player).onJoin().message(player));
@@ -346,7 +342,7 @@ public class QuestAPI {
 			public void run() {
 				if(Storage.previousQuest.get(player).onComplete().nextQuest() != null)
 				{
-					int result = giveQuest(player, Storage.previousQuest.get(player).onComplete().nextQuest(), false, Storage.wayPreviousQuestWereGiven.get(player));
+					int result = giveQuest(player, Storage.previousQuest.get(player).onComplete().nextQuest(), false, false, Storage.wayPreviousQuestWereGiven.get(player));
 					if(result == 0)
 					{
 						Chat.message(player, getActiveQuest(player).onJoin().message(player));

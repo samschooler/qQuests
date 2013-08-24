@@ -313,7 +313,7 @@ public class Signs extends qPlugin implements Listener {
 		{
 			if(qQuests.plugin.qAPI.checkPerms(player, "give.sign"))
 			{
-				Integer result = qQuests.plugin.qAPI.giveQuest(player, getLine(sign, 1), false, "Signs");
+				Integer result = qQuests.plugin.qAPI.giveQuest(player, getLine(sign, 1), false, false, "Signs");
 				if(result == 0)
 				{
 					Chat.message(player, qQuests.plugin.qAPI.getActiveQuest(player).onJoin().message(player));
