@@ -56,7 +56,8 @@ public class qQuests extends JavaPlugin
 
 	// Prefixes
 	public String chatPrefix = ChatColor.AQUA + "[" + ChatColor.LIGHT_PURPLE + Storage.prefix + ChatColor.AQUA + "] " + ChatColor.LIGHT_PURPLE + " ";
-	public String prefix = "[qQuests] ";	
+	public String prefix = "[qQuests] ";
+	public boolean disableFlag;	
 
 	// Super Variable
 	public qQuests() {
@@ -133,6 +134,8 @@ public class qQuests extends JavaPlugin
 		Chat.logger("info", "by Quaz3l: Enabled");
 
 		//Config.dumpQuestConfig();
+		if(this.disableFlag)
+			this.getPluginLoader().disablePlugin(plugin);
 	}
 
 	// Hooks Into The Economy Plugin

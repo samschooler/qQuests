@@ -9,6 +9,7 @@ import java.io.InputStream;
 import me.quaz3l.qQuests.qQuests;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 
@@ -19,6 +20,8 @@ public class Config {
 	private boolean qConfigIsNew = false;
 	private YamlConfiguration cConfig = null;
 	private File cFile = null;
+	private boolean invalidqConfig;
+	private boolean invalidcConfig;
 
 	public Config()
 	{
@@ -47,14 +50,14 @@ public class Config {
 	public YamlConfiguration getConfig()
 	{
 		if (cConfig == null) {
-			loadConfig(this.cFile);
+			this.cConfig = loadConfig(this.cFile);
 		}
 		return cConfig;
 	}
 	public YamlConfiguration getQuestConfig()
 	{
 		if (qConfig == null) {
-			loadConfig(this.qFile);
+			this.qConfig = loadConfig(this.qFile);
 		}
 		return qConfig;
 	}
@@ -62,11 +65,21 @@ public class Config {
 	// Setters
 	public void saveConfig()
 	{
-		this.saveConfig(this.cFile, this.cConfig);
+		if(invalidcConfig || invalidqConfig) {
+			Chat.logger("severe", "One of your configs threw an error. Go and fix it. Until then qQuests is disabled");
+			qQuests.plugin.disableFlag = true;
+		} else {
+			this.saveConfig(this.cFile, this.cConfig);
+		}
 	}
 	public void saveQuestConfig()
 	{
-		this.saveConfig(this.qFile, this.qConfig);
+		if(invalidcConfig || invalidqConfig) {
+			Chat.logger("severe", "One of your configs threw an error. Go and fix it. Until then qQuests is disabled");
+			qQuests.plugin.disableFlag = true;
+		} else {
+			this.saveConfig(this.qFile, this.qConfig);
+		}
 	}
 
 	// Starters
@@ -74,7 +87,7 @@ public class Config {
 		this.getConfig();
 		this.getConfig().options().copyDefaults(true);
 		this.saveConfig();
-		
+
 		qQuests.plugin.debug = this.getConfig().getBoolean("debug");
 
 		// Remove Legacy
@@ -82,16 +95,16 @@ public class Config {
 			this.getConfig().set("autoUpdate", null);
 		if(this.getConfig().getString("tellMeYourUsingMyPlugin") != null)
 			this.getConfig().set("tellMeYourUsingMyPlugin", null);
-		
+
 		if(this.getConfig().getString("notifyMeOfUpdates") != "true" && this.getConfig().getString("notifyMeOfUpdates") != "false")
 			this.getConfig().set("notifyMeOfUpdates", true);
-		
+
 		if(this.getConfig().getString("autoUpdate") != "true" && this.getConfig().getString("autoUpdate") != "false")
 			this.getConfig().set("autoUpdate", true);
 		// Prefix
 		if(this.getConfig().getString("chatPrefix") == null)
 			this.getConfig().set("chatPrefix", "`b[`dqQuests`b] `d");
-		
+
 		// Primary command alias
 		if(this.getConfig().getString("primaryCommand") != null)
 		{
@@ -109,7 +122,7 @@ public class Config {
 		}
 		else
 			this.getConfig().set("primaryCommand", "quest");
-		
+
 		if(this.getConfig().getInt("persistDelay") <= 0)
 			this.getConfig().set("persistDelay", 5);
 
@@ -213,44 +226,15 @@ public class Config {
 		{
 			this.qConfigIsNew = false;
 			this.getQuestConfig().options().copyDefaults(true);
-			/*
-			// Set Setup Nodes
-			this.getQuestConfig().set("Diamonds!.setup.repeated", -1);
-			this.getQuestConfig().set("Diamonds!.setup.invisible", false);
-			this.getQuestConfig().set("Diamonds!.setup.nextQuest", "");
-
-			// Set Requirements Nodes
-			this.getQuestConfig().set("Diamonds!.requirements.levelMin", 0);
-
-			// Set Task Nodes
-			this.getQuestConfig().set("Diamonds!.tasks.0.type", "collect");
-			this.getQuestConfig().set("Diamonds!.tasks.0.id", 264);
-			this.getQuestConfig().set("Diamonds!.tasks.0.display", "Diamond");
-			this.getQuestConfig().set("Diamonds!.tasks.0.amount", 5);
-
-			// Set onJoin Nodes
-			this.getQuestConfig().set("Diamonds!.onJoin.message", "Hey! Can you go get my 5 diamonds! I'll pay you $500");
-			this.getQuestConfig().set("Diamonds!.onJoin.market.money", 0);
-			this.getQuestConfig().set("Diamonds!.onJoin.market.health", 0);
-			this.getQuestConfig().set("Diamonds!.onJoin.market.hunger", 0);
-
-			// Set onDrop Nodes
-			this.getQuestConfig().set("Diamonds!.onDrop.message", "Aww... fine... I'll go find someone else :(");
-			this.getQuestConfig().set("Diamonds!.onDrop.market.money", -50);
-			this.getQuestConfig().set("Diamonds!.onDrop.market.health", 0);
-			this.getQuestConfig().set("Diamonds!.onDrop.market.hunger", 0);
-
-			// Set onComplete Nodes
-			this.getQuestConfig().set("Diamonds!.onComplete.message", "Thanks! Now I can feed my lava dragon! ;)");
-			this.getQuestConfig().set("Diamonds!.onComplete.delay", 10);
-			this.getQuestConfig().set("Diamonds!.onComplete.market.money", 500);
-			this.getQuestConfig().set("Diamonds!.onComplete.market.health", 0);
-			this.getQuestConfig().set("Diamonds!.onComplete.market.hunger", 0);
-			this.getQuestConfig().set("Diamonds!.onComplete.market.items", Arrays.asList("3 1", "4 5"));
-*/
-			// Save changes
-			this.saveQuestConfig();
+		} else if(this.getQuestConfig().getKeys(false).size() == 0) {
+			this.invalidqConfig = true;
+		} else {
+			this.marketTrans("onJoin");
+			this.marketTrans("onDrop");
+			this.marketTrans("onComplete");
 		}
+		// Save changes
+		this.saveQuestConfig();
 	}
 
 
@@ -801,7 +785,6 @@ public class Config {
 				Chat.logger("severe", "Can't Create " + file.getName() + " File!");
 			}
 		}
-
 		return YamlConfiguration.loadConfiguration(file);
 	}
 	private void saveConfig(File file, YamlConfiguration config) 
@@ -810,6 +793,33 @@ public class Config {
 			config.save(file);
 		} catch (IOException ex) {
 			Chat.logger("severe", "Can't Write To File '" + file.getName() + "'!");
+		}
+	}
+
+	// Legacy
+	public void marketTrans(String section) {
+		for(String quest : this.getQuestConfig().getKeys(false)) {
+			ConfigurationSection sec = this.getQuestConfig().getConfigurationSection(quest+ section + ".market");
+			if(sec != null) {
+				Chat.logger("debug", ": "+sec.getList("items"));
+				if(sec.getList("items") != null) {
+					Chat.logger("debug", "FIX MARKET: "+quest+".items...");
+					this.getQuestConfig().set(quest+ section + ".items", sec.getList("items"));
+					sec.set("items", null);
+				}
+				if(sec.getList("commands") != null) {
+					Chat.logger("debug", "FIX MARKET: "+quest+".commands...");
+					this.getQuestConfig().set(quest+ section + ".commands", sec.getList("commands"));
+					sec.set("commands", null);
+				}
+				for(String key : sec.getKeys(false)) {
+					if(key.equals("items") || key.equals("commands")) {} else {
+						Chat.logger("debug", "FIX MARKET: "+quest+"."+key);
+						this.getQuestConfig().set(quest+ section + "."+key, sec.get(key));
+					}
+				}
+				this.getQuestConfig().set(quest+ section + ".market", null);
+			}
 		}
 	}
 

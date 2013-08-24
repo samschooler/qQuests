@@ -18,12 +18,15 @@ Diamonds!:
       amount: 5
   onJoin:
     message: Hey! Can you go get my 5 diamonds! I'll pay you $500, here is a iron pickaxe to mine the diamonds!
-    items:
+    market:
+      items:
       - 257 1
   onDrop:
     message: Aww fine I'll go find someone else :( I will take back my pick though
-    items:
+    market:
+      items:
       - 257 -1
+      health: 10
   onComplete:
     message: Thanks! Now I can feed my lava dragon! ;)
     delay: 10
