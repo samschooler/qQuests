@@ -119,7 +119,7 @@ public class qQuests extends JavaPlugin
 		// Check for updates
 		Updater.start(this, "qquests", this.getFile());
 
-		// http://mcstats.org/qQuests
+		// http://mcstats.org/plugins/qQuests
 		try {
 			Metrics metrics = new Metrics(this);
 			metrics.start();
